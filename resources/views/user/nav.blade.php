@@ -1,2 +1,2 @@
-@include('layout.main')
+@include('user.layout')
 

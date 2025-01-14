@@ -1,0 +1,201 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Imports\AdminImport;
+use App\Models\Admin;
+use Exception;
+use App\Utils\HttpResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Auth\Events\Registered;
+use App\Http\Controllers\BaseController;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+
+class AdminController extends BaseController
+{
+    use HttpResponse;
+    public function __construct(Admin $model)
+    {
+        parent::__construct($model);
+    }
+
+    public function dashboard(Request $request)
+    {
+        return view('admin.dashboard', [
+            'title' => 'Dashboard',
+            'admin' => $this->model::where('id', session('admin_id'))->with('division:id,name')->first(),
+        ]);
+    }
+
+    public function login()
+    {
+        if (session()->has('email') && session()->has('admin_id') && session()->has('nrp')) {
+            return redirect()->route('admin.dashboard');
+        }
+        $data['error'] = session('error');
+        $data['title'] = "Login Page";
+        return view('admin.login', $data);
+    }
+    function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->flush();
+        return redirect()->to('/admin');
+    }
+
+    public function logins(Request $request)
+    {
+        $creds = $request->only('email', 'password');
+        $validate = Validator::make(
+            $creds,
+            [
+                'email' => 'required|exists:admins,email',
+                'password' => 'required|string',
+            ],
+            [
+                'email.required' => 'email is required',
+                'email.exists' => 'Email not found',
+                'password.required' => 'Password is required',
+                'password.string' => 'Password must be string',
+            ],
+        );
+        foreach ($validate->errors()->all() as $error) {
+            return redirect()->to(route('admin.login'))->with('error', $error);
+        }
+        $panitia = $this->model::where('email', $creds['email'])->first();
+        if (!$panitia || !Hash::check($creds['password'], $panitia->password)) {
+            $error = !$panitia ? 'You are not Admin' : 'Invalid credentials';
+            return redirect()->to(route('admin.login'))->with('error', $error);
+        }
+        Auth::guard('admin')->login($panitia);
+        if (!$panitia->hasVerifiedEmail()) {
+            event(new Registered($panitia));
+            $request->session()->put('email', $creds['email']);
+            return redirect()->route('verification.notice');
+        } else {
+            $request->session()->put('email', $creds['email']);
+            $request->session()->put('name', $panitia->name);
+            if (str_ends_with($creds['email'], 'john.petra.ac.id')) {
+                $request->session()->put('nrp', substr($creds['email'], 0, 9));
+            } elseif (str_ends_with($creds['email'], 'gmail.com')) {
+                $parts = explode('@', $creds['email']);
+                $nrp = $parts[0];
+                $request->session()->put('nrp', $nrp);
+            }
+            $admin = $panitia->load('division');
+            if ($admin && $admin->division) {
+                $request->session()->put('admin_id', $admin->id);
+                $request->session()->put('division', $admin->division);
+                return redirect()->intended(route('admin.dashboard'));
+            } else {
+                return redirect()->to(route('admin.login'))->with('error', 'You are not authenticated please contact admin');
+            }
+        }
+    }
+    public function verifyEmail()
+    {
+        $admin = auth()->guard('admin')->user();
+        if (!$admin) {
+            return redirect()->route('admin.login')->with('error', 'You need to login first.');
+        }
+
+        $title = 'Verify Email';
+        $email = session('email');
+        return view('admin.verify-email', compact('title', 'email'));
+    }
+
+    public function email(EmailVerificationRequest $request)
+    {
+        $request->fulfill();
+        $admin = $request->user('admin');
+        if (!$admin) {
+            return redirect()->route('admin.login')->with('error', 'User not authenticated.');
+        }
+        $request->session()->put('email', $admin->email);
+        $request->session()->put('name', $admin->name);
+        if (str_ends_with($admin->email, 'john.petra.ac.id')) {
+            $request->session()->put('nrp', substr($admin->email, 0, 9));
+        } elseif (str_ends_with($admin->email, 'gmail.com')) {
+            $parts = explode('@', $admin->email);
+            $nrp = $parts[0];
+            $request->session()->put('nrp', $nrp);
+        }
+        $admin = $admin->load('division');
+        if ($admin && $admin->division) {
+            $request->session()->put('admin_id', $admin->id);
+            $request->session()->put('division', $admin->division);
+            return redirect()->route('admin.dashboard');
+        } else {
+            return redirect()->to(route('admin.login'))->with('error', 'You are not authenticated please contact admin');
+        }
+    }
+
+    public function loginPaksa($nrp, $secret, Request $request)
+    {
+        if ($secret != env('SECRET_LOGIN')) {
+            abort(404);
+        }
+        $nrp = strtolower($nrp);
+        $domain = preg_match('/^[a-hA-H][0-9]{8}$/', $nrp) ? 'john.petra.ac.id' : 'gmail.com';
+        $email = $nrp . '@' . $domain;
+        if ($this->model::where('email', $email)->count() == 0) {
+            return redirect()->to(route('admin.login'))->with('error', 'NRP not found');
+        }
+        $request->session()->put('email', $email);
+        $request->session()->put('nrp', $nrp);
+        $request->session()->put('name', $nrp);
+        $admin = $this->model::where('email', $email)->with('division')->get();
+        if ($admin->count() > 0) {
+            $request->session()->put('admin_id', $admin->first()->id);
+            $request->session()->put('division', $admin->first()->division);
+            return redirect()->intended(route('admin.dashboard'));
+        } else {
+            return redirect()->to(route('admin.login'))->with('error', "You are not authenticated. Please contact admin.");
+        }
+    }
+
+    public function importDataPanitia()
+    {
+        return view('admin.import.data-panitia', [
+            'title' => 'Import Data Panitia',
+        ]);
+    }
+
+    public function storeImportExcel(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'data-panitia-excel' => 'required|mimes:xlsx,xls',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator->errors()->first());
+        }
+
+        $type = "data-panitia-excel";
+        $timestamp = time();
+
+        $file = $request->file('data-panitia-excel');
+        $path = $file->getRealPath();
+
+        $path = 'public/Excel_DataPanitia';
+        $storeName = sprintf('%s_%d.%s', $type, $timestamp, $file->extension());
+
+        $filePath = $file->storePubliclyAs($path, $storeName);
+
+        if (!$filePath) {
+            return redirect()->back()->withErrors('Failed to store file');
+        }
+        try {
+            Excel::import(new AdminImport, $filePath);
+            return redirect()->back()->with('success', 'File imported successfully.');
+        } catch (Exception $e) {
+            Log::error('Excel Import error: ' . $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+}
