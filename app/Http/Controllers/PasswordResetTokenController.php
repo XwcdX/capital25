@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 
 
-class PasswordResetController extends Controller
+class PasswordResetTokenController extends Controller
 {
     public function forgetPassword($role){
         $data = [
@@ -23,15 +23,13 @@ class PasswordResetController extends Controller
     }
 
     public function sendEmail(Request $request){
-        
         $role = $request->role;
-
         $rules = [
             'email' => ['required',
                         'email',
                         function ($attribute, $value, $fail) use ($role) {
-                            if($role == 'peserta'){
-                                $exists = DB::table('kelompoks')->where('email', $value)->exists();
+                            if($role == 'user'){
+                                $exists = DB::table('teams')->where('email', $value)->exists();
                             }else if($role == 'admin'){
                                 $exists = DB::table('admins')->where('email', $value)->exists();
                             }else{
@@ -45,7 +43,7 @@ class PasswordResetController extends Controller
                     ],
             'role' => ['required',
                         'string',
-                        'in:peserta,admin'
+                        'in:user,admin'
                     ]
         ];
 
@@ -74,7 +72,6 @@ class PasswordResetController extends Controller
             $message->to($request->email);
             $message->subject("Reset Password CAPITAL");
         });
-        
 
         PasswordResetToken::create([
             'email' => $request->email,
@@ -87,8 +84,8 @@ class PasswordResetController extends Controller
 
     public function resetPassword($role, $token){
         $rules = [
-            'token' => 'required|string|exists:password_resets,token',
-            'role' => 'required|string|in:peserta,admin'
+            'token' => 'required|string|exists:password_reset_tokens,token',
+            'role' => 'required|string|in:user,admin'
         ];
 
         $messages = [
@@ -116,7 +113,6 @@ class PasswordResetController extends Controller
     }
 
     public function resetPasswordPost(Request $request){
-
         $rules = [
             'password' => [
                 'required',
@@ -125,7 +121,7 @@ class PasswordResetController extends Controller
                 'min:8',                    
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;"\'<>,.?~\\/-])[A-Za-z\d!@#$%^&*()_+{}\[\]:;"\'<>,.?~\\/-]{8,}$/'
             ],
-            'token' => 'required|string|exists:password_resets,token',
+            'token' => 'required|string|exists:password_reset_tokens,token',
             'role' => 'required|string|in:peserta,admin'
         ];
 

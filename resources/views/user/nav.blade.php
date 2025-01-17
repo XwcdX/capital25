@@ -1,2 +1,1 @@
-@include('user.layout')
-
+{{-- jangan extend ya ini nanti di include sm template --}}

@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\PasswordResetTokenController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -27,7 +27,7 @@ Route::prefix('admin')->group(function () {
 });
 
 // password-reset
-Route::get('/{role}/forget-password', [PasswordResetController::class, 'forgetPassword'])->name('forget.password');
-Route::post('forget-password', [PasswordResetController::class, 'sendEmail'])->name('forget.password.post')->middleware('throttle:resetPasswordEmail');
-Route::get('/reset-password/{role}/{token}', [PasswordResetController::class, 'resetPassword'])->name('reset.password');
-Route::post('/reset-password', [PasswordResetController::class, 'resetPasswordPost'])->name('reset.password.post');
+Route::get('/{role}/forget-password', [PasswordResetTokenController::class, 'forgetPassword'])->name('forget.password');
+Route::post('forget-password', [PasswordResetTokenController::class, 'sendEmail'])->name('forget.password.post')->middleware('throttle:resetPasswordEmail');
+Route::get('/reset-password/{role}/{token}', [PasswordResetTokenController::class, 'resetPassword'])->name('reset.password');
+Route::post('/reset-password', [PasswordResetTokenController::class, 'resetPasswordPost'])->name('reset.password.post');
