@@ -15,9 +15,18 @@ class LoginMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!session('login')) {
-            session()->put('url', url()->current());
-            return redirect()->route('viewLogin');
+        if (!session('email')) {
+            session()->flush();
+
+            $allowedIntent = ['/*'];
+
+            foreach ($allowedIntent as $intent) {
+                if ($request->is($intent)) {
+                    session()->put('url.intended', $request->url());
+                    break;
+                }
+            }
+            return redirect()->to(route('user.login'))->with('error', 'Session Expired, You need to login again!');
         }
         return $next($request);
     }

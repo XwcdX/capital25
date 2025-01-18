@@ -22,7 +22,7 @@ Route::prefix('admin')->group(function () {
     Route::middleware(['isAdminLogin'])->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/import-data-panitia', [AdminController::class, 'importDataPanitia'])->name('admin.import-data-panitia');
-        Route::post('/import/excel_progress', [AdminController::class, 'storeImportExcel'])->name('admin.import.excel');
+        Route::post('/import/excel-progress', [AdminController::class, 'storeImportExcel'])->name('admin.import.excel');
     });
 });
 
