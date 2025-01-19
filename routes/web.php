@@ -2,10 +2,11 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PasswordResetTokenController;
+use App\Http\Controllers\RallyController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('user.home-partials.scanQR', ['title'=>'shatap']);
 });
 
 
@@ -23,9 +24,13 @@ Route::prefix('admin')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/import-data-panitia', [AdminController::class, 'importDataPanitia'])->name('admin.import-data-panitia');
         Route::post('/import/excel-progress', [AdminController::class, 'storeImportExcel'])->name('admin.import.excel');
+
     });
 });
 
+Route::get('/rallyPost', [RallyController::class, 'viewRallyPost'])->name('viewRallyPost');
+Route::get('/generateQR/{rallyId}', [RallyController::class, 'generateRallyQRCode'])->name('generateQR');
+Route::post('/scanQR', [RallyController::class, 'scanQRCode'])->name('scanQR');
 // password-reset
 Route::get('/{role}/forget-password', [PasswordResetTokenController::class, 'forgetPassword'])->name('forget.password');
 Route::post('forget-password', [PasswordResetTokenController::class, 'sendEmail'])->name('forget.password.post')->middleware('throttle:resetPasswordEmail');
