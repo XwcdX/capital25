@@ -3,9 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>User | {{$title}}</title>
+    <title>User | {{ $title }}</title>
     {{-- tailwindcss --}}
     <script src="https://cdn.tailwindcss.com/3.4.5"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/tw-elements.min.css" />
@@ -26,15 +26,24 @@
         @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap');
     </style>
     <style>
-        :root{
-            --nex-yellow: #F9B63F;
-            --nex-purple: #8C54A2;
-            --nex-blue: #8FBDD2;
-            --nex-black: #454556;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        :root {
+            --cap-green5: #344E41;
+            --cap-green4: #3A5A40;
+            --cap-green3: #5C7650;
+            --cap-green2: #A3B18A;
+            --cap-green1: #DAD7CD;
+        }
+
         html {
             scroll-behavior: smooth;
         }
+
         ::-webkit-scrollbar {
             width: 10px;
         }
@@ -42,22 +51,22 @@
         ::-webkit-scrollbar-thumb {
             background: rgb(23, 24, 56);
             background: linear-gradient(180deg, rgba(69, 69, 86, 1) 0%, rgba(140, 84, 162, 1) 49%, rgba(249, 182, 63, 1) 100%);
-            /* background: linear-gradient(180deg, #8C54A2, #F9B63F ); */
             border-radius: 8px;
         }
 
         ::-webkit-scrollbar-track {
             width: 0;
             background: #454556;
-            /* background-color: transparent !important; */
         }
+
         label {
             color: #454556 !important;
         }
+
         input,
         textarea,
         select {
-            color: #454556!important;
+            color: #454556 !important;
         }
 
         input:focused {
@@ -85,15 +94,15 @@
                     boxShadow: {
                         'custom-md': '0 1px 6px rgba(0, 0, 0, 0.1)',
                     },
-                    colors:{
-                        'nex':{
+                    colors: {
+                        'nex': {
                             'yellow': '#F9B63F',
                             'purple': '#8C54A2',
                             'blue': '#8FBDD2 ',
                             'black': '#454556',
                         }
                     },
-                    screens:{
+                    screens: {
                         'nav-custom': '1100px',
                         'custom-2xl': '1700px',
                     }
