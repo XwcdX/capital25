@@ -45,4 +45,13 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function relations()
+    {
+        return ['team'];
+    }
+
+    public function team(){
+        return $this->belongsTo(Team::class);
+    }
 }

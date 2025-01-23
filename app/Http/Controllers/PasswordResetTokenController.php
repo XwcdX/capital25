@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\ResetPasswordEmail;
 use App\Models\Admin;
 use App\Models\PasswordResetToken;
+use App\Models\Team;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -14,11 +15,12 @@ use Illuminate\Support\Facades\Hash;
 
 class PasswordResetTokenController extends BaseController
 {
-    protected $adminController;
+    protected $adminController, $teamController;
     public function __construct(PasswordResetToken $model)
     {
         parent::__construct($model);
         $this->adminController = new AdminController(new Admin());
+        $this->teamController = new TeamController(new Team());
     }
     public function forgetPassword($role)
     {
@@ -98,11 +100,22 @@ class PasswordResetTokenController extends BaseController
             $passwordReset->delete();
 
             return redirect()->route('admin.login')->with('success', "Password successfully changed. Please try logging in again.");
+        } else if ($request->role == 'team') {
+            $team = $this->teamController->model::where('email', $email)->first();
+            $newPassword = $request->password;
 
-        } else if ($request->role == 'user') {
+            if (Hash::check($newPassword, $team->password)) {
+                return redirect()->back()->with('error', 'New password must be different from the current password.');
+            }
 
+            $team->password = Hash::make($newPassword);
+            $team->save();
+
+            $passwordReset->delete();
+
+            return redirect()->route('team.login')->with('success', "Password successfully changed. Please try logging in again.");
         } else {
-            return redirect()->route('admin.logins')->with('error', 'Something went wrong. Please send another request.');
+            return redirect()->route('home')->with('error', 'Something went wrong');
         }
     }
 }

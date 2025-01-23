@@ -124,19 +124,19 @@
                 <!-- Login Form -->
                 <div
                     class="form-box login absolute right-0 w-[50%] h-full flex flex-col items-center justify-center text-black">
-                    <form class="w-full px-8" id="manualLogin" action="" method="POST">
+                    <form class="w-full px-8" id="manualLogin" action="{{ route('team.logins') }}" method="POST">
                         @csrf
                         <h1 class="text-[36px] mb-6 text-black font-bold text-center">Hello, Ecopreneurs!</h1>
                         <div class="input-box relative w-full mb-6">
                             <input id="teamNameOrEmail" type="text" aria-label="Team Name or Email"
-                                placeholder="Team Name/Email" required="" name="teamNameOrEmail"
+                                placeholder="Team Name/Email" required="" name="email" value="{{ old('Team Name or Email') }}"
                                 class="w-full pr-[50px] pl-5 py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[16px] placeholder-[#636161] placeholder:font-semibold">
                             <i
                                 class="fa-solid fa-user absolute right-5 top-1/2 -translate-y-1/2 text-[20px] text-gray-400"></i>
                         </div>
                         <div class="input-box relative w-full mb-6">
                             <input id="loginPassword" type="password" aria-label="Password" placeholder="Password"
-                                required="" name="loginPassword" minlength="8"
+                                required="" name="password" minlength="8"
                                 class="w-full pr-[50px] pl-5 py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[16px] placeholder-[#636161] placeholder:font-semibold">
                             <i
                                 class="fa-solid fa-lock absolute right-5 top-1/2 -translate-y-1/2 text-[20px] text-gray-400"></i>
@@ -158,41 +158,41 @@
                     class="form-box registration absolute right-0 w-[50%] h-full flex flex-col items-center justify-center text-black">
                     <form class="w-full px-8 grid gap-4 grid-cols-2" id="submitRegister">
                         @csrf
-                        <h1 class="text-[36px] mb-6 text-black font-bold text-center col-span-2">Register Here</h1>
-                        <div class="input-box relative w-full mb-6">
+                        <h1 class="text-[36px] mb-4 lg:mb-6 text-black font-bold text-center col-span-2">Register Here</h1>
+                        <div class="input-box relative w-full mb-4 lg:mb-6">
                             <input type="text" aria-label="TeamName" placeholder="Team Name" required=""
                                 id="teamname"
                                 class="w-full pr-[50px] pl-5 py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[16px] placeholder-[#636161] placeholder:font-semibold">
                             <i
                                 class="fa-solid fa-user absolute right-5 top-1/2 -translate-y-1/2 text-[20px] text-gray-400"></i>
                         </div>
-                        <div class="input-box relative w-full mb-6">
+                        <div class="input-box relative w-full mb-4 lg:mb-6">
                             <input type="email" aria-label="Email" placeholder="Email" required="" id="email"
                                 class="w-full pr-[50px] pl-5 py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[16px] placeholder-[#636161] placeholder:font-semibold">
                             <i
                                 class="fa-solid fa-envelope absolute right-5 top-1/2 -translate-y-1/2 text-[20px] text-gray-400"></i>
                         </div>
-                        <div class="input-box relative w-full mb-6">
-                            <input type="text" aria-label="School" placeholder="School" required=""
-                                id="school"
+                        <div class="input-box relative w-full mb-4 lg:mb-6 col-span-2 lg:col-span-1">
+                            <input type="text" aria-label="School" placeholder="School" required="" id="school"
                                 class="w-full pr-[50px] pl-5 py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[16px] placeholder-[#636161] placeholder:font-semibold">
                             <i
                                 class="fa-solid fa-school absolute right-5 top-1/2 -translate-y-1/2 text-[20px] text-gray-400"></i>
                         </div>
-                        <div class="input-box relative w-full mb-6">
-                            <input type="domicile" aria-label="Domicile" placeholder="ex: Surabaya-Jawa Timur" required="" id="domicile"
+                        <div class="input-box relative w-full mb-4 lg:mb-6 col-span-2 lg:col-span-1">
+                            <input type="domicile" aria-label="Domicile" placeholder="Surabaya-Jawa Timur"
+                                required="" id="domicile"
                                 class="w-full pr-[50px] pl-5 py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[16px] placeholder-[#636161] placeholder:font-semibold">
                             <i
                                 class="fa-solid fa-city absolute right-5 top-1/2 -translate-y-1/2 text-[20px] text-gray-400"></i>
                         </div>
-                        <div class="input-box relative w-full mb-6 col-span-2">
+                        <div class="input-box relative w-full mb-4 lg:mb-6 col-span-2">
                             <input type="password" aria-label="Password" placeholder="Password" required=""
                                 id="password" minlength="8"
                                 class="w-full pr-[50px] pl-5 py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[16px] placeholder-[#636161] placeholder:font-semibold">
                             <i
                                 class="fa-solid fa-lock absolute right-5 top-1/2 -translate-y-1/2 text-[20px] text-gray-400"></i>
                         </div>
-                        <div class="input-box relative w-full mb-6 col-span-2">
+                        <div class="input-box relative w-full mb-4 lg:mb-6 col-span-2">
                             <input type="password" aria-label="Confirm Password" placeholder="Confirm Password"
                                 id="confirmPassword" minlength="8" required=""
                                 class="w-full pr-[50px] pl-5 py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[16px] placeholder-[#636161] placeholder:font-semibold">

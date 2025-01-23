@@ -20,7 +20,7 @@ class PasswordResetToken extends Model
                 'required',
                 'email',
                 function ($attribute, $value, $fail) use ($role) {
-                    if ($role == 'user') {
+                    if ($role == 'team') {
                         $exists = DB::table('teams')->where('email', $value)->exists();
                     } else if ($role == 'admin') {
                         $exists = DB::table('admins')->where('email', $value)->exists();
@@ -36,7 +36,7 @@ class PasswordResetToken extends Model
             'role' => [
                 'required',
                 'string',
-                'in:user,admin'
+                'in:team,admin'
             ]
         ];
     }
@@ -55,7 +55,7 @@ class PasswordResetToken extends Model
     public static function resetPasswordValidationRules(){
         return [
             'token' => 'required|string|exists:password_reset_tokens,token',
-            'role' => 'required|string|in:user,admin'
+            'role' => 'required|string|in:team,admin'
         ];
     }
 
@@ -80,7 +80,7 @@ class PasswordResetToken extends Model
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;"\'<>,.?~\\/-])[A-Za-z\d!@#$%^&*()_+{}\[\]:;"\'<>,.?~\\/-]{8,}$/'
             ],
             'token' => 'required|string|exists:password_reset_tokens,token',
-            'role' => 'required|string|in:user,admin'
+            'role' => 'required|string|in:team,admin'
         ];
     }
 

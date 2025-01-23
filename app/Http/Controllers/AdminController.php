@@ -67,19 +67,19 @@ class AdminController extends BaseController
         foreach ($validate->errors()->all() as $error) {
             return redirect()->to(route('admin.login'))->with('error', $error);
         }
-        $panitia = $this->model::where('email', $creds['email'])->first();
-        if (!$panitia || !Hash::check($creds['password'], $panitia->password)) {
-            $error = !$panitia ? 'You are not Admin' : 'Invalid credentials';
+        $admin = $this->model::where('email', $creds['email'])->first();
+        if (!$admin || !Hash::check($creds['password'], $admin->password)) {
+            $error = !$admin ? 'You are not Admin' : 'Invalid credentials';
             return redirect()->to(route('admin.login'))->with('error', $error);
         }
-        Auth::guard('admin')->login($panitia);
-        if (!$panitia->hasVerifiedEmail()) {
-            event(new Registered($panitia));
+        Auth::guard('admin')->login($admin);
+        if (!$admin->hasVerifiedEmail()) {
+            event(new Registered($admin));
             $request->session()->put('email', $creds['email']);
-            return redirect()->route('verification.notice');
+            return redirect()->route('admin.verification.notice');
         } else {
             $request->session()->put('email', $creds['email']);
-            $request->session()->put('name', $panitia->name);
+            $request->session()->put('name', $admin->name);
             if (str_ends_with($creds['email'], 'john.petra.ac.id')) {
                 $request->session()->put('nrp', substr($creds['email'], 0, 9));
             } elseif (str_ends_with($creds['email'], 'gmail.com')) {
@@ -87,7 +87,7 @@ class AdminController extends BaseController
                 $nrp = $parts[0];
                 $request->session()->put('nrp', $nrp);
             }
-            $admin = $panitia->load('division');
+            $admin = $admin->load('division');
             if ($admin && $admin->division) {
                 $request->session()->put('admin_id', $admin->id);
                 $request->session()->put('division', $admin->division);

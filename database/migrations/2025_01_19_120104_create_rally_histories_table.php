@@ -16,8 +16,8 @@ return new class extends Migration
             $table->uuid('rally_id');
             $table->uuid('team_id');
             $table->timestamp('qr_expired_at');
-            $table->timestamp('scanned_at');
-            $table->tinyInteger('rank')->nullable()->comment('1: rank 1, 2: rank 2, 3: rank 3');
+            $table->timestamp('scanned_at')->nullable();
+            $table->smallInteger('rank')->nullable()->comment('1: rank 1, 2: rank 2, 3: rank 3');
             $table->unsignedInteger('point')->nullable();
             $table->timestamps();
 

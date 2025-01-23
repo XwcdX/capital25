@@ -23,6 +23,8 @@ return new class extends Migration
             $table->unsignedInteger('coin')->default(1000000);
             $table->unsignedInteger('green_points')->default(0);
             $table->boolean('valid')->default(false);
+            $table->timestamp('email_verified_at')->nullable();
+            $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
         });
