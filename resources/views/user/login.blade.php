@@ -129,7 +129,8 @@
                         <h1 class="text-[36px] mb-6 text-black font-bold text-center">Hello, Ecopreneurs!</h1>
                         <div class="input-box relative w-full mb-6">
                             <input id="teamNameOrEmail" type="text" aria-label="Team Name or Email"
-                                placeholder="Team Name/Email" required="" name="email" value="{{ old('Team Name or Email') }}"
+                                placeholder="Team Name/Email" required="" name="email"
+                                value="{{ old('Team Name or Email') }}"
                                 class="w-full pr-[50px] pl-5 py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[16px] placeholder-[#636161] placeholder:font-semibold">
                             <i
                                 class="fa-solid fa-user absolute right-5 top-1/2 -translate-y-1/2 text-[20px] text-gray-400"></i>
@@ -161,7 +162,7 @@
                         <h1 class="text-[36px] mb-4 lg:mb-6 text-black font-bold text-center col-span-2">Register Here</h1>
                         <div class="input-box relative w-full mb-4 lg:mb-6">
                             <input type="text" aria-label="TeamName" placeholder="Team Name" required=""
-                                id="teamname"
+                                id="name"
                                 class="w-full pr-[50px] pl-5 py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[16px] placeholder-[#636161] placeholder:font-semibold">
                             <i
                                 class="fa-solid fa-user absolute right-5 top-1/2 -translate-y-1/2 text-[20px] text-gray-400"></i>
@@ -179,8 +180,8 @@
                                 class="fa-solid fa-school absolute right-5 top-1/2 -translate-y-1/2 text-[20px] text-gray-400"></i>
                         </div>
                         <div class="input-box relative w-full mb-4 lg:mb-6 col-span-2 lg:col-span-1">
-                            <input type="domicile" aria-label="Domicile" placeholder="Surabaya-Jawa Timur"
-                                required="" id="domicile"
+                            <input type="domicile" aria-label="Domicile" placeholder="Surabaya-Jawa Timur" required=""
+                                id="domicile"
                                 class="w-full pr-[50px] pl-5 py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[16px] placeholder-[#636161] placeholder:font-semibold">
                             <i
                                 class="fa-solid fa-city absolute right-5 top-1/2 -translate-y-1/2 text-[20px] text-gray-400"></i>
@@ -256,43 +257,38 @@
         const submitRegister = document.getElementById('submitRegister');
         submitRegister.addEventListener('submit', async function(event) {
             event.preventDefault();
-            Swal.fire({
-                title: "Registering...",
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
             try {
-                const teamname = document.getElementById('teamname').value;
+                const name = document.getElementById('name').value;
                 const email = document.getElementById('email').value;
                 const school = document.getElementById('school').value;
                 const domicile = document.getElementById('domicile').value;
                 const password = document.getElementById('password').value;
                 const confirmPassword = document.getElementById('confirmPassword').value;
-
                 if (password !== confirmPassword) {
-                    Swal.close();
                     Swal.fire({
                         title: 'Error',
-                        text: "Password do not match!",
+                        text: "Passwords do not match!",
                         icon: 'error',
-                        confirmButtonText: 'OK!',
-                        didOpen: () => {
-                            Swal.hideLoading();
-                        }
-                    })
+                        confirmButtonText: 'OK',
+                    });
                     return;
                 }
-
-                const response = await fetch("", {
+                Swal.fire({
+                    title: 'Processing your registration...',
+                    text: 'Please wait while we send the verification email.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
+                const response = await fetch("{{ route('team.regist') }}", {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': "{{ csrf_token() }}",
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        teamname,
+                        name,
                         email,
                         school,
                         domicile,
@@ -300,15 +296,9 @@
                     }),
                 });
                 const data = await response.json();
-
                 Swal.close();
-                if (data.ok) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Registration successful!',
-                    });
-                    container.classList.remove('active');
+                if (data.success) {
+                    window.location.href = "{{ route('team.verification.notice') }}";
                 } else {
                     Swal.fire({
                         icon: 'error',

@@ -66,15 +66,14 @@ class TeamController extends BaseController
             ]
         );
         if ($validate->fails()) {
-            return redirect()->to(route('team.login'))
-                ->with('error', $validate->errors()->first());
+            return $this->error($validate->errors()->first());
         }
         $creds['password'] = Hash::make($creds['password']);
         $team = $this->model::create($creds);
         Auth::login($team);
         event(new Registered($team));
         $request->session()->put('email', $creds['email']);
-        return redirect()->route('team.verification.notice');
+        return $this->success('Registered Successfully');
     }
 
     public function logins(Request $request)

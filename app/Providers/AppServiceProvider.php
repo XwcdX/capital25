@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use Hamcrest\Core\IsInstanceOf;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Notifications\Messages\MailMessage;
 use App\Models\Admin;
@@ -24,17 +26,21 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
-            if ($notifiable instanceof Admin) {
-                $view = 'admin.mail.verify-email';
-            } elseif ($notifiable instanceof Team) {
-                $view = 'user.mail.verify-email';
+        VerifyEmail::toMailUsing(function ($notifiable, $url) {
+            $isAdmin = $notifiable instanceof Admin;
+            if ($isAdmin) {
+                $url = URL::temporarySignedRoute(
+                    'admin.verification.verify',
+                    now()->addMinutes(config('auth.verification.expire', 60)),
+                    [
+                        'id' => $notifiable->getKey(),
+                        'hash' => sha1($notifiable->getEmailForVerification()),
+                    ]
+                );
             }
+            $view = $isAdmin ? 'admin.mail.verify-email' : 'user.mail.verify-email';
             return (new MailMessage())
-                ->view($view, [
-                    'url' => $url,
-                    'user' => $notifiable,
-                ]);
+                ->view($view, ['url' => $url, 'user' => $notifiable]);
         });
     }
 }

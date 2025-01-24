@@ -64,8 +64,9 @@ class AdminController extends BaseController
                 'password.string' => 'Password must be string',
             ],
         );
-        foreach ($validate->errors()->all() as $error) {
-            return redirect()->to(route('admin.login'))->with('error', $error);
+        if ($validate->fails()) {
+            return redirect()->route('admin.login')
+                ->with('error', $validate->errors()->first());
         }
         $admin = $this->model::where('email', $creds['email'])->first();
         if (!$admin || !Hash::check($creds['password'], $admin->password)) {

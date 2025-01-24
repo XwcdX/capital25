@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [TeamController::class, 'home'])->name('home');
 Route::get('/login', [TeamController::class, 'login'])->name('team.login');
 Route::post('/login', [TeamController::class, 'logins'])->name('team.logins');
+Route::post('/regist', [TeamController::class, 'regist'])->name('team.regist');
 Route::get('/logout', [TeamController::class, 'logout'])->name('team.logout');
 Route::get('/email/verify', [TeamController::class, 'verifyEmail'])->name('team.verification.notice');
 Route::get('/email/verify/{id}/{hash}', [TeamController::class, 'email'])

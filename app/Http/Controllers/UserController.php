@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Auth;
 use Illuminate\Http\Request;
 
 class UserController extends BaseController
@@ -13,6 +14,7 @@ class UserController extends BaseController
 
     public function viewRegistUser(){
         $title = 'User Registration';
-        return view('user.userRegistrationForm', compact('title'));
+        $name = Auth::user()->name;
+        return view('user.userRegistrationForm', compact('title', 'name'));
     }
 }
