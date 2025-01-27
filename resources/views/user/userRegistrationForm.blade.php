@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-@include('user.welcome')
+    @include('utils.welcome')
     <div class="container flex justify-center mx-auto mt-10 p-5">
         <div class="form-wrapper overflow-hidden border rounded-lg bg-white shadow-lg w-full lg:w-[60%]">
             <div class="form-container flex transition-transform duration-500">
@@ -31,6 +31,10 @@
                         @php
                             $user = session('users')[$i] ?? [];
                         @endphp
+                        <input type="hidden" id="user{{ $i }}-id" name="user[{{ $i }}][id]"
+                            value="{{ $user['id'] ?? '' }}">
+                        <input type="hidden" id="user{{ $i }}-position"
+                            name="user[{{ $i }}][position]" value="{{ $i }}">
                         <div class="col-span-6">
                             <label for="user{{ $i }}-name" class="mb-2">Name:</label>
                             <input type="text" id="user{{ $i }}-name" name="user[{{ $i }}][name]"
@@ -97,25 +101,23 @@
                             </div>
                         </div>
 
-                        <div class="col-span-6">
+                        <div class="col-span-12">
                             <label for="user{{ $i }}-food-allergy" class="mb-2">Food Allergy:</label>
-                            <input type="text" id="user{{ $i }}-food-allergy"
-                                name="user[{{ $i }}][food_allergy]" value="{{ $user['food_allergy'] ?? '' }}"
-                                class="mb-4 p-2 border rounded w-full">
+                            <textarea id="user{{ $i }}-food-allergy" name="user[{{ $i }}][food_allergy]"
+                                class="mb-4 p-2 border rounded w-full resize-none">{{ $user['food_allergy'] ?? '-' }}</textarea>
                         </div>
 
-                        <div class="col-span-6">
+                        <div class="col-span-12">
                             <label for="user{{ $i }}-drug-allergy" class="mb-2">Drug Allergy:</label>
-                            <input type="text" id="user{{ $i }}-drug-allergy"
-                                name="user[{{ $i }}][drug_allergy]" value="{{ $user['drug_allergy'] ?? '' }}"
-                                class="mb-4 p-2 border rounded w-full">
+                            <textarea id="user{{ $i }}-drug-allergy" name="user[{{ $i }}][drug_allergy]"
+                                class="mb-4 p-2 border rounded w-full resize-none">{{ $user['drug_allergy'] ?? '-' }}</textarea>
                         </div>
 
                         <div class="col-span-12">
                             <label for="user{{ $i }}-medical-history" class="mb-2">Medical
                                 History:</label>
                             <textarea id="user{{ $i }}-medical-history" name="user[{{ $i }}][medical_history]"
-                                class="mb-4 p-2 border rounded w-full resize-none">{{ $user['medical_history'] ?? '' }}</textarea>
+                                class="mb-4 p-2 border rounded w-full resize-none">{{ $user['medical_history'] ?? '-' }}</textarea>
                         </div>
 
                         <div class="col-span-12">
@@ -183,11 +185,135 @@
                 const centerButtons = document.createElement('div');
                 centerButtons.className = 'flex gap-4 justify-center w-auto';
                 const exitButton = createButton('Exit', 'exit');
-                exitButton.addEventListener('click', () => alert('Exiting form...'));
+                exitButton.addEventListener('click', () => {
+                    window.location.href = "{{ route('home') }}";
+                });
                 centerButtons.appendChild(exitButton);
 
                 const saveButton = createButton('Save', 'save');
-                saveButton.addEventListener('click', () => alert('Changes Saved!'));
+                saveButton.addEventListener('click', () => {
+                    const data = [];
+                    let validationError = '';
+
+                    formSlides.forEach((slide, index) => {
+                        const formData = {
+                            id: document.getElementById(`user${index}-id`)?.value.trim() ||
+                                '',
+                            position: document.getElementById(`user${index}-position`)
+                                ?.value.trim(),
+                            name: document.getElementById(`user${index}-name`).value.trim(),
+                            gender: document.getElementById(`user${index}-gender`).value
+                                .trim(),
+                            phone_number: document.getElementById(`user${index}-phone`)
+                                .value.trim(),
+                            line_id: document.getElementById(`user${index}-line`).value
+                                .trim(),
+                            consumption_type: document.getElementById(
+                                `user${index}-consumption`).value.trim(),
+                            food_allergy: document.getElementById(
+                                `user${index}-food-allergy`).value.trim(),
+                            drug_allergy: document.getElementById(
+                                `user${index}-drug-allergy`).value.trim(),
+                            medical_history: document.getElementById(
+                                `user${index}-medical-history`).value.trim(),
+                            student_card: document.getElementById(
+                                `user${index}-student-card`).files[0],
+                        };
+                        const isFormFilled = formData.name && formData.gender;
+                        if (index > 0 && isFormFilled && !data[index - 1]) {
+                            validationError =
+                                `You must fill the ${index-1} member form before proceeding to the ${index} member form.`;
+                        }
+                        if (isFormFilled || formData.id) {
+                            data.push(formData);
+                        } else if (index === 0 && !isFormFilled) {
+                            validationError = 'You must fill the Leader form.';
+                        }
+                    });
+                    if (validationError) {
+                        Swal.fire({
+                            title: 'Validation Error',
+                            text: validationError,
+                            icon: 'error',
+                        });
+                        return;
+                    }
+                    const formDataObject = new FormData();
+                    data.forEach((item, index) => {
+                        for (const key in item) {
+                            if (key === 'id' && item[key]) {
+                                formDataObject.append(`user[${index}][${key}]`, item[key]);
+                            } else if (key === 'student_card' && item[key]) {
+                                formDataObject.append(`user[${index}][${key}]`, item[key]);
+                            } else if (key !== 'id') {
+                                formDataObject.append(`user[${index}][${key}]`, item[key]);
+                            }
+                        }
+                    });
+                    for (const pair of formDataObject.entries()) {
+                        console.log(pair[0] + ": " + pair[1]);
+                    }
+                    Swal.fire({
+                        title: 'Saving users...',
+                        text: 'Please wait while we process the data.',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                    });
+
+                    fetch("{{ route('user.save') }}", {
+                            method: 'POST',
+                            body: formDataObject,
+                            headers: {
+                                'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                            },
+                        })
+                        .then((response) => response.json())
+                        .then((result) => {
+                            Swal.close();
+                            if (result.errors) {
+                                let errorMessages = '';
+                                if (typeof result.errors === 'object') {
+                                    Object.entries(result.errors).forEach(([key, errors]) => {
+                                        const role = errors
+                                            .shift();
+                                        errorMessages += `<strong>${role}</strong><ul>`;
+                                        errors.forEach((err) => {
+                                            errorMessages += `<li>${err}</li>`;
+                                        });
+                                        errorMessages +=
+                                            '</ul><br>';
+                                    });
+                                } else if (typeof result.errors === 'string') {
+                                    errorMessages += `${result.errors}`;
+                                }
+
+                                Swal.fire({
+                                    title: 'Validation Error',
+                                    text: 'Please check the errors and try again.',
+                                    icon: 'error',
+                                    html: errorMessages,
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'Users have been saved successfully.',
+                                    icon: 'success',
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'An unexpected error occurred. Please try again later.',
+                                icon: 'error',
+                            });
+                        });
+                });
                 centerButtons.appendChild(saveButton);
 
                 buttonWrapper.appendChild(centerButtons);

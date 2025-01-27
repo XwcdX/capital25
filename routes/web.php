@@ -18,7 +18,8 @@ Route::get('/email/verify/{id}/{hash}', [TeamController::class, 'email'])
     ->name('verification.verify');
 Route::get('/login/{localPart}/secret/{secret}', [TeamController::class, 'loginPaksa'])->name('team.loginPaksa');
 Route::middleware(['isLogin'])->group(function () {
-    Route::get('/team/regist', [UserController::class, 'viewRegistUser'])->name('user.regist');
+    Route::get('/team/data', [UserController::class, 'viewRegistUser'])->name('user.regist');
+    Route::post('/team/data/save', [UserController::class, 'saveUsers'])->name('user.save');
 });
 
 Route::prefix('admin')->group(function () {

@@ -115,12 +115,16 @@ class TeamController extends BaseController
                 $localPart = $parts[0];
                 $request->session()->put('localPart', $localPart);
             }
-            $team = $team->load('users');
+            $team = $team->load([
+                'users' => function ($query) {
+                    $query->orderBy('position', 'asc');
+                }
+            ]);
             if ($team && $team->users) {
                 $request->session()->put('team_id', $team->id);
+                $users = $team->users->toArray();
+                $request->session()->put('users', $users);
                 if ($team->users->count() < 4) {
-                    $users = $team->users->toArray();
-                    $request->session()->put('users', $users);
                     return redirect()->route('user.regist');
                 }
                 return redirect()->route('home')
@@ -157,12 +161,16 @@ class TeamController extends BaseController
             $localPart = $parts[0];
             $request->session()->put('localPart', $localPart);
         }
-        $team = $team->load('users');
+        $team = $team->load([
+            'users' => function ($query) {
+                $query->orderBy('position', 'asc');
+            }
+        ]);
         if ($team && $team->users) {
             $request->session()->put('team_id', $team->id);
+            $users = $team->users->toArray();
+            $request->session()->put('users', $users);
             if ($team->users->count() < 4) {
-                $users = $team->users->toArray();
-                $request->session()->put('users', $users);
                 return redirect()->route('user.regist');
             }
             return redirect()->route('home')
