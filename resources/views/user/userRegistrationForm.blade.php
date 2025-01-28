@@ -10,7 +10,7 @@
 
 @section('content')
     @include('utils.welcome')
-    <div class="container flex justify-center mx-auto mt-10 p-5">
+    <div class="container flex justify-center mx-auto mt-10 p-5 z-[-1]">
         <div class="form-wrapper overflow-hidden border rounded-lg bg-white shadow-lg w-full lg:w-[60%]">
             <div class="form-container flex transition-transform duration-500">
                 @php

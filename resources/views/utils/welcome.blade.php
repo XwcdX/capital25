@@ -117,7 +117,40 @@
     <p id="animated-text" class="text-center font-semibold text-white relative fade-in-text"></p>
 </div>
 <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        window.scrollTo({
+            top: 0
+        });
+    });
+    const fullText =
+        `Thank you for joining us in this exciting occasion, your contribution will truly make a difference. Together, let's build a brighter and greener future!`;
+
+    function setPlaceholderHeight(selector, text) {
+        const tempElement = document.createElement("span");
+        tempElement.style.visibility = "hidden";
+        tempElement.style.position = "absolute";
+        tempElement.style.whiteSpace = "pre-wrap";
+        tempElement.style.fontSize = getComputedStyle(document.querySelector(selector)).fontSize;
+        tempElement.style.fontWeight = getComputedStyle(document.querySelector(selector)).fontWeight;
+        tempElement.style.lineHeight = getComputedStyle(document.querySelector(selector)).lineHeight;
+        tempElement.textContent = text;
+        document.body.appendChild(tempElement);
+
+        const textHeight = tempElement.offsetHeight;
+        const container = document.querySelector(selector);
+        container.style.minHeight = `${textHeight}px`;
+
+        document.body.removeChild(tempElement);
+    }
+
     function typeText(selector, text, speed, callback, delayAfterTyping = 500) {
+        document.body.style.overflow = "hidden";
+
+        setPlaceholderHeight("#animated-text", fullText);
+
         let i = 0;
         const element = document.querySelector(selector);
         element.innerText = "";
@@ -139,13 +172,28 @@
         }, speed);
     }
 
+    function scrollToTopAndRemoveContent() {
+        setTimeout(() => {
+            const mainContainer = document.querySelector(".w-screen");
+            mainContainer.style.transition = "height 1s ease-in-out";
+            mainContainer.style.overflow = "hidden";
+            mainContainer.style.height = "0";
+            setTimeout(() => {
+                mainContainer.remove();
+                document.body.style.overflowY = "auto";
+            }, 1000);
+        }, 500);
+    }
+
     typeText(".welcomeH", "Welcome, Team {{ $name }}", 100, () => {
-        const fullText =
-            `Thank you for joining us in this exciting occasion, your contribution will truly make a difference. Together, let's build a brighter and greener future!`;
-        animateText(fullText, "animated-text");
+        animateText(fullText, "animated-text", () => {
+            setTimeout(() => {
+                scrollToTopAndRemoveContent();
+            }, 1500);
+        });
     }, 700);
 
-    const animateText = (text, containerId) => {
+    const animateText = (text, containerId, onComplete) => {
         const container = document.getElementById(containerId);
         const words = text.split(" ");
         const animationDelayFactor = 0.2;
@@ -183,5 +231,10 @@
                 container.appendChild(span);
             }
         });
+        const totalDuration =
+            words.length * animationDelayFactor * 1000 + 1000;
+        setTimeout(() => {
+            if (onComplete) onComplete();
+        }, totalDuration);
     };
 </script>
