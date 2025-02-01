@@ -2,27 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Team;
 use App\Models\User;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class UserController extends BaseController
 {
+    protected $teamController;
     public function __construct(User $model)
     {
         parent::__construct($model);
+        $this->teamController = new TeamController(new Team());
     }
 
     public function viewRegistUser()
     {
+        $currentTeam = Auth::user();
         $title = 'User Registration';
-        $name = Auth::user()->name;
-        return view('user.userRegistrationForm', compact('title', 'name'));
+        $name = $currentTeam->name;
+        $proof = $currentTeam->proof_of_payment;
+        return $proof !== null
+            ? view('user.userRegistrationForm', compact('title', 'name', 'proof'))
+            : view('user.userRegistrationForm', compact('title', 'name'));
     }
+
 
     public function saveUsers(Request $request)
     {
@@ -30,12 +39,17 @@ class UserController extends BaseController
             return response()->json(['errors' => 'Nothing to save'], 500);
         }
 
+        $currentTeam = Auth::user();
         $users = $request->input('user');
+        $proofOfPayment = $request->file('user.4.proof_of_payment');
         $errors = [];
 
         DB::beginTransaction();
         try {
             foreach ($users as $index => $userData) {
+                $userId = $userData['id'] ?? null;
+                $existingUser = $userId ? $this->model::find($userId) : null;
+
                 $rules = [
                     'name' => 'required|string|max:255',
                     'gender' => 'required|integer|in:0,1',
@@ -43,7 +57,7 @@ class UserController extends BaseController
                         'required',
                         'string',
                         'max:15',
-                        Rule::unique('users', 'phone_number')->ignore($userData['id'] ?? null),
+                        Rule::unique('users', 'phone_number')->ignore($userId),
                         'regex:/^08[0-9]{1,2}-?[0-9]{4}-?[0-9]{4,5}$/',
                     ],
                     'position' => 'required|integer|in:0,1,2,3',
@@ -51,7 +65,7 @@ class UserController extends BaseController
                         'required',
                         'string',
                         'max:255',
-                        Rule::unique('users', 'line_id')->ignore($userData['id'] ?? null),
+                        Rule::unique('users', 'line_id')->ignore($userId),
                     ],
                     'consumption_type' => 'required|integer|in:0,1,2',
                     'food_allergy' => 'nullable|string|max:255',
@@ -59,7 +73,7 @@ class UserController extends BaseController
                     'medical_history' => 'nullable|string|max:255',
                 ];
 
-                if (!isset($userData['id']) || $request->hasFile("user.{$index}.student_card")) {
+                if (!$userId || $request->hasFile("user.{$index}.student_card")) {
                     $rules['student_card'] = 'file|mimes:jpeg,png,pdf|max:2048';
                 }
 
@@ -78,12 +92,11 @@ class UserController extends BaseController
                 }
 
                 $validated = $validator->validated();
-                $validated['team_id'] = session('team_id');
+                $validated['team_id'] = $currentTeam->id;
                 if ($request->hasFile("user.{$index}.student_card")) {
-                    $validated['student_card'] = $request->file("user.{$index}.student_card")
-                        ->store('student_cards', 'public');
-                }
-                if ($request->hasFile("user.{$index}.student_card")) {
+                    if ($existingUser && $existingUser->student_card) {
+                        Storage::disk('public')->delete(str_replace('storage/', '', $existingUser->student_card));
+                    }
                     $studentCardFile = $request->file("user.{$index}.student_card");
                     $fileName = sprintf(
                         'student_card_%s_%s_%s.%s',
@@ -94,22 +107,46 @@ class UserController extends BaseController
                     );
                     $filePath = $studentCardFile->storeAs('student_cards', $fileName, 'public');
                     $validated['student_card'] = 'storage/' . $filePath;
-                } elseif (isset($userData['id'])) {
-                    $validated['student_card'] = session('users')[$index]['student_card'];
+                } elseif ($existingUser) {
+                    $validated['student_card'] = $existingUser->student_card;
                 }
 
                 if (!empty($validated['student_card'])) {
                     $users[$index]['student_card'] = $validated['student_card'];
                 }
 
-                if (isset($userData['id'])) {
-                    $user = $this->model::findOrFail($userData['id']);
-                    $user->update($validated);
+                if ($existingUser) {
+                    $existingUser->update($validated);
                 } else {
-                    $user = $this->model::create($validated);
+                    $newUser = $this->model::create($validated);
+                    $users[$index]['id'] = $newUser->id;
                 }
+            }
 
-                $users[$index]['id'] = $user->id;
+            if ($proofOfPayment) {
+                $proofValidator = Validator::make(
+                    ['proof_of_payment' => $proofOfPayment],
+                    ['proof_of_payment' => 'file|mimes:jpeg,png,pdf|max:2048']
+                );
+
+                if ($proofValidator->fails()) {
+                    $errors["user[4]"] = ['Proof of payment:', ...$proofValidator->errors()->all()];
+                } else {
+                    if ($currentTeam->proof_of_payment) {
+                        Storage::disk('public')->delete(str_replace('storage/', '', $currentTeam->proof_of_payment));
+                    }
+
+                    $fileName = sprintf(
+                        'Proof_of_Payment_%s_CAPITAL 2025.%s',
+                        $currentTeam->name,
+                        $proofOfPayment->getClientOriginalExtension()
+                    );
+
+                    $filePath = $proofOfPayment->storeAs('proof_of_payment', $fileName, 'public');
+                    $proofOfPaymentUrl = 'storage/' . $filePath;
+
+                    $this->teamController->saveProofOfPayment($proofOfPaymentUrl);
+                }
             }
 
             if (!empty($errors)) {

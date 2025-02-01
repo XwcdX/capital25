@@ -203,4 +203,14 @@ class TeamController extends BaseController
             return redirect()->to(route('team.login'))->with('error', "You are not authenticated. Please contact admin.");
         }
     }
+
+    public function saveProofOfPayment($address)
+    {
+        $team = Auth::user();
+        $team->update([
+            'proof_of_payment' => $address,
+            'payment_uploaded_at' => now(),
+        ]);
+    }
+
 }

@@ -5,11 +5,31 @@
         i {
             font-size: 2.5em;
         }
+
+        #proof_of_payment {
+            display: none;
+        }
+
+        #drop_area {
+            border: 2px dashed #000;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 1s ease;
+        }
+
+        #drop_area:hover {
+            transform: scale(102%);
+            box-shadow: 0px 0px 25px #2daa22;
+        }
+
+        #drop_area.dragover {
+            background-color: rgba(0, 122, 204, 0.5);
+        }
     </style>
 @endsection
 
 @section('content')
-    @include('utils.welcome')
+    {{-- @include('utils.welcome') --}}
     <div class="container flex justify-center mx-auto mt-10 p-5 z-[-1]">
         <div class="form-wrapper overflow-hidden border rounded-lg bg-white shadow-lg w-full lg:w-[60%]">
             <div class="form-container flex transition-transform duration-500">
@@ -141,6 +161,59 @@
 
                     </div>
                 @endfor
+                <div id="form-4" class="form-slide p-5 w-full flex flex-col items-center justify-center">
+                    <h2 class="text-4xl font-bold mb-4 col-span-12">
+                        Informasi Pembayaran
+                    </h2>
+                    <div class="w-[80%] bg-slate-300 flex flex-col items-center">
+                        <h1>Jumlah Transfer: Rp150.000,00</h1>
+                        <p>Silahkan lakukan pembayaran dari jumlah yang ditentukan ke akun berikut:</p>
+                        <p class="text-center">Nomor Rekening BCA: 82927779282<br>atas nama Pricilla Chealsea</p>
+                        <p>Ketentuan:</p>
+                        <ol class="list-decimal pl-5">
+                            <li>Masukkan 'NAMA TIM_CAPITAL 2025' sebagai berita transfer</li>
+                            <li>File bukti transfer diunggah dalam format JPG, PNG, atau PDF</li>
+                        </ol>
+                        @if (isset($proof))
+                            <img src="{{ asset($proof) }}" alt="" class="w-32 h-auto rounded">
+                        @endif
+                        <div id="drop_container"
+                            class="w-full justify-center items-center flex flex-col h-[200px] pb-[40px] pt-[20px]">
+                            <div id="drop_area"
+                                class="rounded-sm h-full md:w-[65%] flex items-center justify-center relative py-1 md:p-0 px-2">
+                                <label for="proof_of_payment"
+                                    class="h-full w-full font-return-grid text-white select-none cursor-pointer md:tracking-[1.25px] flex flex-col-reverse items-center justify-center font-serif">
+                                    <p id="file_name"
+                                        class="h-2/5 px-2 font-return-grid text-white leading-[20px] text-shadow-white select-none md:text-[18px]">
+                                        Drag
+                                        & Drop your Image here or click to
+                                        upload</p>
+
+                                    <svg class="h-1/2 drop-shadow-[0_0_10px_rgba(255,255,255,1)]" fill="white"
+                                        version="1.1" id="drop_icon" xmlns="http://www.w3.org/2000/svg"
+                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="38" height="38"
+                                        viewBox="0 0 31.332 31.332" xml:space="preserve">
+                                        <g>
+                                            <path
+                                                d="M23.047,15.266c0.781,0.781,0.781,2.047,0,2.828l-7.381,7.381l-7.379-7.379c-0.781-0.781-0.781-2.046,0-2.828
+                                                    c0.78-0.781,2.047-0.781,2.827,0l2.552,2.551V8.686c0-1.104,0.896-2,2-2c1.104,0,2,0.896,2,2v9.132l2.553-2.553
+                                                    C21,14.484,22.268,14.484,23.047,15.266z M31.332,15.666c0,8.639-7.027,15.666-15.666,15.666C7.026,31.332,0,24.305,0,15.666
+                                                    C0,7.028,7.026,0,15.666,0C24.307,0,31.332,7.028,31.332,15.666z M27.332,15.666C27.332,9.233,22.1,4,15.666,4
+                                                    C9.233,4,4,9.233,4,15.666C4,22.1,9.233,27.332,15.666,27.332C22.1,27.332,27.332,22.1,27.332,15.666z" />
+                                        </g>
+                                    </svg>
+                                </label>
+                                <input type="file" id="proof_of_payment" name="user[4][proof_of_payment]"
+                                    accept="image/png, image/jpeg" onchange="handleProofUpload()">
+                            </div>
+                        </div>
+                        <div id="proof_preview"
+                            class="hidden w-full overflow-y-hidden flex items-center justify-center relative mb-5">
+                            <img id="proof_image" src="#" alt="Preview Bukti Transfer"
+                                class="w-[250px] h-auto object-cover border rounded select-none cursor-pointer md:tracking-[1.25px]">
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="button-wrapper flex justify-center items-center mt-5"></div>
@@ -150,6 +223,48 @@
 
 @section('script')
     <script>
+        const dropAreaContainer = document.getElementById('drop_container');
+        const dropArea = document.getElementById('drop_area');
+        const proofInput = document.getElementById('proof_of_payment');
+        const fileNameLabel = document.getElementById('file_name');
+        const proofImg = document.getElementById('proof_image');
+        const proofPreview = document.getElementById('proof_preview');
+
+        function handleProofUpload() {
+            console.log('click');
+
+            const file = proofInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    proofImg.src = e.target.result;
+                    proofPreview.classList.remove('hidden');
+                    dropAreaContainer.classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+                fileNameLabel.textContent = file.name;
+            }
+        }
+
+        dropArea.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            dropArea.classList.add('dragover');
+        });
+
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.classList.remove('dragover');
+        });
+
+        dropArea.addEventListener('drop', (event) => {
+            event.preventDefault();
+            dropArea.classList.remove('dragover');
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+                proofInput.files = files;
+                handleProofUpload();
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             let currentIndex = 0;
             const formContainer = document.querySelector('.form-container');
@@ -196,33 +311,60 @@
                     let validationError = '';
 
                     formSlides.forEach((slide, index) => {
-                        const formData = {
-                            id: document.getElementById(`user${index}-id`)?.value.trim() ||
-                                '',
-                            position: document.getElementById(`user${index}-position`)
-                                ?.value.trim(),
-                            name: document.getElementById(`user${index}-name`).value.trim(),
-                            gender: document.getElementById(`user${index}-gender`).value
-                                .trim(),
-                            phone_number: document.getElementById(`user${index}-phone`)
-                                .value.trim(),
-                            line_id: document.getElementById(`user${index}-line`).value
-                                .trim(),
-                            consumption_type: document.getElementById(
-                                `user${index}-consumption`).value.trim(),
-                            food_allergy: document.getElementById(
-                                `user${index}-food-allergy`).value.trim(),
-                            drug_allergy: document.getElementById(
-                                `user${index}-drug-allergy`).value.trim(),
-                            medical_history: document.getElementById(
-                                `user${index}-medical-history`).value.trim(),
-                            student_card: document.getElementById(
-                                `user${index}-student-card`).files[0],
+                        let formData = {};
+                        let isFormFilled = false;
+                        if (index < 4) {
+                            formData = {
+                                id: document.getElementById(`user${index}-id`)?.value
+                                    .trim() ||
+                                    '',
+                                position: document.getElementById(`user${index}-position`)
+                                    ?.value.trim(),
+                                name: document.getElementById(`user${index}-name`).value
+                                    .trim(),
+                                gender: document.getElementById(`user${index}-gender`).value
+                                    .trim(),
+                                phone_number: document.getElementById(`user${index}-phone`)
+                                    .value.trim(),
+                                line_id: document.getElementById(`user${index}-line`).value
+                                    .trim(),
+                                consumption_type: document.getElementById(
+                                    `user${index}-consumption`).value.trim(),
+                                food_allergy: document.getElementById(
+                                    `user${index}-food-allergy`).value.trim(),
+                                drug_allergy: document.getElementById(
+                                    `user${index}-drug-allergy`).value.trim(),
+                                medical_history: document.getElementById(
+                                    `user${index}-medical-history`).value.trim(),
+                                student_card: document.getElementById(
+                                    `user${index}-student-card`).files[0] || null,
+                            };
+                            isFormFilled = formData.name && formData.gender;
+                        } else {
+                            formData = {
+                                proof_of_payment: document.getElementById(
+                                    'proof_of_payment').files[0] || null,
+                            };
+                            isFormFilled = formData.proof_of_payment;
+                        }
+
+                        const ordinalSuffix = (n) => {
+                            const suffixes = ["th", "st", "nd", "rd"];
+                            const v = n % 100;
+                            return `${n}${suffixes[(v - 20) % 10] || suffixes[v] || suffixes[0]}`;
                         };
-                        const isFormFilled = formData.name && formData.gender;
-                        if (index > 0 && isFormFilled && !data[index - 1]) {
-                            validationError =
-                                `You must fill the ${index-1} member form before proceeding to the ${index} member form.`;
+
+                        if (isFormFilled && !data[index - 1]) {
+                            if (index === 1) {
+                                validationError =
+                                    `You must fill the Leader form before proceeding to the 1st member form.`;
+                            } else if (index >= 2 && index <= 3) {
+                                validationError =
+                                    `You must fill the ${ordinalSuffix(index - 1)} member form before proceeding to the ${ordinalSuffix(index)} member form.`;
+                            } else if (index === 4) {
+                                validationError =
+                                    `You must fill all the forms before uploading proof of payment.`;
+                            }
                         }
                         if (isFormFilled || formData.id) {
                             data.push(formData);
@@ -370,6 +512,17 @@
                 });
             };
             updateSlide();
+
+            document.getElementById('drop_area').addEventListener('mouseover', function(e) {
+                e.preventDefault();
+                document.getElementById('drop_icon').classList.add('filter');
+                document.getElementById('drop_icon').classList.add('animate-pulse');
+            })
+            document.getElementById('drop_area').addEventListener('mouseleave', function(e) {
+                e.preventDefault();
+                document.getElementById('drop_icon').classList.remove('filter');
+                document.getElementById('drop_icon').classList.remove('animate-pulse');
+            })
         });
 
         function previewImage(event, index) {
