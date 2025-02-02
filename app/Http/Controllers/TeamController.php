@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TeamValidationEmail;
 use App\Models\Team;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class TeamController extends BaseController
@@ -16,6 +19,33 @@ class TeamController extends BaseController
     {
         parent::__construct($model);
     }
+    public function getAllTeam()
+    {
+        return $this->model::with('users')->get();
+    }
+    public function getCompletedTeam()
+    {
+        return $this->model::with('users')->whereNotNull('proof_of_payment')->get();
+    }
+    public function getValidatedTeam()
+    {
+        return $this->model::with('users')->where('valid', 1)->get();
+    }
+
+    public function updateValidAndEmail(Request $request, string $id)
+    {
+        $team = $this->model::findOrFail($id);
+        $data = [
+            'status' => $request->valid,
+        ];
+        if ($request->has('feedback')) {
+            $data['feedback'] = $request->feedback;
+        }
+        Log::info('',$data);
+        Mail::to($team->email)->queue(new TeamValidationEmail($data));
+        parent::updatePartial($request, $id);
+    }
+
 
     public function home()
     {
@@ -49,7 +79,7 @@ class TeamController extends BaseController
                 'email' => 'required|email|unique:teams,email',
                 'password' => 'required|string',
                 'school' => 'required|string',
-                'domicile' => 'required|string',
+                'domicile' => ['required', 'regex:/^[A-Za-z]+(?:\s[A-Za-z]+)*-[A-Za-z]+(?:\s[A-Za-z]+)*$/'],
             ],
             [
                 'name.required' => 'Name is required',
@@ -62,7 +92,7 @@ class TeamController extends BaseController
                 'school.required' => 'School is required',
                 'school.string' => 'School must be a string',
                 'domicile.required' => 'Domicile is required',
-                'domicile.string' => 'Domicile must be a string',
+                'domicile.regex' => 'Domicile format must be "City-Province" (e.g., Jakarta-Jawa Barat)',
             ]
         );
         if ($validate->fails()) {

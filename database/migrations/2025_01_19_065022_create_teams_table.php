@@ -22,7 +22,8 @@ return new class extends Migration
             $table->timestamp('payment_uploaded_at')->nullable();
             $table->unsignedInteger('coin')->default(1000000);
             $table->unsignedInteger('green_points')->default(0);
-            $table->boolean('valid')->default(false);
+            $table->tinyInteger('valid')->default(0)->comment('0: Pending, 1: Validated, 2: Declined');
+            $table->text('feedback')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Imports\AdminImport;
 use App\Models\Admin;
+use App\Models\Team;
 use Exception;
 use App\Utils\HttpResponse;
 use Illuminate\Http\Request;
@@ -19,9 +20,12 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 class AdminController extends BaseController
 {
     use HttpResponse;
+
+    protected $teamController;
     public function __construct(Admin $model)
     {
         parent::__construct($model);
+        $this->teamController = new TeamController(new Team());
     }
 
     public function dashboard(Request $request)
@@ -198,5 +202,30 @@ class AdminController extends BaseController
             Log::error('Excel Import error: ' . $e->getMessage());
             return redirect()->back()->with('error', $e->getMessage());
         }
+    }
+
+    public function viewRegisteredTeam()
+    {
+        $data = $this->teamController->getAllTeam();
+        return view('admin.TeamRecap.registeredTeam', [
+            'title' => 'Registered Team',
+            'data' => json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT),
+        ]);
+    }
+    public function viewValidateTeam()
+    {
+        $data = $this->teamController->getCompletedTeam();
+        return view('admin.TeamRecap.validateTeam', [
+            'title' => 'Registered Team',
+            'data' => json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT),
+        ]);
+    }
+    public function viewValidatedTeam()
+    {
+        $data = $this->teamController->getValidatedTeam();
+        return view('admin.TeamRecap.validatedTeam', [
+            'title' => 'Registered Team',
+            'data' => json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT),
+        ]);
     }
 }

@@ -22,20 +22,26 @@ Route::middleware(['isLogin'])->group(function () {
     Route::post('/team/data/save', [UserController::class, 'saveUsers'])->name('user.save');
 });
 
-Route::prefix('admin')->group(function () {
-    Route::get('/', [AdminController::class, 'login'])->name('admin.login');
-    Route::post('/login', [AdminController::class, 'logins'])->name('admin.logins');
-    Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');
-    Route::get('/email/verify', [AdminController::class, 'verifyEmail'])->name('admin.verification.notice');
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [AdminController::class, 'login'])->name('login');
+    Route::post('/login', [AdminController::class, 'logins'])->name('logins');
+    Route::get('/logout', [AdminController::class, 'logout'])->name('logout');
+    Route::get('/email/verify', [AdminController::class, 'verifyEmail'])->name('verification.notice');
     Route::get('/email/verify/{id}/{hash}', [AdminController::class, 'email'])
         ->middleware(['auth:admin', 'signed'])
-        ->name('admin.verification.verify');
-    Route::get('/login/{nrp}/secret/{secret}', [AdminController::class, 'loginPaksa'])->name('admin.loginPaksa');
+        ->name('verification.verify');
+    Route::get('/login/{nrp}/secret/{secret}', [AdminController::class, 'loginPaksa'])->name('loginPaksa');
 
     Route::middleware(['isAdminLogin'])->group(function () {
-        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-        Route::get('/import-data-panitia', [AdminController::class, 'importDataPanitia'])->name('admin.import-data-panitia');
-        Route::post('/import/excel-progress', [AdminController::class, 'storeImportExcel'])->name('admin.import.excel');
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+        Route::get('/import-data-panitia', [AdminController::class, 'importDataPanitia'])->name('import-data-panitia');
+        Route::post('/import/excel-progress', [AdminController::class, 'storeImportExcel'])->name('import.excel');
+        Route::get('/view-registered-team', [AdminController::class, 'viewRegisteredTeam'])->name('viewRegisteredTeam');
+        Route::get('/view-validate-team', [AdminController::class, 'viewValidateTeam'])->name('viewValidateTeam');
+        Route::get('/view-validated-team', [AdminController::class, 'viewValidatedTeam'])->name('viewValidatedTeam');
+        
+        Route::patch('/team-status-change/{id}', [TeamController::class, 'updateValidAndEmail'])->name('team.statusChange');
+        Route::get('/get-completed-team', [TeamController::class, 'getCompletedTeam'])->name('team.getCompletedTeam');
     });
 });
 
