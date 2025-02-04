@@ -154,7 +154,7 @@ class TeamController extends BaseController
                 $request->session()->put('team_id', $team->id);
                 $users = $team->users->toArray();
                 $request->session()->put('users', $users);
-                if ($team->users->count() < 4) {
+                if ($team->valid != 1) {
                     return redirect()->route('user.regist');
                 }
                 return redirect()->route('home')
@@ -200,7 +200,7 @@ class TeamController extends BaseController
             $request->session()->put('team_id', $team->id);
             $users = $team->users->toArray();
             $request->session()->put('users', $users);
-            if ($team->users->count() < 4) {
+            if ($team->valid != 1) {
                 return redirect()->route('user.regist');
             }
             return redirect()->route('home')

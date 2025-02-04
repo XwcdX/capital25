@@ -29,7 +29,9 @@
 @endsection
 
 @section('content')
-    {{-- @include('utils.welcome') --}}
+    @if (session('users') == [])
+        @include('utils.welcome')
+    @endif
     <div class="container flex justify-center mx-auto mt-10 p-5 z-[-1]">
         <div class="form-wrapper overflow-hidden border rounded-lg bg-white shadow-lg w-full lg:w-[60%]">
             <div class="form-container flex transition-transform duration-500">
@@ -42,14 +44,19 @@
                         }
                         return $suffixes[$number % 10];
                     }
+                    $firstEmptyIndex = null;
                 @endphp
                 @for ($i = 0; $i < 4; $i++)
-                    <div id="form-{{ $i + 1 }}" class="form-slide grid grid-cols-12 gap-2 p-5 w-full">
+                    <div id="form-{{ $i + 1 }}" class="form-slide grid grid-cols-12 gap-2 p-5 w-full"
+                        @if ($firstEmptyIndex === $i) data-first-empty="true" @endif>
                         <h2 class="text-4xl font-bold mb-4 col-span-12">
                             Team Profile ({{ $i === 0 ? 'Leader' : $i . ordinal($i) . ' Member' }})
                         </h2>
                         @php
                             $user = session('users')[$i] ?? [];
+                            if ($firstEmptyIndex === null && empty($user)) {
+                                $firstEmptyIndex = $i;
+                            }
                         @endphp
                         <input type="hidden" id="user{{ $i }}-id" name="user[{{ $i }}][id]"
                             value="{{ $user['id'] ?? '' }}">
@@ -84,7 +91,7 @@
 
                         <div class="col-span-12">
                             <label for="user{{ $i }}-phone" class="mb-2">Phone:</label>
-                            <input type="text" id="user{{ $i }}-phone"
+                            <input type="number" id="user{{ $i }}-phone"
                                 name="user[{{ $i }}][phone_number]" value="{{ $user['phone_number'] ?? '' }}"
                                 class="mb-4 p-2 border rounded w-full">
                         </div>
@@ -161,7 +168,14 @@
 
                     </div>
                 @endfor
-                <div id="form-4" class="form-slide p-5 w-full flex flex-col items-center justify-center">
+                @php
+                    if ($firstEmptyIndex === null) {
+                        $firstEmptyIndex = 4;
+                    }
+                @endphp
+
+                <div id="form-4" class="form-slide p-5 w-full flex flex-col items-center justify-center"
+                    @if ($firstEmptyIndex === 4) data-first-empty="true" @endif>
                     <h2 class="text-4xl font-bold mb-4 col-span-12">
                         Informasi Pembayaran
                     </h2>
@@ -196,10 +210,10 @@
                                         <g>
                                             <path
                                                 d="M23.047,15.266c0.781,0.781,0.781,2.047,0,2.828l-7.381,7.381l-7.379-7.379c-0.781-0.781-0.781-2.046,0-2.828
-                                                    c0.78-0.781,2.047-0.781,2.827,0l2.552,2.551V8.686c0-1.104,0.896-2,2-2c1.104,0,2,0.896,2,2v9.132l2.553-2.553
-                                                    C21,14.484,22.268,14.484,23.047,15.266z M31.332,15.666c0,8.639-7.027,15.666-15.666,15.666C7.026,31.332,0,24.305,0,15.666
-                                                    C0,7.028,7.026,0,15.666,0C24.307,0,31.332,7.028,31.332,15.666z M27.332,15.666C27.332,9.233,22.1,4,15.666,4
-                                                    C9.233,4,4,9.233,4,15.666C4,22.1,9.233,27.332,15.666,27.332C22.1,27.332,27.332,22.1,27.332,15.666z" />
+                                                                c0.78-0.781,2.047-0.781,2.827,0l2.552,2.551V8.686c0-1.104,0.896-2,2-2c1.104,0,2,0.896,2,2v9.132l2.553-2.553
+                                                                C21,14.484,22.268,14.484,23.047,15.266z M31.332,15.666c0,8.639-7.027,15.666-15.666,15.666C7.026,31.332,0,24.305,0,15.666
+                                                                C0,7.028,7.026,0,15.666,0C24.307,0,31.332,7.028,31.332,15.666z M27.332,15.666C27.332,9.233,22.1,4,15.666,4
+                                                                C9.233,4,4,9.233,4,15.666C4,22.1,9.233,27.332,15.666,27.332C22.1,27.332,27.332,22.1,27.332,15.666z" />
                                         </g>
                                     </svg>
                                 </label>
@@ -272,6 +286,8 @@
             const buttonWrapper = document.querySelector('.button-wrapper');
 
             formContainer.style.width = `${formSlides.length * 100}%`;
+
+            currentIndex = Array.from(formSlides).findIndex(slide => slide.dataset.firstEmpty === "true");
 
             const updateSlide = () => {
                 const slideWidth = formSlides[0].clientWidth;
