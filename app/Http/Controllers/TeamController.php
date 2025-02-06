@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ConfirmationEmail;
 use App\Mail\TeamValidationEmail;
 use App\Models\Team;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -41,7 +43,7 @@ class TeamController extends BaseController
         if ($request->has('feedback')) {
             $data['feedback'] = $request->feedback;
         }
-        Log::info('',$data);
+        Log::info('', $data);
         Mail::to($team->email)->queue(new TeamValidationEmail($data));
         parent::updatePartial($request, $id);
     }
@@ -236,11 +238,20 @@ class TeamController extends BaseController
 
     public function saveProofOfPayment($address)
     {
-        $team = Auth::user();
-        $team->update([
-            'proof_of_payment' => $address,
-            'payment_uploaded_at' => now(),
-        ]);
+        $team = Auth::user()->load('users');
+        if (!$team || !$team->email) {
+            throw new \Exception("Authenticated user or email not found.");
+        }
+        $data = [
+            'address' => $address,
+            'users' => $team->users ? $team->users->toArray() : []
+        ];
+        DB::transaction(function () use ($team, $address, $data) {
+            Mail::to($team->email)->queue(new ConfirmationEmail($data));
+            $team->update([
+                'proof_of_payment' => $address,
+                'payment_uploaded_at' => now(),
+            ]);
+        });
     }
-
 }
