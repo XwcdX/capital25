@@ -249,6 +249,7 @@
                     reverseButtons: true,
                     showLoaderOnConfirm: true,
                     preConfirm: async (feedback) => {
+                        const formattedFeedback = feedback.replace(/\n/g, "<br>");
                         try {
                             Swal.fire({
                                 title: "Processing...",
@@ -264,7 +265,7 @@
                                 },
                                 body: JSON.stringify({
                                     valid: selectedOption,
-                                    feedback: feedback
+                                    feedback: formattedFeedback
                                 })
                             });
 
@@ -374,21 +375,21 @@
                         </div>
                         <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                              ${user.food_allergy !== null && user.food_allergy !== "-" ? `
-                                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
-                                                    onclick="showTextModal('Food Allergy', '${user.food_allergy}')">Food Allergy</button>
-                                            ` : ''}
+                                                    <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                                                        onclick="showTextModal('Food Allergy', '${user.food_allergy}')">Food Allergy</button>
+                                                ` : ''}
                             ${user.drug_allergy !== null && user.drug_allergy !== "-" ? `
-                                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-green-500 text-white rounded-md hover:bg-green-600 transition"
-                                                    onclick="showTextModal('Drug Allergy', '${user.drug_allergy}')">Drug Allergy</button>
-                                            ` : ''}
+                                                    <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-green-500 text-white rounded-md hover:bg-green-600 transition"
+                                                        onclick="showTextModal('Drug Allergy', '${user.drug_allergy}')">Drug Allergy</button>
+                                                ` : ''}
                             ${user.medical_history !== null && user.medical_history !== "-" ? `
-                                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition"
-                                                    onclick="showTextModal('Medical History', '${user.medical_history}')">Medical History</button>
-                                            ` : ''}
+                                                    <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition"
+                                                        onclick="showTextModal('Medical History', '${user.medical_history}')">Medical History</button>
+                                                ` : ''}
                             ${user.student_card !== null && user.student_card !== "-" ? `
-                                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-red-500 text-white rounded-md hover:bg-red-600 transition"
-                                                    onclick="showImageModal('Student Card', '${user.student_card}')">Student Card</button>
-                                            ` : ''}
+                                                    <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+                                                        onclick="showImageModal('Student Card', '${user.student_card}')">Student Card</button>
+                                                ` : ''}
                         </div>
                     </div>
                 `;
@@ -501,8 +502,6 @@
                     `;
                             break;
                     }
-                    
-                    console.log(dt.valid);
                     return dt;
                 });
 

@@ -38,7 +38,7 @@ class TeamController extends BaseController
     {
         $team = $this->model::findOrFail($id);
         $data = [
-            'status' => $request->valid,
+            'name' => $team->name,
         ];
         if ($request->has('feedback')) {
             $data['feedback'] = $request->feedback;
@@ -243,8 +243,7 @@ class TeamController extends BaseController
             throw new \Exception("Authenticated user or email not found.");
         }
         $data = [
-            'address' => $address,
-            'users' => $team->users ? $team->users->toArray() : []
+            'name' => $team->name,
         ];
         DB::transaction(function () use ($team, $address, $data) {
             Mail::to($team->email)->queue(new ConfirmationEmail($data));

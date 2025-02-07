@@ -28,7 +28,7 @@ class TeamValidationEmail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Team Validation Email',
+            subject: isset($this->data['feedback']) ? 'Perbaikan Data Pendaftaran CAPITAL 2025' : 'Pengumuman Validasi Data Pendaftaran CAPITAL 2025',
         );
     }
 
