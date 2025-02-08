@@ -42,6 +42,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         
         Route::patch('/team-status-change/{id}', [TeamController::class, 'updateValidAndEmail'])->name('team.statusChange');
         Route::get('/get-completed-team', [TeamController::class, 'getCompletedTeam'])->name('team.getCompletedTeam');
+
+        Route::get('export-teams', [TeamController::class, 'exportValidatedTeam'])->name('export.validated.team');
     });
 });
 

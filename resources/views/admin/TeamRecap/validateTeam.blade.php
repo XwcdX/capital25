@@ -46,6 +46,18 @@
         .buttons:active:before {
             background: #5a6268;
         }
+        .status {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .validated {
+            color: #28a745;
+        }
+
+        .declined {
+            color: #dc3545;
+        }
     </style>
 @endSection
 
@@ -97,6 +109,9 @@
             dt.proof_of_payment = dt.proof_of_payment ?
                 `<button class="buttons" onclick="showProofOfPayment('Proof Of Payment', '${dt.proof_of_payment}')">Team Detail</button>` :
                 "";
+            dt.feedback = (dt.feedback && dt.valid !== 1) ?
+                `<button class="buttons" onclick="showFeedback('${encodeURIComponent(dt.feedback.replace(/'/g, "%27"))}')">Feedback</button>` :
+                "";
             switch (dt.valid) {
                 case 0:
                     dt.valid = `
@@ -108,20 +123,10 @@
                     `;
                     break;
                 case 1:
-                    dt.valid = `
-                        <select class="valid-select" data-id="${dt.id}" disabled>
-                            <option value="1" selected>Validated</option>
-                            <option value="2">Decline</option>
-                        </select>
-                    `;
+                    dt.valid = '<span class="status validated">Validated</span>'
                     break;
                 case 2:
-                    dt.valid = `
-                        <select class="valid-select" data-id="${dt.id}">
-                            <option value="1">Validate</option>
-                            <option value="2" selected>Declined</option>
-                        </select>
-                    `;
+                    dt.valid = '<span class="status declined">Declined</span>';
                     break;
             }
             return dt;
@@ -164,6 +169,12 @@
                     {
                         label: "Status",
                         field: "valid",
+                        sort: false,
+                        html: true
+                    },
+                    {
+                        label: "Detail",
+                        field: "feedback",
                         sort: false,
                         html: true
                     }
@@ -375,21 +386,21 @@
                         </div>
                         <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                              ${user.food_allergy !== null && user.food_allergy !== "-" ? `
-                                                    <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
-                                                        onclick="showTextModal('Food Allergy', '${user.food_allergy}')">Food Allergy</button>
-                                                ` : ''}
+                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                                    onclick="showTextModal('Food Allergy', '${user.food_allergy}')">Food Allergy</button>
+                            ` : ''}
                             ${user.drug_allergy !== null && user.drug_allergy !== "-" ? `
-                                                    <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-green-500 text-white rounded-md hover:bg-green-600 transition"
-                                                        onclick="showTextModal('Drug Allergy', '${user.drug_allergy}')">Drug Allergy</button>
-                                                ` : ''}
+                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-green-500 text-white rounded-md hover:bg-green-600 transition"
+                                    onclick="showTextModal('Drug Allergy', '${user.drug_allergy}')">Drug Allergy</button>
+                            ` : ''}
                             ${user.medical_history !== null && user.medical_history !== "-" ? `
-                                                    <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition"
-                                                        onclick="showTextModal('Medical History', '${user.medical_history}')">Medical History</button>
-                                                ` : ''}
+                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition"
+                                    onclick="showTextModal('Medical History', '${user.medical_history}')">Medical History</button>
+                            ` : ''}
                             ${user.student_card !== null && user.student_card !== "-" ? `
-                                                    <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-red-500 text-white rounded-md hover:bg-red-600 transition"
-                                                        onclick="showImageModal('Student Card', '${user.student_card}')">Student Card</button>
-                                                ` : ''}
+                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+                                    onclick="showImageModal('Student Card', '${user.student_card}')">Student Card</button>
+                            ` : ''}
                         </div>
                     </div>
                 `;
@@ -460,6 +471,18 @@
             });
         }
 
+        function showFeedback(feedback) {
+            let decodedFeedback = decodeURIComponent(feedback);
+            decodedFeedback = decodedFeedback.replace(/%27/g, "'");
+            Swal.fire({
+                title: "Feedback",
+                html: `<div style="text-align: left;">${decodedFeedback}</div>`,
+                icon: "info",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#3085d6",
+            });
+        }
+
         async function reloadTable() {
             try {
                 let response = await fetch("{{ route('admin.team.getCompletedTeam') }}");
@@ -474,7 +497,9 @@
                     dt.proof_of_payment = dt.proof_of_payment ?
                         `<button class="buttons" onclick="showProofOfPayment('Proof Of Payment', '${dt.proof_of_payment}')">Team Detail</button>` :
                         "";
-
+                    dt.feedback = (dt.feedback && dt.valid !== 1) ?
+                        `<button class="buttons" onclick="showFeedback('${encodeURIComponent(dt.feedback.replace(/'/g, "%27"))}')">Feedback</button>` :
+                        "";
                     switch (dt.valid) {
                         case 0:
                             dt.valid = `
@@ -486,20 +511,10 @@
                     `;
                             break;
                         case 1:
-                            dt.valid = `
-                        <select class="valid-select" data-id="${dt.id}" disabled>
-                            <option value="1" selected>Validated</option>
-                            <option value="2">Decline</option>
-                        </select>
-                    `;
+                            dt.valid = '<span class="status validated">Validated</span>'
                             break;
                         case 2:
-                            dt.valid = `
-                        <select class="valid-select" data-id="${dt.id}">
-                            <option value="1">Validate</option>
-                            <option value="2" selected>Declined</option>
-                        </select>
-                    `;
+                            dt.valid = '<span class="status declined">Declined</span>';
                             break;
                     }
                     return dt;
@@ -545,6 +560,12 @@
                         {
                             label: "Status",
                             field: "valid",
+                            sort: false,
+                            html: true
+                        },
+                        {
+                            label: "Detail",
+                            field: "feedback",
                             sort: false,
                             html: true
                         }

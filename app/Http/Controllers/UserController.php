@@ -46,6 +46,10 @@ class UserController extends BaseController
 
         DB::beginTransaction();
         try {
+            if($currentTeam && $currentTeam->valid === 2){
+                $currentTeam->valid = 0;
+                $currentTeam->save();
+            }
             foreach ($users as $index => $userData) {
                 $userId = $userData['id'] ?? null;
                 $existingUser = $userId ? $this->model::find($userId) : null;

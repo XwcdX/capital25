@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TeamsWithUsersExport;
 use App\Mail\ConfirmationEmail;
 use App\Mail\TeamValidationEmail;
 use App\Models\Team;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TeamController extends BaseController
 {
@@ -252,5 +254,9 @@ class TeamController extends BaseController
                 'payment_uploaded_at' => now(),
             ]);
         });
+    }
+
+    public function exportValidatedTeam(){
+        return Excel::download(new TeamsWithUsersExport, 'validated_team.xlsx');
     }
 }
