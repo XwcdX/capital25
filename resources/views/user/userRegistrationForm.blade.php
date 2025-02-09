@@ -25,6 +25,10 @@
         #drop_area.dragover {
             background-color: rgba(0, 122, 204, 0.5);
         }
+
+        .text-white {
+            color: white !important;
+        }
     </style>
 @endsection
 
@@ -32,8 +36,9 @@
     @if (session('users') == [])
         @include('utils.welcome')
     @endif
-    <div class="container flex justify-center mx-auto mt-10 p-5 z-[-1]">
-        <div class="form-wrapper overflow-hidden border rounded-lg bg-white shadow-lg w-full lg:w-[60%]">
+    <div class="lg:container flex justify-center mx-auto p-0 md:p-5 z-[-1] bg-[var(--cap-green1)] min-w-[100vw]">
+        <div
+            class="form-wrapper overflow-hidden sm:my-10 border rounded-lg bg-[var(--cap-green4)] shadow-lg w-full lg:w-[60%]">
             <div class="form-container flex transition-transform duration-500">
                 @php
                     function ordinal($number)
@@ -49,7 +54,7 @@
                 @for ($i = 0; $i < 4; $i++)
                     <div id="form-{{ $i + 1 }}" class="form-slide grid grid-cols-12 gap-2 p-5 w-full"
                         @if ($firstEmptyIndex === $i) data-first-empty="true" @endif>
-                        <h2 class="text-4xl font-bold mb-4 col-span-12">
+                        <h2 class="text-4xl font-bold mb-4 col-span-12 text-white">
                             Team Profile ({{ $i === 0 ? 'Leader' : $i . ordinal($i) . ' Member' }})
                         </h2>
                         @php
@@ -63,15 +68,16 @@
                         <input type="hidden" id="user{{ $i }}-position"
                             name="user[{{ $i }}][position]" value="{{ $i }}">
                         <div class="col-span-6">
-                            <label for="user{{ $i }}-name" class="mb-2">Name:</label>
+                            <label for="user{{ $i }}-name" class="mb-2 text-white">Name:</label>
                             <input type="text" id="user{{ $i }}-name" name="user[{{ $i }}][name]"
-                                value="{{ $user['name'] ?? '' }}" class="mb-4 p-2 border rounded w-full">
+                                value="{{ $user['name'] ?? '' }}"
+                                class="mb-4 p-2 border-none rounded-xl w-full bg-[#BFBDBC]">
                         </div>
 
-                        <div class="col-span-6 relative">
-                            <label for="user{{ $i }}-gender" class="mb-2">Gender:</label>
+                        <div class="col-span-6 relative h-[55px]">
+                            <label for="user{{ $i }}-gender" class="mb-2 text-white">Gender:</label>
                             <select id="user{{ $i }}-gender" name="user[{{ $i }}][gender]"
-                                class="mb-4 p-2 border rounded w-full appearance-none pr-10 bg-white">
+                                class="mb-4 p-2 border-none rounded-xl w-full bg-[#BFBDBC] appearance-none pr-10 relative">
                                 <option value="0"
                                     {{ isset($user['gender']) && $user['gender'] == '0' ? 'selected' : '' }}>Male
                                 </option>
@@ -79,7 +85,7 @@
                                     {{ isset($user['gender']) && $user['gender'] == '1' ? 'selected' : '' }}>Female
                                 </option>
                             </select>
-                            <div class="absolute top-[55%] right-3 transform -translate-y-1/2 pointer-events-none">
+                            <div class="absolute bottom-0 right-3 transform -translate-y-1/2 pointer-events-none">
                                 <svg width="13" height="13" viewBox="0 0 69 60" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -90,24 +96,24 @@
                         </div>
 
                         <div class="col-span-12">
-                            <label for="user{{ $i }}-phone" class="mb-2">Phone:</label>
+                            <label for="user{{ $i }}-phone" class="mb-2 text-white">Phone:</label>
                             <input type="number" id="user{{ $i }}-phone"
                                 name="user[{{ $i }}][phone_number]" value="{{ $user['phone_number'] ?? '' }}"
-                                class="mb-4 p-2 border rounded w-full">
+                                class="mb-4 p-2 border-none  rounded-xl w-full bg-[#BFBDBC]">
                         </div>
 
                         <div class="col-span-6">
-                            <label for="user{{ $i }}-line" class="mb-2">Line ID:</label>
+                            <label for="user{{ $i }}-line" class="mb-2 text-white">Line ID:</label>
                             <input type="text" id="user{{ $i }}-line"
                                 name="user[{{ $i }}][line_id]" value="{{ $user['line_id'] ?? '' }}"
-                                class="mb-4 p-2 border rounded w-full">
+                                class="mb-4 p-2 border-none  rounded-xl w-full bg-[#BFBDBC]">
                         </div>
 
-                        <div class="col-span-6 relative">
-                            <label for="user{{ $i }}-consumption" class="mb-2">Consumption Type:</label>
+                        <div class="col-span-6 relative h-[55px]">
+                            <label for="user{{ $i }}-consumption" class="mb-2 text-white">Consumption:</label>
                             <select id="user{{ $i }}-consumption"
                                 name="user[{{ $i }}][consumption_type]"
-                                class="mb-4 p-2 border rounded w-full appearance-none pr-10 bg-white">
+                                class="mb-4 p-2 border-none  rounded-xl w-full bg-[#BFBDBC] appearance-none pr-10">
                                 <option value="0"
                                     {{ isset($user['consumption_type']) && $user['consumption_type'] == '0' ? 'selected' : '' }}>
                                     Normal</option>
@@ -118,7 +124,7 @@
                                     {{ isset($user['consumption_type']) && $user['consumption_type'] == '2' ? 'selected' : '' }}>
                                     Vegan</option>
                             </select>
-                            <div class="absolute top-[55%] right-3 transform -translate-y-1/2 pointer-events-none">
+                            <div class="absolute bottom-0 right-3 transform -translate-y-1/2 pointer-events-none">
                                 <svg width="13" height="13" viewBox="0 0 69 60" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -129,108 +135,194 @@
                         </div>
 
                         <div class="col-span-12">
-                            <label for="user{{ $i }}-food-allergy" class="mb-2">Food Allergy:</label>
+                            <label for="user{{ $i }}-food-allergy" class="mb-2 text-white">Food Allergy:</label>
                             <textarea id="user{{ $i }}-food-allergy" name="user[{{ $i }}][food_allergy]"
-                                class="mb-4 p-2 border rounded w-full resize-none">{{ $user['food_allergy'] ?? '-' }}</textarea>
+                                class="mb-4 p-2 border-none  rounded-xl w-full bg-[#BFBDBC] resize-none">{{ $user['food_allergy'] ?? '-' }}</textarea>
                         </div>
 
                         <div class="col-span-12">
-                            <label for="user{{ $i }}-drug-allergy" class="mb-2">Drug Allergy:</label>
+                            <label for="user{{ $i }}-drug-allergy" class="mb-2 text-white">Drug Allergy:</label>
                             <textarea id="user{{ $i }}-drug-allergy" name="user[{{ $i }}][drug_allergy]"
-                                class="mb-4 p-2 border rounded w-full resize-none">{{ $user['drug_allergy'] ?? '-' }}</textarea>
+                                class="mb-4 p-2 border-none  rounded-xl w-full bg-[#BFBDBC] resize-none">{{ $user['drug_allergy'] ?? '-' }}</textarea>
                         </div>
 
                         <div class="col-span-12">
-                            <label for="user{{ $i }}-medical-history" class="mb-2">Medical
+                            <label for="user{{ $i }}-medical-history" class="mb-2 text-white">Medical
                                 History:</label>
                             <textarea id="user{{ $i }}-medical-history" name="user[{{ $i }}][medical_history]"
-                                class="mb-4 p-2 border rounded w-full resize-none">{{ $user['medical_history'] ?? '-' }}</textarea>
+                                class="mb-4 p-2 border-none  rounded-xl w-full bg-[#BFBDBC] resize-none">{{ $user['medical_history'] ?? '-' }}</textarea>
                         </div>
 
                         <div class="col-span-12">
-                            <label for="user{{ $i }}-student-card" class="mb-2">Student Card:</label>
+                            <label for="user{{ $i }}-student-card" class="mb-2 text-white">Student Card:</label>
                             @if (!empty($user['student_card']))
-                                <div class="mb-4">
+                                <div class="mb-4 relative">
                                     <img id="preview-existing-{{ $i }}"
                                         src="{{ asset($user['student_card']) }}" alt="Student Card"
-                                        class="w-32 h-auto rounded">
+                                        class="w-[250px] h-auto rounded">
+                                    <span id="remove-existing-{{ $i }}"
+                                        onclick="removeExistingImage({{ $i }})"
+                                        class="absolute top-0 left-0 bg-red-500 text-white px-2 py-1 cursor-pointer rounded-full text-sm">
+                                        &times;
+                                    </span>
+                                </div>
+                                <div id="upload-container-{{ $i }}" class="hidden">
+                                    <div class="mb-4 relative">
+                                        <img id="preview-upload-{{ $i }}" src="#" alt="Preview"
+                                            class="w-[250px] h-auto rounded hidden">
+                                        <span id="remove-upload-{{ $i }}"
+                                            onclick="removeUploadedImage({{ $i }})"
+                                            class="absolute top-0 left-0 bg-red-500 text-white px-2 py-1 cursor-pointer rounded-full text-sm hidden">
+                                            &times;
+                                        </span>
+                                    </div>
+                                    <div class="relative w-full flex items-center bg-[#BFBDBC] rounded-xl overflow-hidden">
+                                        <label for="user{{ $i }}-student-card"
+                                            class="px-3 py-2 cursor-pointer text-gray-700 bg-transparent border-r border-gray-500">
+                                            Choose File
+                                        </label>
+                                        <input type="file" id="user{{ $i }}-student-card"
+                                            name="user[{{ $i }}][student_card]" accept="image/png, image/jpeg"
+                                            class="hidden" onchange="previewImage(event, {{ $i }})">
+                                        <span id="file-name-{{ $i }}" class="text-gray-700 truncate px-3">No
+                                            file chosen</span>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="mb-4 relative">
+                                    <img id="preview-upload-{{ $i }}" src="#" alt="Preview"
+                                        class="w-[250px] h-auto rounded hidden">
+                                    <span id="remove-upload-{{ $i }}"
+                                        onclick="removeUploadedImage({{ $i }})"
+                                        class="absolute top-0 left-0 bg-red-500 text-white px-2 py-1 cursor-pointer rounded-full text-sm hidden">
+                                        &times;
+                                    </span>
+                                </div>
+                                <div class="relative w-full flex items-center bg-[#BFBDBC] rounded-xl overflow-hidden">
+                                    <label for="user{{ $i }}-student-card"
+                                        class="px-3 py-2 cursor-pointer text-gray-700 bg-transparent border-r border-gray-500">
+                                        Choose File
+                                    </label>
+                                    <input type="file" id="user{{ $i }}-student-card"
+                                        name="user[{{ $i }}][student_card]" accept="image/png, image/jpeg"
+                                        class="hidden" onchange="previewImage(event, {{ $i }})">
+                                    <span id="file-name-{{ $i }}" class="text-gray-700 truncate px-3">No file
+                                        chosen</span>
                                 </div>
                             @endif
-                            <div class="mb-4">
-                                <img id="preview-upload-{{ $i }}" src="#" alt="Preview"
-                                    class="w-32 h-auto rounded hidden">
-                            </div>
-                            <input type="file" id="user{{ $i }}-student-card"
-                                name="user[{{ $i }}][student_card]" accept="image/png, image/jpeg"
-                                class="mb-4 p-2 border rounded w-full"
-                                onchange="previewImage(event, {{ $i }})">
                         </div>
 
                     </div>
                 @endfor
                 @php
-                    if ($firstEmptyIndex === null && !$proof) {
+                    if ($firstEmptyIndex === null && isset($proof) && !$proof) {
                         $firstEmptyIndex = 4;
                     }
                 @endphp
 
                 <div id="form-4" class="form-slide p-5 w-full flex flex-col items-center justify-center"
                     @if ($firstEmptyIndex === 4) data-first-empty="true" @endif>
-                    <h2 class="text-4xl font-bold mb-4 col-span-12">
+                    <h2 class="text-2xl sm:text-4xl font-bold mb-4 col-span-12 text-white text-center">
                         Informasi Pembayaran
                     </h2>
-                    <div class="w-[80%] bg-slate-300 flex flex-col items-center">
-                        <h1>Jumlah Transfer: Rp150.000,00</h1>
-                        <p>Silahkan lakukan pembayaran dari jumlah yang ditentukan ke akun berikut:</p>
-                        <p class="text-center">Nomor Rekening BCA: 82927779282<br>atas nama Pricilla Chealsea</p>
-                        <p>Ketentuan:</p>
-                        <ol class="list-decimal pl-5">
-                            <li>Masukkan 'NAMA TIM_CAPITAL 2025' sebagai berita transfer</li>
-                            <li>File bukti transfer diunggah dalam format JPG, PNG, atau PDF</li>
+                    <div class="w-full md:w-[90%] lg:w-[80%] bg-slate-300 rounded-xl flex flex-col items-center">
+                        <h1 class="text-[var(--cap-green5)] text-xl sm:text-3xl font-bold my-5 text-center">Jumlah
+                            Transfer: Rp150.000,00</h1>
+                        <p class="text-center text-sm sm:text-lg font-bold mb-7">Silahkan lakukan pembayaran dari jumlah
+                            yang ditentukan ke akun berikut:</p>
+                        <p class="text-center text-sm sm:text-lg font-bold mb-7">Nomor Rekening BCA: 82927779282<br>atas
+                            nama Pricilla Chealsea</p>
+                        <p class="text-center text-sm sm:text-lg font-bold">Ketentuan:</p>
+                        <ol class="list-decimal pl-5 mb-7">
+                            <li class="text-center text-sm sm:text-lg font-bold">Masukkan 'NAMA TIM_CAPITAL 2025' sebagai
+                                berita transfer</li>
+                            <li class="text-center text-sm sm:text-lg font-bold">File bukti transfer diunggah dalam format
+                                JPG, PNG, atau PDF</li>
                         </ol>
                         @if (isset($proof))
-                            <img src="{{ asset($proof) }}" alt="" class="w-32 h-auto rounded">
-                        @endif
-                        <div id="drop_container"
-                            class="w-full justify-center items-center flex flex-col h-[200px] pb-[40px] pt-[20px]">
-                            <div id="drop_area"
-                                class="rounded-sm h-full md:w-[65%] flex items-center justify-center relative py-1 md:p-0 px-2">
-                                <label for="proof_of_payment"
-                                    class="h-full w-full font-return-grid text-white select-none cursor-pointer md:tracking-[1.25px] flex flex-col-reverse items-center justify-center font-serif">
-                                    <p id="file_name"
-                                        class="h-2/5 px-2 font-return-grid text-white leading-[20px] text-shadow-white select-none md:text-[18px]">
-                                        Drag
-                                        & Drop your Image here or click to
-                                        upload</p>
-
-                                    <svg class="h-1/2 drop-shadow-[0_0_10px_rgba(255,255,255,1)]" fill="white"
-                                        version="1.1" id="drop_icon" xmlns="http://www.w3.org/2000/svg"
-                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="38" height="38"
-                                        viewBox="0 0 31.332 31.332" xml:space="preserve">
-                                        <g>
-                                            <path
-                                                d="M23.047,15.266c0.781,0.781,0.781,2.047,0,2.828l-7.381,7.381l-7.379-7.379c-0.781-0.781-0.781-2.046,0-2.828
-                                                c0.78-0.781,2.047-0.781,2.827,0l2.552,2.551V8.686c0-1.104,0.896-2,2-2c1.104,0,2,0.896,2,2v9.132l2.553-2.553
-                                                C21,14.484,22.268,14.484,23.047,15.266z M31.332,15.666c0,8.639-7.027,15.666-15.666,15.666C7.026,31.332,0,24.305,0,15.666
-                                                C0,7.028,7.026,0,15.666,0C24.307,0,31.332,7.028,31.332,15.666z M27.332,15.666C27.332,9.233,22.1,4,15.666,4
-                                                C9.233,4,4,9.233,4,15.666C4,22.1,9.233,27.332,15.666,27.332C22.1,27.332,27.332,22.1,27.332,15.666z" />
-                                        </g>
-                                    </svg>
-                                </label>
-                                <input type="file" id="proof_of_payment" name="user[4][proof_of_payment]"
-                                    accept="image/png, image/jpeg" onchange="handleProofUpload()">
+                            <div id="prooff" class="mb-4 relative">
+                                <img src="{{ asset($proof) }}" alt="" class="w-[250px] h-auto rounded">
+                                <span id="remove-existing" onclick="removeExistingImage(4)"
+                                    class="absolute top-0 left-0 bg-red-500 text-white px-2 py-1 cursor-pointer rounded-full text-sm">
+                                    &times;
+                                </span>
                             </div>
-                        </div>
+
+                            <div id="drop_container"
+                                class="w-full justify-center items-center flex flex-col h-[200px] pb-[40px] pt-[20px] hidden">
+                                <div id="drop_area"
+                                    class="rounded-sm h-full w-[65%] flex items-center justify-center relative py-1 md:p-0 px-2">
+                                    <label for="proof_of_payment"
+                                        class="h-full w-full font-return-grid text-white select-none cursor-pointer md:tracking-[1.25px] flex flex-col-reverse items-center justify-center font-serif">
+                                        <p id="file_name"
+                                            class="h-2/5 px-2 font-return-grid text-white leading-[20px] text-shadow-white select-none md:text-[18px]">
+                                            Drag
+                                            & Drop your Image here or click to
+                                            upload</p>
+
+                                        <svg class="h-1/2 drop-shadow-[0_0_10px_rgba(255,255,255,1)]" fill="white"
+                                            version="1.1" id="drop_icon" xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="38" height="38"
+                                            viewBox="0 0 31.332 31.332" xml:space="preserve">
+                                            <g>
+                                                <path
+                                                    d="M23.047,15.266c0.781,0.781,0.781,2.047,0,2.828l-7.381,7.381l-7.379-7.379c-0.781-0.781-0.781-2.046,0-2.828
+                                                        c0.78-0.781,2.047-0.781,2.827,0l2.552,2.551V8.686c0-1.104,0.896-2,2-2c1.104,0,2,0.896,2,2v9.132l2.553-2.553
+                                                        C21,14.484,22.268,14.484,23.047,15.266z M31.332,15.666c0,8.639-7.027,15.666-15.666,15.666C7.026,31.332,0,24.305,0,15.666
+                                                        C0,7.028,7.026,0,15.666,0C24.307,0,31.332,7.028,31.332,15.666z M27.332,15.666C27.332,9.233,22.1,4,15.666,4
+                                                        C9.233,4,4,9.233,4,15.666C4,22.1,9.233,27.332,15.666,27.332C22.1,27.332,27.332,22.1,27.332,15.666z" />
+                                            </g>
+                                        </svg>
+                                    </label>
+                                    <input type="file" id="proof_of_payment" name="user[4][proof_of_payment]"
+                                        accept="image/png, image/jpeg" onchange="handleProofUpload()">
+                                </div>
+                            </div>
+                        @else
+                            <div id="drop_container"
+                                class="w-full justify-center items-center flex flex-col h-[200px] pb-[40px] pt-[20px]">
+                                <div id="drop_area"
+                                    class="rounded-sm h-full w-[65%] flex items-center justify-center relative py-1 md:p-0 px-2">
+                                    <label for="proof_of_payment"
+                                        class="h-full w-full font-return-grid text-white select-none cursor-pointer md:tracking-[1.25px] flex flex-col-reverse items-center justify-center font-serif">
+                                        <p id="file_name"
+                                            class="h-2/5 px-2 font-return-grid text-white leading-[20px] text-shadow-white select-none md:text-[18px]">
+                                            Drag
+                                            & Drop your Image here or click to
+                                            upload</p>
+
+                                        <svg class="h-1/2 drop-shadow-[0_0_10px_rgba(255,255,255,1)]" fill="white"
+                                            version="1.1" id="drop_icon" xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="38" height="38"
+                                            viewBox="0 0 31.332 31.332" xml:space="preserve">
+                                            <g>
+                                                <path
+                                                    d="M23.047,15.266c0.781,0.781,0.781,2.047,0,2.828l-7.381,7.381l-7.379-7.379c-0.781-0.781-0.781-2.046,0-2.828
+                                                        c0.78-0.781,2.047-0.781,2.827,0l2.552,2.551V8.686c0-1.104,0.896-2,2-2c1.104,0,2,0.896,2,2v9.132l2.553-2.553
+                                                        C21,14.484,22.268,14.484,23.047,15.266z M31.332,15.666c0,8.639-7.027,15.666-15.666,15.666C7.026,31.332,0,24.305,0,15.666
+                                                        C0,7.028,7.026,0,15.666,0C24.307,0,31.332,7.028,31.332,15.666z M27.332,15.666C27.332,9.233,22.1,4,15.666,4
+                                                        C9.233,4,4,9.233,4,15.666C4,22.1,9.233,27.332,15.666,27.332C22.1,27.332,27.332,22.1,27.332,15.666z" />
+                                            </g>
+                                        </svg>
+                                    </label>
+                                    <input type="file" id="proof_of_payment" name="user[4][proof_of_payment]"
+                                        accept="image/png, image/jpeg" onchange="handleProofUpload()">
+                                </div>
+                            </div>
+                        @endif
                         <div id="proof_preview"
-                            class="hidden w-full overflow-y-hidden flex items-center justify-center relative mb-5">
+                            class="hidden overflow-y-hidden flex items-center justify-center relative mb-5">
                             <img id="proof_image" src="#" alt="Preview Bukti Transfer"
                                 class="w-[250px] h-auto object-cover border rounded select-none cursor-pointer md:tracking-[1.25px]">
+                            <span id="remove-proof-of-payment" onclick="removeUploadedImage(4)"
+                                class="absolute top-0 left-0 bg-red-500 text-white px-2 py-1 cursor-pointer rounded-full text-sm">
+                                &times;
+                            </span>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="button-wrapper flex justify-center items-center mt-5"></div>
+            <div class="button-wrapper flex justify-center items-center my-5"></div>
         </div>
     </div>
 @endsection
@@ -243,10 +335,43 @@
         const fileNameLabel = document.getElementById('file_name');
         const proofImg = document.getElementById('proof_image');
         const proofPreview = document.getElementById('proof_preview');
+        const removeButton = document.getElementById('remove-proof-of-payment');
+
+        function removeExistingImage(i) {
+            if (i < 4) {
+                document.getElementById(`preview-existing-${i}`).style.display = 'none';
+                document.getElementById(`remove-existing-${i}`).style.display = 'none';
+                document.getElementById(`upload-container-${i}`).classList.remove('hidden');
+            } else {
+                document.getElementById('prooff').style.display = 'none';
+                document.getElementById('drop_container').classList.remove('hidden');
+            }
+        }
+
+        function removeUploadedImage(i) {
+            if (i < 4) {
+                const fileInput = document.getElementById(`user${i}-student-card`);
+                const preview = document.getElementById(`preview-upload-${i}`);
+                const fileNameSpan = document.getElementById(`file-name-${i}`);
+
+                fileInput.value = "";
+                preview.src = "#";
+                preview.classList.add('hidden');
+                fileNameSpan.textContent = "No file chosen";
+            } else {
+                const fileInput = document.getElementById('proof_of_payment');
+                const previewContainer = document.getElementById('proof_preview');
+                const proofImage = document.getElementById('proof_image');
+
+                fileInput.value = "";
+                proofImage.src = "#";
+                previewContainer.classList.add('hidden');
+                document.getElementById('drop_container').classList.remove('hidden');
+            }
+            removeButton.classList.add('hidden');
+        }
 
         function handleProofUpload() {
-            console.log('click');
-
             const file = proofInput.files[0];
             if (file) {
                 const reader = new FileReader();
@@ -254,6 +379,7 @@
                     proofImg.src = e.target.result;
                     proofPreview.classList.remove('hidden');
                     dropAreaContainer.classList.add('hidden');
+                    removeButton.classList.remove('hidden');
                 };
                 reader.readAsDataURL(file);
                 fileNameLabel.textContent = file.name;
@@ -288,12 +414,22 @@
             formContainer.style.width = `${formSlides.length * 100}%`;
 
             currentIndex = Array.from(formSlides).findIndex(slide => slide.dataset.firstEmpty === "true");
+            if (currentIndex === -1) {
+                currentIndex = 0;
+            }
 
             const updateSlide = () => {
                 const slideWidth = formSlides[0].clientWidth;
                 formContainer.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
                 updateButtons();
                 trapFocus(formSlides[currentIndex]);
+
+                if (currentIndex === formSlides.length - 1) {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                }
             };
 
             const updateButtons = () => {
@@ -303,7 +439,7 @@
                 if (currentIndex > 0) {
                     const prevButton = createButton('', 'prev');
                     const prevIcon = document.createElement('i');
-                    prevIcon.className = 'fa-solid fa-chevron-left';
+                    prevIcon.className = 'fa-solid fa-chevron-left text-white hover:text-slate-400';
                     prevButton.appendChild(prevIcon);
                     prevButton.addEventListener('click', () => {
                         currentIndex--;
@@ -481,7 +617,7 @@
                 if (currentIndex < formSlides.length - 1) {
                     const nextButton = createButton('', 'next');
                     const nextIcon = document.createElement('i');
-                    nextIcon.className = 'fa-solid fa-chevron-right';
+                    nextIcon.className = 'fa-solid fa-chevron-right text-white hover:text-slate-400';
                     nextButton.appendChild(nextIcon);
                     nextButton.addEventListener('click', () => {
                         currentIndex++;
@@ -496,11 +632,14 @@
             const createButton = (text, className) => {
                 const button = document.createElement('button');
                 button.textContent = text;
-                if (className === 'save' || className === 'exit') {
+                if (className === 'save') {
                     button.className =
-                        `bg-blue-500 text-white px-4 py-2 rounded-full w-[80px] transition-all duration-300 hover:bg-blue-600`;
+                        `bg-white text-[var(--cap-green4)] px-4 py-2 rounded-full w-[80px] font-bold transition-all duration-300 hover:bg-slate-300`;
+                } else if (className === 'exit') {
+                    button.className =
+                        `bg-[var(--cap-green4))] border-2 border-white text-white px-4 py-2 rounded-full w-[80px] font-bold transition-all duration-300 hover:bg-[var(--cap-green5)]`;
                 } else {
-                    button.className = `bg-transparent text-slate-900 px-4 py-2 transition-all duration-300`;
+                    button.className = `bg-transparent px-4 py-2 transition-all duration-300`;
                 }
                 return button;
             };
@@ -544,17 +683,22 @@
         function previewImage(event, index) {
             const file = event.target.files[0];
             const preview = document.getElementById(`preview-upload-${index}`);
+            const removeButton = document.getElementById(`remove-upload-${index}`);
+            const fileNameElement = document.getElementById(`file-name-${index}`);
 
             if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     preview.src = e.target.result;
                     preview.classList.remove('hidden');
+                    removeButton.classList.remove('hidden');
                 };
                 reader.readAsDataURL(file);
+                fileNameElement.textContent = file.name;
             } else {
                 alert('Please upload a valid JPG or PNG image.');
                 event.target.value = '';
+                fileNameElement.textContent = "No file chosen";
             }
         }
     </script>
