@@ -12,7 +12,7 @@
         }
 
         body {
-            background-color: #fff !important;
+            background-color: #3a5a40 !important;
         }
 
         .content__header {
@@ -25,7 +25,7 @@
             margin-right: 50px;
             padding-top: 30px;
             padding-bottom: 30px;
-            background-color: #fff!important;
+            background-color: #3a5a40 !important;
         }
 
         .content__header__logo {
@@ -53,7 +53,7 @@
 
         .content__footer__address a {
             text-decoration: none;
-            color: #718096;
+            color: #fff;
         }
 
         .content__footer__address p {
@@ -84,7 +84,7 @@
         }
 
         .message-box__button {
-            background-color: #273656;
+            background-color: #3a5a40;
             border-radius: 5px;
             color: #fff;
             display: block;
@@ -132,8 +132,8 @@
     <div class="content__container">
         <div class="content__header">
             <div class="content__header__logo">
-                <a href="" target="_blank">
-                    <img src="" alt="" class="" width="100px;">
+                <a href="capital.petra.ac.id" target="_blank">
+                    <img src="" alt="Capital 2025" class="header-bureau-logo" width="100px;">
                 </a>
             </div>
         </div>
@@ -144,9 +144,16 @@
         </div>
         <div class="content__footer">
             <div class="content__footer__logo">
-                <div class="flex items-center justify-center space-x-3 mb-3">
-                    <img src="{{ asset('assets/pcu_logo') }}" class="h-8" alt="PCU Logo" loading="lazy" />
-                </div>
+                <a href="https://petra.ac.id/" target="_blank">
+                    <img src="https://kemahasiswaan.petra.ac.id/img/logoPCU2.png" alt="Petra Christian University" class="footer-pcu-logo">
+                </a>
+            </div>
+            <div class="content__footer__address">
+                <p>
+                    <a href="https://goo.gl/maps/7rtxrXqX4AgpuwVt6" target="_blank">
+                        Jl. Siwalankerto No. 121-131, Siwalankerto, Kec. Wonocolo, Kota SBY, Jawa Timur 60236
+                    </a>
+                </p>
             </div>
         </div>
     </div>

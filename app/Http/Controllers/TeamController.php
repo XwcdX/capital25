@@ -2,13 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TeamsWithUsersExport;
+use App\Mail\ConfirmationEmail;
+use App\Mail\TeamValidationEmail;
 use App\Models\Team;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TeamController extends BaseController
 {
@@ -16,6 +23,33 @@ class TeamController extends BaseController
     {
         parent::__construct($model);
     }
+    public function getAllTeam()
+    {
+        return $this->model::with('users')->get();
+    }
+    public function getCompletedTeam()
+    {
+        return $this->model::with('users')->whereNotNull('proof_of_payment')->get();
+    }
+    public function getValidatedTeam()
+    {
+        return $this->model::with('users')->where('valid', 1)->get();
+    }
+
+    public function updateValidAndEmail(Request $request, string $id)
+    {
+        $team = $this->model::findOrFail($id);
+        $data = [
+            'name' => $team->name,
+        ];
+        if ($request->has('feedback')) {
+            $data['feedback'] = $request->feedback;
+        }
+        Log::info('', $data);
+        Mail::to($team->email)->queue(new TeamValidationEmail($data));
+        parent::updatePartial($request, $id);
+    }
+
 
     public function home()
     {
@@ -49,7 +83,7 @@ class TeamController extends BaseController
                 'email' => 'required|email|unique:teams,email',
                 'password' => 'required|string',
                 'school' => 'required|string',
-                'domicile' => 'required|string',
+                'domicile' => ['required', 'regex:/^[A-Za-z]+(?:\s[A-Za-z]+)*-[A-Za-z]+(?:\s[A-Za-z]+)*$/'],
             ],
             [
                 'name.required' => 'Name is required',
@@ -62,7 +96,7 @@ class TeamController extends BaseController
                 'school.required' => 'School is required',
                 'school.string' => 'School must be a string',
                 'domicile.required' => 'Domicile is required',
-                'domicile.string' => 'Domicile must be a string',
+                'domicile.regex' => 'Domicile format must be "City-Province" (e.g., Jakarta-Jawa Barat)',
             ]
         );
         if ($validate->fails()) {
@@ -124,7 +158,7 @@ class TeamController extends BaseController
                 $request->session()->put('team_id', $team->id);
                 $users = $team->users->toArray();
                 $request->session()->put('users', $users);
-                if ($team->users->count() < 4) {
+                if ($team->valid != 1) {
                     return redirect()->route('user.regist');
                 }
                 return redirect()->route('home')
@@ -170,7 +204,7 @@ class TeamController extends BaseController
             $request->session()->put('team_id', $team->id);
             $users = $team->users->toArray();
             $request->session()->put('users', $users);
-            if ($team->users->count() < 4) {
+            if ($team->valid != 1) {
                 return redirect()->route('user.regist');
             }
             return redirect()->route('home')
@@ -202,5 +236,27 @@ class TeamController extends BaseController
         } else {
             return redirect()->to(route('team.login'))->with('error', "You are not authenticated. Please contact admin.");
         }
+    }
+
+    public function saveProofOfPayment($address)
+    {
+        $team = Auth::user()->load('users');
+        if (!$team || !$team->email) {
+            throw new \Exception("Authenticated user or email not found.");
+        }
+        $data = [
+            'name' => $team->name,
+        ];
+        DB::transaction(function () use ($team, $address, $data) {
+            Mail::to($team->email)->queue(new ConfirmationEmail($data));
+            $team->update([
+                'proof_of_payment' => $address,
+                'payment_uploaded_at' => now(),
+            ]);
+        });
+    }
+
+    public function exportValidatedTeam(){
+        return Excel::download(new TeamsWithUsersExport, 'validated_team.xlsx');
     }
 }

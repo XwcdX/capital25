@@ -1,4 +1,4 @@
-@extends('admin.mail.layout')
+@extends('user.mail.layout')
 
 @section('style')
     <style>

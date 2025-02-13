@@ -49,6 +49,7 @@ class Admin extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    
     /**
      * Rules that applied in this model
      *

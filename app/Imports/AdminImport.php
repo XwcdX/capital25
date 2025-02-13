@@ -29,7 +29,7 @@ class AdminImport implements ToCollection, WithHeadingRow, WithValidation
                     'name' => $row['name'],
                     'email' => $row['email'],
                     'division_id' => Division::where('slug', $row['division'])->first()->id,
-                    'password' => Hash::make('password')
+                    'password' => Hash::make('244466666')
                 ]);
             }
             DB::commit();

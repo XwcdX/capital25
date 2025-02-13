@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\AdminLoginMiddleware;
 use App\Http\Middleware\LoginMiddleware;
+use App\Http\Middleware\ValidationMiddleware;
 use App\Providers\AppServiceProvider;
 use App\Providers\RateLimiterServiceProvider;
 use Illuminate\Foundation\Application;
@@ -20,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'isLogin' => LoginMiddleware::class,
             'isAdminLogin' => AdminLoginMiddleware::class,
+            'isValidated' => ValidationMiddleware::class,
         ]);
     })
     ->withExceptions(function ($exceptions) {

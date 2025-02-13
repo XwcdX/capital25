@@ -9,12 +9,11 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ResetPasswordEmail extends Mailable implements ShouldQueue
+class TeamValidationEmail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
     protected $data;
-
     /**
      * Create a new message instance.
      */
@@ -29,7 +28,7 @@ class ResetPasswordEmail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Reset Password Email',
+            subject: isset($this->data['feedback']) ? 'Perbaikan Data Pendaftaran CAPITAL 2025' : 'Pengumuman Validasi Data Pendaftaran CAPITAL 2025',
         );
     }
 
@@ -39,7 +38,7 @@ class ResetPasswordEmail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            view: 'admin.mail.reset-password-email',
+            view: 'user.mail.team-validation-email',
             with: $this->data,
         );
     }
