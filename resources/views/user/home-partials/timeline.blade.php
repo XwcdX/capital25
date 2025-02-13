@@ -36,14 +36,14 @@
             <h1 class="original-content text-white text-xl md:text-2xl font-extrabold w-[70%] text-center font-quicksand">Closing & Awarding Ceremony</h1>
 
             <div class="hidden-content text-center w-[80%] sm:w-[80%] lg:w-3/4 hidden opacity-0 h-0 overflow-hidden transition-all duration-500 ease-in-out">
-                <h1 class="timeline-title text-lg [@media(max-width:400px)]:text-xl sm:text-2xl lg:text-4xl font-oxanium text-black font-bold"></h1>
-                <p class="timeline-desc text-md [@media(max-width:400px)]:text-base sm:text-lg xl:text-xl font-quicksand text-black my-5 sm:my-5 xl:my-10"></p>
-                <div class="datetime font-quicksand text-md sm:text-lg xl:text-xl text-black">
+                <h1 class="timeline-title text-lg [@media(max-width:400px)]:text-xl sm:text-2xl lg:text-4xl font-oxanium text-white font-bold"></h1>
+                <p class="timeline-desc text-md [@media(max-width:400px)]:text-base sm:text-lg xl:text-xl font-quicksand text-white my-5 sm:my-5 xl:my-10"></p>
+                <div class="datetime font-quicksand text-md sm:text-lg xl:text-xl text-white">
                     <h1 class="timeline-date"></h1>
                     <h1 class="timeline-time"></h1>
                     <h1 class="timeline-loc"></h1>
                 </div>
-                <button class="rounded-3xl border border-black border-[2px] bg-transparent text-black font-quicksand font-bold px-5 py-2 mt-5">Guidebook</button>
+                <button class="rounded-3xl border border-white border-[2px] bg-transparent text-white font-quicksand font-bold px-5 py-2 mt-5">Guidebook</button>
             </div>
         </div>
         <button id="closeBtn"
