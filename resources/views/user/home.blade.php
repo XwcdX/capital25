@@ -17,9 +17,9 @@
 }
 .container {
     border-radius: 40px;
-    width: clamp(65%, 80vw, 80%);
+    /* width: clamp(80%, 85vw, 60%); */
 }
-@media (max-width: 1024px) { /* Adjust based on your needs */
+@media (max-width: 768px) { /* Adjust based on your needs */
     .container {
         flex-direction: column;
     }
@@ -163,49 +163,71 @@
         leftBox: {
             title: "Seminar & Technical Meeting",
             description: `Seminar bertema “The Silent Crisis of Irresponsible Production” akan membahas dampak buruk dari produksi yang tidak bertanggung jawab terhadap lingkungan, serta solusi berkelanjutan seperti Circular Economy (CE) dan Life Cycle Assessment (LCA). Setelah seminar, Technical Meeting akan memberikan penjelasan mengenai teknis Lifecycle Simulation yang akan dilaksanakan pada hari kedua.`,
-            date: "Senin, 17 Maret 2025",
-            time: "17:30 WIB",
-            location: "Zoom Meeting"
+            date: "Tanggal: Senin, 17 Maret 2025",
+            time: "Waktu: 17:30 WIB",
+            location: "Lokasi: Zoom Meeting"
         },
         centerBox: {
             title: "Lifecycle Simulation",
             description: "Rally game interaktif yang mengajak peserta untuk berperan sebagai ecopreneurs di berbagai sektor industri, menghadapi tantangan lingkungan yang relevan dengan kondisi masa kini. Peserta akan menerapkan solusi ramah lingkungan melalui serangkaian fase, dengan fokus pada pengambilan keputusan yang mendukung keberlanjutan jangka panjang.",
-            date: "Senin, Sabtu, 22 Maret 2025",
-            time: "09:00 WIB",
-            location: "Gedung Q, Petra Christian University"
+            date: "Tanggal: Senin, Sabtu, 22 Maret 2025",
+            time: "Waktu: 09:00 WIB",
+            location: "Lokasi: Gedung Q, Petra Christian University"
         },
         rightBox: {
             title: "Talk Show & Awarding Ceremony",
             description: `Talk show bertema “Redefining Profit in a Sustainable World” membahas bagaimana bisnis dapat mencapai profitabilitas berkelanjutan tanpa mengorbankan kelestarian lingkungan. Para narasumber, yang merupakan perwakilan dari perusahaan ramah lingkungan, akan berbagi pengalaman dan studi kasus tentang integrasi keberlanjutan dalam model bisnis mereka. Acara ditutup dengan Awarding Ceremony, di mana tim pemenang Lifecycle Simulation akan menerima penghargaan.`,
-            date: "Jumat, 28 Maret 2025",
-            time: "16:00 WIB",
-            location: "Amphitheatre Gedung Q, Petra Christian University"
+            date: "Tanggal: Jumat, 28 Maret 2025",
+            time: "Waktu: 16:00 WIB",
+            location: "Lokasi: Amphitheatre Gedung Q, Petra Christian University"
         }
     };
-    
+    let hidden_content = '';
+
     boxes.forEach((box) => {
         box.addEventListener("click", () => {
             let tl = gsap.timeline();
-
-            // Hide other boxes except the clicked one
+            hidden_content = box.querySelector('.hidden-content');
+            let timeline_title = box.querySelector('.timeline-title');
+            let timeline_desc = box.querySelector('.timeline-desc');
+            let timeline_date = box.querySelector('.timeline-date');
+            let timeline_time = box.querySelector('.timeline-time');
+            let timeline_loc = box.querySelector('.timeline-loc');
+            
+            if (hidden_content.classList.contains("hidden")) {
+                timeline_title.innerHTML = contentData[box.id].title;
+                timeline_desc.innerHTML = contentData[box.id].description;
+                timeline_date.innerHTML = contentData[box.id].date;
+                timeline_time.innerHTML = contentData[box.id].time;
+                timeline_loc.innerHTML = contentData[box.id].location;
+            }
+            // Hide all boxes except the clicked one
             boxes.forEach(b => {
                 if (b !== box) {
                     tl.to(b, { opacity: 0, duration: 0.4, display: "none" }, "start");
                 }
             });
+            tl.to(box.querySelectorAll(".original-content"), { opacity: 0, duration: 0.3, display: "none" }, "start"); //hide content
 
-            // Expand the clicked box to fill the container
+            // Expand the box to fill the container
             tl.to(box, { 
                 flex: 10, 
                 borderRadius: "0%", 
                 duration: 0.6, 
                 ease: "power2.inOut"
             }, "-=0.3")
-            .to(closeBtn, { 
+            .to(closeBtn, {  //make the close button appear
                 opacity: 1,
                 pointerEvents: "auto", 
                 duration: 0.3 
-            }, "-=0.3");
+            }, "-=0.3")
+            .to(hidden_content, {
+                opacity: 1,
+                height: "auto", 
+                duration: 0.1,
+                ease: "power2.out",
+                onStart: () => hidden_content.classList.remove("hidden"), 
+            })
         });
     });
 
@@ -213,6 +235,8 @@
         let tl = gsap.timeline();
         tl.to(boxes, { flex: 1, opacity: 1, borderRadius: "40px", display: "flex", duration: 0.5 });
         tl.to(closeBtn, { opacity: 0, pointerEvents: "none", duration: 0.3 }, "-=0.5");
+        tl.to(hidden_content, { opacity: 0, height: 0, duration: 0.2, onStart: () => hidden_content.classList.add("hidden") }, "-=0.4");
+        tl.to(document.querySelectorAll(".original-content"), { opacity: 1, display: "block", duration: 0.3 }, "-=0.4");
     });
     
     /* Lenis smooth scroll */
