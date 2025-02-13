@@ -20,7 +20,7 @@ class TeamController extends BaseController
     public function home()
     {
         $title = 'Home';
-        return view('welcome', compact('title'));
+        return view('user.home', compact('title'));
     }
 
     public function login()

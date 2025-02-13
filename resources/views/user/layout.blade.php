@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>User | {{ $title }}</title>
     {{-- tailwindcss --}}
-    <script src="https://cdn.tailwindcss.com/3.4.5"></script>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/tw-elements.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/css/tw-elements.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
@@ -77,6 +77,7 @@
         textarea:disabled {
             background: #aaaaaa50 !important;
         }
+        
     </style>
 
     <script>
