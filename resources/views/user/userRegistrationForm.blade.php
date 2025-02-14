@@ -666,8 +666,9 @@
                 const focusableElements = slide.querySelectorAll(
                     'input, button, select, textarea, a[href], [tabindex]:not([tabindex="-1"])'
                 );
-                const firstElement = focusableElements[0];
-                const lastElement = focusableElements[focusableElements.length - 1];
+                const firstElement = focusableElements[2];
+                const lastElement = focusableElements[focusableElements.length - 2];
+                
                 slide.addEventListener('keydown', (e) => {
                     if (e.key === 'Tab') {
                         if (e.shiftKey) {

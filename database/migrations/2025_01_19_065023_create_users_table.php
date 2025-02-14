@@ -19,9 +19,9 @@ return new class extends Migration
             $table->tinyInteger('position')->comment('0: Leader, 1: 1st Member, 2: 2nd Member, 3: 3rd Member');
             $table->string('line_id')->unique();
             $table->tinyInteger('consumption_type')->default(0)->comment('0: Normal, 1: Vege, 2: Vegan');
-            $table->text('food_allergy')->default('-');
-            $table->text('drug_allergy')->default('-');
-            $table->text('medical_history')->default('-');
+            $table->text('food_allergy')->nullable();
+            $table->text('drug_allergy')->nullable();
+            $table->text('medical_history')->nullable();
             $table->string('student_card')->unique();
             $table->uuid('team_id');
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
