@@ -143,16 +143,16 @@
                                 class="fa-solid fa-lock absolute right-5 top-1/2 -translate-y-1/2 text-[20px] text-gray-400"></i>
                         </div>
                         <div class="mb-4 lg:mb-6 w-full text-center">
-                            <a href="{{ route('forget.password', ['role'=>'team']) }}">Forgot Password</a>
+                            <a href="{{ route('forget.password', ['role'=>'team']) }}" class="text-blue-700"><u>Forgot Password</u></a>
                         </div>
                         <div class="flex flex-col justify-center items-center">
                             <button type="submit"
                                 class="w-full bg-emerald-800 text-white font-bold py-2 px-4 rounded-full hover:bg-emerald-900">Login</button>
-                            <div class="text-center font-semibold my-2 lg:my-4 text-black">OR</div>
+                            {{-- <div class="text-center font-semibold my-2 lg:my-4 text-black">OR</div>
                             <button onclick="window.location.href=''"
                                 class="w-full bg-[#7494ec] text-white font-bold py-2 px-4 rounded-full hover:bg-gray-400 p-[20px]">
                                 <i class="fa-brands fa-google ml-"></i> Login with Email
-                            </button>
+                            </button> --}}
                         </div>
                     </form>
                 </div>
@@ -204,7 +204,7 @@
                                 class="fa-solid fa-lock absolute right-4 min-[376px]:right-5 top-1/2 -translate-y-1/2 text-[17px] min-[376px]:text-[20px] text-gray-400"></i>
                         </div>
                         <button type="submit"
-                            class="w-full bg-[#7494ec] text-white font-bold py-2 px-4 rounded-full hover:bg-emerald-900 col-span-2">Register</button>
+                            class="w-full bg-emerald-800 text-white font-bold py-2 px-4 rounded-full hover:bg-emerald-900 col-span-2">Register</button>
                     </form>
                 </div>
 

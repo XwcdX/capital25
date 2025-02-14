@@ -116,20 +116,22 @@ class TeamController extends BaseController
         $validate = Validator::make(
             $creds,
             [
-                'email' => 'required|exists:teams,email',
+                'email' => 'required',
                 'password' => 'required|string',
             ],
             [
                 'email.required' => 'email is required',
-                'email.exists' => 'Email not found',
                 'password.required' => 'Password is required',
                 'password.string' => 'Password must be string',
             ],
         );
-        foreach ($validate->errors()->all() as $error) {
-            return redirect()->to(route('team.login'))->with('error', $error);
+        if ($validate->fails()) {
+            return redirect()->to(route('team.login'))->withErrors($validate)->withInput();
         }
         $team = $this->model::where('email', $creds['email'])->first();
+        if (!$team) {
+            $team = $this->model::where('name', $creds['email'])->first();
+        }
         if (!$team || !Hash::check($creds['password'], $team->password)) {
             $error = !$team ? 'You are not Registered' : 'Invalid credentials';
             return redirect()->to(route('team.login'))->with('error', $error);
@@ -256,7 +258,8 @@ class TeamController extends BaseController
         });
     }
 
-    public function exportValidatedTeam(){
+    public function exportValidatedTeam()
+    {
         return Excel::download(new TeamsWithUsersExport, 'validated_team.xlsx');
     }
 }
