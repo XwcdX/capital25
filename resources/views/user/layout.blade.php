@@ -49,8 +49,7 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: rgb(23, 24, 56);
-            background: linear-gradient(180deg, rgba(69, 69, 86, 1) 0%, rgba(140, 84, 162, 1) 49%, rgba(249, 182, 63, 1) 100%);
+            background: linear-gradient(180deg, var(--cap-green5) 0%, var(--cap-green3) 49%, var(--cap-green1) 100%);
             border-radius: 8px;
         }
 

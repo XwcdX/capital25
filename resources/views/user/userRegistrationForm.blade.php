@@ -46,10 +46,10 @@
     @if (session('users') == [])
         @include('utils.welcome')
     @endif
-    <div class="lg:container flex justify-center mx-auto p-0 md:p-5 z-[-1] bg-[var(--cap-green1)] min-w-[100vw]">
+    <div class="lg:container flex justify-center bg-[url('{{ asset('assets/texture.jpg') }}')] mx-auto p-0 md:p-5 z-[-1] min-w-[100vw]">
         <div
-            class="form-wrapper overflow-hidden sm:my-10 border rounded-lg bg-[var(--cap-green4)] shadow-lg w-full lg:w-[60%]">
-            <div class="form-container flex transition-transform duration-500">
+            class="form-wrapper overflow-hidden sm:my-10 border rounded-lg bg-[var(--cap-green4)] bg-[url('{{ asset('assets/') }}')] bg-cover bg-center bg-blend-overlay shadow-lg w-full lg:w-[60%]">
+            <div class="form-container flex">
                 @php
                     function ordinal($number)
                     {
@@ -62,7 +62,7 @@
                     $firstEmptyIndex = null;
                 @endphp
                 @for ($i = 0; $i < 4; $i++)
-                    <div id="form-{{ $i + 1 }}" class="form-slide grid grid-cols-12 gap-2 p-5 w-full"
+                    <div id="form-{{ $i + 1 }}" class="form-slide grid grid-cols-12 gap-2 p-12 w-full"
                         @if ($firstEmptyIndex === $i) data-first-empty="true" @endif>
                         <h2 class="text-4xl font-bold mb-4 col-span-12 text-white">
                             Team Profile ({{ $i === 0 ? 'Leader' : $i . ordinal($i) . ' Member' }})
@@ -230,12 +230,12 @@
                     }
                 @endphp
 
-                <div id="form-4" class="form-slide p-5 w-full flex flex-col items-center justify-center"
+                <div id="form-4" class="form-slide p-12 w-full flex flex-col items-center justify-center"
                     @if ($firstEmptyIndex === 4) data-first-empty="true" @endif>
                     <h2 class="text-2xl sm:text-4xl font-bold mb-4 col-span-12 text-white text-center">
                         Informasi Pembayaran
                     </h2>
-                    <div class="w-full md:w-[90%] lg:w-[80%] bg-slate-300 rounded-xl flex flex-col items-center">
+                    <div class="w-full md:w-[90%] lg:w-[80%] bg-slate-300 rounded-xl flex flex-col items-center p-5">
                         <h1 class="text-[var(--cap-green5)] text-xl sm:text-3xl font-bold my-5 text-center">Jumlah
                             Transfer: Rp150.000,00</h1>
                         <p class="text-center text-sm sm:text-lg font-bold mb-7">Silahkan lakukan pembayaran dari jumlah
@@ -263,14 +263,14 @@
                                 <div id="drop_area"
                                     class="rounded-sm h-full w-[65%] flex items-center justify-center relative py-1 md:p-0 px-2">
                                     <label for="proof_of_payment"
-                                        class="h-full w-full font-return-grid text-white select-none cursor-pointer md:tracking-[1.25px] flex flex-col-reverse items-center justify-center font-serif">
+                                        class="h-full w-full font-return-grid text-[var(--cap-green5)] select-none cursor-pointer md:tracking-[1.25px] flex flex-col-reverse items-center justify-center font-serif">
                                         <p id="file_name"
-                                            class="h-2/5 px-2 font-return-grid text-white leading-[20px] text-shadow-white select-none md:text-[18px]">
+                                            class="h-2/5 px-2 font-return-grid text-[#808080] leading-[20px] text-shadow-[0_0_10px_rgba(92,118,80,1)] select-none md:text-[18px]">
                                             Drag
                                             & Drop your Image here or click to
                                             upload</p>
 
-                                        <svg class="h-1/2 drop-shadow-[0_0_10px_rgba(255,255,255,1)]" fill="white"
+                                        <svg class="h-1/2 drop-shadow-[0_0_10px_rgba(255,255,255,1)]" fill="#808080"
                                             version="1.1" id="drop_icon" xmlns="http://www.w3.org/2000/svg"
                                             xmlns:xlink="http://www.w3.org/1999/xlink" width="38" height="38"
                                             viewBox="0 0 31.332 31.332" xml:space="preserve">
@@ -294,14 +294,14 @@
                                 <div id="drop_area"
                                     class="rounded-sm h-full w-[65%] flex items-center justify-center relative py-1 md:p-0 px-2">
                                     <label for="proof_of_payment"
-                                        class="h-full w-full font-return-grid text-white select-none cursor-pointer md:tracking-[1.25px] flex flex-col-reverse items-center justify-center font-serif">
+                                        class="h-full w-full font-return-grid text-[var(--cap-green5)] select-none cursor-pointer md:tracking-[1.25px] flex flex-col-reverse items-center justify-center font-serif">
                                         <p id="file_name"
-                                            class="h-2/5 px-2 font-return-grid text-white leading-[20px] text-shadow-white select-none md:text-[18px]">
+                                            class="h-2/5 px-2 font-return-grid text-[#808080] leading-[20px] text-shadow-[0_0_10px_rgba(92,118,80,1)] select-none md:text-[18px]">
                                             Drag
                                             & Drop your Image here or click to
                                             upload</p>
 
-                                        <svg class="h-1/2 drop-shadow-[0_0_10px_rgba(255,255,255,1)]" fill="white"
+                                        <svg class="h-1/2 drop-shadow-[0_0_10px_rgba(92,118,80,1)]" fill="#808080"
                                             version="1.1" id="drop_icon" xmlns="http://www.w3.org/2000/svg"
                                             xmlns:xlink="http://www.w3.org/1999/xlink" width="38" height="38"
                                             viewBox="0 0 31.332 31.332" xml:space="preserve">
@@ -345,7 +345,6 @@
         const fileNameLabel = document.getElementById('file_name');
         const proofImg = document.getElementById('proof_image');
         const proofPreview = document.getElementById('proof_preview');
-        const removeButton = document.getElementById('remove-proof-of-payment');
 
         function removeExistingImage(i) {
             if (i < 4) {
@@ -359,10 +358,12 @@
         }
 
         function removeUploadedImage(i) {
+            let removeButton;
             if (i < 4) {
                 const fileInput = document.getElementById(`user${i}-student-card`);
                 const preview = document.getElementById(`preview-upload-${i}`);
                 const fileNameSpan = document.getElementById(`file-name-${i}`);
+                removeButton = document.getElementById(`remove-upload-${i}`);
 
                 fileInput.value = "";
                 preview.src = "#";
@@ -372,6 +373,7 @@
                 const fileInput = document.getElementById('proof_of_payment');
                 const previewContainer = document.getElementById('proof_preview');
                 const proofImage = document.getElementById('proof_image');
+                removeButton = document.getElementById('remove-proof-of-payment');
 
                 fileInput.value = "";
                 proofImage.src = "#";

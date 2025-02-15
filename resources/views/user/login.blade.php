@@ -142,8 +142,8 @@
                             <i
                                 class="fa-solid fa-lock absolute right-5 top-1/2 -translate-y-1/2 text-[20px] text-gray-400"></i>
                         </div>
-                        <div class="mb-4 lg:mb-6 w-full text-center">
-                            <a href="{{ route('forget.password', ['role'=>'team']) }}" class="text-blue-700"><u>Forgot Password</u></a>
+                        <div class="mb-4 lg:mb-6 w-full text-end">
+                            <a href="{{ route('forget.password', ['role'=>'team']) }}" class="text-[#6c6a66] text-md font-bold">Forgot Password?</a>
                         </div>
                         <div class="flex flex-col justify-center items-center">
                             <button type="submit"
