@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>User | {{ $title }}</title>
     {{-- tailwindcss --}}
-    <script src="https://cdn.tailwindcss.com/3.4.5"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/tw-elements.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/css/tw-elements.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
@@ -77,6 +77,30 @@
         textarea:disabled {
             background: #aaaaaa50 !important;
         }
+
+        @font-face {
+            font-family: 'orbitron';
+            src: url('/assets/fonts/heading-orbitron.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'quicksand';
+            src: url('/assets/fonts/quicksand.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'oxanium';
+            src: url('/assets/fonts/oxanium.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        .font-orbitron { font-family: 'orbitron'; }
+        .font-quicksand { font-family: 'quicksand'; }
+        .font-oxanium { font-family: 'oxanium'; }
+
+        
     </style>
 
     <script>
