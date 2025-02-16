@@ -46,7 +46,8 @@
     @if (session('users') == [])
         @include('utils.welcome')
     @endif
-    <div class="lg:container flex justify-center bg-[url('{{ asset('assets/texture.jpg') }}')] mx-auto p-0 md:p-5 z-[-1] min-w-[100vw]">
+    <div
+        class="lg:container flex justify-center bg-[url('{{ asset('assets/texture.jpg') }}')] mx-auto p-0 md:p-5 z-[-1] min-w-[100vw]">
         <div
             class="form-wrapper overflow-hidden sm:my-10 border rounded-lg bg-[var(--cap-green4)] bg-[url('{{ asset('assets/') }}')] bg-cover bg-center bg-blend-overlay shadow-lg w-full lg:w-[60%]">
             <div class="form-container flex">
@@ -163,65 +164,57 @@
                                 class="mb-4 p-2 border-none  rounded-xl w-full bg-[#BFBDBC] resize-none">{{ $user['medical_history'] ?? '-' }}</textarea>
                         </div>
 
-                        <div class="col-span-12">
-                            <label for="user{{ $i }}-student-card" class="mb-2 text-white">Student Card:</label>
-                            @if (!empty($user['student_card']))
-                                <div class="mb-4 relative">
-                                    <img id="preview-existing-{{ $i }}"
-                                        src="{{ asset($user['student_card']) }}" alt="Student Card"
-                                        class="w-[250px] h-auto rounded">
-                                    <span id="remove-existing-{{ $i }}"
-                                        onclick="removeExistingImage({{ $i }})"
-                                        class="absolute top-0 left-0 bg-red-500 text-white px-2 py-1 cursor-pointer rounded-full text-sm">
-                                        &times;
-                                    </span>
-                                </div>
-                                <div id="upload-container-{{ $i }}" class="hidden">
+                        @foreach (['student_card', 'twibbon'] as $field)
+                            <div class="col-span-12">
+                                <label for="user{{ $i }}-{{ $field }}" class="mb-2 text-white">
+                                    {{ ucfirst(str_replace('_', ' ', $field)) }}:
+                                </label>
+
+                                @php
+                                    $hasFile = !empty($user[$field]);
+                                @endphp
+
+                                @if ($hasFile)
                                     <div class="mb-4 relative">
-                                        <img id="preview-upload-{{ $i }}" src="#" alt="Preview"
-                                            class="w-[250px] h-auto rounded hidden">
-                                        <span id="remove-upload-{{ $i }}"
-                                            onclick="removeUploadedImage({{ $i }})"
+                                        <img id="preview-existing-{{ $field }}-{{ $i }}"
+                                            src="{{ asset($user[$field]) }}" alt="{{ ucfirst($field) }}"
+                                            class="h-[130px] w-auto rounded">
+                                        <span id="remove-existing-{{ $field }}-{{ $i }}"
+                                            onclick="removeExistingImage({{ $i }}, '{{ $field }}')"
+                                            class="absolute top-0 left-0 bg-red-500 text-white px-2 py-1 cursor-pointer rounded-full text-sm">
+                                            &times;
+                                        </span>
+                                    </div>
+                                @endif
+
+                                <div id="upload-container-{{ $field }}-{{ $i }}"
+                                    class="{{ $hasFile ? 'hidden' : '' }}">
+                                    <div class="mb-4 relative">
+                                        <img id="preview-upload-{{ $field }}-{{ $i }}" src="#"
+                                            alt="Preview" class="h-[130px] w-auto rounded hidden">
+                                        <span id="remove-upload-{{ $field }}-{{ $i }}"
+                                            onclick="removeUploadedImage({{ $i }}, '{{ $field }}')"
                                             class="absolute top-0 left-0 bg-red-500 text-white px-2 py-1 cursor-pointer rounded-full text-sm hidden">
                                             &times;
                                         </span>
                                     </div>
                                     <div class="relative w-full flex items-center bg-[#BFBDBC] rounded-xl overflow-hidden">
-                                        <label for="user{{ $i }}-student-card"
+                                        <label for="user{{ $i }}-{{ $field }}"
                                             class="px-3 py-2 cursor-pointer text-gray-700 bg-transparent border-r border-gray-500">
                                             Choose File
                                         </label>
-                                        <input type="file" id="user{{ $i }}-student-card"
-                                            name="user[{{ $i }}][student_card]" accept="image/png, image/jpeg"
-                                            class="hidden" onchange="previewImage(event, {{ $i }})">
-                                        <span id="file-name-{{ $i }}" class="text-gray-700 truncate px-3">No
-                                            file chosen</span>
+                                        <input type="file" id="user{{ $i }}-{{ $field }}"
+                                            name="user[{{ $i }}][{{ $field }}]"
+                                            accept="image/png, image/jpeg" class="hidden"
+                                            onchange="previewImage(event, '{{ $field }}', {{ $i }})">
+                                        <span id="file-name-{{ $field }}-{{ $i }}"
+                                            class="text-gray-700 truncate px-3">
+                                            No file chosen
+                                        </span>
                                     </div>
                                 </div>
-                            @else
-                                <div class="mb-4 relative">
-                                    <img id="preview-upload-{{ $i }}" src="#" alt="Preview"
-                                        class="w-[250px] h-auto rounded hidden">
-                                    <span id="remove-upload-{{ $i }}"
-                                        onclick="removeUploadedImage({{ $i }})"
-                                        class="absolute top-0 left-0 bg-red-500 text-white px-2 py-1 cursor-pointer rounded-full text-sm hidden">
-                                        &times;
-                                    </span>
-                                </div>
-                                <div class="relative w-full flex items-center bg-[#BFBDBC] rounded-xl overflow-hidden">
-                                    <label for="user{{ $i }}-student-card"
-                                        class="px-3 py-2 cursor-pointer text-gray-700 bg-transparent border-r border-gray-500">
-                                        Choose File
-                                    </label>
-                                    <input type="file" id="user{{ $i }}-student-card"
-                                        name="user[{{ $i }}][student_card]" accept="image/png, image/jpeg"
-                                        class="hidden" onchange="previewImage(event, {{ $i }})">
-                                    <span id="file-name-{{ $i }}" class="text-gray-700 truncate px-3">No file
-                                        chosen</span>
-                                </div>
-                            @endif
-                        </div>
-
+                            </div>
+                        @endforeach
                     </div>
                 @endfor
                 @php
@@ -249,81 +242,51 @@
                             <li class="text-center text-sm sm:text-lg font-bold">File bukti transfer diunggah dalam format
                                 JPG, PNG, atau PDF</li>
                         </ol>
-                        @if (isset($proof))
-                            <div id="prooff" class="mb-4 relative">
-                                <img src="{{ asset($proof) }}" alt="" class="w-[250px] h-auto rounded">
+
+                        <div id="prooff" class="mb-4 relative {{ isset($proof) ? '' : 'hidden' }}">
+                            @if (isset($proof))
+                                <img src="{{ asset($proof) }}" alt="" class="h-[130px] w-auto rounded">
                                 <span id="remove-existing" onclick="removeExistingImage(4)"
                                     class="absolute top-0 left-0 bg-red-500 text-white px-2 py-1 cursor-pointer rounded-full text-sm">
                                     &times;
                                 </span>
-                            </div>
+                            @endif
+                        </div>
 
-                            <div id="drop_container"
-                                class="w-full justify-center items-center flex flex-col h-[200px] pb-[40px] pt-[20px] hidden">
-                                <div id="drop_area"
-                                    class="rounded-sm h-full w-[65%] flex items-center justify-center relative py-1 md:p-0 px-2">
-                                    <label for="proof_of_payment"
-                                        class="h-full w-full font-return-grid text-[var(--cap-green5)] select-none cursor-pointer md:tracking-[1.25px] flex flex-col-reverse items-center justify-center font-serif">
-                                        <p id="file_name"
-                                            class="h-2/5 px-2 font-return-grid text-[#808080] leading-[20px] text-shadow-[0_0_10px_rgba(92,118,80,1)] select-none md:text-[18px]">
-                                            Drag
-                                            & Drop your Image here or click to
-                                            upload</p>
+                        <div id="drop_container"
+                            class="w-full justify-center items-center flex flex-col h-[200px] pb-[40px] pt-[20px] {{ isset($proof) ? 'hidden' : '' }}">
+                            <div id="drop_area"
+                                class="rounded-sm h-full w-[65%] flex items-center justify-center relative py-1 md:p-0 px-2">
+                                <label for="proof_of_payment"
+                                    class="h-full w-full font-return-grid text-[var(--cap-green5)] select-none cursor-pointer md:tracking-[1.25px] flex flex-col-reverse items-center justify-center font-serif">
+                                    <p id="file_name"
+                                        class="h-2/5 px-2 font-return-grid text-[#808080] leading-[20px] text-shadow-[0_0_10px_rgba(92,118,80,1)] select-none md:text-[18px]">
+                                        Drag
+                                        & Drop your Image here or click to
+                                        upload</p>
 
-                                        <svg class="h-1/2 drop-shadow-[0_0_10px_rgba(255,255,255,1)]" fill="#808080"
-                                            version="1.1" id="drop_icon" xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="38" height="38"
-                                            viewBox="0 0 31.332 31.332" xml:space="preserve">
-                                            <g>
-                                                <path
-                                                    d="M23.047,15.266c0.781,0.781,0.781,2.047,0,2.828l-7.381,7.381l-7.379-7.379c-0.781-0.781-0.781-2.046,0-2.828
-                                                        c0.78-0.781,2.047-0.781,2.827,0l2.552,2.551V8.686c0-1.104,0.896-2,2-2c1.104,0,2,0.896,2,2v9.132l2.553-2.553
-                                                        C21,14.484,22.268,14.484,23.047,15.266z M31.332,15.666c0,8.639-7.027,15.666-15.666,15.666C7.026,31.332,0,24.305,0,15.666
-                                                        C0,7.028,7.026,0,15.666,0C24.307,0,31.332,7.028,31.332,15.666z M27.332,15.666C27.332,9.233,22.1,4,15.666,4
-                                                        C9.233,4,4,9.233,4,15.666C4,22.1,9.233,27.332,15.666,27.332C22.1,27.332,27.332,22.1,27.332,15.666z" />
-                                            </g>
-                                        </svg>
-                                    </label>
-                                    <input type="file" id="proof_of_payment" name="user[4][proof_of_payment]"
-                                        accept="image/png, image/jpeg" onchange="handleProofUpload()">
-                                </div>
+                                    <svg class="h-1/2 drop-shadow-[0_0_10px_rgba(92,118,80,1)]" fill="#808080"
+                                        version="1.1" id="drop_icon" xmlns="http://www.w3.org/2000/svg"
+                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="38" height="38"
+                                        viewBox="0 0 31.332 31.332" xml:space="preserve">
+                                        <g>
+                                            <path
+                                                d="M23.047,15.266c0.781,0.781,0.781,2.047,0,2.828l-7.381,7.381l-7.379-7.379c-0.781-0.781-0.781-2.046,0-2.828
+                                                c0.78-0.781,2.047-0.781,2.827,0l2.552,2.551V8.686c0-1.104,0.896-2,2-2c1.104,0,2,0.896,2,2v9.132l2.553-2.553
+                                                C21,14.484,22.268,14.484,23.047,15.266z M31.332,15.666c0,8.639-7.027,15.666-15.666,15.666C7.026,31.332,0,24.305,0,15.666
+                                                C0,7.028,7.026,0,15.666,0C24.307,0,31.332,7.028,31.332,15.666z M27.332,15.666C27.332,9.233,22.1,4,15.666,4
+                                                C9.233,4,4,9.233,4,15.666C4,22.1,9.233,27.332,15.666,27.332C22.1,27.332,27.332,22.1,27.332,15.666z" />
+                                        </g>
+                                    </svg>
+                                </label>
+                                <input type="file" id="proof_of_payment" name="user[4][proof_of_payment]"
+                                    accept="image/png, image/jpeg" onchange="handleProofUpload()">
                             </div>
-                        @else
-                            <div id="drop_container"
-                                class="w-full justify-center items-center flex flex-col h-[200px] pb-[40px] pt-[20px]">
-                                <div id="drop_area"
-                                    class="rounded-sm h-full w-[65%] flex items-center justify-center relative py-1 md:p-0 px-2">
-                                    <label for="proof_of_payment"
-                                        class="h-full w-full font-return-grid text-[var(--cap-green5)] select-none cursor-pointer md:tracking-[1.25px] flex flex-col-reverse items-center justify-center font-serif">
-                                        <p id="file_name"
-                                            class="h-2/5 px-2 font-return-grid text-[#808080] leading-[20px] text-shadow-[0_0_10px_rgba(92,118,80,1)] select-none md:text-[18px]">
-                                            Drag
-                                            & Drop your Image here or click to
-                                            upload</p>
-
-                                        <svg class="h-1/2 drop-shadow-[0_0_10px_rgba(92,118,80,1)]" fill="#808080"
-                                            version="1.1" id="drop_icon" xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="38" height="38"
-                                            viewBox="0 0 31.332 31.332" xml:space="preserve">
-                                            <g>
-                                                <path
-                                                    d="M23.047,15.266c0.781,0.781,0.781,2.047,0,2.828l-7.381,7.381l-7.379-7.379c-0.781-0.781-0.781-2.046,0-2.828
-                                                        c0.78-0.781,2.047-0.781,2.827,0l2.552,2.551V8.686c0-1.104,0.896-2,2-2c1.104,0,2,0.896,2,2v9.132l2.553-2.553
-                                                        C21,14.484,22.268,14.484,23.047,15.266z M31.332,15.666c0,8.639-7.027,15.666-15.666,15.666C7.026,31.332,0,24.305,0,15.666
-                                                        C0,7.028,7.026,0,15.666,0C24.307,0,31.332,7.028,31.332,15.666z M27.332,15.666C27.332,9.233,22.1,4,15.666,4
-                                                        C9.233,4,4,9.233,4,15.666C4,22.1,9.233,27.332,15.666,27.332C22.1,27.332,27.332,22.1,27.332,15.666z" />
-                                            </g>
-                                        </svg>
-                                    </label>
-                                    <input type="file" id="proof_of_payment" name="user[4][proof_of_payment]"
-                                        accept="image/png, image/jpeg" onchange="handleProofUpload()">
-                                </div>
-                            </div>
-                        @endif
+                        </div>
                         <div id="proof_preview"
                             class="hidden overflow-y-hidden flex items-center justify-center relative mb-5">
                             <img id="proof_image" src="#" alt="Preview Bukti Transfer"
-                                class="w-[250px] h-auto object-cover border rounded select-none cursor-pointer md:tracking-[1.25px]">
+                                class="h-[130px] w-auto object-cover border rounded select-none cursor-pointer md:tracking-[1.25px]">
                             <span id="remove-proof-of-payment" onclick="removeUploadedImage(4)"
                                 class="absolute top-0 left-0 bg-red-500 text-white px-2 py-1 cursor-pointer rounded-full text-sm">
                                 &times;
@@ -346,44 +309,60 @@
         const proofImg = document.getElementById('proof_image');
         const proofPreview = document.getElementById('proof_preview');
 
-        function removeExistingImage(i) {
-            if (i < 4) {
-                document.getElementById(`preview-existing-${i}`).style.display = 'none';
-                document.getElementById(`remove-existing-${i}`).style.display = 'none';
-                document.getElementById(`upload-container-${i}`).classList.remove('hidden');
+        function removeExistingImage(i, field = null) {
+            if (i < 4 && field) {
+                const previewExisting = document.getElementById(`preview-existing-${field}-${i}`);
+                const removeExisting = document.getElementById(`remove-existing-${field}-${i}`);
+                const uploadContainer = document.getElementById(`upload-container-${field}-${i}`);
+
+                if (previewExisting) previewExisting.style.display = 'none';
+                if (removeExisting) removeExisting.style.display = 'none';
+                if (uploadContainer) uploadContainer.classList.remove('hidden');
             } else {
-                document.getElementById('prooff').style.display = 'none';
-                document.getElementById('drop_container').classList.remove('hidden');
+                const prooff = document.getElementById('prooff');
+                const dropContainer = document.getElementById('drop_container');
+
+                if (prooff) prooff.style.display = 'none';
+                if (dropContainer) dropContainer.classList.remove('hidden');
             }
         }
 
-        function removeUploadedImage(i) {
+        function removeUploadedImage(i, field = null) {
             let removeButton;
-            if (i < 4) {
-                const fileInput = document.getElementById(`user${i}-student-card`);
-                const preview = document.getElementById(`preview-upload-${i}`);
-                const fileNameSpan = document.getElementById(`file-name-${i}`);
-                removeButton = document.getElementById(`remove-upload-${i}`);
 
-                fileInput.value = "";
-                preview.src = "#";
-                preview.classList.add('hidden');
-                fileNameSpan.textContent = "No file chosen";
+            if (i < 4 && field) {
+                const fileInput = document.getElementById(`user${i}-${field}`);
+                const preview = document.getElementById(`preview-upload-${field}-${i}`);
+                const fileNameSpan = document.getElementById(`file-name-${field}-${i}`);
+                removeButton = document.getElementById(`remove-upload-${field}-${i}`);
+
+                if (fileInput) fileInput.value = "";
+                if (preview) {
+                    preview.src = "#";
+                    preview.classList.add('hidden');
+                }
+                if (fileNameSpan) fileNameSpan.textContent = "No file chosen";
             } else {
                 const fileInput = document.getElementById('proof_of_payment');
                 const previewContainer = document.getElementById('proof_preview');
                 const proofImage = document.getElementById('proof_image');
                 removeButton = document.getElementById('remove-proof-of-payment');
 
-                fileInput.value = "";
-                proofImage.src = "#";
-                previewContainer.classList.add('hidden');
-                document.getElementById('drop_container').classList.remove('hidden');
+                if (fileInput) fileInput.value = "";
+                fileNameLabel.textContent = "Drag & Drop your Image here or click to upload";
+                if (proofImage) proofImage.src = "#";
+                if (previewContainer) previewContainer.classList.add('hidden');
+
+                const dropContainer = document.getElementById('drop_container');
+                if (dropContainer) dropContainer.classList.remove('hidden');
             }
-            removeButton.classList.add('hidden');
+
+            if (removeButton) removeButton.classList.add('hidden');
         }
 
+
         function handleProofUpload() {
+            let removeButton = document.getElementById('remove-proof-of-payment');
             const file = proofInput.files[0];
             if (file) {
                 const reader = new FileReader();
@@ -506,7 +485,9 @@
                                 medical_history: document.getElementById(
                                     `user${index}-medical-history`).value.trim(),
                                 student_card: document.getElementById(
-                                    `user${index}-student-card`).files[0] || null,
+                                    `user${index}-student_card`).files[0] || null,
+                                twibbon: document.getElementById(
+                                    `user${index}-twibbon`).files[0] || null,
                             };
                             isFormFilled = formData.name && formData.gender;
                         } else {
@@ -555,6 +536,8 @@
                             if (key === 'id' && item[key]) {
                                 formDataObject.append(`user[${index}][${key}]`, item[key]);
                             } else if (key === 'student_card' && item[key]) {
+                                formDataObject.append(`user[${index}][${key}]`, item[key]);
+                            } else if (key === 'twibbon' && item[key]) {
                                 formDataObject.append(`user[${index}][${key}]`, item[key]);
                             } else if (key !== 'id') {
                                 formDataObject.append(`user[${index}][${key}]`, item[key]);
@@ -698,11 +681,11 @@
             })
         });
 
-        function previewImage(event, index) {
+        function previewImage(event, field, index) {
             const file = event.target.files[0];
-            const preview = document.getElementById(`preview-upload-${index}`);
-            const removeButton = document.getElementById(`remove-upload-${index}`);
-            const fileNameElement = document.getElementById(`file-name-${index}`);
+            const preview = document.getElementById(`preview-upload-${field}-${index}`);
+            const removeButton = document.getElementById(`remove-upload-${field}-${index}`);
+            const fileNameElement = document.getElementById(`file-name-${field}-${index}`);
 
             if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
                 const reader = new FileReader();

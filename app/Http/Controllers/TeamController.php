@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -48,6 +49,21 @@ class TeamController extends BaseController
         Log::info('', $data);
         Mail::to($team->email)->queue(new TeamValidationEmail($data));
         parent::updatePartial($request, $id);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $team = Auth::user();
+        if ($request->hasFile('profile_image')) {
+            $storagePath = 'team_profile_pictures';
+            if ($team->profile_image) {
+                Storage::disk('public')->delete(str_replace('storage/', '', $team->profile_image));
+            }
+            $newFileName = sprintf('%s_profile_picture.%s', $team->name, $request->file('profile_image')->getClientOriginalExtension());
+            $filePath = $request->file('profile_image')->storeAs($storagePath, $newFileName, 'public');
+            $request->merge(['profile_image' => 'storage/' . $filePath]);
+        }
+        parent::updatePartial($request, $team->id);
     }
 
 

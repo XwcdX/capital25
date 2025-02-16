@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('drug_allergy')->nullable();
             $table->text('medical_history')->nullable();
             $table->string('student_card')->unique();
+            $table->string('twibbon')->unique();
             $table->uuid('team_id');
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
             $table->timestamps();

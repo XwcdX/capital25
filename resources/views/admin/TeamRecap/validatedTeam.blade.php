@@ -212,22 +212,26 @@
                             </div>
                         </div>
                         <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                             ${user.food_allergy !== null && user.food_allergy !== "-" ? `
-                                        <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
-                                            onclick="showTextModal('Food Allergy', '${user.food_allergy}')">Food Allergy</button>
-                                            ` : ''}
+                            ${user.food_allergy !== null && user.food_allergy !== "-" ? `
+                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                                    onclick="showTextModal('Food Allergy', '${user.food_allergy}')">Food Allergy</button>
+                                    ` : ''}
                             ${user.drug_allergy !== null && user.drug_allergy !== "-" ? `
-                                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-green-500 text-white rounded-md hover:bg-green-600 transition"
-                                                    onclick="showTextModal('Drug Allergy', '${user.drug_allergy}')">Drug Allergy</button>
-                                            ` : ''}
+                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-green-500 text-white rounded-md hover:bg-green-600 transition"
+                                    onclick="showTextModal('Drug Allergy', '${user.drug_allergy}')">Drug Allergy</button>
+                                    ` : ''}
                             ${user.medical_history !== null && user.medical_history !== "-" ? `
-                                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition"
-                                                    onclick="showTextModal('Medical History', '${user.medical_history}')">Medical History</button>
-                                            ` : ''}
+                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition"
+                                    onclick="showTextModal('Medical History', '${user.medical_history}')">Medical History</button>
+                                    ` : ''}
                             ${user.student_card !== null && user.student_card !== "-" ? `
-                                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-red-500 text-white rounded-md hover:bg-red-600 transition"
-                                                    onclick="showImageModal('Student Card', '${user.student_card}')">Student Card</button>
-                                            ` : ''}
+                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-orange-500 text-white rounded-md hover:bg-orange-600 transition"
+                                    onclick="showImageModal('Student Card', '${user.student_card}')">Student Card</button>
+                                    ` : ''}
+                            ${user.twibbon !== null && user.twibbon !== "-" ? `
+                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+                                    onclick="showImageModal('Twibbon', '${user.twibbon}')">Twibbon</button>
+                                    ` : ''}
                         </div>
                     </div>
                 `;
@@ -281,7 +285,7 @@
             Swal.fire({
                 title: title,
                 imageUrl: `{{ asset('${imagePath}') }}`,
-                imageAlt: 'Student Card',
+                imageAlt: title,
                 confirmButtonText: 'Close',
                 confirmButtonColor: "#3085d6",
                 imageWidth: 400,

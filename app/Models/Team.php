@@ -26,6 +26,7 @@ class Team extends Authenticatable implements MustVerifyEmail
         'password',
         'proof_of_payment',
         'payment_uploaded_at',
+        'profile_image',
         'coin',
         'green_points',
         'valid',
@@ -66,6 +67,7 @@ class Team extends Authenticatable implements MustVerifyEmail
             'school' => 'required|string|max:255',
             'domicile' => 'required|string|max:255',
             'proof_of_payment' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'profile_image' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'coin' => 'required|integer|min:0',
             'green_points' => 'required|integer|min:0',
             'valid' => 'required|integer|in:0,1,2',
@@ -100,6 +102,10 @@ class Team extends Authenticatable implements MustVerifyEmail
             'proof_of_payment.file' => 'Proof of payment must be a valid file',
             'proof_of_payment.mimes' => 'Proof of payment must be a JPG, JPEG, PNG, or PDF file',
             'proof_of_payment.max' => 'Proof of payment must not exceed 2MB',
+
+            'profile_image.file' => 'Proof of payment must be a valid file',
+            'profile_image.mimes' => 'Proof of payment must be a JPG, JPEG, PNG, or PDF file',
+            'profile_image.max' => 'Proof of payment must not exceed 2MB',
 
             'coin.required' => 'Coin value is required',
             'coin.integer' => 'Coin must be an integer',

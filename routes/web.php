@@ -20,6 +20,8 @@ Route::get('/login/{localPart}/secret/{secret}', [TeamController::class, 'loginP
 Route::middleware(['isLogin'])->group(function () {
     Route::get('/team/data', [UserController::class, 'viewRegistUser'])->middleware(['isValidated'])->name('user.regist');
     Route::post('/team/data/save', [UserController::class, 'saveUsers'])->middleware(['isValidated'])->name('user.save');
+
+    Route::patch('/updateProfile', [TeamController::class, 'updateProfile'])->name('team.updateProfile');
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
