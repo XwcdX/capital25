@@ -8,7 +8,11 @@
     transition: opacity 0.5s ease-out;
     display: hidden;
 }
-
+.landing-title {
+    -webkit-text-stroke: 4px black;
+    paint-order: stroke fill;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.74);
+}
 .box {
     flex: 1;
     color: white;
@@ -23,7 +27,6 @@
     .container {
         flex-direction: column;
     }
-
     .box {
         width: 100%; 
     }
@@ -57,7 +60,6 @@
     overflow: hidden;
     transition: max-height 0.5s ease-in-out;
 }
-
 .expanded {
     max-height: 1000px; 
 }
@@ -70,7 +72,8 @@
         @include('user.loader')
     </div> --}}
 
-    <div id="full-content" class="hidde overflow-x-hidden">
+    <div id="full-content relative" class="hidde overflow-x-hidden">
+        {{-- <div class="nav-overlay bg-black opacity-0 absolute top-0 left-0 w-screen h-[700vh] z-[8000]"></div> --}}
         @include('components.nav')
         @include('user.home-partials.landing')
         @include('user.home-partials.about')
@@ -79,7 +82,7 @@
         @include('user.home-partials.faq')
         @include('user.home-partials.rules')
         @include('components.footer')
-
+        </div>
     </div>
 
 @endsection
@@ -128,9 +131,9 @@
 
    document.addEventListener("DOMContentLoaded", () => {
        //landing
-        // window.onbeforeunload = function () {
-        //     window.scrollTo(0, 0);
-        // }
+        window.onbeforeunload = function () {
+            window.scrollTo(0, 0);
+        }
 
         gsap.registerPlugin(ScrollTrigger);
         // Parallax Layers
@@ -150,9 +153,9 @@
                 { layer: "3", yPercent: 70, xPercent:0 },
                 { layer: "4", yPercent: 45, xPercent:0 },
                 { layer: "5", yPercent: 29, xPercent:0 },
-                { layer: "6", yPercent: 15, xPercent:0},
-                { layer: "7", yPercent: 5, xPercent:0 }, 
-                { layer: "overlay", yPercent: 0, xPercent:0, opacity:0.75 } 
+                { layer: "6", yPercent: 10, xPercent:0},
+                { layer: "7", yPercent: 2, xPercent:0 }, 
+                { layer: "overlay", yPercent: 0, xPercent:0, opacity:0.9 } 
             ];
             layers.forEach((layerObj, idx) => {
             tl.to(
@@ -167,6 +170,26 @@
             );
             });
         });
+
+        gsap.to('.overlay', {
+            opacity: 0.75,
+            scrollTrigger: {
+                trigger: '.overlay',
+                start: "bottom 90%",
+                end: "bottom top",
+                scrub: 0,
+            }
+        })
+        gsap.to('.bush', {
+            yPercent: -50,
+            scrollTrigger: {
+                trigger: '.bush',
+                start: "bottom bottom",
+                end: "bottom top",
+                scrub: 0,
+                markers: true,
+            }
+        })
     });
     
     // timeline
@@ -367,7 +390,7 @@
             toggleButton.classList.remove('rotate-180');
         }
     });
-    /* Lenis smooth scroll */
+
     const lenis = new Lenis()
     lenis.on('scroll', (e) => {})
     lenis.on('scroll', ScrollTrigger.update)

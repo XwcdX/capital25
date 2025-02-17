@@ -250,7 +250,7 @@
         }
     }
 </style>
-<div class="contact_us mt-10">
+<div class="contact_us mt-10 bg-[#dad7cf]">
     <svg class="ombak" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28"
         preserveAspectRatio="none">
         <defs>
@@ -271,7 +271,7 @@
         style="background: #5c7650;
 background: linear-gradient(180deg, #3a5a40 10%, #5c7650 120%);">
         <div class="col-12 m-0 p-5 mb-md-5">
-            <h1>Contact Us</h1>
+            <h1 class="font-oxanium">Contact Us</h1>
         </div>
 
 

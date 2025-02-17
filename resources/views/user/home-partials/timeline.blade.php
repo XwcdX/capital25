@@ -1,4 +1,6 @@
-<section id="timeline" class="relative h-screen w-screen bg-[#14240a] z-[11] flex justify-center items-center">
+<section id="timeline" class="relative h-screen w-screen bg-[#14240a] z-[14] flex justify-center items-center">
+    <img src="{{ asset('assets/landing/daun-ijo.png')}}" alt="" loading="lazy" 
+    class="bush w-full scale-[2.5] sm:scale-[1.6] lg:scale-0 lg:w-full object-cover absolute -top-[5%] sm:-top-[10%] lg:-top-[10%] left-0 z-[14]">
     <div class="relative container h-[80%] md:h-[68%] xl:h-[70%] flex items-center justify-center overflow-hidden gap-[4%] 
         w-[90%] sm:w-[85%] lg:w-[80%] transition-all duration-500">
         <div class="box h-full w-full flex flex-col items-center justify-center [@media(max-width:400px)]:space-y-2 space-y-5 md:space-y-5 " id="leftBox">

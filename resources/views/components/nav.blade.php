@@ -65,14 +65,14 @@
     .navbar .nav-container a {
       text-decoration: none;
       color: #ffffff;
-      font-weight: 500;
+      /* font-weight: 500; */
       font-size: 1.7rem;
       padding: 0.7rem;
       /* text-shadow: 0 0 2px #ff8c00, 0 0 5px #ff8c00, 0 0 10px #ff8c00; */
     }
   
     .navbar .nav-container a:hover {
-      font-weight: bolder;
+      /* font-weight: bolder; */
     }
   
     .nav-container {
@@ -179,7 +179,23 @@
     .nav-container input[type="checkbox"]:checked~.hamburger-lines .line3 {
       transform: rotate(-45deg);
     }
-  
+    .nav-overlay {
+      opacity: 0;
+      visibility: hidden;
+      background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 998; 
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .nav-container input[type="checkbox"]:checked ~ .nav-overlay {
+      opacity: 1;
+      visibility: visible;
+  }
     /* standford breath font */
     @font-face {
         font-family: 'Hermona';
@@ -193,18 +209,19 @@
   
   <div id="navbar" class="">
     <nav class="navbar">
-      <div class="container nav-container">
+      <div class="container nav-container font-quicksand">
         <input class="checkbox" type="checkbox" name="" id="nav-toggle" />
         <div class="hamburger-lines drop-shadow-md">
           <span class="line line1"></span>
           <span class="line line2"></span>
           <span class="line line3"></span>
         </div>
+        <div class="nav-overlay"></div>
         <ul class=" menu-items items-center justify-center gap-6">
-          <li><a href="#aboutUs" class=" drop-shadow-lg hover:scale-110 ">ABOUT</a></li>
-          <li><a href="#timeline" class=" drop-shadow-lg hover:scale-110">TIMELINE</a></li>
-          <li><a href="#prizepool" class=" drop-shadow-lg hover:scale-110">PRIZE POOL</a></li>
-          <li><a href="#faq" class=" drop-shadow-lg hover:scale-110">FAQ</a></li>
+          <li><a href="#aboutUs" class=" drop-shadow-lg hover:scale-110 font-extrabold">ABOUT</a></li>
+          <li><a href="#timeline" class=" drop-shadow-lg hover:scale-110 font-extrabold">TIMELINE</a></li>
+          <li><a href="#prizepool" class=" drop-shadow-lg hover:scale-110 font-extrabold">PRIZE POOL</a></li>
+          <li><a href="#faq" class=" drop-shadow-lg hover:scale-110 font-extrabold">FAQ</a></li>
           {{-- ganti route ke regist --}}
           <li><a href="#regist" class=" drop-shadow-lg hover:scale-110">REGISTRATION</a></li>
         </ul>

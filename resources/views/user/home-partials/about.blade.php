@@ -1,8 +1,13 @@
-<section id="aboutUs" class="relative h-[120vh] min-w-screen z-[10] bg-[#14240a] overflow-x-hidden">
+<section id="aboutUs" class="relative h-[120vh] w-screen z-[13] overflow-x-hidden flex items-center justify-center
+-mt-[49%] sm:-mt-[22%]  md:-mt-[17%] lg:-mt-[15%] xl:-mt-[9%] scroll-mt-[49%]">
     <img src="{{ asset('assets/landing/waterfall.png')}}" alt="" loading="eager"  
-    class="layer w-full h-full max-xl:object-cover xl:object-fit absolute -top-[17%] left-0 z-[10]">
+    class="waterfall w-full h-full object-cover xl:object-fit absolute top-0 left-0 z-[11]">
 
-    <img src="{{ asset('assets/landing/daun-ijo.png')}}" alt="" loading="lazy" 
-    class="max-sm:w-[175vh] md:w-[150%] lg:w-full xl:w-full object-cover absolute max-md:bottom-[5%] md:bottom-[10%] xl:bottom-[5%] left-0 z-[11]
-    max-w-none">
+    {{-- overlay --}}
+    <div class="overlay absolute inset-0 bg-black opacity-0 z-[12]"></div>
+
+    {{-- <img src="{{ asset('assets/landing/daun-ijo.png')}}" alt="" loading="lazy" 
+    class="bush w-[150vh] md:w-[150%] lg:w-full xl:w-full object-cover absolute -bottom-[10%] left-0 z-[23]"> --}}
+
+    <h1 class="font-oxanium text-black text-7xl z-[13]">TESTING</h1>
 </section>
