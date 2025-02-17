@@ -172,10 +172,10 @@
         });
 
         gsap.to('.overlay', {
-            opacity: 0.75,
+            opacity: 0.65,
             scrollTrigger: {
                 trigger: '.overlay',
-                start: "bottom 90%",
+                start: "80% bottom",
                 end: "bottom top",
                 scrub: 0,
             }
@@ -184,10 +184,18 @@
             yPercent: -50,
             scrollTrigger: {
                 trigger: '.bush',
+                start: "60% bottom",
+                end: "bottom top",
+                scrub: 0,
+            }
+        })
+        gsap.to('.waterfall', {
+            yPercent: -3,
+            scrollTrigger: {
+                trigger: '.bush',
                 start: "bottom bottom",
                 end: "bottom top",
                 scrub: 0,
-                markers: true,
             }
         })
     });

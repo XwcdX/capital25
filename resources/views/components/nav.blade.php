@@ -72,7 +72,8 @@
     }
   
     .navbar .nav-container a:hover {
-      /* font-weight: bolder; */
+      color: #b1ce58;
+      transition: all 0.2s;
     }
   
     .nav-container {
@@ -182,7 +183,7 @@
     .nav-overlay {
       opacity: 0;
       visibility: hidden;
-      background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+      background: rgba(0, 0, 0, 0.65); /* Semi-transparent black */
       position: absolute;
       top: 0;
       left: 0;
@@ -223,7 +224,7 @@
           <li><a href="#prizepool" class=" drop-shadow-lg hover:scale-110 font-extrabold">PRIZE POOL</a></li>
           <li><a href="#faq" class=" drop-shadow-lg hover:scale-110 font-extrabold">FAQ</a></li>
           {{-- ganti route ke regist --}}
-          <li><a href="#regist" class=" drop-shadow-lg hover:scale-110">REGISTRATION</a></li>
+          <li><a href="#regist" class=" drop-shadow-lg hover:scale-110 font-extrabold">REGISTRATION</a></li>
         </ul>
       </div>
     </nav>
