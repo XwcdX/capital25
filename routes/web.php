@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\StorageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PasswordResetTokenController;
 use App\Http\Controllers\RallyController;
@@ -41,7 +42,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/view-registered-team', [AdminController::class, 'viewRegisteredTeam'])->name('viewRegisteredTeam');
         Route::get('/view-validate-team', [AdminController::class, 'viewValidateTeam'])->name('viewValidateTeam');
         Route::get('/view-validated-team', [AdminController::class, 'viewValidatedTeam'])->name('viewValidatedTeam');
-        
+
         Route::patch('/team-status-change/{id}', [TeamController::class, 'updateValidAndEmail'])->name('team.statusChange');
         Route::get('/get-completed-team', [TeamController::class, 'getCompletedTeam'])->name('team.getCompletedTeam');
 
@@ -59,3 +60,5 @@ Route::get('/{role}/forget-password', [PasswordResetTokenController::class, 'for
 Route::post('forget-password', [PasswordResetTokenController::class, 'sendEmail'])->name('forget.password.post')->middleware('throttle:resetPasswordEmail');
 Route::get('/reset-password/{role}/{token}', [PasswordResetTokenController::class, 'resetPassword'])->name('reset.password');
 Route::post('/reset-password', [PasswordResetTokenController::class, 'resetPasswordPost'])->name('reset.password.post');
+
+Route::get('/storage/{path?}', [StorageController::class, 'getImage'])->where('path', '.*');
