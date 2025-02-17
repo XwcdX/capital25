@@ -21,6 +21,7 @@ class User extends Model
         'drug_allergy',
         'medical_history',
         'student_card',
+        'twibbon',
         'team_id'
     ];
 

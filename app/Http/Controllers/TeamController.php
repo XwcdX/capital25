@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -48,6 +49,21 @@ class TeamController extends BaseController
         Log::info('', $data);
         Mail::to($team->email)->queue(new TeamValidationEmail($data));
         parent::updatePartial($request, $id);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $team = Auth::user();
+        if ($request->hasFile('profile_image')) {
+            $storagePath = 'team_profile_pictures';
+            if ($team->profile_image) {
+                Storage::disk('public')->delete(str_replace('storage/', '', $team->profile_image));
+            }
+            $newFileName = sprintf('%s_profile_picture.%s', $team->name, $request->file('profile_image')->getClientOriginalExtension());
+            $filePath = $request->file('profile_image')->storeAs($storagePath, $newFileName, 'public');
+            $request->merge(['profile_image' => 'storage/' . $filePath]);
+        }
+        parent::updatePartial($request, $team->id);
     }
 
 
@@ -116,20 +132,22 @@ class TeamController extends BaseController
         $validate = Validator::make(
             $creds,
             [
-                'email' => 'required|exists:teams,email',
+                'email' => 'required',
                 'password' => 'required|string',
             ],
             [
                 'email.required' => 'email is required',
-                'email.exists' => 'Email not found',
                 'password.required' => 'Password is required',
                 'password.string' => 'Password must be string',
             ],
         );
-        foreach ($validate->errors()->all() as $error) {
-            return redirect()->to(route('team.login'))->with('error', $error);
+        if ($validate->fails()) {
+            return redirect()->to(route('team.login'))->withErrors($validate)->withInput();
         }
         $team = $this->model::where('email', $creds['email'])->first();
+        if (!$team) {
+            $team = $this->model::where('name', $creds['email'])->first();
+        }
         if (!$team || !Hash::check($creds['password'], $team->password)) {
             $error = !$team ? 'You are not Registered' : 'Invalid credentials';
             return redirect()->to(route('team.login'))->with('error', $error);
@@ -256,7 +274,8 @@ class TeamController extends BaseController
         });
     }
 
-    public function exportValidatedTeam(){
+    public function exportValidatedTeam()
+    {
         return Excel::download(new TeamsWithUsersExport, 'validated_team.xlsx');
     }
 }

@@ -46,13 +46,14 @@ class UserController extends BaseController
 
         DB::beginTransaction();
         try {
-            if($currentTeam && $currentTeam->valid === 2){
+            if ($currentTeam && $currentTeam->valid === 2) {
                 $currentTeam->valid = 0;
                 $currentTeam->save();
             }
             foreach ($users as $index => $userData) {
                 $userId = $userData['id'] ?? null;
                 $existingUser = $userId ? $this->model::find($userId) : null;
+                $imageFields = ['student_card', 'twibbon'];
 
                 $rules = [
                     'name' => 'required|string|max:255',
@@ -77,8 +78,10 @@ class UserController extends BaseController
                     'medical_history' => 'nullable|string|max:255',
                 ];
 
-                if (!$userId || $request->hasFile("user.{$index}.student_card")) {
-                    $rules['student_card'] = 'file|mimes:jpeg,png,pdf|max:2048';
+                foreach ($imageFields as $field) {
+                    if (!$userId || $request->hasFile("user.{$index}.{$field}")) {
+                        $rules[$field] = 'file|mimes:jpeg,png,pdf|max:2048';
+                    }
                 }
 
                 $validator = Validator::make($userData, $rules);
@@ -97,26 +100,31 @@ class UserController extends BaseController
 
                 $validated = $validator->validated();
                 $validated['team_id'] = $currentTeam->id;
-                if ($request->hasFile("user.{$index}.student_card")) {
-                    if ($existingUser && $existingUser->student_card) {
-                        Storage::disk('public')->delete(str_replace('storage/', '', $existingUser->student_card));
+                foreach ($imageFields as $field) {
+                    if ($request->hasFile("user.{$index}.{$field}")) {
+                        if ($existingUser && $existingUser->$field) {
+                            Storage::disk('public')->delete(str_replace('storage/', '', $existingUser->$field));
+                        }
+                        $file = $request->file("user.{$index}.{$field}");
+                        $fileName = sprintf(
+                            '%s_%s_%s_%s.%s',
+                            $field,
+                            $userData['phone_number'],
+                            $userData['line_id'],
+                            now()->format('YmdHis'),
+                            $file->getClientOriginalExtension()
+                        );
+                        $filePath = $file->storeAs("{$field}s", $fileName, 'public');
+                        $validated[$field] = 'storage/' . $filePath;
+                    } elseif ($existingUser) {
+                        $validated[$field] = $existingUser->$field;
                     }
-                    $studentCardFile = $request->file("user.{$index}.student_card");
-                    $fileName = sprintf(
-                        'student_card_%s_%s_%s.%s',
-                        $userData['phone_number'],
-                        $userData['line_id'],
-                        now()->format('YmdHis'),
-                        $studentCardFile->getClientOriginalExtension()
-                    );
-                    $filePath = $studentCardFile->storeAs('student_cards', $fileName, 'public');
-                    $validated['student_card'] = 'storage/' . $filePath;
-                } elseif ($existingUser) {
-                    $validated['student_card'] = $existingUser->student_card;
                 }
 
-                if (!empty($validated['student_card'])) {
-                    $users[$index]['student_card'] = $validated['student_card'];
+                foreach ($imageFields as $field) {
+                    if (!empty($validated[$field])) {
+                        $users[$index][$field] = $validated[$field];
+                    }
                 }
 
                 if ($existingUser) {
@@ -141,7 +149,7 @@ class UserController extends BaseController
                     }
 
                     $fileName = sprintf(
-                        'Proof_of_Payment_%s_CAPITAL 2025.%s',
+                        'Proof_of_Payment_%s_CAPITAL_2025.%s',
                         $currentTeam->name,
                         $proofOfPayment->getClientOriginalExtension()
                     );
