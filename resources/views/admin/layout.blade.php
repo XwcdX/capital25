@@ -44,7 +44,7 @@
         <a class="mb-3 flex flex-col items-center justify-center border-b-2 border-solid border-gray-100 py-6 outline-none"
             href="#" data-te-ripple-init data-te-ripple-color="primary">
             <div class="flex items-center justify-center space-x-3 mb-3">
-                <img src="{{ asset('assets/logo_capital.png') }}" class="h-8" alt="CAPITAL Logo" loading="lazy" />
+                <img src="{{ asset('assets/logo_capital.png') }}" class="h-10" alt="CAPITAL Logo" loading="lazy" />
             </div>
             <span class="text-center font-bold">CAPITAL<br>2025</span>
         </a>

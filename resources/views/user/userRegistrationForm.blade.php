@@ -49,7 +49,7 @@
     <div
         class="lg:container flex justify-center bg-[url('{{ asset('assets/texture.jpg') }}')] mx-auto p-0 md:p-5 z-[-1] min-w-[100vw]">
         <div
-            class="form-wrapper overflow-hidden sm:my-10 border rounded-lg bg-[var(--cap-green4)] bg-[url('{{ asset('assets/') }}')] bg-cover bg-center bg-blend-overlay shadow-lg w-full lg:w-[60%]">
+            class="form-wrapper overflow-hidden sm:my-10 border rounded-lg bg-[var(--cap-green4)] shadow-lg w-full lg:w-[60%]">
             <div class="form-container flex">
                 @php
                     function ordinal($number)
@@ -78,14 +78,14 @@
                             value="{{ $user['id'] ?? '' }}">
                         <input type="hidden" id="user{{ $i }}-position"
                             name="user[{{ $i }}][position]" value="{{ $i }}">
-                        <div class="col-span-6">
+                        <div class="col-span-12 sm:col-span-6">
                             <label for="user{{ $i }}-name" class="mb-2 text-white">Name:</label>
                             <input type="text" id="user{{ $i }}-name" name="user[{{ $i }}][name]"
                                 value="{{ $user['name'] ?? '' }}"
                                 class="mb-4 p-2 border-none rounded-xl w-full bg-[#BFBDBC]">
                         </div>
 
-                        <div class="col-span-6 relative h-[55px]">
+                        <div class="col-span-12 sm:col-span-6 relative h-[55px] mb-5">
                             <label for="user{{ $i }}-gender" class="mb-2 text-white">Gender:</label>
                             <select id="user{{ $i }}-gender" name="user[{{ $i }}][gender]"
                                 class="mb-4 p-2 border-none rounded-xl w-full bg-[#BFBDBC] appearance-none pr-10 relative">
@@ -113,15 +113,15 @@
                                 class="mb-4 p-2 border-none  rounded-xl w-full bg-[#BFBDBC]">
                         </div>
 
-                        <div class="col-span-6">
+                        <div class="col-span-12 sm:col-span-6">
                             <label for="user{{ $i }}-line" class="mb-2 text-white">Line ID:</label>
                             <input type="text" id="user{{ $i }}-line"
                                 name="user[{{ $i }}][line_id]" value="{{ $user['line_id'] ?? '' }}"
                                 class="mb-4 p-2 border-none  rounded-xl w-full bg-[#BFBDBC]">
                         </div>
 
-                        <div class="col-span-6 relative h-[55px]">
-                            <label for="user{{ $i }}-consumption" class="mb-2 text-white">Consumption:</label>
+                        <div class="col-span-12 sm:col-span-6 relative h-[55px] mb-5">
+                            <label for="user{{ $i }}-consumption" class="mb-2 text-white">Consumption Type:</label>
                             <select id="user{{ $i }}-consumption"
                                 name="user[{{ $i }}][consumption_type]"
                                 class="mb-4 p-2 border-none  rounded-xl w-full bg-[#BFBDBC] appearance-none pr-10">

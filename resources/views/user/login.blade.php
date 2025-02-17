@@ -183,7 +183,7 @@
                                 class="fa-solid fa-school absolute right-4 min-[376px]:right-5 top-1/2 -translate-y-1/2 text-[17px] min-[376px]:text-[20px] text-gray-400"></i>
                         </div>
                         <div class="input-box relative w-full mb-2 lg:mb-6 col-span-2 lg:col-span-1">
-                            <input type="domicile" aria-label="Domicile" placeholder="Surabaya-Jawa Timur" required=""
+                            <input type="domicile" aria-label="Domicile" placeholder="Domicile" value="Surabaya-Jawa Timur" required=""
                                 id="domicile"
                                 class="w-full pr-[50px] pl-4 min-[376px]:pl-5 py-[8px] min-[376px]:py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[14px] min-[376px]:text-[16px] placeholder-[#636161] placeholder:font-semibold">
                             <i
