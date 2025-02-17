@@ -34,8 +34,8 @@
         
     {{-- title --}}
     <div class="flex flex-col">
-        <h1 class="landing-title text-7xl lg:text-8xl uppercase z-[7] text-white font-oxanium font-black">CAPITAL 2025</h1>
-        <h1 class="landing-title text-3xl lg:text-4xl xl:text-5xl z-[7] text-white font-oxanium font-black">Breaking the Loop for Sustainable Future</h1>
+        <h1 class="landing-title text-6xl sm:text-7xl lg:text-8xl uppercase z-[7] text-white font-oxanium font-black">CAPITAL 2025</h1>
+        <h1 class="landing-title max-sm:mt-2 text-3xl lg:text-4xl xl:text-5xl z-[7] text-white font-oxanium font-black">Breaking the Loop for Sustainable Future</h1>
     </div>
 
 </section>
