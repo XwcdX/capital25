@@ -121,7 +121,8 @@
                         </div>
 
                         <div class="col-span-12 sm:col-span-6 relative h-[55px] mb-5">
-                            <label for="user{{ $i }}-consumption" class="mb-2 text-white">Consumption Type:</label>
+                            <label for="user{{ $i }}-consumption" class="mb-2 text-white">Consumption
+                                Type:</label>
                             <select id="user{{ $i }}-consumption"
                                 name="user[{{ $i }}][consumption_type]"
                                 class="mb-4 p-2 border-none  rounded-xl w-full bg-[#BFBDBC] appearance-none pr-10">
@@ -212,6 +213,13 @@
                                             No file chosen
                                         </span>
                                     </div>
+                                    @if (trim(strtolower($field)) === 'twibbon')
+                                    <a href="https://docs.google.com/document/d/12WIOeYrcGlbaqv9JmoMQY2ooaxqyFOALBmwBZJKh-Ug/edit?usp=sharing"
+                                        target="_blank" rel="noopener noreferrer"
+                                        class="text-blue-500 underline hover:text-blue-700">
+                                        📄 Ketentuan Upload Twibbon (Google Docs)
+                                    </a>
+                                @endif
                                 </div>
                             </div>
                         @endforeach
@@ -272,10 +280,10 @@
                                         <g>
                                             <path
                                                 d="M23.047,15.266c0.781,0.781,0.781,2.047,0,2.828l-7.381,7.381l-7.379-7.379c-0.781-0.781-0.781-2.046,0-2.828
-                                                c0.78-0.781,2.047-0.781,2.827,0l2.552,2.551V8.686c0-1.104,0.896-2,2-2c1.104,0,2,0.896,2,2v9.132l2.553-2.553
-                                                C21,14.484,22.268,14.484,23.047,15.266z M31.332,15.666c0,8.639-7.027,15.666-15.666,15.666C7.026,31.332,0,24.305,0,15.666
-                                                C0,7.028,7.026,0,15.666,0C24.307,0,31.332,7.028,31.332,15.666z M27.332,15.666C27.332,9.233,22.1,4,15.666,4
-                                                C9.233,4,4,9.233,4,15.666C4,22.1,9.233,27.332,15.666,27.332C22.1,27.332,27.332,22.1,27.332,15.666z" />
+                                                        c0.78-0.781,2.047-0.781,2.827,0l2.552,2.551V8.686c0-1.104,0.896-2,2-2c1.104,0,2,0.896,2,2v9.132l2.553-2.553
+                                                        C21,14.484,22.268,14.484,23.047,15.266z M31.332,15.666c0,8.639-7.027,15.666-15.666,15.666C7.026,31.332,0,24.305,0,15.666
+                                                        C0,7.028,7.026,0,15.666,0C24.307,0,31.332,7.028,31.332,15.666z M27.332,15.666C27.332,9.233,22.1,4,15.666,4
+                                                        C9.233,4,4,9.233,4,15.666C4,22.1,9.233,27.332,15.666,27.332C22.1,27.332,27.332,22.1,27.332,15.666z" />
                                         </g>
                                     </svg>
                                 </label>
