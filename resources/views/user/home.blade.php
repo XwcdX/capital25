@@ -208,24 +208,24 @@
     const contentData = {
         leftBox: {
             title: "Seminar & Technical Meeting",
-            description: `Seminar bertema “The Silent Crisis of Irresponsible Production” akan membahas dampak buruk dari produksi yang tidak bertanggung jawab terhadap lingkungan, serta solusi berkelanjutan seperti Circular Economy (CE) dan Life Cycle Assessment (LCA). Setelah seminar, Technical Meeting akan memberikan penjelasan mengenai teknis Lifecycle Simulation yang akan dilaksanakan pada hari kedua.`,
-            date: "Tanggal: Senin, 17 Maret 2025",
-            time: "Waktu: 17:30 WIB",
-            location: "Lokasi: Zoom Meeting"
+            description: `Seminar bertema <b>“The Silent Crisis of Irresponsible Production”</b> akan membahas dampak buruk dari produksi yang tidak bertanggung jawab terhadap lingkungan, serta solusi berkelanjutan seperti Circular Economy (CE) dan Life Cycle Assessment (LCA). Setelah seminar, Technical Meeting akan memberikan penjelasan mengenai teknis Lifecycle Simulation yang akan dilaksanakan pada hari kedua.`,
+            date: "<b>Tanggal: Senin, 17 Maret 2025</b>",
+            time: "<b>Waktu: 17:30 WIB<b>",
+            location: "<b>Lokasi: Zoom Meeting</b>"
         },
         centerBox: {
             title: "Lifecycle Simulation",
             description: "Rally game interaktif yang mengajak peserta untuk berperan sebagai ecopreneurs di berbagai sektor industri, menghadapi tantangan lingkungan yang relevan dengan kondisi masa kini. Peserta akan menerapkan solusi ramah lingkungan melalui serangkaian fase, dengan fokus pada pengambilan keputusan yang mendukung keberlanjutan jangka panjang.",
-            date: "Tanggal: Senin, Sabtu, 22 Maret 2025",
-            time: "Waktu: 09:00 WIB",
-            location: "Lokasi: Gedung Q, Petra Christian University"
+            date: "<b>Tanggal: Senin, Sabtu, 22 Maret 2025</b>",
+            time: "<b>Waktu: 09:00 WIB</b>",
+            location: "<b>Lokasi: Gedung Q, Petra Christian University</b>"
         },
         rightBox: {
             title: "Talk Show & Awarding Ceremony",
-            description: `Talk show bertema “Redefining Profit in a Sustainable World” membahas bagaimana bisnis dapat mencapai profitabilitas berkelanjutan tanpa mengorbankan kelestarian lingkungan. Para narasumber, yang merupakan perwakilan dari perusahaan ramah lingkungan, akan berbagi pengalaman dan studi kasus tentang integrasi keberlanjutan dalam model bisnis mereka. Acara ditutup dengan Awarding Ceremony, di mana tim pemenang Lifecycle Simulation akan menerima penghargaan.`,
-            date: "Tanggal: Jumat, 28 Maret 2025",
-            time: "Waktu: 16:00 WIB",
-            location: "Lokasi: Amphitheatre Gedung Q, Petra Christian University"
+            description: `Talk show bertema <b>“Redefining Profit in a Sustainable World”</b> membahas bagaimana bisnis dapat mencapai profitabilitas berkelanjutan tanpa mengorbankan kelestarian lingkungan. Para narasumber, yang merupakan perwakilan dari perusahaan ramah lingkungan, akan berbagi pengalaman dan studi kasus tentang integrasi keberlanjutan dalam model bisnis mereka. Acara ditutup dengan Awarding Ceremony, di mana tim pemenang Lifecycle Simulation akan menerima penghargaan.`,
+            date: "<b>Tanggal: Jumat, 28 Maret 2025</b>",
+            time: "<b>Waktu: 16:00 WIB</b>",
+            location: "<b>Lokasi: Amphitheatre Gedung Q, Petra Christian University</b>"
         }
     };
 

@@ -18,7 +18,7 @@
                     <h1 class="timeline-time"></h1>
                     <h1 class="timeline-loc"></h1>
                 </div>
-                <button class="rounded-3xl border border-black border-[2px] bg-transparent text-black font-quicksand font-bold px-5 py-2 mt-5">Guidebook</button>
+                {{-- <button class="rounded-3xl border border-black border-[2px] bg-transparent text-black font-quicksand font-bold px-5 py-2 mt-5">Guidebook</button> --}}
             </div>
         </div>
         <div class="box h-full w-full flex flex-col items-center justify-center [@media(max-width:400px)]:space-y-2 space-y-5 md:space-y-5" id="centerBox">
@@ -33,7 +33,7 @@
                     <h1 class="timeline-time"></h1>
                     <h1 class="timeline-loc"></h1>
                 </div>
-                <button class="rounded-3xl border border-black border-[2px] bg-transparent text-black font-quicksand font-bold px-5 py-2 mt-5">Guidebook</button>
+                <button class="guidebook rounded-3xl border border-black border-[2px] bg-transparent text-black font-quicksand font-bold px-5 py-2 mt-5">Guidebook</button>
             </div>
         </div>
         <div class="box h-full w-full flex flex-col items-center justify-center [@media(max-width:400px)]:space-y-2 space-y-5 md:space-y-5" id="rightBox">
@@ -48,7 +48,7 @@
                     <h1 class="timeline-time"></h1>
                     <h1 class="timeline-loc"></h1>
                 </div>
-                <button class="rounded-3xl border border-white border-[2px] bg-transparent text-white font-quicksand font-bold px-5 py-2 mt-5">Guidebook</button>
+                {{-- <button class="rounded-3xl border border-white border-[2px] bg-transparent text-white font-quicksand font-bold px-5 py-2 mt-5">Guidebook</button> --}}
             </div>
         </div>
         <button id="closeBtn"
