@@ -256,7 +256,7 @@
             },
             {
                 question: "Apakah peserta harus mengikuti seluruh rangkaian acara CAPITAL 2025 yang ada?",
-                answer: "Peserta <b>diwajibkan</b> untuk mengikuti seluruh rangkaian acara dari CAPITAL 2025 mulai dari Day 1 hingga Day 3. Namun, apabila berhalangan, peserta dapat melakukan perizinan ke Contact Person CAPITAL 2025.",
+                answer: `Peserta <b>diwajibkan</b> untuk mengikuti seluruh rangkaian acara dari CAPITAL 2025 mulai dari Day 1 hingga Day 3. Namun, apabila berhalangan, peserta dapat melakukan perizinan ke Contact Person CAPITAL 2025.`,
             },
             {
                 question: "Apakah seluruh anggota tim wajib hadir pada saat Technical Meeting atau hanya perwakilan saja?",
@@ -342,23 +342,23 @@
     const faqsContainer = document.getElementById("faqs");
     const toggleButton = document.getElementById("toggleBtn");
 
-    const questionsToShow = window.innerWidth >= 768 ? 4 : 6; // determine how many questions appear initially
+    // const questionsToShow = window.innerWidth >= 768 ? 4 : 6; // determine how many questions appear initially
     const questionContainers = [];
 
     questionData.questions.forEach((item, index) => {
         const questionWrapper = document.createElement("div");
-        questionWrapper.classList.add("dropdown", "flex", "flex-col", "bg-[#dad7cf]", "relative", "rounded-2xl");
+        questionWrapper.classList.add("dropdown", "flex", "flex-col", "bg-[#dad7cf]", "relative", "rounded-2xl", "hover:bg-[#8c897f]", "transition-all", "duration-200");
 
         questionWrapper.innerHTML = `
             <p class="number font-oxanium px-2 bg-[#14240a] text-white text-left rounded-full absolute top-2 left-3">1</p>
         `;
         const questionElement = document.createElement("li");
-        questionElement.classList.add("p-2", "flex", "items-center", "justify-center", "rounded-2xl", "font-oxanium", "h-[80px]", "text-black", "p-8");
+        questionElement.classList.add("p-2", "flex", "items-center", "justify-center", "rounded-2xl", "font-oxanium", "h-[120px]","md:h-[80px]", "text-black", "p-8");
 
         questionElement.innerHTML = `
             <p class="number font-oxanium px-2 bg-[#14240a] text-white text-center rounded-full absolute top-2 left-3">${index+1}</p>
             
-            <p class="question font-oxanium w-full h-full font-extrabold md:text-xl text-left flex items-center justify-start opacity-100 cursor-pointer ml-6">${item.question}</p>
+            <p class="question font-oxanium w-full h-full font-extrabold text-base sm:text-lg lg:text-xl text-left flex items-center justify-start opacity-100 cursor-pointer ml-6">${item.question}</p>
             <i class="fa-solid fa-angle-down cursor-pointer text-white"></i>     
         `;
 
@@ -366,39 +366,36 @@
         answerElement.classList.add("dropdown-wrapper");
 
         answerElement.innerHTML = `
-            <div class="dropdown-content px-10 mb-8">
-                <p class="font-quicksand w-full h-full md:text-lg text-center flex items-start justify-center">${item.answer}</p>
+            <div class="dropdown-content lg:px-10 mb-8">
+                <p class="font-quicksand w-full h-full text-base lg:text-lg text-center flex items-start justify-center">${item.answer}</p>
             </div>
         `
         
         questionWrapper.appendChild(questionElement);
         questionWrapper.appendChild(answerElement);
 
-        if (index >= questionsToShow) {
-            questionWrapper.classList.add("question-container"); 
-        }
-
         faqsContainer.appendChild(questionWrapper);
         questionContainers.push(questionWrapper);
     });
 
-    let isExpanded = false;
+    // let isExpanded = false;
 
-    toggleButton.addEventListener("click", () => {
-        questionContainers.forEach((q, index) => {
-            if (index >= questionsToShow) {
-                q.classList.toggle("expanded");
-            }
-        });
+    // toggleButton.addEventListener("click", () => {
+    //     questionContainers.forEach((question, index) => {
+    //         if (index >= questionsToShow) {
+    //             question.classList.toggle("hidden");
+    //             question.classList.toggle("expanded");
+    //         }
+    //     });
 
-        isExpanded = !isExpanded;
+    //     isExpanded = !isExpanded;
         
-        if (isExpanded) {
-            toggleButton.classList.add('rotate-180');
-        } else {
-            toggleButton.classList.remove('rotate-180');
-        }
-    });
+    //     if (isExpanded) {
+    //         toggleButton.classList.add('rotate-180');
+    //     } else {
+    //         toggleButton.classList.remove('rotate-180');
+    //     }
+    // });
 
     const plusBtns = document.querySelectorAll('.fa-solid');
     const contentWrappers = document.querySelectorAll(".dropdown-wrapper");
@@ -411,7 +408,6 @@
         });
     });
 
-   
 
     const lenis = new Lenis()
     lenis.on('scroll', (e) => {})
