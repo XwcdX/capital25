@@ -38,7 +38,7 @@
         </div>
         <div class="box h-full w-full flex flex-col items-center justify-center [@media(max-width:400px)]:space-y-2 space-y-5 md:space-y-5" id="rightBox">
             <img class="original-content w-[70px] sm:w-[80px] lg:w-[125px] xl:w-[150px]" src="{{ asset('assets/timeline/icon-container.png')}}" alt="">
-            <h1 class="original-content text-white text-xl md:text-2xl font-extrabold w-[70%] text-center font-quicksand">Closing & Awarding Ceremony</h1>
+            <h1 class="original-content text-white text-xl md:text-2xl font-extrabold w-[70%] text-center font-quicksand">Talk Show & Awarding Ceremony</h1>
 
             <div class="hidden-content text-center w-[80%] sm:w-[80%] lg:w-3/4 hidden opacity-0 h-0 overflow-hidden transition-all duration-500 ease-in-out">
                 <h1 class="timeline-title text-lg [@media(max-width:400px)]:text-xl sm:text-2xl lg:text-4xl font-oxanium text-white font-bold"></h1>

@@ -94,6 +94,9 @@
 <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script> 
 
 <script>
+    AOS.init();
+</script>
+<script>
     function simulateBackgroundTask() {
         return new Promise((resolve) => {
             setTimeout(() => {
@@ -131,9 +134,9 @@
 
    document.addEventListener("DOMContentLoaded", () => {
        //landing
-        window.onbeforeunload = function () {
-            window.scrollTo(0, 0);
-        }
+        // window.onbeforeunload = function () {
+        //     window.scrollTo(0, 0);
+        // }
 
         gsap.registerPlugin(ScrollTrigger);
         // Parallax Layers
@@ -208,21 +211,21 @@
     const contentData = {
         leftBox: {
             title: "Seminar & Technical Meeting",
-            description: `Seminar bertema <b>“The Silent Crisis of Irresponsible Production”</b> akan membahas dampak buruk dari produksi yang tidak bertanggung jawab terhadap lingkungan, serta solusi berkelanjutan seperti Circular Economy (CE) dan Life Cycle Assessment (LCA). Setelah seminar, Technical Meeting akan memberikan penjelasan mengenai teknis Lifecycle Simulation yang akan dilaksanakan pada hari kedua.`,
+            description: `Seminar bertema <b>“<i>The Silent Crisis of Irresponsible Production</i>”</b> akan membahas dampak buruk dari produksi yang tidak bertanggung jawab terhadap lingkungan, serta solusi berkelanjutan seperti <i>Circular Economy</i> (CE) dan <i>Life Cycle Assessment</i> (LCA). Setelah seminar, <i>Technical Meeting</i> akan memberikan penjelasan mengenai teknis <i>Lifecycle Simulation</i> yang akan dilaksanakan pada hari kedua.`,
             date: "<b>Tanggal: Senin, 17 Maret 2025</b>",
             time: "<b>Waktu: 17:30 WIB<b>",
             location: "<b>Lokasi: Zoom Meeting</b>"
         },
         centerBox: {
             title: "Lifecycle Simulation",
-            description: "Rally game interaktif yang mengajak peserta untuk berperan sebagai ecopreneurs di berbagai sektor industri, menghadapi tantangan lingkungan yang relevan dengan kondisi masa kini. Peserta akan menerapkan solusi ramah lingkungan melalui serangkaian fase, dengan fokus pada pengambilan keputusan yang mendukung keberlanjutan jangka panjang.",
+            description: "<i>Rally game</i> interaktif yang mengajak peserta untuk berperan sebagai <i>ecopreneurs</i> di berbagai sektor industri, menghadapi tantangan lingkungan yang relevan dengan kondisi masa kini. Peserta akan menerapkan solusi ramah lingkungan melalui serangkaian fase, dengan fokus pada pengambilan keputusan yang mendukung keberlanjutan jangka panjang.",
             date: "<b>Tanggal: Senin, Sabtu, 22 Maret 2025</b>",
             time: "<b>Waktu: 09:00 WIB</b>",
             location: "<b>Lokasi: Gedung Q, Petra Christian University</b>"
         },
         rightBox: {
             title: "Talk Show & Awarding Ceremony",
-            description: `Talk show bertema <b>“Redefining Profit in a Sustainable World”</b> membahas bagaimana bisnis dapat mencapai profitabilitas berkelanjutan tanpa mengorbankan kelestarian lingkungan. Para narasumber, yang merupakan perwakilan dari perusahaan ramah lingkungan, akan berbagi pengalaman dan studi kasus tentang integrasi keberlanjutan dalam model bisnis mereka. Acara ditutup dengan Awarding Ceremony, di mana tim pemenang Lifecycle Simulation akan menerima penghargaan.`,
+            description: `<i>Talk show</i> bertema <b>“<i>Redefining Profit in a Sustainable World</i>”</b> membahas bagaimana bisnis dapat mencapai profitabilitas berkelanjutan tanpa mengorbankan kelestarian lingkungan. Para narasumber, yang merupakan perwakilan dari perusahaan ramah lingkungan, akan berbagi pengalaman dan studi kasus tentang integrasi keberlanjutan dalam model bisnis mereka. Acara ditutup dengan <i>Awarding Ceremony</i>, di mana tim pemenang <i>Lifecycle Simulation</i> akan menerima penghargaan.`,
             date: "<b>Tanggal: Jumat, 28 Maret 2025</b>",
             time: "<b>Waktu: 16:00 WIB</b>",
             location: "<b>Lokasi: Amphitheatre Gedung Q, Petra Christian University</b>"
@@ -249,18 +252,18 @@
             },
             {
                 question: "Bagaimana cara melakukan pembayaran biaya pendaftaran?",
-                answer: "Biaya pendaftaran bisa dibayarkan dengan transfer melalui Blu by BCA Digital (005737903186) - Pricilla Chealsea Saputra. Bukti transfer dapat diunggah ke halaman Pendaftaran -> Kolom Bukti Transfer.",
+                answer: "Biaya pendaftaran bisa dibayarkan dengan transfer melalui <b>Blu by BCA Digital (005737903186) - Pricilla Chealsea Saputra</b>. Bukti transfer dapat diunggah ke halaman Pendaftaran -> Kolom Bukti Transfer.",
             },
             {
                 question: "Apakah peserta harus mengikuti seluruh rangkaian acara CAPITAL 2025 yang ada?",
-                answer: "Peserta diwajibkan untuk mengikuti seluruh rangkaian acara dari CAPITAL 2025 mulai dari Day 1 hingga Day 3. Namun, apabila berhalangan, peserta dapat melakukan perizinan ke Contact Person CAPITAL 2025.",
+                answer: "Peserta <b>diwajibkan</b> untuk mengikuti seluruh rangkaian acara dari CAPITAL 2025 mulai dari Day 1 hingga Day 3. Namun, apabila berhalangan, peserta dapat melakukan perizinan ke Contact Person CAPITAL 2025.",
             },
             {
                 question: "Apakah seluruh anggota tim wajib hadir pada saat Technical Meeting atau hanya perwakilan saja?",
                 answer: "Seluruh anggota tim diharapkan untuk hadir karena akan ada pemberian materi serta persiapan untuk hari-H Lifecycle Simulation. Namun, apabila berhalangan, peserta dapat melakukan perizinan ke Contact Person CAPITAL 2025.",
             },
             {
-                question: "Jika salah satu anggota tim tidak bisa hadir pada salah satu rangkaian acara, bagaimana prosedur perizinan yang harus dilakukan?",
+                question: "Jika salah satu anggota tim tidak bisa hadir pada salah satu rangkaian acara,<br> bagaimana prosedur perizinan yang harus dilakukan?",
                 answer: `Prosedur perizinan dapat dilakukan dengan menghubungi Contact Person OA LINE ataupun WhatsApp dengan format : <br>
                     Nama Tim : …………………<br>
                     Nama Anggota : ……………<br>
@@ -289,7 +292,7 @@
             let timeline_date = box.querySelector('.timeline-date');
             let timeline_time = box.querySelector('.timeline-time');
             let timeline_loc = box.querySelector('.timeline-loc');
-            
+
             if (hidden_content.classList.contains("hidden")) {
                 timeline_title.innerHTML = contentData[box.id].title;
                 timeline_desc.innerHTML = contentData[box.id].description;
@@ -339,39 +342,37 @@
     const faqsContainer = document.getElementById("faqs");
     const toggleButton = document.getElementById("toggleBtn");
 
-    const questionsToShow = window.innerWidth >= 768 ? 6 : 4; // determine how many questions appear initially
+    const questionsToShow = window.innerWidth >= 768 ? 4 : 6; // determine how many questions appear initially
     const questionContainers = [];
 
     questionData.questions.forEach((item, index) => {
         const questionWrapper = document.createElement("div");
-        questionWrapper.classList.add("question-wrapper");
+        questionWrapper.classList.add("dropdown", "flex", "flex-col", "bg-[#dad7cf]", "relative", "rounded-2xl");
 
-        const questionElement = document.createElement("div");
-        questionElement.classList.add("questions", "relative", "h-[150px]", "text-black", "bg-[#dad7cf]", "p-8", "w-full", "rounded-2xl");
+        questionWrapper.innerHTML = `
+            <p class="number font-oxanium px-2 bg-[#14240a] text-white text-left rounded-full absolute top-2 left-3">1</p>
+        `;
+        const questionElement = document.createElement("li");
+        questionElement.classList.add("p-2", "flex", "items-center", "justify-center", "rounded-2xl", "font-oxanium", "h-[80px]", "text-black", "p-8");
 
         questionElement.innerHTML = `
             <p class="number font-oxanium px-2 bg-[#14240a] text-white text-center rounded-full absolute top-2 left-3">${index+1}</p>
-            <div class="front font-oxanium w-full h-full font-extrabold md:text-xl text-center flex items-center justify-center opacity-100 cursor-pointer">
-                ${item.question}
-            </div>
-            <div class="hidden back font-quicksand w-full h-full md:text-lg text-center flex items-start justify-center overflow-y-auto cursor-pointer">
-                ${item.answer}
-            </div>
+            
+            <p class="question font-oxanium w-full h-full font-extrabold md:text-xl text-left flex items-center justify-start opacity-100 cursor-pointer ml-6">${item.question}</p>
+            <i class="fa-solid fa-angle-down cursor-pointer text-white"></i>     
         `;
 
+        const answerElement = document.createElement("div");
+        answerElement.classList.add("dropdown-wrapper");
+
+        answerElement.innerHTML = `
+            <div class="dropdown-content px-10 mb-8">
+                <p class="font-quicksand w-full h-full md:text-lg text-center flex items-start justify-center">${item.answer}</p>
+            </div>
+        `
+        
         questionWrapper.appendChild(questionElement);
-        const front = questionElement.querySelector(".front");
-        const back = questionElement.querySelector(".back");
-
-        front.addEventListener("click", () => {
-            front.classList.add("hidden");
-            back.classList.remove("hidden");
-        });
-
-        back.addEventListener("click", () => {
-            back.classList.add("hidden");
-            front.classList.remove("hidden");
-        });
+        questionWrapper.appendChild(answerElement);
 
         if (index >= questionsToShow) {
             questionWrapper.classList.add("question-container"); 
@@ -398,6 +399,19 @@
             toggleButton.classList.remove('rotate-180');
         }
     });
+
+    const plusBtns = document.querySelectorAll('.fa-solid');
+    const contentWrappers = document.querySelectorAll(".dropdown-wrapper");
+
+    plusBtns.forEach((btn, index) => {
+        btn.addEventListener('click', () => {
+            // Toggle the "active" class for the corresponding content wrapper
+            contentWrappers[index].classList.toggle("active");
+            btn.classList.toggle('rotate-180');
+        });
+    });
+
+   
 
     const lenis = new Lenis()
     lenis.on('scroll', (e) => {})
