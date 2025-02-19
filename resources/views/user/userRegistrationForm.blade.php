@@ -63,17 +63,17 @@
                     $firstEmptyIndex = null;
                 @endphp
                 @for ($i = 0; $i < 4; $i++)
+                    @php
+                        $user = session('users')[$i] ?? [];
+                        if ($firstEmptyIndex === null && empty($user)) {
+                            $firstEmptyIndex = $i;
+                        }
+                    @endphp
                     <div id="form-{{ $i + 1 }}" class="form-slide grid grid-cols-12 gap-2 p-12 w-full"
                         @if ($firstEmptyIndex === $i) data-first-empty="true" @endif>
                         <h2 class="text-4xl font-bold mb-4 col-span-12 text-white">
                             Team Profile ({{ $i === 0 ? 'Leader' : $i . ordinal($i) . ' Member' }})
                         </h2>
-                        @php
-                            $user = session('users')[$i] ?? [];
-                            if ($firstEmptyIndex === null && empty($user)) {
-                                $firstEmptyIndex = $i;
-                            }
-                        @endphp
                         <input type="hidden" id="user{{ $i }}-id" name="user[{{ $i }}][id]"
                             value="{{ $user['id'] ?? '' }}">
                         <input type="hidden" id="user{{ $i }}-position"
@@ -166,8 +166,8 @@
                         </div>
 
                         @foreach (['student_card', 'twibbon'] as $field)
-                            <div class="col-span-12">
-                                <label for="user{{ $i }}-{{ $field }}" class="mb-2 text-white">
+                            <div class="col-span-12 mb-2">
+                                <label for="user{{ $i }}-{{ $field }}" class="text-white">
                                     {{ ucfirst(str_replace('_', ' ', $field)) }}:
                                 </label>
 
@@ -190,7 +190,7 @@
 
                                 <div id="upload-container-{{ $field }}-{{ $i }}"
                                     class="{{ $hasFile ? 'hidden' : '' }}">
-                                    <div class="mb-4 relative">
+                                    <div class="relative">
                                         <img id="preview-upload-{{ $field }}-{{ $i }}" src="#"
                                             alt="Preview" class="h-[130px] w-auto rounded hidden">
                                         <span id="remove-upload-{{ $field }}-{{ $i }}"
@@ -214,12 +214,12 @@
                                         </span>
                                     </div>
                                     @if (trim(strtolower($field)) === 'twibbon')
-                                    <a href="https://docs.google.com/document/d/12WIOeYrcGlbaqv9JmoMQY2ooaxqyFOALBmwBZJKh-Ug/edit?usp=sharing"
-                                        target="_blank" rel="noopener noreferrer"
-                                        class="text-blue-500 underline hover:text-blue-700">
-                                        📄 Ketentuan Upload Twibbon (Google Docs)
-                                    </a>
-                                @endif
+                                        <a href="https://docs.google.com/document/d/12WIOeYrcGlbaqv9JmoMQY2ooaxqyFOALBmwBZJKh-Ug/edit?usp=sharing"
+                                            target="_blank" rel="noopener noreferrer"
+                                            class="text-blue-500 underline hover:text-blue-700">
+                                            📄 Ketentuan Upload Twibbon (Google Docs)
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
                         @endforeach
@@ -280,10 +280,10 @@
                                         <g>
                                             <path
                                                 d="M23.047,15.266c0.781,0.781,0.781,2.047,0,2.828l-7.381,7.381l-7.379-7.379c-0.781-0.781-0.781-2.046,0-2.828
-                                                        c0.78-0.781,2.047-0.781,2.827,0l2.552,2.551V8.686c0-1.104,0.896-2,2-2c1.104,0,2,0.896,2,2v9.132l2.553-2.553
-                                                        C21,14.484,22.268,14.484,23.047,15.266z M31.332,15.666c0,8.639-7.027,15.666-15.666,15.666C7.026,31.332,0,24.305,0,15.666
-                                                        C0,7.028,7.026,0,15.666,0C24.307,0,31.332,7.028,31.332,15.666z M27.332,15.666C27.332,9.233,22.1,4,15.666,4
-                                                        C9.233,4,4,9.233,4,15.666C4,22.1,9.233,27.332,15.666,27.332C22.1,27.332,27.332,22.1,27.332,15.666z" />
+                                                c0.78-0.781,2.047-0.781,2.827,0l2.552,2.551V8.686c0-1.104,0.896-2,2-2c1.104,0,2,0.896,2,2v9.132l2.553-2.553
+                                                C21,14.484,22.268,14.484,23.047,15.266z M31.332,15.666c0,8.639-7.027,15.666-15.666,15.666C7.026,31.332,0,24.305,0,15.666
+                                                C0,7.028,7.026,0,15.666,0C24.307,0,31.332,7.028,31.332,15.666z M27.332,15.666C27.332,9.233,22.1,4,15.666,4
+                                                C9.233,4,4,9.233,4,15.666C4,22.1,9.233,27.332,15.666,27.332C22.1,27.332,27.332,22.1,27.332,15.666z" />
                                         </g>
                                     </svg>
                                 </label>
