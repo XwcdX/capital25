@@ -552,9 +552,6 @@
                             }
                         }
                     });
-                    for (const pair of formDataObject.entries()) {
-                        console.log(pair[0] + ": " + pair[1]);
-                    }
                     Swal.fire({
                         title: 'Saving users...',
                         text: 'Please wait while we process the data.',

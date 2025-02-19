@@ -30,7 +30,7 @@
             width: 300%;
             height: 100%;
             left: -250%;
-            background: url('{{ asset('assets/test.jpg') }}') no-repeat center center fixed, rgba(255, 255, 255, 0.3);
+            background: url('{{ asset('assets/login.png') }}') no-repeat center center fixed, rgba(255, 255, 255, 0.3);
             background-size: cover;
             background-blend-mode: overlay;
             border-radius: 50px;

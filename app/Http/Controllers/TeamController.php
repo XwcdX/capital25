@@ -46,7 +46,6 @@ class TeamController extends BaseController
         if ($request->has('feedback')) {
             $data['feedback'] = $request->feedback;
         }
-        Log::info('', $data);
         Mail::to($team->email)->queue(new TeamValidationEmail($data));
         parent::updatePartial($request, $id);
     }

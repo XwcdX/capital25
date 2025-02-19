@@ -41,6 +41,15 @@ class UserController extends BaseController
 
         $currentTeam = Auth::user();
         $users = $request->input('user');
+        $files = $request->file('user');
+        foreach ($users as $index => &$user) {
+            if (isset($files[$index]['student_card'])) {
+                $user['student_card'] = $files[$index]['student_card'];
+            }
+            if (isset($files[$index]['twibbon'])) {
+                $user['twibbon'] = $files[$index]['twibbon'];
+            }
+        }
         $proofOfPayment = $request->file('user.4.proof_of_payment');
         $errors = [];
 
