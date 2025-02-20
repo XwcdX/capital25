@@ -1,3 +1,9 @@
+<style>
+.landing-title {
+    text-shadow: 1px 0px 15px rgb(0, 170, 255);
+}   
+</style>
+
 <section id="landing" class="relative h-screen w-screen bg-[#a8d3fb] overflow-hidden flex items-center justify-start p-12 sm:p-20 lg:p-28" data-parallax-layers>
     <img src="{{ asset('assets/landing/cloud-1.png')}}" alt=""  loading="eager" data-parallax-layer="1" 
     class="layer10 max-md:w-[275px] md:w-[350px] lg:w-[500px] xl:w-[550px] absolute max-md:top-0 max-md:-right-[20%] md:-top-[17%] md:-right-[25%] lg:-right-[20%] lg:-right-[5%] xl:-top-[35%] xl:-right-[20%] z-[0]">
@@ -33,9 +39,10 @@
     class="layer7 w-full h-screen object-cover absolute -bottom-[5%] left-0 z-[6]">
         
     {{-- title --}}
-    <div class="flex flex-col">
-        <h1 class="landing-title text-6xl sm:text-7xl lg:text-8xl uppercase z-[7] text-white font-oxanium font-black">CAPITAL 2025</h1>
-        <h1 class="landing-title max-sm:mt-2 text-3xl lg:text-4xl xl:text-5xl z-[7] text-white font-oxanium font-black">Breaking the Loop for Sustainable Future</h1>
+    <div class="flex flex-col space-y-4">
+        {{-- <h1 class="landing-title text-6xl sm:text-7xl lg:text-8xl uppercase z-[7] text-white font-oxanium font-black">CAPITAL 2025</h1> --}}
+        <img class="object-cover md:w-3/4 lg:w-1/2 mx-auto relative z-[7]" src="{{ asset('assets/landing/font-capital.png')}}" alt="">
+        <h1 class="landing-title max-sm:mt-2 text-3xl lg:text-4xl xl:text-5xl z-[7] text-white font-league font-bold text-center">Breaking the Loop for <br>Sustainable Future</h1>
     </div>
 
 </section>
