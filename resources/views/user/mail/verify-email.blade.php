@@ -38,7 +38,7 @@
     <div class="">
         <div class="greetings">
             <h1>Email Verification</h1>
-            <p>Hello {{ $user->name}},</p>
+            <p>Hello {{ $user->name }},</p>
             <p>Please click the button below to verify your email address..</p>
             <a href="{{$url}}">
                 <button class="message-box__button">Verify Email</button>

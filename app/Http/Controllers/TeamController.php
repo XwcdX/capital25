@@ -46,7 +46,6 @@ class TeamController extends BaseController
         if ($request->has('feedback')) {
             $data['feedback'] = $request->feedback;
         }
-        Log::info('', $data);
         Mail::to($team->email)->queue(new TeamValidationEmail($data));
         parent::updatePartial($request, $id);
     }
@@ -193,7 +192,7 @@ class TeamController extends BaseController
             return redirect()->route('team.login')->with('error', 'You need to login first.');
         }
         $title = 'Verify Email';
-        $email = session('email');
+        $email = $team->email;
         return view('user.verify-email', compact('title', 'email'));
     }
 

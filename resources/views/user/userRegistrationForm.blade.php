@@ -63,17 +63,17 @@
                     $firstEmptyIndex = null;
                 @endphp
                 @for ($i = 0; $i < 4; $i++)
+                    @php
+                        $user = session('users')[$i] ?? [];
+                        if ($firstEmptyIndex === null && empty($user)) {
+                            $firstEmptyIndex = $i;
+                        }
+                    @endphp
                     <div id="form-{{ $i + 1 }}" class="form-slide grid grid-cols-12 gap-2 p-12 w-full"
                         @if ($firstEmptyIndex === $i) data-first-empty="true" @endif>
                         <h2 class="text-4xl font-bold mb-4 col-span-12 text-white">
                             Team Profile ({{ $i === 0 ? 'Leader' : $i . ordinal($i) . ' Member' }})
                         </h2>
-                        @php
-                            $user = session('users')[$i] ?? [];
-                            if ($firstEmptyIndex === null && empty($user)) {
-                                $firstEmptyIndex = $i;
-                            }
-                        @endphp
                         <input type="hidden" id="user{{ $i }}-id" name="user[{{ $i }}][id]"
                             value="{{ $user['id'] ?? '' }}">
                         <input type="hidden" id="user{{ $i }}-position"
@@ -121,7 +121,8 @@
                         </div>
 
                         <div class="col-span-12 sm:col-span-6 relative h-[55px] mb-5">
-                            <label for="user{{ $i }}-consumption" class="mb-2 text-white">Consumption Type:</label>
+                            <label for="user{{ $i }}-consumption" class="mb-2 text-white">Consumption
+                                Type:</label>
                             <select id="user{{ $i }}-consumption"
                                 name="user[{{ $i }}][consumption_type]"
                                 class="mb-4 p-2 border-none  rounded-xl w-full bg-[#BFBDBC] appearance-none pr-10">
@@ -165,8 +166,8 @@
                         </div>
 
                         @foreach (['student_card', 'twibbon'] as $field)
-                            <div class="col-span-12">
-                                <label for="user{{ $i }}-{{ $field }}" class="mb-2 text-white">
+                            <div class="col-span-12 mb-2">
+                                <label for="user{{ $i }}-{{ $field }}" class="text-white">
                                     {{ ucfirst(str_replace('_', ' ', $field)) }}:
                                 </label>
 
@@ -189,7 +190,7 @@
 
                                 <div id="upload-container-{{ $field }}-{{ $i }}"
                                     class="{{ $hasFile ? 'hidden' : '' }}">
-                                    <div class="mb-4 relative">
+                                    <div class="relative">
                                         <img id="preview-upload-{{ $field }}-{{ $i }}" src="#"
                                             alt="Preview" class="h-[130px] w-auto rounded hidden">
                                         <span id="remove-upload-{{ $field }}-{{ $i }}"
@@ -212,6 +213,13 @@
                                             No file chosen
                                         </span>
                                     </div>
+                                    @if (trim(strtolower($field)) === 'twibbon')
+                                        <a href="https://docs.google.com/document/d/12WIOeYrcGlbaqv9JmoMQY2ooaxqyFOALBmwBZJKh-Ug/edit?usp=sharing"
+                                            target="_blank" rel="noopener noreferrer"
+                                            class="text-blue-500 underline hover:text-blue-700">
+                                            📄 Ketentuan Upload Twibbon (Google Docs)
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
                         @endforeach
@@ -544,9 +552,6 @@
                             }
                         }
                     });
-                    for (const pair of formDataObject.entries()) {
-                        console.log(pair[0] + ": " + pair[1]);
-                    }
                     Swal.fire({
                         title: 'Saving users...',
                         text: 'Please wait while we process the data.',
