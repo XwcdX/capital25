@@ -226,12 +226,12 @@
                     </div>
                 @endfor
                 @php
-                    if ($firstEmptyIndex === null && isset($proof) && !$proof) {
+                    if ($firstEmptyIndex === null && !isset($proof)) {
                         $firstEmptyIndex = 4;
                     }
                 @endphp
 
-                <div id="form-4" class="form-slide p-12 w-full flex flex-col items-center justify-center"
+                <div id="form-5" class="form-slide p-12 w-full flex flex-col items-center justify-center"
                     @if ($firstEmptyIndex === 4) data-first-empty="true" @endif>
                     <h2 class="text-2xl sm:text-4xl font-bold mb-4 col-span-12 text-white text-center">
                         Informasi Pembayaran
