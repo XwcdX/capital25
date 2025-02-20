@@ -192,7 +192,7 @@ class TeamController extends BaseController
             return redirect()->route('team.login')->with('error', 'You need to login first.');
         }
         $title = 'Verify Email';
-        $email = session('email');
+        $email = $team->email;
         return view('user.verify-email', compact('title', 'email'));
     }
 
