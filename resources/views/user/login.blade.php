@@ -120,7 +120,7 @@
 
     <div class="flex justify-center items-center min-h-screen w-full">
         <div class="mx-auto cont relative w-[100%] h-[100%] bg-slate-700 flex justify-center items-center">
-            <div class="container relative h-screen bg-[var(--cap-green1)] shadow-lg">
+            <div class="container relative h-screen bg-[var(--cap-green2)] shadow-lg">
                 <!-- Login Form -->
                 <div
                     class="form-box login absolute right-0 w-[50%] h-full flex flex-col items-center justify-center text-black">
