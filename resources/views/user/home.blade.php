@@ -57,18 +57,11 @@
     overflow: hidden;
     transition: max-height 0.5s ease-in-out;
 }
-.expanded {
-    max-height: 1000px; 
-}
 </style>
 @endsection
 
 
 @section('content')
-    {{-- <div id="loader" class="loader h-screen w-screen flex justify-center items-center bg-[#25352d]" >
-        @include('user.loader')
-    </div> --}}
-
     <div id="full-content relative" class="hidde overflow-x-hidden bg-[var(--cap-green2)]">
         {{-- <div class="nav-overlay bg-black opacity-0 absolute top-0 left-0 w-screen h-[700vh] z-[8000]"></div> --}}
         @include('components.nav')
@@ -172,7 +165,7 @@
         });
 
         gsap.to('.overlay', {
-            opacity: 0.65,
+            opacity: 0.85,
             scrollTrigger: {
                 trigger: '.overlay',
                 start: "80% bottom",
@@ -189,15 +182,15 @@
                 scrub: 0,
             }
         })
-        gsap.to('.waterfall', {
-            yPercent: -3,
-            scrollTrigger: {
-                trigger: '.bush',
-                start: "bottom bottom",
-                end: "bottom top",
-                scrub: 0,
-            }
-        })
+        // gsap.to('.waterfall', {
+        //     yPercent: -3,
+        //     scrollTrigger: {
+        //         trigger: '.bush',
+        //         start: "bottom bottom",
+        //         end: "bottom top",
+        //         scrub: 0,
+        //     }
+        // })
         //moni
         let mm = gsap.matchMedia();
         mm.add("(max-width: 767px)", () => {
@@ -385,7 +378,6 @@
     const faqsContainer = document.getElementById("faqs");
     const toggleButton = document.getElementById("toggleBtn");
 
-    // const questionsToShow = window.innerWidth >= 768 ? 4 : 6; // determine how many questions appear initially
     const questionContainers = [];
 
     questionData.questions.forEach((item, index) => {

@@ -6,9 +6,9 @@
 </style>
 
 <section id="aboutUs" class="about relative h-[120vh] w-screen z-[13] overflow-hidden p-10  lg:p-16 xl:p-28 flex items-center justify-center
--mt-[49%] sm:-mt-[22%]  md:-mt-[17%] lg:-mt-[15%] xl:-mt-[9%]">
+-mt-[49%] sm:-mt-[22%] md:-mt-[17%] lg:-mt-[15%] xl:-mt-[9%]">
     <img src="{{ asset('assets/landing/waterfall.png')}}" alt="" loading="eager"  
-    class="waterfall w-full h-full object-cover absolute top-0 left-0 z-[11]">
+    class="waterfall w-full h-full object-cover lg:object-fit absolute top-0 left-0 z-[11]">
 
     {{-- overlay --}}
     <div class="overlay absolute inset-0 bg-black opacity-0 z-[12]"></div>
@@ -23,7 +23,7 @@
          src="{{ asset('assets/about/moni.png')}}" alt="">
 
         <div class="flex flex-col justify-center max-md:text-center">
-            <h1 class="abt-stroke text-6xl md:text-7xl lg:text-7xl xl:text-8xl text-[#14240a] z-[7] text-[#608343] font-oxanium font-black text-center md:text-left">About Us</h1>
+            <h1 class="abt-stroke text-6xl md:text-7xl lg:text-7xl xl:text-8xl text-[#14240a] z-[7] text-[#608343] font-league font-black text-center md:text-left">About Us</h1>
             <h1 class="abt-stroke text-base lg:text-xl xl:text-2xl z-[7] text-[#608343] font-quicksand font-bold mt-12 md:mt-4 lg:mt-8 tracking-wide text-center md:text-left">
                 Rangkaian acara CAPITAL 2025 memberikan kesempatan bagi siswa dan siswi SMA untuk berkolaborasi, berpikir strategis, serta mempersiapkan diri menjadi entrepreneur masa depan yang mampu menghadapi tantangan global. Dengan menggabungkan kompetisi yang menantang dan sesi diskusi yang inspiratif, CAPITAL 2025 bertujuan menciptakan generasi Ecopreneurs yang tidak hanya inovatif, tetapi juga bertanggung jawab secara sosial dan lingkungan.
             </h1>

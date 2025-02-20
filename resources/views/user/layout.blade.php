@@ -144,7 +144,10 @@
     @yield('style')
 </head>
 
-<body class="overflow-x-hidden">
+<body class="overflow-hidden">
+    <div id="loader" class="loader absolute z-[10000] inset-0 h-screen w-screen flex justify-center items-center bg-[#25352d]" >
+        @include('user.loader')
+    </div>
     @yield('content')
     <script src="https://cdn.jsdelivr.net/npm/tw-elements/js/tw-elements.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></script>
@@ -160,6 +163,40 @@
             })
         </script>
     @endif
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const loader = document.getElementById("loader");
+            const body = document.body;
+            const html = document.documentElement;
+
+            body.style.overflow = "hidden";
+            html.style.overflow = "hidden";
+            // html.classList.remove('lenis-scrolling', 'lenis-smooth'); loader g scroll
+            window.scrollTo(0, 0);
+            // if (typeof lenis !== "undefined" && lenis) {
+            //     lenis.stop();
+            // }
+
+            if (loader) {
+                setTimeout(() => {
+                    loader.remove();
+                    body.style.overflow = "visible";
+                    html.style.overflow = "visible";
+                    body.classList.remove('overflow-hidden');
+                    body.classList.add('overflow-x-hidden');
+                    setTimeout(()=>{
+                        if (typeof Lenis !== "undefined") {
+                            // const lenis = new Lenis();
+                            lenis.start();
+                        }
+                    }, 3000);
+                    if (typeof ScrollTrigger !== "undefined") {
+                        ScrollTrigger.refresh();
+                    }
+                }, 3000);
+            }
+        });
+    </script>
 </body>
 
 </html>
