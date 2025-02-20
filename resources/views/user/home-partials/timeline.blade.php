@@ -1,3 +1,6 @@
+<style>
+</style>
+
 <section id="timeline" class="relative h-screen w-screen bg-[#14240a] z-[14] flex justify-center items-center">
     
     <img src="{{ asset('assets/landing/daun-ijo.png')}}" alt="" loading="lazy" 
@@ -13,7 +16,7 @@
             <div class="hidden-content text-center w-[80%] sm:w-[80%] lg:w-3/4 hidden opacity-0 h-0 overflow-hidden transition-all duration-500 ease-in-out">
                 <h1 class="timeline-title text-lg [@media(max-width:400px)]:text-xl sm:text-2xl lg:text-4xl font-oxanium text-black font-bold"></h1>
                 <p class="timeline-desc text-md [@media(max-width:400px)]:text-base sm:text-lg xl:text-xl font-quicksand text-black my-5 sm:my-5 xl:my-10"></p>
-                <div class="datetime font-quicksand text-md sm:text-lg xl:text-xl text-black">
+                <div class="datetime font-quicksand text-md sm:text-lg xl:text-xl  text-black">
                     <h1 class="timeline-date"></h1>
                     <h1 class="timeline-time"></h1>
                     <h1 class="timeline-loc"></h1>

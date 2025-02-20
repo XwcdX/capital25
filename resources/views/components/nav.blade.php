@@ -75,6 +75,11 @@
       color: #b1ce58;
       transition: all 0.2s;
     }
+
+    li:hover {
+      color: #b1ce58;
+      transition: all 0.2s;
+    }
   
     .nav-container {
       display: block;
@@ -206,10 +211,16 @@
     .hermona {
         font-family: 'Hermona';
     }
+    .nav {
+      transition: transform 0.3s ease-in-out;
+    }
+    .-translate-y-full {
+      transform: translateY(-100%);
+    }
   </style>
   
   <div id="navbar" class="">
-    <nav class="navbar">
+    <nav class="navbar block md:hidden">
       <div class="container nav-container font-quicksand">
         <input class="checkbox" type="checkbox" name="" id="nav-toggle" />
         <div class="hamburger-lines drop-shadow-md">
@@ -228,7 +239,39 @@
         </ul>
       </div>
     </nav>
-  </div>
+
+    {{-- desktop nav --}}
+    <nav class="nav hidden md:block font-quicksand fixed top-0 left-0 z-[80] border-gray-200 w-full bg-transparent backdrop-blur shadow-md">
+      <div class="flex flex-wrap items-center justify-end mx-auto px-4 lg:px-8 2xl:px py-4">
+          <button data-collapse-toggle="navbar-default" type="button"
+              class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-white
+              rounded-lg md:hidden focus:ring-2 ring-amber-400"
+              aria-controls="navbar-default" aria-expanded="false">
+              <span class="sr-only">Open main menu</span>
+              <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 17 14">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M1 1h15M1 7h15M1 13h15" />
+              </svg>
+          </button>
+          <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+              <ul class="borderXwidth flex flex-col py-4 md:p-0  md:flex-row text-white tracking-wide text-md space-x-6">
+                <li><a href="#aboutUs" class=" drop-shadow-lg hover:scale-110 font-extrabold">ABOUT</a></li>
+                <li><a href="#timeline" class=" drop-shadow-lg hover:scale-110 font-extrabold">TIMELINE</a></li>
+                <li><a href="#prizepool" class=" drop-shadow-lg hover:scale-110 font-extrabold">PRIZE POOL</a></li>
+                <li><a href="#faq" class=" drop-shadow-lg hover:scale-110 font-extrabold">FAQ</a></li>
+                {{-- ganti route ke regist --}}
+                @if (Auth::user())
+                  
+                @else
+
+                @endif
+                <li><a href="#regist" class=" drop-shadow-lg hover:scale-110 font-extrabold">LOGIN</a></li>
+                
+              </ul>
+          </div>
+      </div>
+  </nav>
   
   <script>
     const checkbox = document.getElementById('nav-toggle');
@@ -250,5 +293,22 @@
         checkbox.checked = false;
       });
     });
+
+    document.addEventListener("DOMContentLoaded", function() {
+      let lastScrollY = window.scrollY;
+
+      window.addEventListener("scroll", () => {
+          const navbar = document.querySelector(".nav");
+
+          if (lastScrollY < window.scrollY) {
+              navbar.classList.add("-translate-y-full");
+          } else {
+              navbar.classList.remove("-translate-y-full");
+          }
+
+          lastScrollY = window.scrollY;
+      }); 
+    });
+    
   </script>
   

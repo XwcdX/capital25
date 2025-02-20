@@ -25,6 +25,11 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap');
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    {{-- font landing --}}
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -33,11 +38,11 @@
         }
 
         :root {
-            --cap-green5: #344E41;
-            --cap-green4: #3A5A40;
-            --cap-green3: #5C7650;
-            --cap-green2: #A3B18A;
-            --cap-green1: #DAD7CD;
+            --cap-green5: #25483d;
+            --cap-green4: #56843a;
+            --cap-green3: #82b741;
+            --cap-green2: #a8c747;
+            --cap-green1: #e6e773;  /*yellow*/
         }
 
         html {
@@ -98,7 +103,7 @@
         .font-orbitron { font-family: 'orbitron'; }
         .font-quicksand { font-family: 'quicksand'; }
         .font-oxanium { font-family: 'oxanium'; }
-
+        .font-league { font-family: 'League Spartan'}
         
     </style>
 

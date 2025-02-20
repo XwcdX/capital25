@@ -8,16 +8,13 @@
     transition: opacity 0.5s ease-out;
     display: hidden;
 }
-.landing-title {
-    -webkit-text-stroke: 4px black;
-    paint-order: stroke fill;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.74);
-}
 .box {
     flex: 1;
     color: white;
     cursor: pointer;
     transition: background 0.3s;
+    transform: scaleY(0);
+    transform-origin: top;
 }
 .container {
     border-radius: 40px;
@@ -31,9 +28,9 @@
         width: 100%; 
     }
 }
-.box:nth-child(1) { background: #dedbd3; border-radius: 40px; }
-.box:nth-child(2) { background: #bdbdbb; border-radius: 40px; }
-.box:nth-child(3) { background: #646361; border-radius: 40px; }
+.box:nth-child(1) { background: #a8c747; border-radius: 40px; }
+.box:nth-child(2) { background: #82b741; border-radius: 40px; }
+.box:nth-child(3) { background: #56843a; border-radius: 40px; }
 
 .close-btn {
     position: absolute;
@@ -72,7 +69,7 @@
         @include('user.loader')
     </div> --}}
 
-    <div id="full-content relative" class="hidde overflow-x-hidden">
+    <div id="full-content relative" class="hidde overflow-x-hidden bg-[var(--cap-green2)]">
         {{-- <div class="nav-overlay bg-black opacity-0 absolute top-0 left-0 w-screen h-[700vh] z-[8000]"></div> --}}
         @include('components.nav')
         @include('user.home-partials.landing')
@@ -156,7 +153,7 @@
                 { layer: "3", yPercent: 70, xPercent:0 },
                 { layer: "4", yPercent: 45, xPercent:0 },
                 { layer: "5", yPercent: 29, xPercent:0 },
-                { layer: "6", yPercent: 10, xPercent:0},
+                { layer: "6", yPercent: 15, xPercent:0},
                 { layer: "7", yPercent: 2, xPercent:0 }, 
                 { layer: "overlay", yPercent: 0, xPercent:0, opacity:0.9 } 
             ];
@@ -201,13 +198,41 @@
                 scrub: 0,
             }
         })
+        //moni
+        let mm = gsap.matchMedia();
+        mm.add("(max-width: 767px)", () => {
+            gsap.to('.moni', {
+                yPercent: -70,
+                scrollTrigger: {
+                    trigger: '#aboutUs',
+                    start: "70% bottom",
+                    end: "bottom top",
+                    scrub: 0,
+                }
+            });
+        });
+        
+        mm.add("(min-width: 768px)", () => {
+            gsap.set('.moni', {
+                yPercent: 80,
+            });
+            gsap.to('.moni', {
+                yPercent: -60,
+                scrollTrigger: {
+                    trigger: '#aboutUs',
+                    start: "80% bottom",
+                    end: "bottom top",
+                    scrub: 0,
+                }
+            });
+        })
     });
     
     // timeline
     const boxes = document.querySelectorAll(".box");
     const closeBtn = document.getElementById("closeBtn");
     const container = document.querySelector(".container")
-
+    
     const contentData = {
         leftBox: {
             title: "Seminar & Technical Meeting",
@@ -281,6 +306,24 @@
             },
         ]
     }
+
+    let tl = gsap.timeline();
+
+    
+    gsap.to(".box", { 
+        scaleY: 1,
+        duration: 1,
+        ease: "power2.out",
+        stagger: 0.1, 
+        scrollTrigger: {
+            trigger: "#leftBox",
+            start: "top 20%",  
+            end: "bottom top",    
+            toggleActions: "play none reverse none",
+            markers: true, 
+        }
+    });
+
     let hidden_content = '';
 
     boxes.forEach((box) => {
@@ -347,7 +390,7 @@
 
     questionData.questions.forEach((item, index) => {
         const questionWrapper = document.createElement("div");
-        questionWrapper.classList.add("dropdown", "flex", "flex-col", "bg-[#dad7cf]", "relative", "rounded-2xl", "hover:bg-[#8c897f]", "transition-all", "duration-200");
+        questionWrapper.classList.add("dropdown", "flex", "flex-col", "bg-[#dad7cf]", "relative", "rounded-2xl", "hover:bg-[#a8c747]", "transition-all", "duration-200");
 
         questionWrapper.innerHTML = `
             <p class="number font-oxanium px-2 bg-[#14240a] text-white text-left rounded-full absolute top-2 left-3">1</p>
@@ -377,25 +420,6 @@
         faqsContainer.appendChild(questionWrapper);
         questionContainers.push(questionWrapper);
     });
-
-    // let isExpanded = false;
-
-    // toggleButton.addEventListener("click", () => {
-    //     questionContainers.forEach((question, index) => {
-    //         if (index >= questionsToShow) {
-    //             question.classList.toggle("hidden");
-    //             question.classList.toggle("expanded");
-    //         }
-    //     });
-
-    //     isExpanded = !isExpanded;
-        
-    //     if (isExpanded) {
-    //         toggleButton.classList.add('rotate-180');
-    //     } else {
-    //         toggleButton.classList.remove('rotate-180');
-    //     }
-    // });
 
     const plusBtns = document.querySelectorAll('.fa-solid');
     const contentWrappers = document.querySelectorAll(".dropdown-wrapper");
