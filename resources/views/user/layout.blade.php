@@ -199,21 +199,26 @@
 
             function removeLoader() {
                 if (loader) {
-                    loader.remove();
-                    body.style.overflowY = "visible";
-                    html.style.overflowY = "visible";
-                    body.classList.remove('overflow-hidden');
-                    body.classList.add('overflow-x-hidden');
+                    loader.style.transition = "opacity 0.8s ease";
+                    loader.style.opacity = "0";
 
                     setTimeout(() => {
-                        if (typeof Lenis !== "undefined") {
-                            lenis.start();
-                        }
-                    }, 3000);
+                        loader.remove();
+                        body.style.overflowY = "visible";
+                        html.style.overflowY = "visible";
+                        body.classList.remove('overflow-hidden');
+                        body.classList.add('overflow-x-hidden');
 
-                    if (typeof ScrollTrigger !== "undefined") {
-                        ScrollTrigger.refresh();
-                    }
+                        setTimeout(() => {
+                            if (typeof Lenis !== "undefined") {
+                                lenis.start();
+                            }
+                        }, 3000);
+
+                        if (typeof ScrollTrigger !== "undefined") {
+                            ScrollTrigger.refresh();
+                        }
+                    }, 800);
                 }
             }
             if (isHomePage) {
