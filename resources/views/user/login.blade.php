@@ -124,7 +124,7 @@
                 <!-- Login Form -->
                 <div
                     class="form-box login absolute right-0 w-[50%] h-full flex flex-col items-center justify-center text-black">
-                    <form class="w-full px-8" id="manualLogin" action="{{ route('team.logins') }}" method="POST">
+                    <form class="w-full px-8 font-quicksand" id="manualLogin" action="{{ route('team.logins') }}" method="POST">
                         @csrf
                         <h1 class="text-[33px] min-[376px]:text-[39px] mb-4 lg:mb-6 text-black font-bold text-center">Hello,
                             Ecopreneurs!</h1>
@@ -132,14 +132,14 @@
                             <input id="teamNameOrEmail" type="text" aria-label="Team Name or Email"
                                 placeholder="Team Name/Email" required="" name="email"
                                 value="{{ old('Team Name or Email') }}"
-                                class="w-full pr-[50px] pl-5 py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[16px] placeholder-[#636161] placeholder:font-semibold">
+                                class="w-full pr-[50px] pl-5 py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[16px] placeholder-[#636161] font-semibold">
                             <i
                                 class="fa-solid fa-user absolute right-5 top-1/2 -translate-y-1/2 text-[20px] text-gray-400"></i>
                         </div>
                         <div class="input-box relative w-full mb-4 lg:mb-6">
                             <input id="loginPassword" type="password" aria-label="Password" placeholder="Password"
                                 required="" name="password" minlength="8"
-                                class="w-full pr-[50px] pl-5 py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[16px] placeholder-[#636161] placeholder:font-semibold">
+                                class="w-full pr-[50px] pl-5 py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[16px] placeholder-[#636161] font-semibold">
                             <i
                                 class="fa-solid fa-lock absolute right-5 top-1/2 -translate-y-1/2 text-[20px] text-gray-400"></i>
                         </div>
@@ -162,7 +162,7 @@
                 {{-- Registration Form --}}
                 <div
                     class="form-box registration absolute right-0 w-[50%] h-full flex flex-col items-center justify-center text-black">
-                    <form class="w-full px-8 grid gap-4 grid-cols-2" id="submitRegister">
+                    <form class="w-full px-8 grid gap-4 grid-cols-2 font-quicksand" id="submitRegister">
                         @csrf
                         <h1
                             class="text-[33px] min-[376px]:text-[39px] mb-4 lg:mb-6 text-black font-bold text-center col-span-2">
@@ -170,40 +170,40 @@
                         <div class="input-box relative w-full mb-2 lg:mb-6">
                             <input type="text" aria-label="TeamName" placeholder="Team Name" required=""
                                 id="name"
-                                class="w-full pr-[50px] pl-4 min-[376px]:pl-5 py-[8px] min-[376px]:py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[14px] min-[376px]:text-[16px] placeholder-[#636161] placeholder:font-semibold">
+                                class="w-full pr-[50px] pl-4 min-[376px]:pl-5 py-[8px] min-[376px]:py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[14px] min-[376px]:text-[16px] placeholder-[#636161] font-semibold">
                             <i
                                 class="fa-solid fa-user absolute right-4 min-[376px]:right-5 top-1/2 -translate-y-1/2 text-[17px] min-[376px]:text-[20px] text-gray-400"></i>
                         </div>
                         <div class="input-box relative w-full mb-2 lg:mb-6">
                             <input type="email" aria-label="Email" placeholder="Email" required="" id="email"
-                                class="w-full pr-[50px] pl-4 min-[376px]:pl-5 py-[8px] min-[376px]:py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[14px] min-[376px]:text-[16px] placeholder-[#636161] placeholder:font-semibold">
+                                class="w-full pr-[50px] pl-4 min-[376px]:pl-5 py-[8px] min-[376px]:py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[14px] min-[376px]:text-[16px] placeholder-[#636161] font-semibold">
                             <i
                                 class="fa-solid fa-envelope absolute right-4 min-[376px]:right-5 top-1/2 -translate-y-1/2 text-[17px] min-[376px]:text-[20px] text-gray-400"></i>
                         </div>
                         <div class="input-box relative w-full mb-2 lg:mb-6 col-span-2 lg:col-span-1">
                             <input type="text" aria-label="School" placeholder="School" required="" id="school"
-                                class="w-full pr-[50px] pl-4 min-[376px]:pl-5 py-[8px] min-[376px]:py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[14px] min-[376px]:text-[16px] placeholder-[#636161] placeholder:font-semibold">
+                                class="w-full pr-[50px] pl-4 min-[376px]:pl-5 py-[8px] min-[376px]:py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[14px] min-[376px]:text-[16px] placeholder-[#636161] font-semibold">
                             <i
                                 class="fa-solid fa-school absolute right-4 min-[376px]:right-5 top-1/2 -translate-y-1/2 text-[17px] min-[376px]:text-[20px] text-gray-400"></i>
                         </div>
                         <div class="input-box relative w-full mb-2 lg:mb-6 col-span-2 lg:col-span-1">
                             <input type="domicile" aria-label="Domicile" placeholder="Domicile" value="Surabaya-Jawa Timur"
                                 required="" id="domicile"
-                                class="w-full pr-[50px] pl-4 min-[376px]:pl-5 py-[8px] min-[376px]:py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[14px] min-[376px]:text-[16px] placeholder-[#636161] placeholder:font-semibold">
+                                class="w-full pr-[50px] pl-4 min-[376px]:pl-5 py-[8px] min-[376px]:py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[14px] min-[376px]:text-[16px] placeholder-[#636161] font-semibold">
                             <i
                                 class="fa-solid fa-city absolute right-4 min-[376px]:right-5 top-1/2 -translate-y-1/2 text-[17px] min-[376px]:text-[20px] text-gray-400"></i>
                         </div>
                         <div class="input-box relative w-full mb-2 lg:mb-6 col-span-2">
                             <input type="password" aria-label="Password" placeholder="Password" required=""
                                 id="password" minlength="8"
-                                class="w-full pr-[50px] pl-4 min-[376px]:pl-5 py-[8px] min-[376px]:py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[14px] min-[376px]:text-[16px] placeholder-[#636161] placeholder:font-semibold">
+                                class="w-full pr-[50px] pl-4 min-[376px]:pl-5 py-[8px] min-[376px]:py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[14px] min-[376px]:text-[16px] placeholder-[#636161] font-semibold">
                             <i
                                 class="fa-solid fa-lock absolute right-4 min-[376px]:right-5 top-1/2 -translate-y-1/2 text-[17px] min-[376px]:text-[20px] text-gray-400"></i>
                         </div>
                         <div class="input-box relative w-full mb-2 lg:mb-6 col-span-2">
                             <input type="password" aria-label="Confirm Password" placeholder="Confirm Password"
                                 id="confirmPassword" minlength="8" required=""
-                                class="w-full pr-[50px] pl-4 min-[376px]:pl-5 py-[8px] min-[376px]:py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[14px] min-[376px]:text-[16px] placeholder-[#636161] placeholder:font-semibold">
+                                class="w-full pr-[50px] pl-4 min-[376px]:pl-5 py-[8px] min-[376px]:py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[14px] min-[376px]:text-[16px] placeholder-[#636161] font-semibold">
                             <i
                                 class="fa-solid fa-lock absolute right-4 min-[376px]:right-5 top-1/2 -translate-y-1/2 text-[17px] min-[376px]:text-[20px] text-gray-400"></i>
                         </div>
@@ -212,7 +212,7 @@
                     </form>
                 </div>
 
-                <div class="toggle-box absolute w-full h-full">
+                <div class="toggle-box absolute w-full h-full font-quicksand">
                     <div
                         class="toggle-panel toggle-left left-0 absolute w-[50%] h-[100%] flex flex-col justify-center items-center text-slate-900 text-center">
 

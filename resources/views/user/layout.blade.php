@@ -163,7 +163,7 @@
 
 <body class="overflow-hidden">
     <div id="loader"
-        class="loader fixed z-[10000] inset-0 h-screen w-screen flex justify-center items-center bg-[#25352d]">
+        class="loader fixed z-[10000] inset-0 h-screen w-screen flex justify-center items-center bg-[var(--cap-green5)]">
         @include('user.loader')
     </div>
     @yield('content')
