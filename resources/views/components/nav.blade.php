@@ -230,12 +230,21 @@
         </div>
         <div class="nav-overlay"></div>
         <ul class=" menu-items items-center justify-center gap-6">
+          @if (Auth::user())
+            <li><a href="{{ route('user.regist')}}" class="">
+              <img class="rounded-full h-[100px]" src="{{ asset('assets/landing/icon-profile.png')}}" alt="">   
+            </a></li>
+          @endif
           <li><a href="#aboutUs" class=" drop-shadow-lg hover:scale-110 font-extrabold">ABOUT</a></li>
           <li><a href="#timeline" class=" drop-shadow-lg hover:scale-110 font-extrabold">TIMELINE</a></li>
           <li><a href="#prizepool" class=" drop-shadow-lg hover:scale-110 font-extrabold">PRIZE POOL</a></li>
           <li><a href="#faq" class=" drop-shadow-lg hover:scale-110 font-extrabold">FAQ</a></li>
           {{-- ganti route ke regist --}}
-          <li><a href="#regist" class=" drop-shadow-lg hover:scale-110 font-extrabold">REGISTRATION</a></li>
+          @if (Auth::user())
+            <li><a href="{{route('team.logout')}}" class=" drop-shadow-lg hover:scale-110 font-extrabold">Logout</a></li>
+          @else
+            <li><a href="{{route('team.login')}}" class=" drop-shadow-lg hover:scale-110 font-extrabold">Login</a></li>
+          @endif
         </ul>
       </div>
     </nav>
@@ -262,11 +271,13 @@
                 <li><a href="#faq" class=" drop-shadow-lg hover:scale-110 font-extrabold">FAQ</a></li>
                 {{-- ganti route ke regist --}}
                 @if (Auth::user())
-                  
+                  <li><a href="{{ route('user.regist')}}" class=" drop-shadow-lg hover:scale-110 font-extrabold">
+                    <img class="h-[25px] rounded-full" src="{{ asset('assets/landing/icon-profile.png')}}" alt="">  
+                  </a></li>
+                  <li><a href="{{ route('team.logout')}}" class=" drop-shadow-lg hover:scale-110 font-extrabold">LOGOUT</a></li>
                 @else
-
+                  <li><a href="{{ route('team.login')}}" class=" drop-shadow-lg hover:scale-110 font-extrabold">LOGIN</a></li>
                 @endif
-                <li><a href="{{ route('team.login')}}" class=" drop-shadow-lg hover:scale-110 font-extrabold">LOGIN</a></li>
                 
               </ul>
           </div>

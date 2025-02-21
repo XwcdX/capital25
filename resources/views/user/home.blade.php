@@ -218,7 +218,7 @@
             });
 
             gsap.to('.overlay', {
-                opacity: 0.85,
+                opacity: 0.87,
                 scrollTrigger: {
                     trigger: '.overlay',
                     start: "80% bottom",
@@ -246,7 +246,7 @@
             // })
             //moni
             let mm = gsap.matchMedia();
-            mm.add("(max-width: 767px)", () => {
+            mm.add("(max-width: 767.9px)", () => {
                 gsap.to('.moni', {
                     yPercent: -70,
                     scrollTrigger: {
@@ -259,19 +259,18 @@
             });
 
             mm.add("(min-width: 768px)", () => {
-                gsap.set('.moni', {
-                    yPercent: 80,
-                });
                 gsap.to('.moni', {
-                    yPercent: -60,
+                    yPercent: 70,
                     scrollTrigger: {
                         trigger: '#aboutUs',
-                        start: "80% bottom",
-                        end: "bottom top",
-                        scrub: 0,
+                        start: "60% center",  // Starts when `.about-us` enters the viewport
+                        end: "bottom top",    // Ends when `.about-us` reaches the center
+                        scrub: 1,             // Smooth scroll effect
+                        // markers: true,        
                     }
                 });
-            })
+            });
+
         });
 
         // timeline
@@ -365,7 +364,7 @@
                 start: "top 20%",
                 end: "bottom top",
                 toggleActions: "play none reverse none",
-                markers: true,
+                // markers: true,
             }
         });
 

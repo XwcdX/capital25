@@ -4,7 +4,7 @@
 }   
 </style>
 
-<section id="landing" class="relative h-screen w-screen bg-[#a8d3fb] overflow-hidden flex items-center justify-start p-12 sm:p-20 lg:p-28" data-parallax-layers>
+<section id="landing" class="relative h-screen w-screen bg-[#a8d3fb] overflow-hidden flex items-center justify-start p-12 sm:p-20 lg:p-28 z-[7]" data-parallax-layers>
     <img src="{{ asset('assets/landing/cloud-1.png')}}" alt=""  loading="eager" data-parallax-layer="1" 
     class="layer10 max-md:w-[275px] md:w-[350px] lg:w-[500px] xl:w-[550px] absolute max-md:top-0 max-md:-right-[20%] md:-top-[17%] md:-right-[25%] lg:-right-[20%] lg:-right-[5%] xl:-top-[35%] xl:-right-[20%] z-[0]">
     <img src="{{ asset('assets/landing/cloud-2.png')}}" alt=""  loading="eager" data-parallax-layer="1" 

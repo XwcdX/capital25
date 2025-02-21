@@ -4,7 +4,7 @@
 <section id="timeline" class="relative h-screen w-screen bg-[#14240a] z-[14] flex justify-center items-center">
     
     <img src="{{ asset('assets/landing/daun-ijo.png')}}" alt="" loading="lazy" 
-    class="bush w-full scale-[2.5] sm:scale-[1.6] lg:scale-[1.1] object-cover absolute -top-[5%] sm:-top-[10%] md:-top-[8%] lg:-top-[10%] xl:-top-[15%] left-0 z-[14]">
+    class="bush w-full scale-[2.5] sm:scale-[1.6] lg:scale-[1.1] object-cover absolute -top-[5%] sm:-top-[10%] md:-top-[8%] lg:-top-[10%] xl:-top-[12%] left-0 z-[14]">
     
     
     <div class="relative container h-[80%] md:h-[68%] xl:h-[70%] flex items-center justify-center overflow-hidden gap-[4%] 

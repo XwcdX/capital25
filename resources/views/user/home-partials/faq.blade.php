@@ -17,9 +17,9 @@
 </style>
 
 <section id="faq" class="relative h-screen w-screen bg-[#14240a] flex flex-col items-center justify-center p-4 lg:p-10">
-    <h1 class="font-oxanium text-4xl md:text-5xl lg:text-7xl text-[#dad7cf] text-center font-extrabold mb-12">Frequently Asked Question</h1>
+    <h1  data-aos="fade-right" data-aos-duration="1000"  class="font-oxanium text-4xl md:text-5xl lg:text-7xl text-[#dad7cf] text-center font-extrabold mb-12">Frequently Asked Question</h1>
     
-    <div id="faqs" class="grid grid-cols-1 rounded-xl md:grid-cols-1 gap-6 p-6 md:p-12 w-[full] lg:w-[80%] bg-[#82b741] h-[70%] overflow-y-auto">
+    <div  data-aos="fade-down" data-aos-duration="1500"  id="faqs" class="grid grid-cols-1 rounded-xl md:grid-cols-1 gap-6 p-6 md:p-12 w-[full] lg:w-[80%] bg-[#82b741] h-[70%] overflow-y-auto">
 
     </div>    
     
