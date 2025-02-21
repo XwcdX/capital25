@@ -298,7 +298,7 @@ background: linear-gradient(180deg, #3a5a40 10%, #5c7650 120%);">
             </ul>
         </div>
         <div class="credit pt-5 mt-md-5">
-            <h5 class="my-4" style="color: #dedfe0;">© IT x Creative capital 2025</h5>
+            <h5 class="my-4" style="color: #dedfe0;">© IT x Creative CAPITAL 2025</h5>
         </div>
     </div>
 </div>
