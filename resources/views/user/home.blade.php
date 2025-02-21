@@ -251,7 +251,7 @@
                     yPercent: -70,
                     scrollTrigger: {
                         trigger: '#aboutUs',
-                        start: "70% bottom",
+                        start: "80% bottom",
                         end: "bottom top",
                         scrub: 0,
                     }
