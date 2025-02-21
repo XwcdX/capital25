@@ -8,7 +8,7 @@
 }
 
 .dropdown-wrapper.active{
-  max-height:300px;
+  max-height:1000px;
 }
 /* 
 #faqs{
