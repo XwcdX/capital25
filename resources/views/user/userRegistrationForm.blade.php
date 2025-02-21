@@ -226,12 +226,12 @@
                     </div>
                 @endfor
                 @php
-                    if ($firstEmptyIndex === null && isset($proof) && !$proof) {
+                    if ($firstEmptyIndex === null && !isset($proof)) {
                         $firstEmptyIndex = 4;
                     }
                 @endphp
 
-                <div id="form-4" class="form-slide p-12 w-full flex flex-col items-center justify-center"
+                <div id="form-5" class="form-slide p-12 w-full flex flex-col items-center justify-center"
                     @if ($firstEmptyIndex === 4) data-first-empty="true" @endif>
                     <h2 class="text-2xl sm:text-4xl font-bold mb-4 col-span-12 text-white text-center">
                         Informasi Pembayaran
@@ -280,10 +280,10 @@
                                         <g>
                                             <path
                                                 d="M23.047,15.266c0.781,0.781,0.781,2.047,0,2.828l-7.381,7.381l-7.379-7.379c-0.781-0.781-0.781-2.046,0-2.828
-                                                c0.78-0.781,2.047-0.781,2.827,0l2.552,2.551V8.686c0-1.104,0.896-2,2-2c1.104,0,2,0.896,2,2v9.132l2.553-2.553
-                                                C21,14.484,22.268,14.484,23.047,15.266z M31.332,15.666c0,8.639-7.027,15.666-15.666,15.666C7.026,31.332,0,24.305,0,15.666
-                                                C0,7.028,7.026,0,15.666,0C24.307,0,31.332,7.028,31.332,15.666z M27.332,15.666C27.332,9.233,22.1,4,15.666,4
-                                                C9.233,4,4,9.233,4,15.666C4,22.1,9.233,27.332,15.666,27.332C22.1,27.332,27.332,22.1,27.332,15.666z" />
+                                                                c0.78-0.781,2.047-0.781,2.827,0l2.552,2.551V8.686c0-1.104,0.896-2,2-2c1.104,0,2,0.896,2,2v9.132l2.553-2.553
+                                                                C21,14.484,22.268,14.484,23.047,15.266z M31.332,15.666c0,8.639-7.027,15.666-15.666,15.666C7.026,31.332,0,24.305,0,15.666
+                                                                C0,7.028,7.026,0,15.666,0C24.307,0,31.332,7.028,31.332,15.666z M27.332,15.666C27.332,9.233,22.1,4,15.666,4
+                                                                C9.233,4,4,9.233,4,15.666C4,22.1,9.233,27.332,15.666,27.332C22.1,27.332,27.332,22.1,27.332,15.666z" />
                                         </g>
                                     </svg>
                                 </label>
@@ -535,6 +535,8 @@
                             title: 'Validation Error',
                             text: validationError,
                             icon: 'error',
+                            showConfirmButton: true,
+                            confirmButtonColor: "#56843a",
                         });
                         return;
                     }
@@ -593,12 +595,16 @@
                                     text: 'Please check the errors and try again.',
                                     icon: 'error',
                                     html: errorMessages,
+                                    showConfirmButton: true,
+                                    confirmButtonColor: "#56843a",
                                 });
                             } else {
                                 Swal.fire({
                                     title: 'Success!',
                                     text: 'Users have been saved successfully.',
                                     icon: 'success',
+                                    showConfirmButton: true,
+                                    confirmButtonColor: "#56843a",
                                 }).then(() => {
                                     location.reload();
                                 });
@@ -610,6 +616,8 @@
                                 title: 'Error',
                                 text: 'An unexpected error occurred. Please try again later.',
                                 icon: 'error',
+                                showConfirmButton: true,
+                                confirmButtonColor: "#56843a",
                             });
                         });
                 });

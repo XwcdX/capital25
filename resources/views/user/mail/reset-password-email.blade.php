@@ -42,7 +42,7 @@
             <p>Please click the button below to reset your account's password...</p>
             <p>Ignore this email if this is not you.</p>
             <a href="{{route("reset.password", ['role' => $role, 'token' => $token])}}">
-                <button class="message-box__button">Reset Password</button>
+                <button class="message-box__button bg-[#56843a]">Reset Password</button>
             </a>
             <p>Thank you.</p>
         </div>

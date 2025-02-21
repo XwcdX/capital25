@@ -28,27 +28,22 @@
                     type="text" placeholder="Email" name="email">
                 <input class="w-[400px] max-sm:w-full h-[55px] rounded-full border border-b-4 mx-auto" type="password"
                     placeholder="Password" name="password">
-                    <a class="mt-[10px] text-center underline hover:text-slate-400" href="{{ route('forget.password', ['role'=>'admin']) }}">forget password?</a>
+                <a class="mt-[10px] text-center underline hover:text-slate-400"
+                    href="{{ route('forget.password', ['role' => 'admin']) }}">forget password?</a>
                 <button type="submit"
                     class="w-[400px] max-sm:w-full h-[55px] rounded-full border border-black text-black hover:text-white hover:bg-black mt-5">Login</button>
             </form>
         </div>
     </section>
 </body>
-@if (session('error'))
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: '{{ session('error') }}',
-        })
-    </script>
-@elseif (session('success'))
+@if (session('success'))
     <script>
         Swal.fire({
             icon: 'success',
             title: "SUCCESS!",
             text: "{{ session('success') }}",
+            showConfirmButton: true,
+            confirmButtonColor: "#56843a",
         })
     </script>
 @endif

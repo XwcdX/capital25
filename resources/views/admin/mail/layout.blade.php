@@ -84,7 +84,7 @@
         }
 
         .message-box__button {
-            background-color: #273656;
+            background-color: #3a5a40;
             border-radius: 5px;
             color: #fff;
             display: block;
@@ -132,8 +132,8 @@
     <div class="content__container">
         <div class="content__header">
             <div class="content__header__logo">
-                <a href="" target="_blank">
-                    <img src="" alt="" class="" width="100px;">
+                <a href="capital.petra.ac.id" target="_blank">
+                    <img src="{{ asset('assets/logo_capital.png') }}" alt="Capital 2025" class="header-bureau-logo" width="200px;">
                 </a>
             </div>
         </div>

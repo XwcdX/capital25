@@ -334,6 +334,8 @@
                 icon: 'error',
                 title: 'Oops...',
                 text: '{{ session('error') }}',
+                showConfirmButton: true,
+                confirmButtonColor: "#56843a",
             })
         </script>
     @endif

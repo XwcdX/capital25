@@ -43,7 +43,8 @@
             --cap-green4: #56843a;
             --cap-green3: #82b741;
             --cap-green2: #a8c747;
-            --cap-green1: #e6e773;  /*yellow*/
+            --cap-green1: #e6e773;
+            /*yellow*/
         }
 
         html {
@@ -89,23 +90,36 @@
             font-weight: normal;
             font-style: normal;
         }
+
         @font-face {
             font-family: 'quicksand';
             src: url('/assets/fonts/quicksand.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
         }
+
         @font-face {
             font-family: 'oxanium';
             src: url('/assets/fonts/oxanium.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
         }
-        .font-orbitron { font-family: 'orbitron'; }
-        .font-quicksand { font-family: 'quicksand'; }
-        .font-oxanium { font-family: 'oxanium'; }
-        .font-league { font-family: 'League Spartan'}
-        
+
+        .font-orbitron {
+            font-family: 'orbitron';
+        }
+
+        .font-quicksand {
+            font-family: 'quicksand';
+        }
+
+        .font-oxanium {
+            font-family: 'oxanium';
+        }
+
+        .font-league {
+            font-family: 'League Spartan'
+        }
     </style>
 
     <script>
@@ -146,7 +160,8 @@
 </head>
 
 <body class="overflow-hidden">
-    <div id="loader" class="loader absolute z-[10000] inset-0 h-screen w-screen flex justify-center items-center bg-[#25352d]" >
+    <div id="loader"
+        class="loader fixed z-[10000] inset-0 h-screen w-screen flex justify-center items-center bg-[#25352d]">
         @include('user.loader')
     </div>
     @yield('content')
@@ -161,6 +176,8 @@
                 icon: 'error',
                 title: 'Oops...',
                 text: '{{ session('error') }}',
+                showConfirmButton: true,
+                confirmButtonColor: "#56843a",
             })
         </script>
     @endif
@@ -172,32 +189,50 @@
 
             body.style.overflow = "hidden";
             html.style.overflow = "hidden";
-            // html.classList.remove('lenis-scrolling', 'lenis-smooth'); loader g scroll
             window.scrollTo(0, 0);
-            // if (typeof lenis !== "undefined" && lenis) {
-            //     lenis.stop();
-            // }
 
-            if (loader) {
-                setTimeout(() => {
+            const isHomePage = window.location.pathname === "/";
+            let timeoutReached = false;
+
+            function removeLoader() {
+                if (loader) {
                     loader.remove();
-                    body.style.overflow = "visible";
-                    html.style.overflow = "visible";
+                    body.style.overflowY = "visible";
+                    html.style.overflowY = "visible";
                     body.classList.remove('overflow-hidden');
                     body.classList.add('overflow-x-hidden');
-                    setTimeout(()=>{
+
+                    setTimeout(() => {
                         if (typeof Lenis !== "undefined") {
-                            // const lenis = new Lenis();
                             lenis.start();
                         }
                     }, 3000);
+
                     if (typeof ScrollTrigger !== "undefined") {
                         ScrollTrigger.refresh();
                     }
+                }
+            }
+            if (isHomePage) {
+                const timeout = setTimeout(() => {
+                    timeoutReached = true;
+                    removeLoader();
                 }, 3000);
+                window.addEventListener("load", function() {
+                    if (timeoutReached) {
+                        removeLoader();
+                    } else {
+                        clearTimeout(timeout);
+                        setTimeout(removeLoader, 3000);
+                    }
+                });
+
+            } else {
+                window.addEventListener("load", removeLoader);
             }
         });
     </script>
+
 </body>
 
 </html>

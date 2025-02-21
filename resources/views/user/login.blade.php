@@ -120,13 +120,14 @@
 
     <div class="flex justify-center items-center min-h-screen w-full">
         <div class="mx-auto cont relative w-[100%] h-[100%] bg-slate-700 flex justify-center items-center">
-            <div class="container relative h-screen bg-[var(--cap-green1)] shadow-lg">
+            <div class="container relative h-screen bg-[#DAD7CD] shadow-lg">
                 <!-- Login Form -->
                 <div
                     class="form-box login absolute right-0 w-[50%] h-full flex flex-col items-center justify-center text-black">
                     <form class="w-full px-8" id="manualLogin" action="{{ route('team.logins') }}" method="POST">
                         @csrf
-                        <h1 class="text-[33px] min-[376px]:text-[39px] mb-4 lg:mb-6 text-black font-bold text-center">Hello, Ecopreneurs!</h1>
+                        <h1 class="text-[33px] min-[376px]:text-[39px] mb-4 lg:mb-6 text-black font-bold text-center">Hello,
+                            Ecopreneurs!</h1>
                         <div class="input-box relative w-full mb-4 lg:mb-6">
                             <input id="teamNameOrEmail" type="text" aria-label="Team Name or Email"
                                 placeholder="Team Name/Email" required="" name="email"
@@ -143,7 +144,8 @@
                                 class="fa-solid fa-lock absolute right-5 top-1/2 -translate-y-1/2 text-[20px] text-gray-400"></i>
                         </div>
                         <div class="mb-4 lg:mb-6 w-full text-end">
-                            <a href="{{ route('forget.password', ['role'=>'team']) }}" class="text-[#6c6a66] text-md font-bold">Forgot Password?</a>
+                            <a href="{{ route('forget.password', ['role' => 'team']) }}"
+                                class="text-[#6c6a66] text-md font-bold">Forgot Password?</a>
                         </div>
                         <div class="flex flex-col justify-center items-center">
                             <button type="submit"
@@ -162,7 +164,9 @@
                     class="form-box registration absolute right-0 w-[50%] h-full flex flex-col items-center justify-center text-black">
                     <form class="w-full px-8 grid gap-4 grid-cols-2" id="submitRegister">
                         @csrf
-                        <h1 class="text-[33px] min-[376px]:text-[39px] mb-4 lg:mb-6 text-black font-bold text-center col-span-2">Register Here</h1>
+                        <h1
+                            class="text-[33px] min-[376px]:text-[39px] mb-4 lg:mb-6 text-black font-bold text-center col-span-2">
+                            Register Here</h1>
                         <div class="input-box relative w-full mb-2 lg:mb-6">
                             <input type="text" aria-label="TeamName" placeholder="Team Name" required=""
                                 id="name"
@@ -183,8 +187,8 @@
                                 class="fa-solid fa-school absolute right-4 min-[376px]:right-5 top-1/2 -translate-y-1/2 text-[17px] min-[376px]:text-[20px] text-gray-400"></i>
                         </div>
                         <div class="input-box relative w-full mb-2 lg:mb-6 col-span-2 lg:col-span-1">
-                            <input type="domicile" aria-label="Domicile" placeholder="Domicile" value="Surabaya-Jawa Timur" required=""
-                                id="domicile"
+                            <input type="domicile" aria-label="Domicile" placeholder="Domicile" value="Surabaya-Jawa Timur"
+                                required="" id="domicile"
                                 class="w-full pr-[50px] pl-4 min-[376px]:pl-5 py-[8px] min-[376px]:py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[14px] min-[376px]:text-[16px] placeholder-[#636161] placeholder:font-semibold">
                             <i
                                 class="fa-solid fa-city absolute right-4 min-[376px]:right-5 top-1/2 -translate-y-1/2 text-[17px] min-[376px]:text-[20px] text-gray-400"></i>
@@ -213,7 +217,8 @@
                         class="toggle-panel toggle-left left-0 absolute w-[50%] h-[100%] flex flex-col justify-center items-center text-slate-900 text-center">
 
                         <h1 class="text-3xl min-[376px]:text-4xl font-extrabold">Start Your<br>Journey Now</h1>
-                        <p class="my-[15px] min-[376px]:my-[20px] text-sm min-[376px]:text-base">If you don't have an account yet, join us now and help<br>create a greener,
+                        <p class="my-[15px] min-[376px]:my-[20px] text-sm min-[376px]:text-base">If you don't have an
+                            account yet, join us now and help<br>create a greener,
                             better future for everyone!</p>
                         <button
                             class="btn register-btn w-[130px] min-[376px]:w-[160px] h-[39px] min-[376px]:h-[46px] text-sm min-[376px]:text-base bg-white border-2 border-white rounded-full">Register</button>
@@ -221,7 +226,8 @@
                     <div
                         class="toggle-panel toggle-right right-[-50%] absolute w-[50%] h-[100%] flex flex-col justify-center items-center text-slate-900 text-center">
                         <h1 class="text-3xl min-[376px]:text-4xl font-extrabold">Hello,<br>Ecopreneurs!</h1>
-                        <p class="my-[15px] min-[376px]:my-[20px] text-sm min-[376px]:text-base">If you already have an account,<br>login here and have fun with us!</p>
+                        <p class="my-[15px] min-[376px]:my-[20px] text-sm min-[376px]:text-base">If you already have an
+                            account,<br>login here and have fun with us!</p>
                         <button
                             class="btn login-btn w-[130px] min-[376px]:w-[160px] h-[39px] min-[376px]:h-[46px] text-sm min-[376px]:text-base bg-white border-2 border-white rounded-full">Login</button>
                     </div>
@@ -272,7 +278,8 @@
                         title: 'Error',
                         text: "Passwords do not match!",
                         icon: 'error',
-                        confirmButtonText: 'OK',
+                        showConfirmButton: true,
+                        confirmButtonColor: "#56843a",
                     });
                     return;
                 }
@@ -307,6 +314,8 @@
                         icon: 'error',
                         title: 'Error',
                         text: data.message || 'Registration failed.',
+                        showConfirmButton: true,
+                        confirmButtonColor: "#56843a",
                     });
                 }
             } catch (error) {
@@ -314,6 +323,8 @@
                     icon: 'error',
                     title: 'Error',
                     text: 'An unexpected error occurred.',
+                    showConfirmButton: true,
+                    confirmButtonColor: "#56843a",
                 });
             }
         });

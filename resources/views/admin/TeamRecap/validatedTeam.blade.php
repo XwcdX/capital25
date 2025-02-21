@@ -243,7 +243,7 @@
                 html: content,
                 width: '80%',
                 confirmButtonText: 'Close',
-                confirmButtonColor: "#3085d6",
+                confirmButtonColor: "#56843a",
             });
         }
 
@@ -262,7 +262,7 @@
                 title: title,
                 text: text,
                 confirmButtonText: 'Close',
-                confirmButtonColor: "#3085d6",
+                confirmButtonColor: "#56843a",
             }).then(() => {
                 if (lastSwalContent) {
                     Swal.fire({
@@ -270,7 +270,7 @@
                         html: lastSwalContent,
                         width: '80%',
                         confirmButtonText: 'Close',
-                        confirmButtonColor: "#3085d6",
+                        confirmButtonColor: "#56843a",
                     });
                 }
             });
@@ -287,7 +287,7 @@
                 imageUrl: `{{ asset('${imagePath}') }}`,
                 imageAlt: title,
                 confirmButtonText: 'Close',
-                confirmButtonColor: "#3085d6",
+                confirmButtonColor: "#56843a",
                 imageWidth: 400,
             }).then(() => {
                 if (lastSwalContent) {
@@ -296,7 +296,7 @@
                         html: lastSwalContent,
                         width: '80%',
                         confirmButtonText: 'Close',
-                        confirmButtonColor: "#3085d6",
+                        confirmButtonColor: "#56843a",
                     });
                 }
             });
