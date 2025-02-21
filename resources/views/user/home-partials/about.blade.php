@@ -1,7 +1,7 @@
 <style>
 .abt-stroke {
-    -webkit-text-stroke: 2px rgba(255, 255, 255, 0.7);
-    /* paint-order: stroke fill; */
+    -webkit-text-stroke: 5px rgba(255, 255, 255, 0.7);
+    paint-order: stroke fill;
 }   
 </style>
 
@@ -18,13 +18,13 @@
 
     <div class="flex max-md:flex-col max-md:flex-col-reverse z-[16] justify-center space-x-4 w-full xl:w-[90%]">
         {{-- moni --}}
-        <img class="hidden md:block object-cover h-[200px] md:h-[350px] lg:h-[500px] my-auto moni" src=" {{ asset('assets/about/moni.png')}}" alt="">
+        <img  class="hidden md:block object-cover h-[200px] md:h-[350px] lg:h-[500px] my-auto moni" src=" {{ asset('assets/about/moni.png')}}" alt="">
         <img class="moni block md:hidden absolute z-[16] h-[300px] -bottom-[15%] left-1/2 -translate-x-1/2 object-cover"
          src="{{ asset('assets/about/moni.png')}}" alt="">
 
         <div class="about-us flex flex-col justify-center max-md:text-center">
-            <h1 class="abt-stroke text-6xl md:text-7xl lg:text-7xl xl:text-8xl text-[#14240a] z-[16] text-[#608343] font-league font-black text-center md:text-left">About Us</h1>
-            <h1 class="abt-stroke text-base lg:text-xl xl:text-2xl z-[6] text-[#608343] font-bold mt-12 md:mt-4 lg:mt-8 tracking-wide text-center md:text-left">
+            <h1 data-aos="fade-left" data-aos-duration="1000" class="abt-stroke text-6xl md:text-7xl lg:text-7xl xl:text-8xl text-[#14240a] z-[16] text-[#608343] font-league font-black text-center md:text-left">About Us</h1>
+            <h1 data-aos="fade-down" data-aos-duration="1500" class="abt-stroke text-base lg:text-xl xl:text-2xl z-[6] text-[#608343] font-bold mt-12 md:mt-4 lg:mt-8 tracking-wide text-center md:text-left">
                 Rangkaian acara CAPITAL 2025 memberikan kesempatan bagi siswa dan siswi SMA untuk berkolaborasi, berpikir strategis, serta mempersiapkan diri menjadi entrepreneur masa depan yang mampu menghadapi tantangan global. Dengan menggabungkan kompetisi yang menantang dan sesi diskusi yang inspiratif, CAPITAL 2025 bertujuan menciptakan generasi Ecopreneurs yang tidak hanya inovatif, tetapi juga bertanggung jawab secara sosial dan lingkungan.
             </h1>
         </div> 

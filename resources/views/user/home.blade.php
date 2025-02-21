@@ -218,7 +218,7 @@
             });
 
             gsap.to('.overlay', {
-                opacity: 0.85,
+                opacity: 0.87,
                 scrollTrigger: {
                     trigger: '.overlay',
                     start: "80% bottom",
@@ -259,20 +259,18 @@
             });
 
             mm.add("(min-width: 768px)", () => {
-                gsap.set('.moni', {
-                    yPercent: 80,
-                });
                 gsap.to('.moni', {
-                    yPercent: -20,
+                    yPercent: 70,
                     scrollTrigger: {
-                        trigger: '.about-us',
-                        start: "50% 80%",
-                        end: "50% center",
-                        scrub: 0,
-                        markers:true,
+                        trigger: '#aboutUs',
+                        start: "60% center",  // Starts when `.about-us` enters the viewport
+                        end: "bottom top",    // Ends when `.about-us` reaches the center
+                        scrub: 1,             // Smooth scroll effect
+                        // markers: true,        
                     }
                 });
-            })
+            });
+
         });
 
         // timeline

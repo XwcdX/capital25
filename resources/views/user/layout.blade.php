@@ -30,6 +30,7 @@
 
     {{-- font landing --}}
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
+
     <style>
         * {
             margin: 0;
