@@ -266,7 +266,7 @@
                 @else
 
                 @endif
-                <li><a href="#regist" class=" drop-shadow-lg hover:scale-110 font-extrabold">LOGIN</a></li>
+                <li><a href="{{ route('team.login')}}" class=" drop-shadow-lg hover:scale-110 font-extrabold">LOGIN</a></li>
                 
               </ul>
           </div>

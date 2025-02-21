@@ -10,7 +10,7 @@
 }
 </style>
 
-<section id="rules" class="relative h-screen w-screen bg-[var(--cap-green2)] overflow-hidden flex max-sm:flex-col items-center justify-center max-sm:space-y-4 sm:space-x-4">
+<section id="rules" class="relative h-screen w-screen bg-[var(--cap-green3)] overflow-hidden flex max-sm:flex-col items-center justify-center max-sm:space-y-4 sm:space-x-28">
     {{-- <h1 class="text-6xl lg:text-7xl text-[#14240a] z-[7] text-white font-oxanium font-black ">Rules</h1>     --}}
     <div class="w-[250px] h-[250px] md:w-[250px] flex flex-col items-center justify-center">
         <img src="{{ asset('assets/rules/guidebook.png')}}" alt="">

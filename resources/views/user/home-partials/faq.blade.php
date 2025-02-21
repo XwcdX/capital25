@@ -19,8 +19,8 @@
 <section id="faq" class="relative h-screen w-screen bg-[#14240a] flex flex-col items-center justify-center p-4 lg:p-10">
     <h1 class="font-oxanium text-4xl md:text-5xl lg:text-7xl text-[#dad7cf] text-center font-extrabold mb-12">Frequently Asked Question</h1>
     
-    <div id="faqs" class="grid grid-cols-1 md:grid-cols-1 gap-6 p-6 md:p-12 w-[full] lg:w-[80%] bg-[#82b741] h-[70%] overflow-y-auto">
-    
+    <div id="faqs" class="grid grid-cols-1 rounded-xl md:grid-cols-1 gap-6 p-6 md:p-12 w-[full] lg:w-[80%] bg-[#82b741] h-[70%] overflow-y-auto">
+
     </div>    
     
     {{-- <svg id="toggleBtn" class="absolute bottom-5 left-1/2 transform -translate-x-1/2 arrow cursor-pointer" xmlns="http://www.w3.org/2000/svg" 
