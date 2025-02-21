@@ -246,7 +246,7 @@
             // })
             //moni
             let mm = gsap.matchMedia();
-            mm.add("(max-width: 767px)", () => {
+            mm.add("(max-width: 767.9px)", () => {
                 gsap.to('.moni', {
                     yPercent: -70,
                     scrollTrigger: {
@@ -263,12 +263,13 @@
                     yPercent: 80,
                 });
                 gsap.to('.moni', {
-                    yPercent: -60,
+                    yPercent: -20,
                     scrollTrigger: {
-                        trigger: '#aboutUs',
-                        start: "80% bottom",
-                        end: "bottom top",
+                        trigger: '.about-us',
+                        start: "50% 80%",
+                        end: "50% center",
                         scrub: 0,
+                        markers:true,
                     }
                 });
             })
@@ -365,7 +366,7 @@
                 start: "top 20%",
                 end: "bottom top",
                 toggleActions: "play none reverse none",
-                markers: true,
+                // markers: true,
             }
         });
 

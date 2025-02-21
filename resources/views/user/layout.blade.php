@@ -160,10 +160,10 @@
 </head>
 
 <body class="overflow-hidden">
-    <div id="loader"
+    {{-- <div id="loader"
         class="loader fixed z-[10000] inset-0 h-screen w-screen flex justify-center items-center bg-[#25352d]">
         @include('user.loader')
-    </div>
+    </div> --}}
     @yield('content')
     <script src="https://cdn.jsdelivr.net/npm/tw-elements/js/tw-elements.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></script>
