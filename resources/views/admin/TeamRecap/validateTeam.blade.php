@@ -232,7 +232,7 @@
                 confirmButtonText: `Yes, ${actionText} it!`,
                 cancelButtonText: "No, cancel!",
                 reverseButtons: true,
-                confirmButtonColor: "#3085d6",
+                confirmButtonColor: "#56843a",
                 cancelButtonColor: "#d33",
             });
 
@@ -255,7 +255,7 @@
                     },
                     showCancelButton: true,
                     confirmButtonText: "Submit",
-                    confirmButtonColor: "#3085d6",
+                    confirmButtonColor: "#56843a",
                     cancelButtonColor: "#d33",
                     reverseButtons: true,
                     showLoaderOnConfirm: true,
@@ -298,7 +298,7 @@
                     Swal.fire({
                         title: "Updated Successfully!",
                         icon: "success",
-                        confirmButtonColor: "#3085d6",
+                        confirmButtonColor: "#56843a",
                     });
                 }
             } else {
@@ -328,14 +328,14 @@
                     Swal.fire({
                         title: "Updated Successfully!",
                         icon: "success",
-                        confirmButtonColor: "#3085d6",
+                        confirmButtonColor: "#56843a",
                     });
                 } catch (error) {
                     Swal.fire({
                         title: "Error",
                         text: error.message,
                         icon: "error",
-                        confirmButtonColor: "#3085d6",
+                        confirmButtonColor: "#56843a",
                     });
                 }
             }
@@ -416,7 +416,7 @@
                 html: content,
                 width: '80%',
                 confirmButtonText: 'Close',
-                confirmButtonColor: "#3085d6",
+                confirmButtonColor: "#56843a",
             });
         }
 
@@ -435,7 +435,7 @@
                 title: title,
                 text: text,
                 confirmButtonText: 'Close',
-                confirmButtonColor: "#3085d6",
+                confirmButtonColor: "#56843a",
             }).then(() => {
                 if (lastSwalContent) {
                     Swal.fire({
@@ -443,7 +443,7 @@
                         html: lastSwalContent,
                         width: '80%',
                         confirmButtonText: 'Close',
-                        confirmButtonColor: "#3085d6",
+                        confirmButtonColor: "#56843a",
                     });
                 }
             });
@@ -460,7 +460,7 @@
                 imageUrl: `{{ asset('${imagePath}') }}`,
                 imageAlt: title,
                 confirmButtonText: 'Close',
-                confirmButtonColor: "#3085d6",
+                confirmButtonColor: "#56843a",
                 imageWidth: 400,
             }).then(() => {
                 if (lastSwalContent) {
@@ -469,7 +469,7 @@
                         html: lastSwalContent,
                         width: '80%',
                         confirmButtonText: 'Close',
-                        confirmButtonColor: "#3085d6",
+                        confirmButtonColor: "#56843a",
                     });
                 }
             });
@@ -483,7 +483,7 @@
                 html: `<div style="text-align: left;">${decodedFeedback}</div>`,
                 icon: "info",
                 confirmButtonText: "OK",
-                confirmButtonColor: "#3085d6",
+                confirmButtonColor: "#56843a",
             });
         }
 

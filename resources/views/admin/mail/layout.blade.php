@@ -84,7 +84,7 @@
         }
 
         .message-box__button {
-            background-color: #273656;
+            background-color: #3a5a40;
             border-radius: 5px;
             color: #fff;
             display: block;
