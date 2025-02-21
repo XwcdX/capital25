@@ -41,6 +41,7 @@
         }
 
         :root {
+            --cap-green6: #14240a;
             --cap-green5: #25483d;
             --cap-green4: #56843a;
             --cap-green3: #82b741;

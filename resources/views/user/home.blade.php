@@ -79,7 +79,7 @@
 
 
 @section('content')
-    <div id="full-content relative" class="hidde overflow-x-hidden bg-[var(--cap-green2)]">
+    <div id="full-content relative" class="hidde overflow-x-hidden bg-[var(--cap-green3)]">
         {{-- <div class="nav-overlay bg-black opacity-0 absolute top-0 left-0 w-screen h-[700vh] z-[8000]"></div> --}}
         @include('components.nav')
         @include('user.home-partials.landing')
@@ -509,6 +509,9 @@
                 }
             });
         });
+
+    // rules & guidebook
+    
 
 
         const lenis = new Lenis()
