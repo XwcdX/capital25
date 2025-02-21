@@ -229,10 +229,11 @@
             });
 
             lastSwalContent = content;
+            let width = window.matchMedia("(orientation: landscape)").matches ? '60%' : '80%';
             Swal.fire({
                 title: 'Team Details',
                 html: content,
-                width: '80%',
+                width: width,
                 confirmButtonText: 'Close',
                 confirmButtonColor: "#56843a",
             });

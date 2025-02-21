@@ -50,7 +50,7 @@
         class="lg:container flex justify-center bg-[url('{{ asset('assets/texture.jpg') }}')] mx-auto p-0 md:p-5 z-[-1] min-w-[100vw]">
         <div
             class="form-wrapper overflow-hidden sm:my-10 border rounded-lg bg-[var(--cap-green4)] shadow-lg w-full lg:w-[60%]">
-            <div class="form-container flex">
+            <div class="form-container flex font-quicksand">
                 @php
                     function ordinal($number)
                     {
