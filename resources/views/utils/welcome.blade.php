@@ -112,7 +112,7 @@
     }
 </style>
 
-<div class="w-screen h-screen bg-[#DAD7CD] flex flex-col justify-center items-center z-[1000]">
+<div class="w-screen h-screen bg-[var(--cap-green3)] fixed inset-0 flex flex-col justify-center items-center z-[1000]">
     <h1 class="welcomeH text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 md:mb-5 lg:mb-7 text-center"></h1>
     <p id="animated-text" class="text-center font-semibold text-white relative fade-in-text"></p>
 </div>
@@ -124,6 +124,12 @@
         window.scrollTo({
             top: 0
         });
+    });
+    window.addEventListener("load", function() {
+        setTimeout(() => {
+            document.body.style.overflow = "hidden";
+            document.documentElement.style.overflow = "hidden";
+        }, 900);
     });
     const fullText =
         `Thank you for joining us in this exciting occasion, your contribution will truly make a difference. Together, let's build a brighter and greener future!`;
@@ -181,6 +187,7 @@
             setTimeout(() => {
                 mainContainer.remove();
                 document.body.style.overflowY = "auto";
+                document.documentElement.style.overflow = "auto";
             }, 1000);
         }, 500);
     }
