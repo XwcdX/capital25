@@ -167,7 +167,7 @@
     <div id="loader"
         class="loader fixed z-[10000] inset-0 h-screen w-screen flex justify-center items-center bg-[var(--cap-green5)]">
         @include('user.loader')
-    </div> 
+    </div>
     @yield('content')
     <script src="https://cdn.jsdelivr.net/npm/tw-elements/js/tw-elements.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></script>
@@ -200,21 +200,26 @@
 
             function removeLoader() {
                 if (loader) {
-                    loader.remove();
-                    body.style.overflowY = "visible";
-                    html.style.overflowY = "visible";
-                    body.classList.remove('overflow-hidden');
-                    body.classList.add('overflow-x-hidden');
+                    loader.style.transition = "opacity 0.8s ease";
+                    loader.style.opacity = "0";
 
                     setTimeout(() => {
-                        if (typeof Lenis !== "undefined") {
-                            lenis.start();
-                        }
-                    }, 3000);
+                        loader.remove();
+                        body.style.overflowY = "visible";
+                        html.style.overflowY = "visible";
+                        body.classList.remove('overflow-hidden');
+                        body.classList.add('overflow-x-hidden');
 
-                    if (typeof ScrollTrigger !== "undefined") {
-                        ScrollTrigger.refresh();
-                    }
+                        setTimeout(() => {
+                            if (typeof Lenis !== "undefined") {
+                                lenis.start();
+                            }
+                        }, 3000);
+
+                        if (typeof ScrollTrigger !== "undefined") {
+                            ScrollTrigger.refresh();
+                        }
+                    }, 800);
                 }
             }
             if (isHomePage) {
