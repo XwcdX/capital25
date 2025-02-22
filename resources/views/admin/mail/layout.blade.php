@@ -133,7 +133,7 @@
         <div class="content__header">
             <div class="content__header__logo">
                 <a href="capital.petra.ac.id" target="_blank">
-                    <img src="{{ asset('assets/logo_capital.png') }}" alt="Capital 2025" class="header-bureau-logo" width="200px;">
+                    <img src="{{ asset('assets/logo_capital.png') }}" alt="CAPITAL 2025" class="header-bureau-logo" width="200px;">
                 </a>
             </div>
         </div>
