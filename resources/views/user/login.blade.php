@@ -124,7 +124,8 @@
                 <!-- Login Form -->
                 <div
                     class="form-box login absolute right-0 w-[50%] h-full flex flex-col items-center justify-center text-black">
-                    <form class="w-full px-8 font-quicksand" id="manualLogin" action="{{ route('team.logins') }}" method="POST">
+                    <form class="w-full px-8 font-quicksand" id="manualLogin" action="{{ route('team.logins') }}"
+                        method="POST">
                         @csrf
                         <h1 class="text-[33px] min-[376px]:text-[39px] mb-4 lg:mb-6 text-black font-bold text-center">Hello,
                             Ecopreneurs!</h1>
@@ -170,9 +171,16 @@
                         <div class="input-box relative w-full mb-2 lg:mb-6">
                             <input type="text" aria-label="TeamName" placeholder="Team Name" required=""
                                 id="name"
-                                class="w-full pr-[50px] pl-4 min-[376px]:pl-5 py-[8px] min-[376px]:py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[14px] min-[376px]:text-[16px] placeholder-[#636161] font-semibold">
-                            <i
-                                class="fa-solid fa-user absolute right-4 min-[376px]:right-5 top-1/2 -translate-y-1/2 text-[17px] min-[376px]:text-[20px] text-gray-400"></i>
+                                class="w-full pr-[50px] pl-4 min-[376px]:pl-5 py-[8px] min-[376px]:py-3 bg-gray-200 rounded-[8px] border-none outline-none text-[14px] min-[376px]:text-[16px] placeholder-[#636161] font-semibold"
+                                onfocus="showTooltip()" onblur="hideTooltip()">
+                            <div id="tooltip"
+                                class="hidden absolute left-1 bottom-[110%] bg-gray-800 text-white text-xs rounded-lg py-2 px-3 w-72 shadow-lg transition-opacity duration-300"
+                                style="white-space: normal;">
+                                <b>Nama kelompok dilarang mengandung SARA, pornografi, politik, atau melanggar hukum dan norma.</b>
+                            </div>
+                            <i class="fa-solid fa-user absolute right-4 min-[376px]:right-5 top-1/2 -translate-y-1/2 text-[17px] min-[376px]:text-[20px] text-gray-400 cursor-pointer"
+                                onmouseenter="showTooltip()" onmouseleave="hideTooltip()">
+                            </i>
                         </div>
                         <div class="input-box relative w-full mb-2 lg:mb-6">
                             <input type="email" aria-label="Email" placeholder="Email" required="" id="email"
@@ -239,6 +247,22 @@
 
 @section('script')
     <script>
+        function showTooltip() {
+            document.getElementById("tooltip").classList.remove("hidden");
+        }
+
+        function hideTooltip() {
+            document.getElementById("tooltip").classList.add("hidden");
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const tooltip = document.getElementById("tooltip");
+            tooltip.classList.remove("hidden");
+            setTimeout(() => {
+                tooltip.classList.add("hidden");
+            }, 4000);
+        });
+
         const container = document.querySelector('.container');
         const registerBtn = document.querySelector('.register-btn');
         const loginBtn = document.querySelector('.login-btn');
