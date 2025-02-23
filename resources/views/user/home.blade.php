@@ -282,21 +282,21 @@
             leftBox: {
                 title: "Seminar & Technical Meeting",
                 description: `Seminar bertema <b>“<i>The Silent Crisis of Irresponsible Production</i>”</b> akan membahas dampak buruk dari produksi yang tidak bertanggung jawab terhadap lingkungan, serta solusi berkelanjutan seperti <i>Circular Economy</i> (CE) dan <i>Life Cycle Assessment</i> (LCA). Setelah seminar, <i>Technical Meeting</i> akan memberikan penjelasan mengenai teknis <i>Lifecycle Simulation</i> yang akan dilaksanakan pada hari kedua.`,
-                date: "<b>Tanggal: Senin, 17 Maret 2025</b>",
+                date: "<b>Tanggal: Senin, 21 April 2025</b>",
                 time: "<b>Waktu: 17:30 WIB<b>",
                 location: "<b>Lokasi: Zoom Meeting</b>"
             },
             centerBox: {
                 title: "Lifecycle Simulation",
                 description: "<i>Rally game</i> interaktif yang mengajak peserta untuk berperan sebagai <i>ecopreneurs</i> di berbagai sektor industri, menghadapi tantangan lingkungan yang relevan dengan kondisi masa kini. Peserta akan menerapkan solusi ramah lingkungan melalui serangkaian fase, dengan fokus pada pengambilan keputusan yang mendukung keberlanjutan jangka panjang.",
-                date: "<b>Tanggal: Senin, Sabtu, 22 Maret 2025</b>",
+                date: "<b>Tanggal: Sabtu, 26 April 2025</b>",
                 time: "<b>Waktu: 09:00 WIB</b>",
                 location: "<b>Lokasi: Gedung Q, Petra Christian University</b>"
             },
             rightBox: {
                 title: "Talk Show & Awarding Ceremony",
                 description: `<i>Talk show</i> bertema <b>“<i>Redefining Profit in a Sustainable World</i>”</b> membahas bagaimana bisnis dapat mencapai profitabilitas berkelanjutan tanpa mengorbankan kelestarian lingkungan. Para narasumber, yang merupakan perwakilan dari perusahaan ramah lingkungan, akan berbagi pengalaman dan studi kasus tentang integrasi keberlanjutan dalam model bisnis mereka. Acara ditutup dengan <i>Awarding Ceremony</i>, di mana tim pemenang <i>Lifecycle Simulation</i> akan menerima penghargaan.`,
-                date: "<b>Tanggal: Jumat, 28 Maret 2025</b>",
+                date: "<b>Tanggal: Rabu, 30 April 2025</b>",
                 time: "<b>Waktu: 16:00 WIB</b>",
                 location: "<b>Lokasi: Amphitheatre Gedung Q, Petra Christian University</b>"
             }

@@ -101,9 +101,6 @@
         let data = @json($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
         data = typeof data === 'string' ? JSON.parse(data) : data;
 
-        console.log(data);
-
-
         data = Array.isArray(data) ? data.map(dt => {
             dt.users = Array.isArray(dt.users) && dt.users.length > 0 ?
                 `<button class="buttons" data-users='${JSON.stringify(dt.users)
