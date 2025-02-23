@@ -34,7 +34,7 @@ class TeamController extends BaseController
     }
     public function getValidatedTeam()
     {
-        return $this->model::with('users')->where('valid', 1)->get();
+        return $this->model::with(['users', 'admins'])->where('valid', 1)->get();;
     }
 
     public function updateValidAndEmail(Request $request, string $id)
@@ -47,6 +47,9 @@ class TeamController extends BaseController
             $data['feedback'] = $request->feedback;
         }
         Mail::to($team->email)->queue(new TeamValidationEmail($data));
+        $request->merge([
+            'validator_id' => Auth::guard('admin')->user()->id,
+        ]);
         parent::updatePartial($request, $id);
     }
 
@@ -150,7 +153,7 @@ class TeamController extends BaseController
             ],
         );
         if ($validate->fails()) {
-            return redirect()->to(route('team.login'))->withErrors($validate)->withInput();
+            return redirect()->to(route('login'))->withErrors($validate)->withInput();
         }
         $team = $this->model::where('email', $creds['email'])->first();
         if (!$team) {
@@ -158,7 +161,7 @@ class TeamController extends BaseController
         }
         if (!$team || !Hash::check($creds['password'], $team->password)) {
             $error = !$team ? 'You are not Registered' : 'Invalid credentials';
-            return redirect()->to(route('team.login'))->with('error', $error);
+            return redirect()->to(route('login'))->with('error', $error);
         }
         Auth::login($team);
         if (!$team->hasVerifiedEmail()) {
@@ -190,7 +193,7 @@ class TeamController extends BaseController
                 return redirect()->route('home')
                     ->with('success', 'Login Successful');
             } else {
-                return redirect()->to(route('team.login'))->with('error', 'You are not authenticated please contact admin');
+                return redirect()->to(route('login'))->with('error', 'You are not authenticated please contact admin');
             }
         }
     }
@@ -198,7 +201,7 @@ class TeamController extends BaseController
     {
         $team = Auth::user();
         if (!$team) {
-            return redirect()->route('team.login')->with('error', 'You need to login first.');
+            return redirect()->route('login')->with('error', 'You need to login first.');
         }
         $title = 'Verify Email';
         $email = $team->email;
@@ -210,7 +213,7 @@ class TeamController extends BaseController
         $request->fulfill();
         $team = $request->user();
         if (!$team) {
-            return redirect()->route('team.login')->with('error', 'User not authenticated.');
+            return redirect()->route('login')->with('error', 'User not authenticated.');
         }
         $request->session()->put('email', $team->email);
         $request->session()->put('name', $team->name);
@@ -236,7 +239,7 @@ class TeamController extends BaseController
             return redirect()->route('home')
                 ->with('success', 'Login Successful');
         } else {
-            return redirect()->to(route('team.login'))->with('error', 'You are not authenticated please contact admin');
+            return redirect()->to(route('login'))->with('error', 'You are not authenticated please contact admin');
         }
     }
 
@@ -249,7 +252,7 @@ class TeamController extends BaseController
         $domain = preg_match('/^[a-hA-H][0-9]{8}$/', $localPart) ? 'john.petra.ac.id' : 'gmail.com';
         $email = $localPart . '@' . $domain;
         if ($this->model::where('email', $email)->count() == 0) {
-            return redirect()->to(route('team.login'))->with('error', 'Email not found');
+            return redirect()->to(route('login'))->with('error', 'Email not found');
         }
         $request->session()->put('email', $email);
         $request->session()->put('localPart', $localPart);
@@ -260,7 +263,7 @@ class TeamController extends BaseController
             $request->session()->put('division', $team->first()->division);
             return redirect()->intended(route('home'));
         } else {
-            return redirect()->to(route('team.login'))->with('error', "You are not authenticated. Please contact admin.");
+            return redirect()->to(route('login'))->with('error', "You are not authenticated. Please contact admin.");
         }
     }
 

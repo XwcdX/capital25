@@ -293,7 +293,7 @@
                         </li>
                     </ul>
                 @else
-                    <li><a href="{{ route('team.login') }}"
+                    <li><a href="{{ route('login') }}"
                             class="drop-shadow-lg hover:scale-110 font-extrabold">Login</a></li>
                 @endif
             </ul>
@@ -334,7 +334,7 @@
                             <ul id="profileDropdown"
                                 class="absolute w-[210px] right-0 p-2 mt-2 w-48 bg-white shadow-lg rounded-lg opacity-0 invisible transition-all duration-200">
                                 <li>
-                                    <a id="editUserProfile"
+                                    <a id="editUserProfileD"
                                         class="flex items-center text-[var(--cap-green2)] gap-2 px-4 py-2 hover:bg-gray-200 cursor-pointer">
                                         <i class="fa-solid fa-user-pen"></i> Edit User Profile
                                     </a>
@@ -355,7 +355,7 @@
                             </ul>
                         </li>
                     @else
-                        <li><a href="{{ route('team.login') }}"
+                        <li><a href="{{ route('login') }}"
                                 class=" drop-shadow-lg hover:scale-110 font-extrabold">LOGIN</a></li>
                     @endif
                 </ul>
@@ -570,6 +570,9 @@
         });
 
         document.getElementById('editUserProfile').addEventListener('click', function() {
+            document.getElementById('userProfileModal').classList.remove('hidden');
+        });
+        document.getElementById('editUserProfileD').addEventListener('click', function() {
             document.getElementById('userProfileModal').classList.remove('hidden');
         });
 

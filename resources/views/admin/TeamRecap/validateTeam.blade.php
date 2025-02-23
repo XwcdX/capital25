@@ -46,6 +46,7 @@
         .buttons:active:before {
             background: #5a6268;
         }
+
         .status {
             font-size: 14px;
             font-weight: bold;
@@ -128,7 +129,10 @@
                 case 2:
                     dt.valid = '<span class="status declined">Declined</span>';
                     break;
-            }
+            };
+            dt.profile_image = dt.profile_image ?
+                `<button class="buttons" onclick="showProofOfPayment('Photo Profile', '${dt.profile_image}')">Team Image</button>` :
+                "";
             return dt;
         }) : [];
 
@@ -138,6 +142,12 @@
                         label: "Nama",
                         field: "name",
                         sort: true
+                    },
+                    {
+                        label: "Profile",
+                        field: "profile_image",
+                        sort: false,
+                        html: true
                     },
                     {
                         label: "Email",
@@ -521,7 +531,10 @@
                         case 2:
                             dt.valid = '<span class="status declined">Declined</span>';
                             break;
-                    }
+                    };
+                    dt.profile_image = dt.profile_image ?
+                        `<button class="buttons" onclick="showProofOfPayment('Photo Profile', '${dt.profile_image}')">Team Image</button>` :
+                        "";
                     return dt;
                 });
 
@@ -534,6 +547,12 @@
                             label: "Nama",
                             field: "name",
                             sort: true
+                        },
+                        {
+                            label: "Profile",
+                            field: "profile_image",
+                            sort: false,
+                            html: true
                         },
                         {
                             label: "Email",

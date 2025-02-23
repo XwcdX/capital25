@@ -113,7 +113,7 @@ class PasswordResetTokenController extends BaseController
 
             $passwordReset->delete();
 
-            return redirect()->route('team.login')->with('success', "Password successfully changed. Please try logging in again.");
+            return redirect()->route('login')->with('success', "Password successfully changed. Please try logging in again.");
         } else {
             return redirect()->route('home')->with('error', 'Something went wrong');
         }

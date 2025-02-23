@@ -25,7 +25,7 @@ class LoginMiddleware
                     break;
                 }
             }
-            return redirect()->to(route('team.login'))->with('error', 'Session Expired, You need to login again!');
+            return redirect()->to(route('login'))->with('error', 'Session Expired, You need to login again!');
         }
         return $next($request);
     }

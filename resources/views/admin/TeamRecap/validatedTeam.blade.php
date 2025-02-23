@@ -71,7 +71,7 @@
                     </svg>
                 </button>
             </div>
-            <a href="{{route('admin.export.validated.team')}}" target="_blank">
+            <a href="{{ route('admin.export.validated.team') }}" target="_blank">
                 <button type="button" data-te-ripple-init data-te-ripple-color="light"
                     class="save w-full inline-block rounded bg-success px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-success-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-success-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-success-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]">
                     Download Excel
@@ -97,6 +97,10 @@
             dt.proof_of_payment = dt.proof_of_payment ?
                 `<button class="buttons" onclick="showProofOfPayment('Proof Of Payment', '${dt.proof_of_payment}')">Team Detail</button>` :
                 "";
+            dt.profile_image = dt.profile_image ?
+                `<button class="buttons" onclick="showProofOfPayment('Photo Profile', '${dt.profile_image}')">Team Image</button>` :
+                "";
+            dt.admin = dt.admins.name;
             return dt;
         }) : [];
 
@@ -106,6 +110,12 @@
                         label: "Nama",
                         field: "name",
                         sort: true
+                    },
+                    {
+                        label: "Profile",
+                        field: "profile_image",
+                        sort: false,
+                        html: true
                     },
                     {
                         label: "Email",
@@ -133,6 +143,10 @@
                         field: "users",
                         sort: false,
                         html: true
+                    },
+                    {
+                        label: "Validator",
+                        field: "admin"
                     }
                 ],
                 rows: data,

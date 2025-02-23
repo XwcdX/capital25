@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Team extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuids;
+    use HasApiTokens, HasFactory, Notifiable, HasUuids, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -30,6 +31,7 @@ class Team extends Authenticatable implements MustVerifyEmail
         'coin',
         'green_points',
         'valid',
+        'validator_id',
         'feedback'
     ];
 
@@ -71,6 +73,7 @@ class Team extends Authenticatable implements MustVerifyEmail
             'coin' => 'required|integer|min:0',
             'green_points' => 'required|integer|min:0',
             'valid' => 'required|integer|in:0,1,2',
+            'validator_id' => 'nullable|exists:admins,id',
             'feedback' => 'nullable|string',
         ];
     }
@@ -121,7 +124,7 @@ class Team extends Authenticatable implements MustVerifyEmail
 
     public function relations()
     {
-        return ['rallies', 'users'];
+        return ['rallies', 'users', 'admins'];
     }
 
     public function rallies()
@@ -134,5 +137,9 @@ class Team extends Authenticatable implements MustVerifyEmail
     public function users()
     {
         return $this->hasMany(User::class);
+    }
+    public function admins()
+    {
+        return $this->belongsTo(Admin::class, 'validator_id');
     }
 }

@@ -9,7 +9,7 @@ use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [TeamController::class, 'home'])->name('home');
-Route::get('/login', [TeamController::class, 'login'])->name('team.login');
+Route::get('/login', [TeamController::class, 'login'])->name('login');
 Route::post('/login', [TeamController::class, 'logins'])->name('team.logins');
 Route::post('/regist', [TeamController::class, 'regist'])->name('team.regist');
 Route::get('/logout', [TeamController::class, 'logout'])->name('team.logout');
@@ -22,7 +22,7 @@ Route::middleware(['isLogin'])->group(function () {
     Route::get('/team/data', [UserController::class, 'viewRegistUser'])->middleware(['isValidated'])->name('user.regist');
     Route::post('/team/data/save', [UserController::class, 'saveUsers'])->middleware(['isValidated'])->name('user.save');
 
-    Route::patch('/updateProfile', [TeamController::class, 'updateProfile'])->name('team.updateProfile');
+    Route::patch('/updateProfile', [TeamController::class, 'updateProfile'])->middleware(['isValidated'])->name('team.updateProfile');
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
