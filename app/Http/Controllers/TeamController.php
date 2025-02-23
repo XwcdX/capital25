@@ -53,18 +53,27 @@ class TeamController extends BaseController
     public function updateProfile(Request $request)
     {
         $team = Auth::user();
+        $data = $request->all();
+        if (isset($data['name']) && $data['name'] === $team->name) {
+            unset($data['name']);
+        }
         if ($request->hasFile('profile_image')) {
+            $validator = Validator::make($request->all(), [
+                'profile_image' => 'image|mimes:jpg,png|max:2048',
+            ]);
+            if ($validator->fails()) {
+                return $this->error($validator->errors()->first(), 422);
+            }
             $storagePath = 'team_profile_pictures';
             if ($team->profile_image) {
                 Storage::disk('public')->delete(str_replace('storage/', '', $team->profile_image));
             }
             $newFileName = sprintf('%s_profile_picture.%s', $team->name, $request->file('profile_image')->getClientOriginalExtension());
             $filePath = $request->file('profile_image')->storeAs($storagePath, $newFileName, 'public');
-            $request->merge(['profile_image' => 'storage/' . $filePath]);
+            $data['profile_image'] = 'storage/' . $filePath;
         }
-        parent::updatePartial($request, $team->id);
+        return parent::updatePartial(new Request($data), $team->id);
     }
-
 
     public function home()
     {

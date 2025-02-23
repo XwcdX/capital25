@@ -61,13 +61,13 @@ class Team extends Authenticatable implements MustVerifyEmail
     public static function validationRules()
     {
         return [
-            'name' => 'required|string|max:255|unique:teams,name',
+            'name' => 'required|string|max:16|unique:teams,name',
             'password' => 'required|string|min:8',
             'email' => 'required|email|unique:teams,email',
             'school' => 'required|string|max:255',
             'domicile' => 'required|string|max:255',
             'proof_of_payment' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'profile_image' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'profile_image' => 'nullable|string',
             'coin' => 'required|integer|min:0',
             'green_points' => 'required|integer|min:0',
             'valid' => 'required|integer|in:0,1,2',
@@ -80,7 +80,7 @@ class Team extends Authenticatable implements MustVerifyEmail
         return [
             'name.required' => 'Team name is required',
             'name.string' => 'Team name must be a string',
-            'name.max' => 'Team name must not exceed 255 characters',
+            'name.max' => 'Team name must not exceed 16 characters',
             'name.unique' => 'Team name has already been taken',
 
             'password.required' => 'Password is required',
@@ -102,10 +102,6 @@ class Team extends Authenticatable implements MustVerifyEmail
             'proof_of_payment.file' => 'Proof of payment must be a valid file',
             'proof_of_payment.mimes' => 'Proof of payment must be a JPG, JPEG, PNG, or PDF file',
             'proof_of_payment.max' => 'Proof of payment must not exceed 2MB',
-
-            'profile_image.file' => 'Proof of payment must be a valid file',
-            'profile_image.mimes' => 'Proof of payment must be a JPG, JPEG, PNG, or PDF file',
-            'profile_image.max' => 'Proof of payment must not exceed 2MB',
 
             'coin.required' => 'Coin value is required',
             'coin.integer' => 'Coin must be an integer',
