@@ -34,9 +34,7 @@ class TeamController extends BaseController
     }
     public function getValidatedTeam()
     {
-        $h = $this->model::with(['users', 'admins'])->where('valid', 1)->get();
-        Log::info($h);
-        return $h;
+        return $this->model::with(['users', 'admins'])->where('valid', 1)->get();;
     }
 
     public function updateValidAndEmail(Request $request, string $id)
