@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Admin extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuids;
+    use HasApiTokens, HasFactory, Notifiable, HasUuids, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -84,7 +85,7 @@ class Admin extends Authenticatable implements MustVerifyEmail
 
     public function relations()
     {
-        return ['division'];
+        return ['division','teams'];
     }
 
     /**
@@ -96,5 +97,9 @@ class Admin extends Authenticatable implements MustVerifyEmail
     public function division()
     {
         return $this->belongsTo(Division::class);
+    }
+    public function teams()
+    {
+        return $this->hasMany(Team::class);
     }
 }

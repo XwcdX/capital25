@@ -34,7 +34,9 @@ class TeamController extends BaseController
     }
     public function getValidatedTeam()
     {
-        return $this->model::with('users')->where('valid', 1)->get();
+        $h = $this->model::with(['users', 'admins'])->where('valid', 1)->get();
+        Log::info($h);
+        return $h;
     }
 
     public function updateValidAndEmail(Request $request, string $id)
@@ -47,6 +49,9 @@ class TeamController extends BaseController
             $data['feedback'] = $request->feedback;
         }
         Mail::to($team->email)->queue(new TeamValidationEmail($data));
+        $request->merge([
+            'validator_id' => Auth::guard('admin')->user()->id,
+        ]);
         parent::updatePartial($request, $id);
     }
 
