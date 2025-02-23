@@ -293,7 +293,7 @@
                         </li>
                     </ul>
                 @else
-                    <li><a href="{{ route('team.login') }}"
+                    <li><a href="{{ route('login') }}"
                             class="drop-shadow-lg hover:scale-110 font-extrabold">Login</a></li>
                 @endif
             </ul>
@@ -355,7 +355,7 @@
                             </ul>
                         </li>
                     @else
-                        <li><a href="{{ route('team.login') }}"
+                        <li><a href="{{ route('login') }}"
                                 class=" drop-shadow-lg hover:scale-110 font-extrabold">LOGIN</a></li>
                     @endif
                 </ul>
