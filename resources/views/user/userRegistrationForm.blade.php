@@ -39,17 +39,31 @@
         .text-white {
             color: white !important;
         }
+        @keyframes sway {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(var(--sway-angle));
+            }
+        }
+
+        .bush {
+            animation: sway var(--sway-speed) ease-in-out infinite alternate;
+        }
+
+
     </style>
 @endsection
 
 @section('content')
-    @if (session('users') == [])
+    {{-- @if (session('users') == [])
         @include('utils.welcome')
-    @endif
+    @endif --}}
     <div
-        class="lg:container flex justify-center bg-gradient-to-br from-[var(--cap-green4)] via-[var(--cap-green3)] to-[var(--cap-green2)] mx-auto p-0 md:p-5 z-[-1] min-w-[100vw]">
+        class="relative lg:container flex justify-center bg-gradient-to-b from-[#316235] from-[30%] to-[#c9e3b0] mx-auto p-0 md:p-5 z-[-1] min-w-[100vw] overflow-hidden">
         <div
-            class="form-wrapper overflow-hidden sm:my-10 border rounded-xl bg-white/10 backdrop-blur-md shadow-lg border border-white/40 w-full lg:w-[60%]">
+            class="relative z-[10] form-wrapper overflow-hidden sm:my-10 border rounded-xl bg-white/10 backdrop-blur-md shadow-lg border border-white/40 w-full lg:w-[60%]">
             <div class="form-container flex font-quicksand">
                 @php
                     function ordinal($number)
@@ -305,6 +319,48 @@
             </div>
             <div class="button-wrapper flex justify-center items-center my-5"></div>
         </div>
+           {{-- bushes --}}
+           <img class="absolute -bottom-[7%] left-[30%] z-[1] md:w-[450px] lg:w-[550px] bush"
+            style="--sway-speed: 3.5s; --sway-angle: 3deg;"
+            src="{{ asset('assets/form/bush-4.png')}}" alt="">
+        
+            <img class="absolute -bottom-[2%] md:left-[11%] z-[2] md:w-[400px] lg:w-[500px] bush"
+                style="--sway-speed: 3s; --sway-angle: 4deg;"
+                src="{{ asset('assets/form/bush-5.png')}}" alt="">
+            
+            <img class="absolute -bottom-[2%] md:right-[13%] z-[2] md:w-[400px]  lg:w-[500px] scale-x-[-1] bush"
+                style="--sway-speed: 4s; --sway-angle: -4deg;"
+                src="{{ asset('assets/form/bush-5.png')}}" alt="">
+            
+            <img class="absolute -bottom-[18%] md:-left-[32%] z-[3] md:w-[650px] lg:w-[775px] bush"
+                style="--sway-speed: 3.8s; --sway-angle: 2.5deg;"
+                src="{{ asset('assets/form/bush-2.png')}}" alt="">
+            
+            <img class="absolute -bottom-[15%] md:-right-[32%] lg:-right-[27%] z-[3] md:w-[600px] lg:w-[725px] scale-x-[-1] rotate-[-5deg] bush"
+                style="--sway-speed: 3.2s; --sway-angle: -3deg;"
+                src="{{ asset('assets/form/bush-2.png')}}" alt="">
+            
+            <img class="absolute md:-bottom-[13%] lg:-bottom-[15%] left-[9%] z-[4] md:w-[400px] lg:w-[500px] bush"
+                style="--sway-speed: 3s; --sway-angle: 3deg;"
+                src="{{ asset('assets/form/bush-1.png')}}" alt="">
+            
+            <img class="absolute md:-bottom-[13%] lg:-bottom-[15%] right-[8%] z-[4] md:w-[400px] lg:w-[500px] rotate-[-17deg] bush"
+                style="--sway-speed: 3.5s; --sway-angle: -3.5deg;"
+                src="{{ asset('assets/form/bush-1.png')}}" alt="">
+            
+                <img class="absolute md:-bottom-[14%] lg:-bottom-[17%] left-[30%] z-[5] md:w-[425px] lg:w-[525px] bush"
+                style="--sway-speed: 4s; --sway-angle: 5deg;"
+                src="{{ asset('assets/form/bush-3.png')}}" alt="">
+            
+            <img class="absolute md:-bottom-[16%] lg:-bottom-[20%] left-0 z-[5] md:w-[350px] lg:w-[450px] bush"
+                style="--sway-speed: 3.6s; --sway-angle: 3deg;"
+                src="{{ asset('assets/form/bush-4.png')}}" alt="">
+            
+            <img class="absolute md:-bottom-[18%] lg:-bottom-[20%] right-0 z-[5] md:w-[350px] lg:w-[450px] rotate-[5deg] bush"
+                style="--sway-speed: 4.2s; --sway-angle: -3deg;"
+                src="{{ asset('assets/form/bush-4.png')}}" alt="">
+      
+
     </div>
 @endsection
 

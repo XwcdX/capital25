@@ -363,7 +363,7 @@
                 trigger: "#leftBox",
                 start: "top 20%",
                 end: "bottom top",
-                toggleActions: "play none reverse none",
+                toggleActions: "play none none none",
                 // markers: true,
             }
         });
