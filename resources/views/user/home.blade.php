@@ -468,7 +468,7 @@
         `;
             const questionElement = document.createElement("li");
             questionElement.classList.add("accordion", "p-2", "flex", "items-center", "justify-center",
-                "rounded-2xl", "font-oxanium", "h-[120px]", "md:h-[80px]", "hover:text-black", "cursor-pointer",
+                "rounded-2xl", "font-oxanium", "h-[165px]", "md:h-[80px]", "hover:text-black", "cursor-pointer",
                 "p-8");
 
             questionElement.innerHTML = `
