@@ -124,6 +124,12 @@
         .font-league {
             font-family: 'League Spartan'
         }
+
+        body {
+            max-height: 100vh;
+            overflow: hidden;
+            overflow-x: hidden;
+        }
     </style>
 
     <script>
@@ -219,6 +225,9 @@
                         if (typeof ScrollTrigger !== "undefined") {
                             ScrollTrigger.refresh();
                         }
+
+                        // Ensure this runs last after everything is completed
+                        document.body.style.maxHeight = "none";
                     }, 800);
                 }
             }
