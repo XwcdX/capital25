@@ -61,7 +61,7 @@
         @include('utils.welcome')
     @endif --}}
     <div
-        class="relative lg:container flex justify-center bg-gradient-to-b from-[#316235] from-[30%] to-[#c9e3b0] mx-auto p-0 md:p-5 z-[-1] min-w-[100vw] overflow-hidden">
+        class="relative lg:container flex justify-center bg-gradient-to-b from-[#316235] from-[30%] to-[#c9e3b0] mx-auto p-0 md:p-5 min-w-[100vw] overflow-hidden">
         <div
             class="relative z-[10] form-wrapper overflow-hidden sm:my-10 border rounded-xl bg-white/10 backdrop-blur-md shadow-lg border border-white/40 w-full lg:w-[60%]">
             <div class="form-container flex font-quicksand">
