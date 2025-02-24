@@ -57,9 +57,9 @@
 @endsection
 
 @section('content')
-    {{-- @if (session('users') == [])
+    @if (session('users') == [])
         @include('utils.welcome')
-    @endif --}}
+    @endif
     <div
         class="relative lg:container flex justify-center bg-gradient-to-b from-[#316235] from-[30%] to-[#c9e3b0] mx-auto p-0 md:p-5 min-w-[100vw] overflow-hidden">
         <div
