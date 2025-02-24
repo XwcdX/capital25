@@ -1,4 +1,25 @@
 <style>
+    @keyframes pulseEffect {
+        0% {
+            transform: scale(0);
+            opacity: 1;
+        }
+
+        100% {
+            transform: scale(3);
+            opacity: 0;
+        }
+    }
+
+    .pulse {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        transform: scale(0);
+        animation: pulseEffect 0.6s ease-out;
+    }
 </style>
 
 <section id="timeline" class="relative h-screen w-screen bg-[#14240a] z-[14] flex justify-center items-center">
@@ -10,7 +31,7 @@
     <div
         class="relative container h-[80%] md:h-[68%] xl:h-[70%] flex items-center justify-center overflow-hidden gap-[4%] 
         w-[90%] sm:w-[85%] lg:w-[80%] transition-all duration-500">
-        <div class="box h-full w-full overflow-hidden flex flex-col items-center justify-center [@media(max-width:400px)]:space-y-2 space-y-5 md:space-y-5 "
+        <div class="box relative h-full w-full overflow-hidden flex flex-col items-center justify-center [@media(max-width:400px)]:space-y-2 space-y-5 md:space-y-5 "
             id="leftBox">
             <img class="original-content w-[70px] sm:w-[80px] lg:w-[125px] xl:w-[150px]"
                 src="{{ asset('assets/timeline/icon-mic.png') }}" alt="">
@@ -34,7 +55,7 @@
                 {{-- <button class="rounded-3xl border border-black border-[2px] bg-transparent text-black font-quicksand font-bold px-5 py-2 mt-5">Guidebook</button> --}}
             </div>
         </div>
-        <div class="box h-full w-full overflow-hidden flex flex-col items-center justify-center [@media(max-width:400px)]:space-y-2 space-y-5 md:space-y-5"
+        <div class="box relative h-full w-full overflow-hidden flex flex-col items-center justify-center [@media(max-width:400px)]:space-y-2 space-y-5 md:space-y-5"
             id="centerBox">
             <img class="original-content w-[70px] sm:w-[80px] lg:w-[125px] xl:w-[150px]"
                 src="{{ asset('assets/timeline/icon-recycle.png') }}" alt="">
@@ -59,7 +80,7 @@
                     class="guidebook rounded-3xl border border-black border-[2px] bg-transparent text-black font-quicksand font-bold px-5 py-2 mt-5">Guidebook</button>
             </div>
         </div>
-        <div class="box h-full w-full overflow-hidden flex flex-col items-center justify-center [@media(max-width:400px)]:space-y-2 space-y-5 md:space-y-5"
+        <div class="box relative h-full w-full overflow-hidden flex flex-col items-center justify-center [@media(max-width:400px)]:space-y-2 space-y-5 md:space-y-5"
             id="rightBox">
             <img class="original-content w-[70px] sm:w-[80px] lg:w-[125px] xl:w-[150px]"
                 src="{{ asset('assets/timeline/icon-container.png') }}" alt="">
@@ -91,10 +112,31 @@
 </section>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         const boxes = document.querySelectorAll(".box");
         let index = 0;
         let animationActive = true;
+
+        function createMultiplePulses(box) {
+            const pulseCount = Math.floor(Math.random() * 5) + 2;
+
+            for (let i = 0; i < pulseCount; i++) {
+                setTimeout(() => {
+                    const pulse = document.createElement("span");
+                    pulse.classList.add("pulse");
+                    const rect = box.getBoundingClientRect();
+                    const x = Math.random() * rect.width;
+                    const y = Math.random() * rect.height;
+
+                    pulse.style.left = `${x}px`;
+                    pulse.style.top = `${y}px`;
+                    box.appendChild(pulse);
+                    setTimeout(() => {
+                        pulse.remove();
+                    }, 600);
+                }, i * 100);
+            }
+        }
 
         function cycleContent() {
             if (!animationActive) return;
@@ -124,6 +166,7 @@
                     title.style.transform = "rotate(45deg) scale(1.3)";
                     title.style.opacity = "1";
                     title.style.fontSize = "2rem";
+                    createMultiplePulses(currentBox);
                 }, 500);
             }
 

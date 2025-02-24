@@ -147,13 +147,24 @@
                     boxShadow: {
                         'custom-md': '0 1px 6px rgba(0, 0, 0, 0.1)',
                     },
-                    colors: {
-                        'nex': {
-                            'yellow': '#F9B63F',
-                            'purple': '#8C54A2',
-                            'blue': '#8FBDD2 ',
-                            'black': '#454556',
+                    keyframes: {
+                        shake: {
+                            '0%, 100%': {
+                                transform: 'translateX(0)'
+                            },
+                            '25%': {
+                                transform: 'translateX(-5px) rotate(-5deg)'
+                            },
+                            '50%': {
+                                transform: 'translateX(5px) rotate(5deg)'
+                            },
+                            '75%': {
+                                transform: 'translateX(-5px) rotate(-5deg)'
+                            },
                         }
+                    },
+                    animation: {
+                        shake: 'shake 0.5s ease-in-out infinite',
                     },
                     screens: {
                         'nav-custom': '1100px',

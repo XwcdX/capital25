@@ -5,7 +5,7 @@
 
     }
 
-    .rule:hover {
+    .rule:hover, .fa-lock:hover {
         transform: scale(1.2);
         transition: all .2s;
     }
@@ -25,8 +25,8 @@
             font-oxanium font-black text-2xl md:text-3xl lg:text-4xl text-white">
                 Guidebook</h1>
             <i class="fa-solid fa-lock absolute inset-0 flex items-center justify-center text-white 
-                w-full h-full text-[10rem] md:text-[13rem] lg:text-[16rem] leading-none 
-                opacity-0 transition-opacity duration-1000 cursor-pointer"
+                w-full h-full text-[9rem] md:text-[12rem] lg:text-[15rem] leading-none 
+                opacity-0 transition-opacity duration-1000 cursor-pointer animate-shake"
                 id="guidebookLock"></i>
         </div>
 
@@ -42,8 +42,8 @@
                 font-oxanium font-black text-2xl md:text-3xl lg:text-4xl text-white">
                     Rules</h1>
                 <i class="fa-solid fa-lock absolute inset-0 flex items-center justify-center text-white 
-                    w-full h-full text-[10rem] md:text-[13rem] lg:text-[16rem] leading-none 
-                    opacity-0 transition-opacity duration-1000 cursor-pointer"
+                    w-full h-full text-[9rem] md:text-[12rem] lg:text-[15rem] leading-none 
+                    opacity-0 transition-opacity duration-1000 cursor-pointer animate-shake"
                     id="rulesLock"></i>
         </div>
     </div>
