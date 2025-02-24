@@ -320,43 +320,43 @@
             <div class="button-wrapper flex justify-center items-center my-5"></div>
         </div>
            {{-- bushes --}}
-           <img class="absolute -bottom-[7%] left-[30%] z-[1] md:w-[450px] lg:w-[550px] bush"
+           <img class="absolute -bottom-[7%] left-[30%] z-[1] sm:w-[350px] md:w-[450px] lg:w-[550px] bush"
             style="--sway-speed: 3.5s; --sway-angle: 3deg;"
             src="{{ asset('assets/form/bush-4.png')}}" alt="">
         
-            <img class="absolute -bottom-[2%] md:left-[11%] z-[2] md:w-[400px] lg:w-[500px] bush"
+            <img class="absolute -bottom-[2%] left-[11%] z-[2] sm:w-[300px] md:w-[400px] lg:w-[500px] bush"
                 style="--sway-speed: 3s; --sway-angle: 4deg;"
                 src="{{ asset('assets/form/bush-5.png')}}" alt="">
             
-            <img class="absolute -bottom-[2%] md:right-[13%] z-[2] md:w-[400px]  lg:w-[500px] scale-x-[-1] bush"
+            <img class="absolute -bottom-[2%] right-[13%] z-[2] sm:w-[300px] md:w-[400px]  lg:w-[500px] scale-x-[-1] bush"
                 style="--sway-speed: 4s; --sway-angle: -4deg;"
                 src="{{ asset('assets/form/bush-5.png')}}" alt="">
             
-            <img class="absolute -bottom-[18%] md:-left-[32%] z-[3] md:w-[650px] lg:w-[775px] bush"
+            <img class="absolute -bottom-[9%] md:-bottom-[18%] -left-[20%] sm:-left-[32%] z-[3] sm:w-[550px] md:w-[650px] lg:w-[775px] bush"
                 style="--sway-speed: 3.8s; --sway-angle: 2.5deg;"
                 src="{{ asset('assets/form/bush-2.png')}}" alt="">
             
-            <img class="absolute -bottom-[15%] md:-right-[32%] lg:-right-[27%] z-[3] md:w-[600px] lg:w-[725px] scale-x-[-1] rotate-[-5deg] bush"
+            <img class="absolute -bottom-[7%] md:-bottom-[15%] -right-[25%] sm:-right-[32%] lg:-right-[27%] z-[3] sm:w-[500px] md:w-[600px] lg:w-[725px] scale-x-[-1] rotate-[-5deg] bush"
                 style="--sway-speed: 3.2s; --sway-angle: -3deg;"
                 src="{{ asset('assets/form/bush-2.png')}}" alt="">
             
-            <img class="absolute md:-bottom-[13%] lg:-bottom-[15%] left-[9%] z-[4] md:w-[400px] lg:w-[500px] bush"
+            <img class="absolute -bottom-[13%] lg:-bottom-[15%] left-[9%] z-[4] sm:w-[300px] md:w-[400px] lg:w-[500px] bush"
                 style="--sway-speed: 3s; --sway-angle: 3deg;"
                 src="{{ asset('assets/form/bush-1.png')}}" alt="">
             
-            <img class="absolute md:-bottom-[13%] lg:-bottom-[15%] right-[8%] z-[4] md:w-[400px] lg:w-[500px] rotate-[-17deg] bush"
+            <img class="absolute -bottom-[13%] lg:-bottom-[15%] right-[8%] z-[4] sm:w-[300px] md:w-[400px] lg:w-[500px] rotate-[-17deg] bush"
                 style="--sway-speed: 3.5s; --sway-angle: -3.5deg;"
                 src="{{ asset('assets/form/bush-1.png')}}" alt="">
             
-                <img class="absolute md:-bottom-[14%] lg:-bottom-[17%] left-[30%] z-[5] md:w-[425px] lg:w-[525px] bush"
+                <img class="absolute -bottom-[14%] lg:-bottom-[17%] left-[30%] z-[5] sm:w-[325px] md:w-[425px] lg:w-[525px] bush"
                 style="--sway-speed: 4s; --sway-angle: 5deg;"
                 src="{{ asset('assets/form/bush-3.png')}}" alt="">
             
-            <img class="absolute md:-bottom-[16%] lg:-bottom-[20%] left-0 z-[5] md:w-[350px] lg:w-[450px] bush"
+            <img class="absolute -bottom-[16%] lg:-bottom-[20%] left-0 z-[5] sm:w-[250px] md:w-[350px] lg:w-[450px] bush"
                 style="--sway-speed: 3.6s; --sway-angle: 3deg;"
                 src="{{ asset('assets/form/bush-4.png')}}" alt="">
             
-            <img class="absolute md:-bottom-[18%] lg:-bottom-[20%] right-0 z-[5] md:w-[350px] lg:w-[450px] rotate-[5deg] bush"
+            <img class="absolute -bottom-[18%] lg:-bottom-[20%] right-0 z-[5] sm:w-[250px] md:w-[350px] lg:w-[450px] rotate-[5deg] bush"
                 style="--sway-speed: 4.2s; --sway-angle: -3deg;"
                 src="{{ asset('assets/form/bush-4.png')}}" alt="">
       
