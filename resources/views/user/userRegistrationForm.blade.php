@@ -227,6 +227,7 @@
                                             No file chosen
                                         </span>
                                     </div>
+                                    <h1><b>*Maximum file size 2mb, if exceed please resize or compress your file</b></h1>
                                     @if (trim(strtolower($field)) === 'twibbon')
                                         <a href="https://docs.google.com/document/d/12WIOeYrcGlbaqv9JmoMQY2ooaxqyFOALBmwBZJKh-Ug/edit?usp=sharing"
                                             target="_blank" rel="noopener noreferrer"
