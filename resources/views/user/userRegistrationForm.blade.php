@@ -256,7 +256,7 @@
                             Transfer: Rp150.000,00</h1>
                         <p class="text-center text-sm sm:text-lg font-bold mb-7">Silahkan lakukan pembayaran dari jumlah
                             yang ditentukan ke akun berikut:</p>
-                        <p class="text-center text-sm sm:text-lg font-bold mb-7">Nomor Rekening BCA: 82927779282<br>atas
+                        <p class="text-center text-sm sm:text-lg font-bold mb-7">Nomor Rekening BCA: 8292779282<br>atas
                             nama Pricilla Chealsea</p>
                         <p class="text-center text-sm sm:text-lg font-bold">Ketentuan:</p>
                         <ol class="list-decimal pl-5 mb-7">
