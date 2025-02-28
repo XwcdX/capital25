@@ -158,7 +158,7 @@
         /* padding-top: 120px; */
         background: #25362d;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        height: 100vh;
+        height: 100lvh;
         width: 100%;
         /* Default full-width for smaller devices */
         transform: translate3d(-150%, 0, 0);
@@ -217,7 +217,7 @@
         top: 0;
         left: 0;
         width: 100vw;
-        height: 100vh;
+        height: 100lvh;
         z-index: 998;
         transition: opacity 0.3s ease, visibility 0.3s ease;
     }
