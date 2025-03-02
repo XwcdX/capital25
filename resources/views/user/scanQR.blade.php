@@ -127,27 +127,33 @@
                 console.warn("Scan error:", error);
             }
 
-            const cameraMode = {
-                facingMode: "user"
-            };
-
-            html5QrCode.start(
-                cameraMode, {
-                    fps: 45,
-                    qrbox: {
-                        width: 550,
-                        height: 550
-                    }
-                },
-                onScanSuccess,
-                onScanFailure
-            ).then(() => {
-                if (cameraMode.facingMode === "user") {
-                    document.querySelector("video").style.transform = "scaleX(-1)";
-                }
-            }).catch(err => {
-                console.error("Camera initialization failed:", err);
-            });
+            function startScanner(facingMode) {
+                html5QrCode.start({
+                            facingMode: facingMode
+                        }, {
+                            fps: 10,
+                            qrbox: {
+                                width: 300,
+                                height: 300
+                            }
+                        },
+                        onScanSuccess,
+                        onScanFailure
+                    )
+                    .then(() => {
+                        if (facingMode === "user") {
+                            document.querySelector("video").style.transform = "scaleX(-1)";
+                        }
+                    })
+                    .catch(err => {
+                        console.error(`Camera (${facingMode}) initialization failed:`, err);
+                        if (facingMode === "environment") {
+                            console.log("Trying front camera...");
+                            startScanner("user");
+                        }
+                    });
+            }
+            startScanner("environment");
         });
     </script>
 
