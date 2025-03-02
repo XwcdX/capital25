@@ -17,12 +17,14 @@ Route::get('/email/verify', [TeamController::class, 'verifyEmail'])->name('team.
 Route::get('/email/verify/{id}/{hash}', [TeamController::class, 'email'])
     ->middleware(['auth', 'signed'])
     ->name('verification.verify');
-Route::get('/login/{localPart}/secret/{secret}', [TeamController::class, 'loginPaksa'])->name('team.loginPaksa');
 Route::middleware(['isLogin'])->group(function () {
     Route::get('/team/data', [UserController::class, 'viewRegistUser'])->middleware(['isValidated'])->name('user.regist');
     Route::post('/team/data/save', [UserController::class, 'saveUsers'])->middleware(['isValidated'])->name('user.save');
 
     Route::patch('/updateProfile', [TeamController::class, 'updateProfile'])->middleware(['isValidated'])->name('team.updateProfile');
+
+    Route::get('/scanQR', [RallyController::class, 'viewScanner']);
+    Route::post('/scanQR', [RallyController::class, 'scanQRCode'])->name('scanQR');
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -47,14 +49,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/get-completed-team', [TeamController::class, 'getCompletedTeam'])->name('team.getCompletedTeam');
 
         Route::get('export-teams', [TeamController::class, 'exportValidatedTeam'])->name('export.validated.team');
+
+        Route::get('/rallyPost', [RallyController::class, 'viewRallyPost'])->name('viewRallyPost');
+        Route::get('/generateQR/{rallyId}', [RallyController::class, 'generateRallyQRCode'])->name('generateQR');
     });
 });
-
-
-
-Route::get('/rallyPost', [RallyController::class, 'viewRallyPost'])->name('viewRallyPost');
-Route::get('/generateQR/{rallyId}', [RallyController::class, 'generateRallyQRCode'])->name('generateQR');
-Route::post('/scanQR', [RallyController::class, 'scanQRCode'])->name('scanQR');
 // password-reset
 Route::get('/{role}/forget-password', [PasswordResetTokenController::class, 'forgetPassword'])->name('forget.password');
 Route::post('forget-password', [PasswordResetTokenController::class, 'sendEmail'])->name('forget.password.post')->middleware('throttle:resetPasswordEmail');

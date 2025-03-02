@@ -37,6 +37,7 @@
     </script>
 
     @yield('style')
+    @livewireStyles 
 </head>
 
 <body>
@@ -331,6 +332,7 @@
     <script src="https://cdn.jsdelivr.net/npm/tw-elements/js/tw-elements.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></script>
     @yield('script')
+    @livewireScripts 
     @if (session('error'))
         <script>
             Swal.fire({

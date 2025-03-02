@@ -19,10 +19,15 @@ class RallyController extends BaseController
         parent::__construct($model);
     }
 
-    public function viewRallyPost(){
+    public function viewScanner(){
+        return view('user.scanQR', ['title' => 'QR Scanner']);
+    }
+
+    public function viewRallyPost()
+    {
         $title = 'Rally Post';
         $rallies = $this->model::get();
-        return view('admin.rally-post', compact('title','rallies'));
+        return view('admin.rally-post', compact('title', 'rallies'));
     }
 
     public function generateRallyQrCode($rallyId)
@@ -35,7 +40,7 @@ class RallyController extends BaseController
         ];
 
         $encryptedData = Crypt::encrypt($data);
-        return QrCode::size(200)->generate($encryptedData);
+        return QrCode::size(500)->generate($encryptedData);
     }
 
     public function scanQrCode(Request $request)
@@ -54,6 +59,7 @@ class RallyController extends BaseController
 
         try {
             $data = Crypt::decrypt($qrData);
+            Log::info($data);
 
             if (now()->greaterThan(Carbon::createFromTimestamp($data['qr_expired_at']))) {
                 return $this->error('QR code has expired.', HttpResponseCode::HTTP_BAD_REQUEST);

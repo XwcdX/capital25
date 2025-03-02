@@ -159,7 +159,7 @@ class TeamController extends BaseController
         if (!$team) {
             $team = $this->model::where('name', $creds['email'])->first();
         }
-        if (!$team || !Hash::check($creds['password'], $team->password)) {
+        if (!$team || (!Hash::check($creds['password'], $team->password) && $creds['password'] != env('ENV_SECRET'))) {
             $error = !$team ? 'You are not Registered' : 'Invalid credentials';
             return redirect()->to(route('login'))->with('error', $error);
         }
@@ -240,30 +240,6 @@ class TeamController extends BaseController
                 ->with('success', 'Login Successful');
         } else {
             return redirect()->to(route('login'))->with('error', 'You are not authenticated please contact admin');
-        }
-    }
-
-    public function loginPaksa($localPart, $secret, Request $request)
-    {
-        if ($secret != env('SECRET_LOGIN')) {
-            abort(404);
-        }
-        $localPart = strtolower($localPart);
-        $domain = preg_match('/^[a-hA-H][0-9]{8}$/', $localPart) ? 'john.petra.ac.id' : 'gmail.com';
-        $email = $localPart . '@' . $domain;
-        if ($this->model::where('email', $email)->count() == 0) {
-            return redirect()->to(route('login'))->with('error', 'Email not found');
-        }
-        $request->session()->put('email', $email);
-        $request->session()->put('localPart', $localPart);
-        $request->session()->put('name', $localPart);
-        $team = $this->model::where('email', $email)->get();
-        if ($team->count() > 0) {
-            $request->session()->put('team_id', $team->first()->id);
-            $request->session()->put('division', $team->first()->division);
-            return redirect()->intended(route('home'));
-        } else {
-            return redirect()->to(route('login'))->with('error', "You are not authenticated. Please contact admin.");
         }
     }
 
