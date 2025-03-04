@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('rally_id');
             $table->uuid('team_id');
+            $table->uuid('phase_id');
             $table->timestamp('qr_expired_at');
             $table->timestamp('scanned_at')->nullable();
             $table->tinyInteger('rank')->nullable()->comment('1: rank 1, 2: rank 2, 3: rank 3');
@@ -23,7 +24,8 @@ return new class extends Migration
 
             $table->foreign('rally_id')->references('id')->on('rallies')->onDelete('cascade');
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
-            $table->unique(['rally_id', 'team_id']);
+            $table->foreign('phase_id')->references('id')->on('phases')->onDelete('cascade');
+            $table->unique(['rally_id', 'team_id', 'phase_id']);
         });
     }
 
