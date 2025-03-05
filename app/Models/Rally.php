@@ -15,4 +15,11 @@ class Rally extends Model
                     ->withPivot('qr_expired_at', 'scanned_at', 'rank', 'point')
                     ->withTimestamps();
     }
+
+    public function phases()
+    {
+        return $this->belongsToMany(Phase::class, 'rally_histories')
+                    ->withPivot('qr_expired_at', 'scanned_at', 'rank', 'point')
+                    ->withTimestamps();
+    }
 }

@@ -250,7 +250,7 @@
         }
     }
 </style>
-<div class="contact_us mt-10">
+<div class="contact_us mt-10 bg-[var(--cap-green3)]">
     <svg class="ombak" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28"
         preserveAspectRatio="none">
         <defs>
@@ -271,7 +271,7 @@
         style="background: #5c7650;
 background: linear-gradient(180deg, #3a5a40 10%, #5c7650 120%);">
         <div class="col-12 m-0 p-5 mb-md-5">
-            <h1>Contact Us</h1>
+            <h1 class="font-oxanium">Contact Us</h1>
         </div>
 
 
@@ -298,7 +298,7 @@ background: linear-gradient(180deg, #3a5a40 10%, #5c7650 120%);">
             </ul>
         </div>
         <div class="credit pt-5 mt-md-5">
-            <h5 class="my-4" style="color: #dedfe0;">© IT x Creative capital 2025</h5>
+            <h5 class="my-4" style="color: #dedfe0;">© IT x Creative CAPITAL 2025</h5>
         </div>
     </div>
 </div>

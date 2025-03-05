@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Auth;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,7 @@ class AdminLoginMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!session('email')) {
+        if (!Auth::guard('admin')->user()) {
             session()->flush();
 
             $allowedIntent = ['admin/*'];

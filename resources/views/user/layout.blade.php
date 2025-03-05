@@ -4,10 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('assets/favicon-512.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('assets/favicon-192.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/apple-touch-icon.png') }}">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>User | {{ $title }}</title>
     {{-- tailwindcss --}}
-    <script src="https://cdn.tailwindcss.com/3.4.5"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/tw-elements.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/css/tw-elements.min.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
@@ -25,6 +28,14 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap');
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    {{-- font landing --}}
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.1.6/html5-qrcode.min.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -33,11 +44,13 @@
         }
 
         :root {
-            --cap-green5: #344E41;
-            --cap-green4: #3A5A40;
-            --cap-green3: #5C7650;
-            --cap-green2: #A3B18A;
-            --cap-green1: #DAD7CD;
+            --cap-green6: #14240a;
+            --cap-green5: #25483d;
+            --cap-green4: #56843a;
+            --cap-green3: #82b741;
+            --cap-green2: #a8c747;
+            --cap-green1: #e6e773;
+            /*yellow*/
         }
 
         html {
@@ -49,8 +62,7 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: rgb(23, 24, 56);
-            background: linear-gradient(180deg, rgba(69, 69, 86, 1) 0%, rgba(140, 84, 162, 1) 49%, rgba(249, 182, 63, 1) 100%);
+            background: linear-gradient(180deg, var(--cap-green5) 0%, var(--cap-green3) 49%, var(--cap-green1) 100%);
             border-radius: 8px;
         }
 
@@ -77,6 +89,49 @@
         textarea:disabled {
             background: #aaaaaa50 !important;
         }
+
+        @font-face {
+            font-family: 'orbitron';
+            src: url('/assets/fonts/heading-orbitron.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'quicksand';
+            src: url('/assets/fonts/quicksand.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'oxanium';
+            src: url('/assets/fonts/oxanium.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        .font-orbitron {
+            font-family: 'orbitron';
+        }
+
+        .font-quicksand {
+            font-family: 'quicksand';
+        }
+
+        .font-oxanium {
+            font-family: 'oxanium';
+        }
+
+        .font-league {
+            font-family: 'League Spartan'
+        }
+
+        body {
+            max-height: 100vh;
+            overflow: hidden;
+            overflow-x: hidden;
+        }
     </style>
 
     <script>
@@ -94,13 +149,24 @@
                     boxShadow: {
                         'custom-md': '0 1px 6px rgba(0, 0, 0, 0.1)',
                     },
-                    colors: {
-                        'nex': {
-                            'yellow': '#F9B63F',
-                            'purple': '#8C54A2',
-                            'blue': '#8FBDD2 ',
-                            'black': '#454556',
+                    keyframes: {
+                        shake: {
+                            '0%, 100%': {
+                                transform: 'translateX(0)'
+                            },
+                            '25%': {
+                                transform: 'translateX(-5px) rotate(-5deg)'
+                            },
+                            '50%': {
+                                transform: 'translateX(5px) rotate(5deg)'
+                            },
+                            '75%': {
+                                transform: 'translateX(-5px) rotate(-5deg)'
+                            },
                         }
+                    },
+                    animation: {
+                        shake: 'shake 0.5s ease-in-out infinite',
                     },
                     screens: {
                         'nav-custom': '1100px',
@@ -116,11 +182,15 @@
     @yield('style')
 </head>
 
-<body class="overflow-x-hidden">
+<body class="overflow-hidden">
+    <div id="loader"
+        class="loader fixed z-[10000] inset-0 h-screen w-screen flex justify-center items-center bg-[var(--cap-green5)]">
+        @include('user.loader')
+    </div>
     @yield('content')
     <script src="https://cdn.jsdelivr.net/npm/tw-elements/js/tw-elements.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.1.6/html5-qrcode.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     @yield('script')
     @if (session('error'))
         <script>
@@ -128,9 +198,71 @@
                 icon: 'error',
                 title: 'Oops...',
                 text: '{{ session('error') }}',
+                showConfirmButton: true,
+                confirmButtonColor: "#56843a",
             })
         </script>
     @endif
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const loader = document.getElementById("loader");
+            const body = document.body;
+            const html = document.documentElement;
+
+            body.style.overflow = "hidden";
+            html.style.overflow = "hidden";
+            window.scrollTo(0, 0);
+
+            const isHomePage = window.location.pathname === "/";
+            let timeoutReached = false;
+
+            function removeLoader() {
+                if (loader) {
+                    loader.style.transition = "opacity 0.8s ease";
+                    loader.style.opacity = "0";
+
+                    setTimeout(() => {
+                        loader.remove();
+                        body.style.overflowY = "visible";
+                        html.style.overflowY = "visible";
+                        body.classList.remove('overflow-hidden');
+                        body.classList.add('overflow-x-hidden');
+
+                        setTimeout(() => {
+                            if (typeof Lenis !== "undefined") {
+                                lenis.start();
+                            }
+                        }, 3000);
+
+                        if (typeof ScrollTrigger !== "undefined") {
+                            ScrollTrigger.refresh();
+                        }
+
+                        // Ensure this runs last after everything is completed
+                        document.body.style.maxHeight = "none";
+                    }, 800);
+                }
+            }
+            if (isHomePage) {
+                const timeout = setTimeout(() => {
+                    timeoutReached = true;
+                    removeLoader();
+                }, 3000);
+                window.addEventListener("load", function() {
+                    if (timeoutReached) {
+                        removeLoader();
+                    } else {
+                        clearTimeout(timeout);
+                        setTimeout(removeLoader, 3000);
+                    }
+                });
+
+            } else {
+                window.addEventListener("load", removeLoader);
+            }
+        });
+    </script>
+
 </body>
 
 </html>

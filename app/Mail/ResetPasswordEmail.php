@@ -13,7 +13,7 @@ class ResetPasswordEmail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public $data;
+    protected $data;
 
     /**
      * Create a new message instance.

@@ -1,6 +1,14 @@
-@extends('user.layout')
+<!DOCTYPE html>
+<html lang="en">
 
-@section('style')
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Scanner</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.1.6/html5-qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="user-id" content="{{ Auth::user()->id }}">
     <style>
         body,
         html {
@@ -72,68 +80,83 @@
             z-index: -1;
         }
     </style>
-@endsection
+</head>
 
-@section('content')
-    <div id="reader"></div>
-    <div id="qr-box"></div>
+<body>
+
     <h1>Scan Rally QR Code</h1>
+    <div id="reader"></div>
     <p id="scanned-result"></p>
 
-    <form id="scan-form" action="{{ route('scanQR') }}" method="POST">
-        @csrf
-        <input type="hidden" name="team_id" id="team_id" value="YOUR_TEAM_ID">
-        <input type="hidden" name="qr_data" id="qr_data">
-    </form>
-@endsection
-
-@section('script')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const html5QrCode = new Html5Qrcode("reader");
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const teamId = document.querySelector('meta[name="user-id"]').getAttribute('content');
 
             function onScanSuccess(decodedText) {
+                console.log("Decoded:", decodedText);
                 document.getElementById('scanned-result').innerText = `Scanned: ${decodedText}`;
-                document.getElementById('qr_data').value = decodedText;
-                document.getElementById('scan-form').submit();
+
+                html5QrCode.stop().then(() => {
+                    fetch('{{ route('scanQR') }}', {
+                            method: "POST",
+                            headers: {
+                                "X-CSRF-TOKEN": csrfToken,
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                team_id: teamId,
+                                qr_data: decodedText
+                            })
+                        }).then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                swal("Success", "Scan successful: " + decodedText, "success");
+                            } else {
+                                swal("Error", data.message, "error");
+                            }
+                        }).catch(err => {
+                            console.error("Fetch error:", err);
+                            swal("Error", "An unexpected error occurred.", "error");
+                        });
+                }).catch(err => console.error("Stop failed", err));
             }
 
-            function onScanError(errorMessage) {
-                console.error(errorMessage);
+            function onScanFailure(error) {
+                console.warn("Scan error:", error);
             }
 
-            const qrBoxSize = 250;
-
-            html5QrCode.start({
-                    facingMode: "environment"
-                }, {
-                    fps: 10,
-                    qrbox: {
-                        width: qrBoxSize,
-                        height: qrBoxSize
-                    },
-                },
-                onScanSuccess,
-                onScanError
-            ).catch((err) => {
-                console.error("Back camera initialization failed:", err);
-                html5QrCode
-                    .start({
-                            facingMode: "user"
+            function startScanner(facingMode) {
+                html5QrCode.start({
+                            facingMode: facingMode
                         }, {
                             fps: 10,
                             qrbox: {
-                                width: qrBoxSize,
-                                height: qrBoxSize
-                            },
+                                width: 300,
+                                height: 300
+                            }
                         },
                         onScanSuccess,
-                        onScanError
+                        onScanFailure
                     )
-                    .catch((err) => {
-                        console.error("Error accessing any camera:", err);
+                    .then(() => {
+                        if (facingMode === "user") {
+                            document.querySelector("video").style.transform = "scaleX(-1)";
+                        }
+                    })
+                    .catch(err => {
+                        console.error(`Camera (${facingMode}) initialization failed:`, err);
+                        if (facingMode === "environment") {
+                            console.log("Trying front camera...");
+                            startScanner("user");
+                        }
                     });
-            });
+            }
+            startScanner("environment");
         });
     </script>
-@endsection
+
+</body>
+
+</html>

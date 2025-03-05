@@ -20,13 +20,18 @@ return new class extends Migration
             $table->string('domicile');
             $table->string('proof_of_payment')->nullable();
             $table->timestamp('payment_uploaded_at')->nullable();
+            $table->string('profile_image')->nullable();
             $table->unsignedInteger('coin')->default(1000000);
             $table->unsignedInteger('green_points')->default(0);
-            $table->boolean('valid')->default(false);
+            $table->tinyInteger('valid')->default(0)->comment('0: Pending, 1: Validated, 2: Declined');
+            $table->uuid('validator_id')->nullable();
+            $table->text('feedback')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('validator_id')->references('id')->on('admins')->onDelete('cascade');
         });
     }
 

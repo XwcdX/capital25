@@ -33,7 +33,7 @@
             title: 'Berhasil',
             text: '{{ Session::get('success') }}',
             showConfirmButton: true,
-            confirmButtonColor: "#3085d6",
+            confirmButtonColor: "#56843a",
         });
     @endif
 
@@ -43,7 +43,7 @@
             title: 'Error',
             text: '{{ Session::get('error') }}',
             showConfirmButton: true,
-            confirmButtonColor: "#3085d6",
+            confirmButtonColor: "#56843a",
         });
     @endif
     $(document).ready(function() {
@@ -54,7 +54,7 @@
                 text: "Seluruh Panitia akan direplace dengan data yang baru",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: "#3085d6",
+                confirmButtonColor: "#56843a",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yes, update it!"
                 }).then((result) => {

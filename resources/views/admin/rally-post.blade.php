@@ -7,7 +7,7 @@
     <div class="container mx-auto mt-5">
         <div class="mb-4">
             <label for="rallyDropdown" class="block mb-2 text-sm font-medium text-gray-700">Select Rally:</label>
-            <select id="rallyDropdown"
+            <select id="rallyDropdown" wire:model="rallyId"
                 class="w-full px-4 py-2 border rounded shadow-sm focus:outline-none focus:ring focus:ring-blue-300">
                 <option value="">-- Select a Rally --</option>
                 @foreach ($rallies as $rally)
@@ -19,6 +19,9 @@
         <button id="openQrModal" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
             Generate Rally QR Code
         </button>
+    </div>
+    <div>
+        @livewire('rally-participants', ['rallyId' => $rallyId ?? null])
     </div>
 
     <div id="qrCodeModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden z-[1036]">
@@ -47,8 +50,6 @@
 @endsection
 
 @section('script')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const rallyDropdown = document.getElementById("rallyDropdown");
@@ -60,14 +61,22 @@
             const closeQrModalButton = document.getElementById("closeQrModal");
             const closeModalButton = document.getElementById("closeModalButton");
 
-            const removePlaceholderOnce = () => {
-                const firstOption = rallyDropdown.querySelector("option:first-child");
-                if (rallyDropdown.value !== "") {
-                    firstOption.remove();
-                    rallyDropdown.removeEventListener("change", removePlaceholderOnce);
+            rallyDropdown.addEventListener("change", (event) => {
+                const rallyId = event.target.value;
+
+                if (rallyId !== "") {
+                    const firstOption = rallyDropdown.querySelector("option:first-child");
+                    if (firstOption && firstOption.value === "") {
+                        firstOption.remove();
+                    }
+                    Livewire.dispatch('rallyIdUpdated', { rallyId: rallyId });
+                    window.Livewire.on('rallyIdUpdated', (data) => {
+                        console.log("Livewire Event Received:", data);
+                    });
+
+                    console.log("Selected Rally ID:", rallyId);
                 }
-            };
-            rallyDropdown.addEventListener("change", removePlaceholderOnce);
+            });
 
             openQrModalButton.addEventListener("click", () => {
                 const rallyId = rallyDropdown.value;
@@ -86,7 +95,7 @@
                 qrCodeContainer.classList.add("hidden");
                 loadingSpinner.classList.remove("hidden");
 
-                fetch(`/generateQR/${rallyId}`)
+                fetch(`{{ route('admin.generateQR', ':rallyId') }}`.replace(':rallyId', rallyId))
                     .then(response => response.text())
                     .then(data => {
                         qrCodeImage.src = `data:image/svg+xml;base64,${btoa(data)}`;

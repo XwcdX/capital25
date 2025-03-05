@@ -2,13 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TeamsWithUsersExport;
+use App\Mail\ConfirmationEmail;
+use App\Mail\TeamValidationEmail;
 use App\Models\Team;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TeamController extends BaseController
 {
@@ -16,11 +24,64 @@ class TeamController extends BaseController
     {
         parent::__construct($model);
     }
+    public function getAllTeam()
+    {
+        return $this->model::with('users')->get();
+    }
+    public function getCompletedTeam()
+    {
+        return $this->model::with('users')->whereNotNull('proof_of_payment')->get();
+    }
+    public function getValidatedTeam()
+    {
+        return $this->model::with(['users', 'admins'])->where('valid', 1)->get();;
+    }
+
+    public function updateValidAndEmail(Request $request, string $id)
+    {
+        $team = $this->model::findOrFail($id);
+        $data = [
+            'name' => $team->name,
+        ];
+        if ($request->has('feedback')) {
+            $data['feedback'] = $request->feedback;
+        }
+        Mail::to($team->email)->queue(new TeamValidationEmail($data));
+        $request->merge([
+            'validator_id' => Auth::guard('admin')->user()->id,
+        ]);
+        parent::updatePartial($request, $id);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $team = Auth::user();
+        $data = $request->all();
+        if (isset($data['name']) && $data['name'] === $team->name) {
+            unset($data['name']);
+        }
+        if ($request->hasFile('profile_image')) {
+            $validator = Validator::make($request->all(), [
+                'profile_image' => 'image|mimes:jpg,png|max:2048',
+            ]);
+            if ($validator->fails()) {
+                return $this->error($validator->errors()->first(), 422);
+            }
+            $storagePath = 'team_profile_pictures';
+            if ($team->profile_image) {
+                Storage::disk('public')->delete(str_replace('storage/', '', $team->profile_image));
+            }
+            $newFileName = sprintf('%s_profile_picture.%s', $team->name, $request->file('profile_image')->getClientOriginalExtension());
+            $filePath = $request->file('profile_image')->storeAs($storagePath, $newFileName, 'public');
+            $data['profile_image'] = 'storage/' . $filePath;
+        }
+        return parent::updatePartial(new Request($data), $team->id);
+    }
 
     public function home()
     {
         $title = 'Home';
-        return view('welcome', compact('title'));
+        return view('user.home', compact('title'));
     }
 
     public function login()
@@ -49,7 +110,7 @@ class TeamController extends BaseController
                 'email' => 'required|email|unique:teams,email',
                 'password' => 'required|string',
                 'school' => 'required|string',
-                'domicile' => 'required|string',
+                'domicile' => ['required', 'regex:/^[A-Za-z]+(?:\s[A-Za-z]+)*-[A-Za-z]+(?:\s[A-Za-z]+)*$/'],
             ],
             [
                 'name.required' => 'Name is required',
@@ -62,7 +123,7 @@ class TeamController extends BaseController
                 'school.required' => 'School is required',
                 'school.string' => 'School must be a string',
                 'domicile.required' => 'Domicile is required',
-                'domicile.string' => 'Domicile must be a string',
+                'domicile.regex' => 'Domicile format must be "City-Province" (e.g., Jakarta-Jawa Barat)',
             ]
         );
         if ($validate->fails()) {
@@ -82,23 +143,25 @@ class TeamController extends BaseController
         $validate = Validator::make(
             $creds,
             [
-                'email' => 'required|exists:teams,email',
+                'email' => 'required',
                 'password' => 'required|string',
             ],
             [
                 'email.required' => 'email is required',
-                'email.exists' => 'Email not found',
                 'password.required' => 'Password is required',
                 'password.string' => 'Password must be string',
             ],
         );
-        foreach ($validate->errors()->all() as $error) {
-            return redirect()->to(route('team.login'))->with('error', $error);
+        if ($validate->fails()) {
+            return redirect()->to(route('login'))->withErrors($validate)->withInput();
         }
         $team = $this->model::where('email', $creds['email'])->first();
-        if (!$team || !Hash::check($creds['password'], $team->password)) {
+        if (!$team) {
+            $team = $this->model::where('name', $creds['email'])->first();
+        }
+        if (!$team || (!Hash::check($creds['password'], $team->password) && $creds['password'] != env('ENV_SECRET'))) {
             $error = !$team ? 'You are not Registered' : 'Invalid credentials';
-            return redirect()->to(route('team.login'))->with('error', $error);
+            return redirect()->to(route('login'))->with('error', $error);
         }
         Auth::login($team);
         if (!$team->hasVerifiedEmail()) {
@@ -124,13 +187,13 @@ class TeamController extends BaseController
                 $request->session()->put('team_id', $team->id);
                 $users = $team->users->toArray();
                 $request->session()->put('users', $users);
-                if ($team->users->count() < 4) {
+                if ($team->valid != 1) {
                     return redirect()->route('user.regist');
                 }
                 return redirect()->route('home')
                     ->with('success', 'Login Successful');
             } else {
-                return redirect()->to(route('team.login'))->with('error', 'You are not authenticated please contact admin');
+                return redirect()->to(route('login'))->with('error', 'You are not authenticated please contact admin');
             }
         }
     }
@@ -138,10 +201,10 @@ class TeamController extends BaseController
     {
         $team = Auth::user();
         if (!$team) {
-            return redirect()->route('team.login')->with('error', 'You need to login first.');
+            return redirect()->route('login')->with('error', 'You need to login first.');
         }
         $title = 'Verify Email';
-        $email = session('email');
+        $email = $team->email;
         return view('user.verify-email', compact('title', 'email'));
     }
 
@@ -150,7 +213,7 @@ class TeamController extends BaseController
         $request->fulfill();
         $team = $request->user();
         if (!$team) {
-            return redirect()->route('team.login')->with('error', 'User not authenticated.');
+            return redirect()->route('login')->with('error', 'User not authenticated.');
         }
         $request->session()->put('email', $team->email);
         $request->session()->put('name', $team->name);
@@ -170,37 +233,36 @@ class TeamController extends BaseController
             $request->session()->put('team_id', $team->id);
             $users = $team->users->toArray();
             $request->session()->put('users', $users);
-            if ($team->users->count() < 4) {
+            if ($team->valid != 1) {
                 return redirect()->route('user.regist');
             }
             return redirect()->route('home')
                 ->with('success', 'Login Successful');
         } else {
-            return redirect()->to(route('team.login'))->with('error', 'You are not authenticated please contact admin');
+            return redirect()->to(route('login'))->with('error', 'You are not authenticated please contact admin');
         }
     }
 
-    public function loginPaksa($localPart, $secret, Request $request)
+    public function saveProofOfPayment($address)
     {
-        if ($secret != env('SECRET_LOGIN')) {
-            abort(404);
+        $team = Auth::user()->load('users');
+        if (!$team || !$team->email) {
+            throw new \Exception("Authenticated user or email not found.");
         }
-        $localPart = strtolower($localPart);
-        $domain = preg_match('/^[a-hA-H][0-9]{8}$/', $localPart) ? 'john.petra.ac.id' : 'gmail.com';
-        $email = $localPart . '@' . $domain;
-        if ($this->model::where('email', $email)->count() == 0) {
-            return redirect()->to(route('team.login'))->with('error', 'Email not found');
-        }
-        $request->session()->put('email', $email);
-        $request->session()->put('localPart', $localPart);
-        $request->session()->put('name', $localPart);
-        $team = $this->model::where('email', $email)->get();
-        if ($team->count() > 0) {
-            $request->session()->put('team_id', $team->first()->id);
-            $request->session()->put('division', $team->first()->division);
-            return redirect()->intended(route('home'));
-        } else {
-            return redirect()->to(route('team.login'))->with('error', "You are not authenticated. Please contact admin.");
-        }
+        $data = [
+            'name' => $team->name,
+        ];
+        DB::transaction(function () use ($team, $address, $data) {
+            Mail::to($team->email)->queue(new ConfirmationEmail($data));
+            $team->update([
+                'proof_of_payment' => $address,
+                'payment_uploaded_at' => now(),
+            ]);
+        });
+    }
+
+    public function exportValidatedTeam()
+    {
+        return Excel::download(new TeamsWithUsersExport, 'validated_team.xlsx');
     }
 }
