@@ -2,21 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Rally;
-use App\Utils\HttpResponseCode;
 use Carbon\Carbon;
-use GrahamCampbell\ResultType\Success;
+use App\Models\Team;
+use App\Models\Rally;
+use App\Models\Commodity;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
+use App\Utils\HttpResponseCode;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Crypt;
+use GrahamCampbell\ResultType\Success;
 use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class RallyController extends BaseController
 {
+    protected $teamController;
+    protected $commodityController;
     public function __construct(Rally $model)
     {
         parent::__construct($model);
+        $this->teamController = new TeamController(new Team());
+        $this->commodityController = new CommodityController(new Commodity());
     }
 
     public function viewScanner(){
@@ -137,5 +143,16 @@ class RallyController extends BaseController
             ]);
             return $this->error('Error updating rank and point.', HttpResponseCode::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+    public function viewTradeZone(){
+        //JANLUPA CEK TERBUKA OR NO, IKU BERDASAR PHASE a? 15 menit after phase started bro
+        $title = 'Trade Zone';
+        $commodities = $this->commodityController->getAllCommodity();
+        
+        return view('user.tradeZone', compact('title','commodities'));
+    }
+    public function checkoutTradeZone(Request $request){
+        
+        return;
     }
 }

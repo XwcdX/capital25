@@ -25,6 +25,9 @@ Route::middleware(['isLogin'])->group(function () {
 
     Route::get('/scanQR', [RallyController::class, 'viewScanner']);
     Route::post('/scanQR', [RallyController::class, 'scanQRCode'])->name('scanQR');
+
+    Route::get('/tradeZone', [RallyController::class, 'viewTradeZone']);
+    Route::post('/tradeZone', [RallyController::class, 'checkoutTradeZone'])->name('checkoutTradeZone');
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {

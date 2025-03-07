@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Commodity extends Model
 {
     use HasUuids;
+
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'team_commodities')
+            ->withPivot('quantity')
+            ->withTimestamps();
+    }
 }
