@@ -9,6 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="user-id" content="{{ Auth::user()->id }}">
+    @vite(['resources/js/app.js'])
     <style>
         body,
         html {
@@ -58,8 +59,8 @@
 
         #qr-box {
             position: absolute;
-            width: 250px;
-            height: 250px;
+            /* width: 250px; */
+            /* height: 250px; */
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -87,9 +88,23 @@
     <h1>Scan Rally QR Code</h1>
     <div id="reader"></div>
     <p id="scanned-result"></p>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            const phaseId = localStorage.getItem("current_phase_id");
+
+            if (!phaseId) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Phase Not Started",
+                    text: "Please wait, the phase hasn't started yet.",
+                    confirmButtonText: "OK"
+                }).then(() => {
+                    window.location.href = "{{ route('home') }}";
+                });
+
+                return;
+            }
+
             const html5QrCode = new Html5Qrcode("reader");
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             const teamId = document.querySelector('meta[name="user-id"]').getAttribute('content');
@@ -107,14 +122,20 @@
                             },
                             body: JSON.stringify({
                                 team_id: teamId,
-                                qr_data: decodedText
+                                qr_data: decodedText,
+                                phase_id: phaseId,
                             })
                         }).then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                swal("Success", "Scan successful: " + decodedText, "success");
+                                swal("Success", "Scanned Successfully! ", "success");
+                                window.dispatchEvent(new CustomEvent("rallyScanned", {
+                                    detail: {
+                                        rallyId: data.data.rally_id
+                                    }
+                                }));
                             } else {
-                                swal("Error", data.message, "error");
+                                swal("Error", data.message || "An unexpected error occurred.", "error");
                             }
                         }).catch(err => {
                             console.error("Fetch error:", err);
@@ -127,36 +148,45 @@
                 console.warn("Scan error:", error);
             }
 
-            function startScanner(facingMode) {
-                html5QrCode.start({
-                            facingMode: facingMode
-                        }, {
-                            fps: 10,
-                            qrbox: {
-                                width: 300,
-                                height: 300
-                            }
-                        },
-                        onScanSuccess,
-                        onScanFailure
-                    )
-                    .then(() => {
-                        if (facingMode === "user") {
-                            document.querySelector("video").style.transform = "scaleX(-1)";
+            function startScanner(cameraId) {
+                html5QrCode.start(cameraId, {
+                        fps: 15,
+                        qrbox: {
+                            width: 500,
+                            height: 500
                         }
-                    })
-                    .catch(err => {
-                        console.error(`Camera (${facingMode}) initialization failed:`, err);
-                        if (facingMode === "environment") {
-                            console.log("Trying front camera...");
-                            startScanner("user");
-                        }
-                    });
+                    },
+                    onScanSuccess,
+                    onScanFailure
+                ).then(() => {
+                    const videoElement = document.querySelector("video");
+                    if (videoElement) {
+                        videoElement.style.transform = cameraId === "user" ? "scaleX(-1)" : "scaleX(1)";
+                    }
+                }).catch(err => console.error("Camera initialization failed:", err));
             }
-            startScanner("environment");
+
+            Html5Qrcode.getCameras().then(devices => {
+                if (devices.length > 0) {
+                    const backCamera = devices.find(device => device.label.toLowerCase().includes(
+                        "back")) || devices[0];
+                    startScanner(backCamera.id);
+                } else {
+                    console.error("No cameras found.");
+                    swal("Error", "No available cameras detected.", "error");
+                }
+            }).catch(err => {
+                console.error("Camera access error:", err);
+                swal("Error", "Failed to access camera.", "error");
+            });
+
+            Echo.channel("phase-updates")
+                .listen(".PhaseUpdated", (event) => {
+                    // console.log('phase_updated');
+                    localStorage.setItem("current_phase_id", event.phase_id);
+                });
         });
     </script>
-
 </body>
 
 </html>

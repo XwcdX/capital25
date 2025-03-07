@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\RallyParticipant;
 use App\Models\Rally;
 use App\Utils\HttpResponseCode;
 use Carbon\Carbon;
@@ -19,7 +20,8 @@ class RallyController extends BaseController
         parent::__construct($model);
     }
 
-    public function viewScanner(){
+    public function viewScanner()
+    {
         return view('user.scanQR', ['title' => 'QR Scanner']);
     }
 
@@ -32,15 +34,11 @@ class RallyController extends BaseController
 
     public function generateRallyQrCode($rallyId)
     {
-        $qrExpireAt = now()->addMinutes(5);
-
-        $data = [
-            'rally_id' => $rallyId,
-            'qr_expired_at' => $qrExpireAt->timestamp,
-        ];
-
-        $encryptedData = Crypt::encrypt($data);
-        return QrCode::size(500)->generate($encryptedData);
+        $qrExpireAt = now()->addMinutes(5)->timestamp;
+        $data = "$rallyId|$qrExpireAt";
+        $signature = hash_hmac('sha256', $data, env('QR_SECRET_KEY'));
+        $qrData = base64_encode("$data|$signature");
+        return QrCode::size(200)->generate($qrData);
     }
 
     public function scanQrCode(Request $request)
@@ -48,6 +46,7 @@ class RallyController extends BaseController
         $validator = Validator::make($request->all(), [
             'team_id' => 'required|uuid|exists:teams,id',
             'qr_data' => 'required|string',
+            'phase_id' => 'required|uuid|exists:phases,id'
         ]);
 
         if ($validator->fails()) {
@@ -56,36 +55,63 @@ class RallyController extends BaseController
 
         $teamId = $request->input('team_id');
         $qrData = $request->input('qr_data');
+        $phaseId = $request->input('phase_id');
 
         try {
-            $data = Crypt::decrypt($qrData);
-            Log::info($data);
+            $decodedData = base64_decode($qrData);
+            if (!$decodedData) {
+                throw new \Exception('Invalid QR code format');
+            }
+            list($rallyId, $qrExpireAt, $signature) = explode('|', $decodedData);
 
-            if (now()->greaterThan(Carbon::createFromTimestamp($data['qr_expired_at']))) {
+            $expectedSignature = hash_hmac('sha256', "$rallyId|$qrExpireAt", env('QR_SECRET_KEY'));
+            if (!hash_equals($expectedSignature, $signature)) {
+                throw new \Exception('Invalid QR code signature');
+            }
+
+            if (now()->timestamp > $qrExpireAt) {
                 return $this->error('QR code has expired.', HttpResponseCode::HTTP_BAD_REQUEST);
             }
 
-            $rallyId = $data['rally_id'];
-            $qrExpireAt = Carbon::createFromTimestamp($data['qr_expired_at']);
             $rally = $this->model::findOrFail($rallyId);
+            $qrExpireAtCarbon = Carbon::createFromTimestamp($qrExpireAt);
 
-            $exists = $rally->teams()
+            $alreadyPlayedInPhase = $rally->teams()
                 ->wherePivot('team_id', $teamId)
-                ->wherePivot('qr_expired_at', $qrExpireAt)
+                ->wherePivot('phase_id', $phaseId)
                 ->exists();
 
-            if ($exists) {
+            if ($alreadyPlayedInPhase) {
+                return $this->error(
+                    'Your team has already participated in this rally during this phase. Please try another rally.',
+                    HttpResponseCode::HTTP_BAD_REQUEST
+                );
+            }
+
+            $alreadyScanned = $rally->teams()
+                ->wherePivot('team_id', $teamId)
+                ->wherePivot('qr_expired_at', $qrExpireAtCarbon)
+                ->exists();
+
+            if ($alreadyScanned) {
                 return $this->error('QR code already scanned.', HttpResponseCode::HTTP_BAD_REQUEST);
             }
 
             $rally->teams()->syncWithoutDetaching([
                 $teamId => [
-                    'qr_expired_at' => $qrExpireAt,
+                    'phase_id' => $phaseId,
+                    'qr_expired_at' => $qrExpireAtCarbon,
                     'scanned_at' => now(),
                 ]
             ]);
 
-            return $this->success('QR code scanned successfully.');
+            $rallyHistory = $rally->teams()
+                ->wherePivot('phase_id', $phaseId)
+                ->get();
+
+            event(new RallyParticipant($rallyHistory));
+
+            return $this->success('QR code scanned successfully.', ['rally_id' => $rally->id]);
         } catch (\Exception $e) {
             Log::error('Error during QR code scan', [
                 'error' => $e->getMessage(),

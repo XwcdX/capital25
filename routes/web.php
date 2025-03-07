@@ -50,8 +50,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('export-teams', [TeamController::class, 'exportValidatedTeam'])->name('export.validated.team');
 
+        //Rally
         Route::get('/rallyPost', [RallyController::class, 'viewRallyPost'])->name('viewRallyPost');
         Route::get('/generateQR/{rallyId}', [RallyController::class, 'generateRallyQRCode'])->name('generateQR');
+
+        Route::get('/phase-control', [AdminController::class, 'viewPhaseControl'])->name('phaseControl');
+        Route::post('/update-phase', [AdminController::class, 'updatePhase'])->name('updatePhase');
     });
 });
 // password-reset
