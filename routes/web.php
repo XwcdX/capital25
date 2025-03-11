@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\MapController;
 use App\Http\Controllers\StorageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PasswordResetTokenController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [TeamController::class, 'home'])->name('home');
+Route::get('/map', [MapController::class, 'showMap'])->name('map');
 Route::get('/login', [TeamController::class, 'login'])->name('login');
 Route::post('/login', [TeamController::class, 'logins'])->name('team.logins');
 Route::post('/regist', [TeamController::class, 'regist'])->name('team.regist');

@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call(DivisionSeeder::class);
         $this->call(AdminSeeder::class);
         $this->call(PhaseSeeder::class);
+        $this->call(MapSeeder::class);
     }
 }
