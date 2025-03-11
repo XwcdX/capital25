@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PhaseUpdated;
 use App\Imports\AdminImport;
 use App\Models\Admin;
 use App\Models\Team;
 use Exception;
 use App\Utils\HttpResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -228,4 +230,23 @@ class AdminController extends BaseController
             'data' => json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT),
         ]);
     }
+
+    public function viewPhaseControl()
+    {
+        $currentPhase = Cache::get("current_phase", "No Phase Set");
+        $title = 'Phase Control';
+        return view('admin.phase', compact('currentPhase', 'title'));
+    }
+
+    public function updatePhase(Request $request)
+    {
+        $request->validate([
+            'phase_id' => 'required|uuid|exists:phases,id',
+        ]);
+        $phaseId = $request->input('phase_id');
+        Cache::forever("current_phase", $phaseId);
+        event(new PhaseUpdated($phaseId));
+        return back()->with('success', 'Phase updated successfully.');
+    }
+
 }
