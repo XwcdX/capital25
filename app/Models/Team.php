@@ -149,4 +149,11 @@ class Team extends Authenticatable implements MustVerifyEmail
             ->withPivot('qr_expired_at', 'scanned_at', 'rank', 'point')
             ->withTimestamps();
     }
+
+    public function answers()
+    {
+        return $this->belongsToMany(Answer::class, 'team_answers')
+            ->withPivot('answer_id')
+            ->withTimestamps();
+    }
 }
