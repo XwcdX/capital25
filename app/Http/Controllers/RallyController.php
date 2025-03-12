@@ -6,9 +6,7 @@ use App\Events\RallyParticipant;
 use App\Models\Rally;
 use App\Utils\HttpResponseCode;
 use Carbon\Carbon;
-use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -28,7 +26,9 @@ class RallyController extends BaseController
     public function viewRallyPost()
     {
         $title = 'Rally Post';
-        $rallies = $this->model::get();
+        $rallies = $this->model::with(['teams' => function ($query) {
+            $query->withPivot(['qr_expired_at'])->orderBy('qr_expired_at');
+        }])->get();
         return view('admin.rally-post', compact('title', 'rallies'));
     }
 
@@ -76,6 +76,15 @@ class RallyController extends BaseController
             $rally = $this->model::findOrFail($rallyId);
             $qrExpireAtCarbon = Carbon::createFromTimestamp($qrExpireAt);
 
+            $alreadyScanned = $rally->teams()
+                ->wherePivot('team_id', $teamId)
+                ->wherePivot('qr_expired_at', $qrExpireAtCarbon)
+                ->exists();
+
+            if ($alreadyScanned) {
+                return $this->error('QR code already scanned.', HttpResponseCode::HTTP_BAD_REQUEST);
+            }
+            
             $alreadyPlayedInPhase = $rally->teams()
                 ->wherePivot('team_id', $teamId)
                 ->wherePivot('phase_id', $phaseId)
@@ -88,15 +97,6 @@ class RallyController extends BaseController
                 );
             }
 
-            $alreadyScanned = $rally->teams()
-                ->wherePivot('team_id', $teamId)
-                ->wherePivot('qr_expired_at', $qrExpireAtCarbon)
-                ->exists();
-
-            if ($alreadyScanned) {
-                return $this->error('QR code already scanned.', HttpResponseCode::HTTP_BAD_REQUEST);
-            }
-
             $rally->teams()->syncWithoutDetaching([
                 $teamId => [
                     'phase_id' => $phaseId,
@@ -107,6 +107,7 @@ class RallyController extends BaseController
 
             $rallyHistory = $rally->teams()
                 ->wherePivot('phase_id', $phaseId)
+                ->wherePivot('qr_expired_at', $qrExpireAtCarbon)
                 ->get();
 
             event(new RallyParticipant($rallyHistory));
