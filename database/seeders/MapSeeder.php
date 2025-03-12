@@ -48,31 +48,35 @@ class MapSeeder extends Seeder
         }
 
         // Masukkan data rally_histories dengan SQL query langsung
-        $query = "INSERT INTO rally_histories (rally_id, team_id, phase_id, qr_expired_at, scanned_at, rank, point, created_at, updated_at) VALUES ";
+        $query = "INSERT INTO rally_histories (id, rally_id, team_id, phase_id, qr_expired_at, scanned_at, `rank`, `point`, created_at, updated_at) VALUES ";
         $values = [];
         $bindings = [];
 
         foreach ($teams as $team) {
             foreach ($rallies as $rallyId) {
                 foreach ($phases as $phaseId) { // Loop untuk setiap phase
-                    $values[] = "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    $values[] = "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     $bindings = array_merge($bindings, [
+                        Str::uuid(),
                         $rallyId, 
                         $team->id, 
                         $phaseId, // Pastikan phase_id terisi
-                        Carbon::now()->addHours(2),
-                        rand(0, 1) ? Carbon::now() : null, 
+                        (string) Carbon::now()->addHours(2),
+                        (string) rand(0, 1) ? Carbon::now() : null, 
                         rand(1, 3), 
                         rand(10, 100),
-                        now(), 
-                        now()
+                        (string) now(), 
+                        (string) now()
                     ]);
                 }
             }
         }
 
         if (!empty($values)) {
-            DB::insert($query . implode(", ", $values), $bindings);
+            $query .= implode(", ", $values);
+            
+            // Jalankan query
+            DB::insert($query, $bindings);
         }
     }
 }

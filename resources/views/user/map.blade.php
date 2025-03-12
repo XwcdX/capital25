@@ -12,7 +12,8 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            color: var(--cap-green);
+            background-color: var(--cap-green3);
         }
 
         .modal-content {
@@ -60,7 +61,7 @@
         }
 
         .carousel-btn {
-            background-color: #007bff;
+            background-color: var(--cap-green4);
             color: white;
             border: none;
             padding: 10px 15px;
@@ -75,7 +76,7 @@
         }
 
         .phase-title {
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: bold;
             margin-bottom: 10px;
         }
@@ -85,7 +86,7 @@
 @section('content')
     <div id="mapModal" class="modal">
         <div class="modal-content">
-            <h2 class="phase-title" id="phaseTitle">Phase {{ $currentPhase->phase }}</h2>
+            <h2 class="phase-title" id="phaseTitle">Fase {{ $currentPhase->phase }}</h2>
 
             <div id="mapCarousel">
                 @foreach ($phases as $phase)
@@ -135,7 +136,7 @@
                 slides[currentPhaseIndex].style.display = "none";
                 currentPhaseIndex = (currentPhaseIndex + direction + totalPhases) % totalPhases;
                 slides[currentPhaseIndex].style.display = "block";
-                phaseTitle.innerText = "Phase " + (currentPhaseIndex + 1);
+                phaseTitle.innerText = "Fase " + (currentPhaseIndex + 1);
 
                 updateButtons();
             }

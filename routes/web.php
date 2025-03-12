@@ -10,7 +10,6 @@ use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [TeamController::class, 'home'])->name('home');
-Route::get('/map', [MapController::class, 'showMap'])->name('map');
 Route::get('/login', [TeamController::class, 'login'])->name('login');
 Route::post('/login', [TeamController::class, 'logins'])->name('team.logins');
 Route::post('/regist', [TeamController::class, 'regist'])->name('team.regist');
@@ -20,6 +19,7 @@ Route::get('/email/verify/{id}/{hash}', [TeamController::class, 'email'])
     ->middleware(['auth', 'signed'])
     ->name('verification.verify');
 Route::middleware(['isLogin'])->group(function () {
+    Route::get('/map', [MapController::class, 'showMap'])->name('map');
     Route::get('/team/data', [UserController::class, 'viewRegistUser'])->middleware(['isValidated'])->name('user.regist');
     Route::post('/team/data/save', [UserController::class, 'saveUsers'])->middleware(['isValidated'])->name('user.save');
 
