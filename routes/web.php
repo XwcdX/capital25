@@ -7,6 +7,9 @@ use App\Http\Controllers\PasswordResetTokenController;
 use App\Http\Controllers\RallyController;
 use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StorylineController;
+use App\Models\Phase;
+use App\Http\Controllers\LifecycleHomepageController;
 
 Route::get('/', [TeamController::class, 'home'])->name('home');
 Route::get('/login', [TeamController::class, 'login'])->name('login');
@@ -65,3 +68,10 @@ Route::get('/reset-password/{role}/{token}', [PasswordResetTokenController::clas
 Route::post('/reset-password', [PasswordResetTokenController::class, 'resetPasswordPost'])->name('reset.password.post');
 
 Route::get('/storage/{path?}', [StorageController::class, 'getImage'])->where('path', '.*');
+
+//storyline
+Route::get('/storyline', [StorylineController::class, 'index'])->name('storyline.index');
+Route::get('/storyline/change/{phase}', [StorylineController::class, 'changePhase'])->name('storyline.changePhase');
+
+//lifecycle homepage
+Route::get('/Lifecycle', [LifecycleHomepageController::class,'index'])->name('LifecycleHomepage.index');
