@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\MapController;
 use App\Http\Controllers\StorageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PasswordResetTokenController;
@@ -19,6 +20,7 @@ Route::get('/email/verify/{id}/{hash}', [TeamController::class, 'email'])
     ->middleware(['auth', 'signed'])
     ->name('verification.verify');
 Route::middleware(['isLogin'])->group(function () {
+    Route::get('/map', [MapController::class, 'showMap'])->name('map');
     Route::get('/team/data', [UserController::class, 'viewRegistUser'])->middleware(['isValidated'])->name('user.regist');
     Route::post('/team/data/save', [UserController::class, 'saveUsers'])->middleware(['isValidated'])->name('user.save');
 
