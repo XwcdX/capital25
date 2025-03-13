@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StorageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PasswordResetTokenController;
+use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RallyController;
 use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,9 @@ Route::middleware(['isLogin'])->group(function () {
 
     Route::get('/scanQR', [RallyController::class, 'viewScanner']);
     Route::post('/scanQR', [RallyController::class, 'scanQRCode'])->name('scanQR');
+
+    // quiz
+    Route::get('/quiz', [QuizController::class, 'index'])->name('quiz.index');
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {
