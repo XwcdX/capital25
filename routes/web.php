@@ -30,7 +30,8 @@ Route::middleware(['isLogin'])->group(function () {
     Route::post('/scanQR', [RallyController::class, 'scanQRCode'])->name('scanQR');
 
     // quiz
-    Route::get('/quiz', [QuizController::class, 'index'])->name('quiz.index');
+    Route::get('/quizRules', [QuizController::class, 'index'])->name('quizRules');
+    Route::get('/quiz', [QuizController::class, 'showQuiz'])->name('quiz');
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {

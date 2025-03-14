@@ -60,9 +60,9 @@ class MapSeeder extends Seeder
                         Str::uuid(),
                         $rallyId, 
                         $team->id, 
-                        $phaseId, // Pastikan phase_id terisi
+                        $phaseId,
                         (string) Carbon::now()->addHours(2),
-                        (string) rand(0, 1) ? Carbon::now() : null, 
+                        rand(0, 1) ? Carbon::now()->toDateTimeString() : null, 
                         rand(1, 3), 
                         rand(10, 100),
                         (string) now(), 

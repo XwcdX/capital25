@@ -90,7 +90,7 @@
     <p id="scanned-result"></p>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const phaseId = localStorage.getItem("current_phase_id");
+            let phaseId = localStorage.getItem("current_phase_id");
 
             if (!phaseId) {
                 Swal.fire({
@@ -182,8 +182,8 @@
 
             Echo.channel("phase-updates")
                 .listen(".PhaseUpdated", (event) => {
-                    // console.log('phase_updated');
                     localStorage.setItem("current_phase_id", event.phase_id);
+                    phaseId = event.phase_id;
                 });
         });
     </script>
