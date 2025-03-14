@@ -35,7 +35,7 @@
             min-width: 65%;
             min-height: 250px;
             color: white;
-            font-size: 30px;
+            font-size: 24px;
         }
 
         .options p {
@@ -45,7 +45,7 @@
             border-radius: 5px;
             background: var(--cap-green3);
             transition: 0.3s;
-            font-size: 30px;
+            font-size: 24px;
         }
 
         .options p:hover {
@@ -85,7 +85,7 @@
             background: var(--cap-green3);
             color: white;
             padding: 12px;
-            font-size: 30px;
+            font-size: 24px;
             border-radius: 5px;
             cursor: pointer;
             text-align: center;
@@ -107,14 +107,17 @@
             color: white;
         }
 
-        .finish-btn {
+        .finish-btn,
+        .back-btn,
+        .next-btn {
             background: var(--cap-green2);
-            color: black;
+            color: white;
             padding: 12px;
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
             margin-top: 10px;
+            font-size: 20px;
         }
 
         .quiz-title {
@@ -135,7 +138,7 @@
             .question-box {
                 width: 100%;
                 min-height: auto;
-                font-size: 27px;
+                font-size: 20px;
             }
 
             .sidebar {
@@ -148,17 +151,13 @@
             }
 
             .options p {
-                font-size: 27px;
+                font-size: 20px;
                 padding: 8px;
             }
 
             .question-number {
                 padding: 8px;
-                font-size: 27px;
-            }
-
-            .timer {
-                font-size: 35px;
+                font-size: 20px;
             }
         }
 
@@ -171,7 +170,7 @@
             .question-box {
                 width: 100%;
                 min-height: auto;
-                font-size: 25px;
+                font-size: 18px;
                 padding: 20px;
             }
 
@@ -185,21 +184,20 @@
             }
 
             .options p {
-                font-size: 25px;
+                font-size: 18px;
                 padding: 8px;
             }
 
             .question-number {
                 padding: 8px;
-                font-size: 25px;
+                font-size: 18px;
             }
 
-            .timer {
+            .quiz-title {
                 font-size: 30px;
             }
         }
 
-        /* Untuk layar yang sangat kecil */
         @media (max-width: 650px) {
             .quiz-container {
                 padding: 15px;
@@ -208,7 +206,7 @@
             }
 
             .options p {
-                font-size: 20px;
+                font-size: 16px;
                 padding: 6px;
             }
 
@@ -218,7 +216,20 @@
 
             .question-number {
                 padding: 6px;
-                font-size: 20px;
+                font-size: 16px;
+            }
+
+            .quiz-title {
+                font-size: 24px;
+            }
+
+            .finish-btn {
+                font-size: 18px;
+            }
+
+            .back-btn,
+            .next-btn {
+                font-size: 16px;
             }
         }
 
@@ -230,7 +241,7 @@
             }
 
             .options p {
-                font-size: 22px;
+                font-size: 14px;
                 padding: 6px;
             }
 
@@ -240,13 +251,17 @@
 
             .question-number {
                 padding: 6px;
-                font-size: 22px;
+                font-size: 14px;
             }
 
-            .quiz-title {
-                font-size: 24px;
+            .finish-btn {
+                font-size: 16px;
             }
 
+            .back-btn,
+            .next-btn {
+                font-size: 14px;
+            }
         }
     </style>
 @endsection
@@ -365,8 +380,40 @@
             }
         }
 
+        function startTimer(duration, display) {
+            let timer = duration;
+            let hours, minutes, seconds;
+
+            function updateDisplay() {
+                hours = Math.floor(timer / 3600);
+                minutes = Math.floor((timer % 3600) / 60);
+                seconds = timer % 60;
+
+                hours = hours < 10 ? "0" + hours : hours;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = hours + ":" + minutes + ":" + seconds;
+            }
+
+            updateDisplay();
+
+            const interval = setInterval(() => {
+                if (timer <= 0) {
+                    clearInterval(interval);
+                    alert("Waktu habis! Quiz selesai.");
+                    return;
+                }
+
+                timer--;
+                updateDisplay();
+            }, 1000);
+        }
+
         window.onload = () => {
             loadQuestion();
+            const display = document.getElementById("timer");
+            startTimer(30 * 60, display);
         };
     </script>
 @endsection
