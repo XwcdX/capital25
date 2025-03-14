@@ -7,6 +7,7 @@ use App\Http\Controllers\PasswordResetTokenController;
 use App\Http\Controllers\RallyController;
 use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GameController;
 
 Route::get('/', [TeamController::class, 'home'])->name('home');
 Route::get('/login', [TeamController::class, 'login'])->name('login');
@@ -62,3 +63,11 @@ Route::get('/reset-password/{role}/{token}', [PasswordResetTokenController::clas
 Route::post('/reset-password', [PasswordResetTokenController::class, 'resetPasswordPost'])->name('reset.password.post');
 
 Route::get('/storage/{path?}', [StorageController::class, 'getImage'])->where('path', '.*');
+
+Route::get('/test', function(){
+    return view('inventory');
+});
+
+
+Route::get('/test1', [GameController::class, 'index']);
+
