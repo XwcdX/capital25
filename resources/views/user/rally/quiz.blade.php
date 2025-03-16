@@ -299,28 +299,30 @@
 
 @section('script')
     <script>
+        const quizRules = document.getElementById('quiz-rules');
+        document.getElementById('start-quiz-btn').addEventListener('click', function() {
+            fetch("{{ route('quiz.start') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}" 
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                quizRules.classList.add('hidden');
+                console.log("Quiz End Time:", data.quiz_end_time);
+                alert("Quiz started! You have 30 minutes.");
+
+                let quizEndTime = new Date(data.quiz_end_time);
+                startCountdown(quizEndTime);
+            })
+            .catch(error => console.error("Error starting quiz:", error));
+        });
+    </script>
+    
+    <script>
         let currentQuestion = 0;
-        const questions = [{
-                text: "Berapakah hasil dari 1 + 1?",
-                options: ["2", "3", "4", "Semua jawaban salah"]
-            },
-            {
-                text: "Berapakah hasil dari 2 + 2?",
-                options: ["3", "4", "5", "6"]
-            },
-            {
-                text: "Berapakah hasil dari 3 + 3?",
-                options: ["5", "6", "7", "8"]
-            },
-            {
-                text: "Berapakah hasil dari 4 + 4?",
-                options: ["6", "7", "8", "9"]
-            },
-            {
-                text: "Berapakah hasil dari 5 + 5?",
-                options: ["9", "10", "11", "12"]
-            },
-        ];
 
         function loadQuestion() {
             const questionText = document.getElementById("question-text");
@@ -383,40 +385,34 @@
             }
         }
 
-        function startTimer(duration, display) {
-            let timer = duration;
-            let hours, minutes, seconds;
+        function startCountdown(endTime) {
+            let timerDisplay = document.getElementById("timer");
 
-            function updateDisplay() {
-                hours = Math.floor(timer / 3600);
-                minutes = Math.floor((timer % 3600) / 60);
-                seconds = timer % 60;
+            function updateTimer() {
+                let now = new Date();
+                let remainingTime = Math.max(0, endTime - now); // Ensure non-negative value
 
-                hours = hours < 10 ? "0" + hours : hours;
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
+                let minutes = Math.floor(remainingTime / (1000 * 60));
+                let seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
 
-                display.textContent = hours + ":" + minutes + ":" + seconds;
+                // Display time
+                timerDisplay.innerHTML = `Time Left: ${minutes}m ${seconds}s`;
+
+                if (remainingTime <= 0) {
+                    clearInterval(timerInterval);
+                    timerDisplay.innerHTML = "Time's up!";
+                    alert("Time is up! Submitting quiz...");
+                    // Auto-submit logic can be added here
+                }
             }
 
-            updateDisplay();
-
-            const interval = setInterval(() => {
-                if (timer <= 0) {
-                    clearInterval(interval);
-                    alert("Waktu habis! Quiz selesai.");
-                    return;
-                }
-
-                timer--;
-                updateDisplay();
-            }, 1000);
+            updateTimer(); // Run immediately to prevent 1-second delay
+            let timerInterval = setInterval(updateTimer, 1000);
         }
-
         window.onload = () => {
-            loadQuestion();
+            // loadQuestion();
             const display = document.getElementById("timer");
-            startTimer(30 * 60, display);
+            // startTimer(30 * 60, display);
         };
     </script>
 @endsection
