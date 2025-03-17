@@ -13,8 +13,8 @@
 
         .quiz-container {
             display: flex;
-            flex-direction: row;
-            min-width: 1180px;
+            /* flex-direction: row; */
+            width: 1180px;
             min-height: 500px;
             justify-content: space-between;
             align-items: flex-start;
@@ -22,20 +22,19 @@
             background: white;
             padding: 20px;
             border-radius: 10px;
-            flex-wrap: wrap;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             gap: 20px;
         }
 
         .question-box {
-            flex-grow: 2;
             background: var(--cap-green4);
             border-radius: 10px;
             padding: 20px;
-            min-width: 65%;
-            min-height: 250px;
+            width: 100%;
+            min-height: 350px;
             color: white;
-            font-size: 24px;
+            font-size: 16px;
+            margin-bottom: 1rem;
         }
 
         .options p {
@@ -117,7 +116,7 @@
             cursor: pointer;
             font-weight: bold;
             margin-top: 10px;
-            font-size: 20px;
+            font-size: 18px;
         }
 
         .quiz-title {
@@ -268,29 +267,32 @@
 
 @section('content')
     <section id="quiz" class="relative w-screen h-screen">
-        @include('user.rally.quizRules')
-        <div class="quiz-wrapper">
-            <div>
-                <h2 class="quiz-title">Final Test Capital 2025</h2>
-                <div class="quiz-container">
-                    <!-- Soal & Jawaban -->
-                    <div class="question-box">
+        {{-- @include('user.rally.quizRules') --}}
+        <div class="quiz-wrapper flex-col">
+            <h2 class="quiz-title font-orbitron">Final Test Capital 2025</h2>
+            <div class="quiz-container flex font-quicksand">
+                <!-- Soal & Jawaban -->
+                <div>
+                    <div class="question-box ">
                         <h3 id="question-text">Loading...</h3>
-                        <div class="options" id="options-container"></div>
+                        <div class="options mt-2 space-y-2" id="options-container"></div>
                         <div class="navigation-buttons">
-                            <button class="back-btn" onclick="previousQuestion()">Previous</button>
-                            <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next</button>
                             <button class="finish-btn" id="submit-btn" onclick="finishQuiz()"
                                 style="display: none;">Submit</button>
                         </div>
                     </div>
-    
-                    <!-- Sidebar Navigasi & Timer -->
-                    <div class="sidebar">
-                        <div class="question-grid" id="question-grid"></div>
-                        <div class="timer" id="timer">00:00:00</div>
-                        <button class="finish-btn" onclick="finishQuiz()">Finish Attempt</button>
+                    <div class="flex justify-between">
+                        <button class="back-btn w-28" onclick="previousQuestion()">Previous</button>
+                        <button class="next-btn w-28" id="next-btn" onclick="nextQuestion()">Next</button>  
                     </div>
+                </div>
+                
+
+                <!-- Sidebar Navigasi & Timer -->
+                <div class="sidebar">
+                    <div class="question-grid" id="question-grid"></div>
+                    <div class="timer" id="timer">00:00:00</div>
+                    <button class="finish-btn" onclick="finishQuiz()">Finish Attempt</button>
                 </div>
             </div>
         </div>
@@ -323,26 +325,61 @@
     
     <script>
         let currentQuestion = 0;
+        let questions = @json($questions);
+        let answers = @json($answers);
+        let storedAnswers = @json($storedAnswers ?? []); //when page refresh, the selected ans will appear
+        const submitButton = document.getElementById("submit-btn");
 
         function loadQuestion() {
+            // html
             const questionText = document.getElementById("question-text");
             const optionsContainer = document.getElementById("options-container");
             const nextButton = document.getElementById("next-btn");
-            const submitButton = document.getElementById("submit-btn");
+            const currentQ = questions[currentQuestion];
 
-            questionText.textContent = `${currentQuestion + 1}. ${questions[currentQuestion].text}`;
+            questionText.textContent = `${currentQuestion + 1}. ${currentQ.question}`;
+            questionText.classList.add("font-bold");
             optionsContainer.innerHTML = "";
-            questions[currentQuestion].options.forEach((option, index) => {
-                const optionElement = document.createElement("p");
-                optionElement.textContent = `${String.fromCharCode(97 + index)}. ${option}`;
-                optionElement.onclick = () => selectAnswer(index);
-                optionsContainer.appendChild(optionElement);
+
+            let filteredAnswers = answers[currentQ.id] || [];
+           // const optionLabels = ["A", "B", "C", "D"]; //optional
+
+            filteredAnswers.forEach((answer, index) => {
+                let isChecked = storedAnswers[currentQ.id] == answer.id ? "checked" : ""; //to store user previous ans as checked
+
+                let option = document.createElement("div");
+                option.classList.add("option");
+                option.innerHTML = `
+                   <input type="radio" name="answer" id="option${index}" value="${answer.id}" 
+                        onchange="tempAnswer('${currentQ.id}', '${answer.id}')" ${isChecked}>
+                    <label class="!text-white" for="option${index}">
+                        ${answer.answer_text}
+                    </label>
+                `;
+                // <strong>${optionLabels[index]}.</strong> ${answer.answer_text}
+                optionsContainer.appendChild(option);
             });
 
             nextButton.style.display = currentQuestion === questions.length - 1 ? "none" : "inline-block";
             submitButton.style.display = currentQuestion === questions.length - 1 ? "inline-block" : "none";
 
             updateQuestionGrid();
+        }
+
+        function tempAnswer(question_id, answer_id) {
+            fetch("{{ route('quiz.save') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({ question_id: question_id, answer_id: answer_id }) 
+            })
+            .then(response => response.json())
+            .then(data => {
+                storedAnswers = data.storedAnswers; 
+            })
+            .catch(error => console.error("Error saving answer:", error));
         }
 
         function selectAnswer(index) {
@@ -364,7 +401,38 @@
         }
 
         function finishQuiz() {
-            alert("Quiz selesai!");
+            let answers = Object.values(storedAnswers);
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Once submitted, you cannot change your answers!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, submit!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                        fetch("{{ route('quiz.submit') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({ answers }) 
+                })
+                .then(response => response.json())
+                .then(data => {
+                    Swal.fire({
+                        title: "Quiz Submitted!",
+                        text: "Your answers have been recorded.",
+                        icon: "success"
+                    }).then(() => {
+                        window.location.href = "{{ route('home') }}"; 
+                    });
+                })
+                .catch(error => console.error("Error saving answer:", error));
+                }
+            });
         }
 
         function updateQuestionGrid() {
@@ -410,7 +478,7 @@
             let timerInterval = setInterval(updateTimer, 1000);
         }
         window.onload = () => {
-            // loadQuestion();
+            loadQuestion();
             const display = document.getElementById("timer");
             // startTimer(30 * 60, display);
         };

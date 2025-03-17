@@ -30,6 +30,8 @@ Route::middleware(['isLogin'])->group(function () {
     Route::post('/scanQR', [RallyController::class, 'scanQRCode'])->name('scanQR');
 
     Route::post('/quiz/start', [QuizController::class, 'startQuiz'])->name('quiz.start');
+    Route::post('/quiz/save-answer', [QuizController::class, 'saveAnswer'])->name('quiz.save');
+    Route::post('/quiz/submit-quiz', [QuizController::class, 'submitQuiz'])->name('quiz.submit');
     Route::get('/quiz', [QuizController::class, 'index'])->name('quiz');
 }); 
 
