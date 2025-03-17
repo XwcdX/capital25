@@ -7,6 +7,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class RallyParticipant implements ShouldBroadcastNow
 {
@@ -30,5 +31,12 @@ class RallyParticipant implements ShouldBroadcastNow
     public function broadcastAs()
     {
         return 'rally.history.updated';
+    }
+
+    public function broadcastWith()
+    {
+        return [
+            'rallyHistory' => $this->rallyHistory
+        ];
     }
 }
