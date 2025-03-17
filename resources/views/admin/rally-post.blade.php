@@ -120,9 +120,10 @@
                     }
 
                     const updatedTeamData = event.rallyHistory.map(history => ({
-                        teamId: history.team.id,
-                        teamName: history.team.name,
-                        score: history.team.score
+                        teamId: history.id,
+                        teamName: history.name,
+                        coin: history.coin,
+                        rallyId: history.pivot.rally_id
                     }));
 
                     updateTeamData(updatedTeamData);
@@ -158,7 +159,7 @@
                         teamList.appendChild(teamElement);
                     }
 
-                    teamElement.textContent = `${team.teamName} - Score: ${team.score}`;
+                    teamElement.textContent = `${team.teamName} - Score: ${team.coin}`;
                 });
             }
 
