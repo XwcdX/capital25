@@ -13,8 +13,8 @@
 
         .quiz-container {
             display: flex;
-            flex-direction: row;
-            min-width: 1180px;
+            /* flex-direction: row; */
+            width: 1180px;
             min-height: 500px;
             justify-content: space-between;
             align-items: flex-start;
@@ -22,20 +22,19 @@
             background: white;
             padding: 20px;
             border-radius: 10px;
-            flex-wrap: wrap;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             gap: 20px;
         }
 
         .question-box {
-            flex-grow: 2;
             background: var(--cap-green4);
             border-radius: 10px;
             padding: 20px;
-            min-width: 65%;
-            min-height: 250px;
+            width: 100%;
+            min-height: 350px;
             color: white;
-            font-size: 24px;
+            font-size: 16px;
+            margin-bottom: 1rem;
         }
 
         .options p {
@@ -117,7 +116,7 @@
             cursor: pointer;
             font-weight: bold;
             margin-top: 10px;
-            font-size: 20px;
+            font-size: 18px;
         }
 
         .quiz-title {
@@ -267,21 +266,27 @@
 @endsection
 
 @section('content')
-    <div class="quiz-wrapper">
-        <div>
-            <h2 class="quiz-title">Final Test Capital 2025</h2>
-            <div class="quiz-container">
+    <section id="quiz" class="relative w-screen h-screen">
+        {{-- @include('user.rally.quizRules') --}}
+        <div class="quiz-wrapper flex-col">
+            <h2 class="quiz-title font-orbitron">Final Test Capital 2025</h2>
+            <div class="quiz-container flex font-quicksand">
                 <!-- Soal & Jawaban -->
-                <div class="question-box">
-                    <h3 id="question-text">Loading...</h3>
-                    <div class="options" id="options-container"></div>
-                    <div class="navigation-buttons">
-                        <button class="back-btn" onclick="previousQuestion()">Previous</button>
-                        <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next</button>
-                        <button class="finish-btn" id="submit-btn" onclick="finishQuiz()"
-                            style="display: none;">Submit</button>
+                <div>
+                    <div class="question-box ">
+                        <h3 id="question-text">Loading...</h3>
+                        <div class="options mt-2 space-y-2" id="options-container"></div>
+                        <div class="navigation-buttons">
+                            <button class="finish-btn" id="submit-btn" onclick="finishQuiz()"
+                                style="display: none;">Submit</button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between">
+                        <button class="back-btn w-28" onclick="previousQuestion()">Previous</button>
+                        <button class="next-btn w-28" id="next-btn" onclick="nextQuestion()">Next</button>  
                     </div>
                 </div>
+                
 
                 <!-- Sidebar Navigasi & Timer -->
                 <div class="sidebar">
@@ -291,53 +296,90 @@
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 @endsection
 
 @section('script')
     <script>
+        const quizRules = document.getElementById('quiz-rules');
+        document.getElementById('start-quiz-btn').addEventListener('click', function() {
+            fetch("{{ route('quiz.start') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}" 
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                quizRules.classList.add('hidden');
+                console.log("Quiz End Time:", data.quiz_end_time);
+                alert("Quiz started! You have 30 minutes.");
+
+                let quizEndTime = new Date(data.quiz_end_time);
+                startCountdown(quizEndTime);
+            })
+            .catch(error => console.error("Error starting quiz:", error));
+        });
+    </script>
+    
+    <script>
         let currentQuestion = 0;
-        const questions = [{
-                text: "Berapakah hasil dari 1 + 1?",
-                options: ["2", "3", "4", "Semua jawaban salah"]
-            },
-            {
-                text: "Berapakah hasil dari 2 + 2?",
-                options: ["3", "4", "5", "6"]
-            },
-            {
-                text: "Berapakah hasil dari 3 + 3?",
-                options: ["5", "6", "7", "8"]
-            },
-            {
-                text: "Berapakah hasil dari 4 + 4?",
-                options: ["6", "7", "8", "9"]
-            },
-            {
-                text: "Berapakah hasil dari 5 + 5?",
-                options: ["9", "10", "11", "12"]
-            },
-        ];
+        let questions = @json($questions);
+        let answers = @json($answers);
+        let storedAnswers = @json($storedAnswers ?? []); //when page refresh, the selected ans will appear
+        const submitButton = document.getElementById("submit-btn");
 
         function loadQuestion() {
+            // html
             const questionText = document.getElementById("question-text");
             const optionsContainer = document.getElementById("options-container");
             const nextButton = document.getElementById("next-btn");
-            const submitButton = document.getElementById("submit-btn");
+            const currentQ = questions[currentQuestion];
 
-            questionText.textContent = `${currentQuestion + 1}. ${questions[currentQuestion].text}`;
+            questionText.textContent = `${currentQuestion + 1}. ${currentQ.question}`;
+            questionText.classList.add("font-bold");
             optionsContainer.innerHTML = "";
-            questions[currentQuestion].options.forEach((option, index) => {
-                const optionElement = document.createElement("p");
-                optionElement.textContent = `${String.fromCharCode(97 + index)}. ${option}`;
-                optionElement.onclick = () => selectAnswer(index);
-                optionsContainer.appendChild(optionElement);
+
+            let filteredAnswers = answers[currentQ.id] || [];
+           // const optionLabels = ["A", "B", "C", "D"]; //optional
+
+            filteredAnswers.forEach((answer, index) => {
+                let isChecked = storedAnswers[currentQ.id] == answer.id ? "checked" : ""; //to store user previous ans as checked
+
+                let option = document.createElement("div");
+                option.classList.add("option");
+                option.innerHTML = `
+                   <input type="radio" name="answer" id="option${index}" value="${answer.id}" 
+                        onchange="tempAnswer('${currentQ.id}', '${answer.id}')" ${isChecked}>
+                    <label class="!text-white" for="option${index}">
+                        ${answer.answer_text}
+                    </label>
+                `;
+                // <strong>${optionLabels[index]}.</strong> ${answer.answer_text}
+                optionsContainer.appendChild(option);
             });
 
             nextButton.style.display = currentQuestion === questions.length - 1 ? "none" : "inline-block";
             submitButton.style.display = currentQuestion === questions.length - 1 ? "inline-block" : "none";
 
             updateQuestionGrid();
+        }
+
+        function tempAnswer(question_id, answer_id) {
+            fetch("{{ route('quiz.save') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({ question_id: question_id, answer_id: answer_id }) 
+            })
+            .then(response => response.json())
+            .then(data => {
+                storedAnswers = data.storedAnswers; 
+            })
+            .catch(error => console.error("Error saving answer:", error));
         }
 
         function selectAnswer(index) {
@@ -359,7 +401,38 @@
         }
 
         function finishQuiz() {
-            alert("Quiz selesai!");
+            let answers = Object.values(storedAnswers);
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Once submitted, you cannot change your answers!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, submit!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                        fetch("{{ route('quiz.submit') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({ answers }) 
+                })
+                .then(response => response.json())
+                .then(data => {
+                    Swal.fire({
+                        title: "Quiz Submitted!",
+                        text: "Your answers have been recorded.",
+                        icon: "success"
+                    }).then(() => {
+                        window.location.href = "{{ route('home') }}"; 
+                    });
+                })
+                .catch(error => console.error("Error saving answer:", error));
+                }
+            });
         }
 
         function updateQuestionGrid() {
@@ -380,40 +453,34 @@
             }
         }
 
-        function startTimer(duration, display) {
-            let timer = duration;
-            let hours, minutes, seconds;
+        function startCountdown(endTime) {
+            let timerDisplay = document.getElementById("timer");
 
-            function updateDisplay() {
-                hours = Math.floor(timer / 3600);
-                minutes = Math.floor((timer % 3600) / 60);
-                seconds = timer % 60;
+            function updateTimer() {
+                let now = new Date();
+                let remainingTime = Math.max(0, endTime - now); // Ensure non-negative value
 
-                hours = hours < 10 ? "0" + hours : hours;
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
+                let minutes = Math.floor(remainingTime / (1000 * 60));
+                let seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
 
-                display.textContent = hours + ":" + minutes + ":" + seconds;
+                // Display time
+                timerDisplay.innerHTML = `Time Left: ${minutes}m ${seconds}s`;
+
+                if (remainingTime <= 0) {
+                    clearInterval(timerInterval);
+                    timerDisplay.innerHTML = "Time's up!";
+                    alert("Time is up! Submitting quiz...");
+                    // Auto-submit logic can be added here
+                }
             }
 
-            updateDisplay();
-
-            const interval = setInterval(() => {
-                if (timer <= 0) {
-                    clearInterval(interval);
-                    alert("Waktu habis! Quiz selesai.");
-                    return;
-                }
-
-                timer--;
-                updateDisplay();
-            }, 1000);
+            updateTimer(); // Run immediately to prevent 1-second delay
+            let timerInterval = setInterval(updateTimer, 1000);
         }
-
         window.onload = () => {
             loadQuestion();
             const display = document.getElementById("timer");
-            startTimer(30 * 60, display);
+            // startTimer(30 * 60, display);
         };
     </script>
 @endsection
