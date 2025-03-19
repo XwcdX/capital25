@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Scanner</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.1.6/html5-qrcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="user-id" content="{{ Auth::user()->id }}">
     @vite(['resources/js/app.js'])
@@ -92,18 +92,18 @@
         document.addEventListener("DOMContentLoaded", function() {
             let phaseId = localStorage.getItem("current_phase_id");
 
-            if (!phaseId) {
-                Swal.fire({
-                    icon: "warning",
-                    title: "Phase Not Started",
-                    text: "Please wait, the phase hasn't started yet.",
-                    confirmButtonText: "OK"
-                }).then(() => {
-                    window.location.href = "{{ route('home') }}";
-                });
+            // if (!phaseId) {
+            //     Swal.fire({
+            //         icon: "warning",
+            //         title: "Phase Not Started",
+            //         text: "Please wait, the phase hasn't started yet.",
+            //         confirmButtonText: "OK"
+            //     }).then(() => {
+            //         window.location.href = "{{ route('home') }}";
+            //     });
 
-                return;
-            }
+            //     return;
+            // }
 
             const html5QrCode = new Html5Qrcode("reader");
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -150,7 +150,7 @@
 
             function startScanner(cameraId) {
                 html5QrCode.start(cameraId, {
-                        fps: 15,
+                        fps: 45,
                         qrbox: {
                             width: 500,
                             height: 500
