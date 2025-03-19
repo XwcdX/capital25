@@ -69,6 +69,10 @@
         }
 
         /* faq */
+
+        #faqs {
+            -webkit-overflow-scrolling: touch;
+        }
         .question-container {
             max-height: 0;
             overflow: hidden;
@@ -248,10 +252,10 @@
             let mm = gsap.matchMedia();
             mm.add("(max-width: 767.9px)", () => {
                 gsap.to('.moni', {
-                    yPercent: -70,
+                    yPercent: -80,
                     scrollTrigger: {
                         trigger: '#aboutUs',
-                        start: "80% bottom",
+                        start: "bottom bottom",  //screen object
                         end: "bottom top",
                         scrub: 0,
                     }
@@ -265,8 +269,7 @@
                         trigger: '#aboutUs',
                         start: "60% center",  // Starts when `.about-us` enters the viewport
                         end: "bottom top",    // Ends when `.about-us` reaches the center
-                        scrub: 1,             // Smooth scroll effect
-                        // markers: true,        
+                        scrub: 1,                  
                     }
                 });
             });
@@ -455,7 +458,15 @@
         // faqs
         const faqsContainer = document.getElementById("faqs");
         const toggleButton = document.getElementById("toggleBtn");
+        
+        faqsContainer.addEventListener("wheel", function (e) {
+            const isScrollable = this.scrollHeight > this.clientHeight;
 
+            if (isScrollable) {
+                e.stopPropagation(); //stop the parent's event
+            }
+        }, { passive: false }); //force e.preventDefault
+        
         const questionContainers = [];
 
         questionData.questions.forEach((item, index) => {

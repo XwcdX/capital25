@@ -22,15 +22,14 @@
     }
 </style>
 
-<section id="timeline" class="relative h-screen w-screen bg-[#14240a] z-[14] flex justify-center items-center">
-
+<section id="timeline" class="relative h-screen w-screen bg-[#14240a] z-[14] flex flex-col justify-center items-center">
+    <h1 class="font-orbitron text-white">Click each boxes for more information</h1>
     <img src="{{ asset('assets/landing/daun-ijo.png') }}" alt="" loading="lazy"
         class="bush w-full scale-[2.5] sm:scale-[1.6] lg:scale-[1.1] object-cover absolute -top-[5%] sm:-top-[10%] md:-top-[8%] lg:-top-[10%] xl:-top-[12%] left-0 z-[14]">
 
-
     <div
         class="relative container h-[80%] md:h-[68%] xl:h-[70%] flex items-center justify-center overflow-hidden gap-[4%] 
-        w-[90%] sm:w-[85%] lg:w-[80%] transition-all duration-500">
+        w-[90%] sm:w-[85%] lg:w-[80%] transition-all duration-500 mt-5">
         <div class="box relative h-full w-full overflow-hidden flex flex-col items-center justify-center [@media(max-width:400px)]:space-y-2 space-y-5 md:space-y-5 "
             id="leftBox">
             <img class="original-content w-[70px] sm:w-[80px] lg:w-[125px] xl:w-[150px]"
@@ -117,7 +116,7 @@
         let index = 0;
         let animationActive = true;
 
-        function createMultiplePulses(box) {
+       /* function createMultiplePulses(box) {
             const pulseCount = Math.floor(Math.random() * 5) + 2;
 
             for (let i = 0; i < pulseCount; i++) {
@@ -136,44 +135,44 @@
                     }, 600);
                 }, i * 100);
             }
-        }
+        }*/
 
-        function cycleContent() {
-            if (!animationActive) return;
+        // function cycleContent() {
+        //     if (!animationActive) return;
 
-            boxes.forEach((box) => {
-                const img = box.querySelector("img.original-content");
-                const title = box.querySelector("h1.original-content");
-                if (img) img.style.display = "block";
-                if (title) {
-                    title.style.transform = "rotate(0deg) scale(1)";
-                    title.style.opacity = "1";
-                    title.style.transition =
-                        "opacity 1s ease-in-out, transform 1s ease-in-out, font-size 1s ease-in-out";
-                    title.textContent = title.dataset.originalText;
-                }
-            });
+        //     boxes.forEach((box) => {
+        //         const img = box.querySelector("img.original-content");
+        //         const title = box.querySelector("h1.original-content");
+        //         if (img) img.style.display = "block";
+        //         if (title) {
+        //             title.style.transform = "rotate(0deg) scale(1)";
+        //             title.style.opacity = "1";
+        //             title.style.transition =
+        //                 "opacity 1s ease-in-out, transform 1s ease-in-out, font-size 1s ease-in-out";
+        //             title.textContent = title.dataset.originalText;
+        //         }
+        //     });
 
-            const currentBox = boxes[index];
-            const img = currentBox.querySelector("img.original-content");
-            const title = currentBox.querySelector("h1.original-content");
+        //     const currentBox = boxes[index];
+        //     const img = currentBox.querySelector("img.original-content");
+        //     const title = currentBox.querySelector("h1.original-content");
 
-            if (img) img.style.display = "none";
-            if (title) {
-                title.style.opacity = "0";
-                setTimeout(() => {
-                    title.textContent = "CLICK HERE";
-                    title.style.transform = "rotate(45deg) scale(1.3)";
-                    title.style.opacity = "1";
-                    title.style.fontSize = "2rem";
-                    createMultiplePulses(currentBox);
-                }, 500);
-            }
+        //     if (img) img.style.display = "none";
+        //     if (title) {
+        //         title.style.opacity = "0";
+        //         setTimeout(() => {
+        //             title.textContent = "CLICK HERE";
+        //             title.style.transform = "rotate(45deg) scale(1.3)";
+        //             title.style.opacity = "1";
+        //             title.style.fontSize = "2rem";
+        //             createMultiplePulses(currentBox);
+        //         }, 500);
+        //     }
 
-            index = (index + 1) % boxes.length;
+        //     index = (index + 1) % boxes.length;
 
-            setTimeout(cycleContent, 3000);
-        }
+        //     setTimeout(cycleContent, 3000);
+        // }
 
         boxes.forEach((box) => {
             const title = box.querySelector("h1.original-content");
