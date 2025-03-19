@@ -112,7 +112,7 @@
     }
 </style>
 
-<div class="w-screen h-screen bg-[var(--cap-green3)] fixed inset-0 flex flex-col justify-center items-center z-[1000]">
+<div class="w-screen h-screen bg-[var(--cap-green3)] fixed inset-0 flex flex-col justify-center items-center z-[1000] font-quicksand">
     <h1 class="welcomeH text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 md:mb-5 lg:mb-7 text-center"></h1>
     <p id="animated-text" class="text-center font-semibold text-white relative fade-in-text"></p>
 </div>
