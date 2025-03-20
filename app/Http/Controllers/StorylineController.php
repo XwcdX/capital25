@@ -14,7 +14,7 @@ class StorylineController extends Controller
     {
         $title = "Storyline";
         
-        $currentPhase = session('currentPhase',1);
+        $currentPhase = 1;
 
         $maxUnlockedPhase = 4;
 
@@ -71,13 +71,5 @@ class StorylineController extends Controller
         return view('storyline.storyline', compact('title','currentPhase', 'maxUnlockedPhase', 'storylines'));
     }
 
-    public function changePhase($phase)
-    {
-        $title = "Storyline";
-        session(['currentPhase' => $phase]);
-       
-
-        return redirect()->route('storyline.index');
-    }
 }
 
