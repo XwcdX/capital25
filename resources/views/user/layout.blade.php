@@ -239,7 +239,6 @@
                             ScrollTrigger.refresh();
                         }
 
-                        // Ensure this runs last after everything is completed
                         document.body.style.maxHeight = "none";
                     }, 800);
                 }
@@ -261,6 +260,11 @@
             } else {
                 window.addEventListener("load", removeLoader);
             }
+
+            Echo.channel("phase-updates")
+                .listen(".PhaseUpdated", (event) => {
+                    localStorage.setItem("current_phase_id", event.phase_id);
+                });
         });
     </script>
 
