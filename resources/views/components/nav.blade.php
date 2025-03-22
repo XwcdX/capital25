@@ -158,14 +158,16 @@
         /* padding-top: 120px; */
         background: #25362d;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        height: 100vh;
+        height: 100lvh;
         width: 100%;
         /* Default full-width for smaller devices */
         transform: translate3d(-150%, 0, 0);
         display: flex;
         flex-direction: column;
+        /* justify-items: center;
+        align-items: center; */
         margin-left: -40px;
-        /* padding-left: 50px; */
+        padding-left: 50px;
         transition: transform 0.5s ease-in-out;
         will-change: transform;
         text-align: center;
@@ -217,7 +219,7 @@
         top: 0;
         left: 0;
         width: 100vw;
-        height: 100vh;
+        height: 100lvh;
         z-index: 998;
         transition: opacity 0.3s ease, visibility 0.3s ease;
     }

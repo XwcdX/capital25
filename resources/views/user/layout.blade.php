@@ -34,6 +34,9 @@
     {{-- font landing --}}
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.1.6/html5-qrcode.min.js"></script>
+    @vite(['resources/js/app.js'])
+
     <style>
         * {
             margin: 0;
@@ -188,7 +191,6 @@
     @yield('content')
     <script src="https://cdn.jsdelivr.net/npm/tw-elements/js/tw-elements.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.1.6/html5-qrcode.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     @yield('script')
     @if (session('error'))
@@ -237,7 +239,6 @@
                             ScrollTrigger.refresh();
                         }
 
-                        // Ensure this runs last after everything is completed
                         document.body.style.maxHeight = "none";
                     }, 800);
                 }
@@ -259,6 +260,11 @@
             } else {
                 window.addEventListener("load", removeLoader);
             }
+
+            Echo.channel("phase-updates")
+                .listen(".PhaseUpdated", (event) => {
+                    localStorage.setItem("current_phase_id", event.phase_id);
+                });
         });
     </script>
 
