@@ -440,7 +440,7 @@
         }
 
 
-    }
+    
         </style>
     </head>
     <body class="flex items-center justify-center min-h-screen p-4">
