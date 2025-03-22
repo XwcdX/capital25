@@ -18,4 +18,20 @@ class Question extends Model
     {
         return $this->hasMany(Answer::class);
     }
+
+    public static function validationRules()
+    {
+        return [
+            'question' => 'required|string|unique',
+        ];
+    }
+
+    public static function validationMessages()
+    {
+        return [
+            'question.required' => 'Question is required',
+            'question.string' => 'Question must be a string',
+            'name.unique' => 'Question has already been made',
+        ];
+    }
 }

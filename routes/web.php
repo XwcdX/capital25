@@ -64,6 +64,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('/phase-control', [AdminController::class, 'viewPhaseControl'])->name('phaseControl');
         Route::post('/update-phase', [AdminController::class, 'updatePhase'])->name('updatePhase');
+
+        // Quiz
+        Route::get('/question', [AdminController::class, 'viewQuizQuestions'])->name('viewQuestions');
+        Route::put('/question/{id}', [AdminController::class, 'editQuestion'])->name('editQuestion');
+
+
     });
 });
 // password-reset
