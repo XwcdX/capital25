@@ -11,11 +11,28 @@
             padding: 20px;
         }
 
+        #submit-btn {
+            display: none !important;
+        }
+
+        .submit-btn {
+            background: var(--cap-green3);
+            color: black;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
         .quiz-container {
             display: flex;
-            /* flex-direction: row; */
-            width: 1180px;
+            /* flex-wrap: wrap; */
+            flex-direction: row;
+            width: 100%;
             min-height: 500px;
+            max-width: 1180px;
             justify-content: space-between;
             align-items: flex-start;
             height: auto;
@@ -27,29 +44,34 @@
         }
 
         .question-box {
+            flex: 2;
             background: var(--cap-green4);
             border-radius: 10px;
             padding: 20px;
-            width: 100%;
+            /* width: 65%; */
             min-height: 350px;
             color: white;
-            font-size: 16px;
-            margin-bottom: 1rem;
+            font-size: 18px;
+            /* margin-bottom: 1rem; */
         }
 
-        .options p {
+        .options label {
             margin: 15px 0;
             cursor: pointer;
             padding: 10px;
             border-radius: 5px;
-            background: var(--cap-green3);
             transition: 0.3s;
-            font-size: 24px;
+            font-size: 16px;
         }
 
-        .options p:hover {
-            background: var(--cap-green2);
+        .options label:hover {
+            font-weight: bold;
+        }
+
+        .options input[type="radio"]:checked+label {
+            font-weight: bold;
             color: black;
+            transform: scale(1.05);
         }
 
         .navigation-buttons {
@@ -63,18 +85,19 @@
             padding: 15px;
             border-radius: 10px;
             text-align: center;
-            min-width: 30%;
+            /* width: 35%; */
             display: flex;
             flex-direction: column;
-            align-items: center;
-            flex-grow: 1;
-            min-width: 200px;
+            /* align-items: center; */
+            flex: 1;
+            /* min-width: 200px; */
         }
 
         /* Grid nomor soal */
         .question-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            /* grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); */
+            grid-template-columns: repeat(5, 1fr);
             gap: 8px;
             width: 100%;
             padding: 10px;
@@ -84,7 +107,7 @@
             background: var(--cap-green3);
             color: white;
             padding: 12px;
-            font-size: 24px;
+            font-size: 18px;
             border-radius: 5px;
             cursor: pointer;
             text-align: center;
@@ -106,7 +129,18 @@
             color: white;
         }
 
-        .finish-btn,
+
+        .finish-btn {
+            background: red;
+            color: white;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
         .back-btn,
         .next-btn {
             background: var(--cap-green2);
@@ -116,7 +150,7 @@
             cursor: pointer;
             font-weight: bold;
             margin-top: 10px;
-            font-size: 18px;
+            font-size: 18x;
         }
 
         .quiz-title {
@@ -130,19 +164,14 @@
         /* Responsiveness */
         @media (max-width: 1200px) {
             .quiz-container {
-                align-items: center;
+                /* align-items: center; */
                 min-width: 800px;
             }
 
             .question-box {
                 width: 100%;
                 min-height: auto;
-                font-size: 20px;
-            }
-
-            .sidebar {
-                width: 100%;
-                margin-top: 20px;
+                font-size: 18px;
             }
 
             .question-grid {
@@ -150,7 +179,7 @@
             }
 
             .options p {
-                font-size: 20px;
+                font-size: 16px;
                 padding: 8px;
             }
 
@@ -162,7 +191,7 @@
 
         @media (max-width: 900px) {
             .quiz-container {
-                align-items: center;
+                /* align-items: center; */
                 min-width: 600px;
             }
 
@@ -173,13 +202,8 @@
                 padding: 20px;
             }
 
-            .sidebar {
-                width: 100%;
-                margin-top: 20px;
-            }
-
             .question-grid {
-                grid-template-columns: repeat(5, 1fr);
+                grid-template-columns: repeat(4, 1fr);
             }
 
             .options p {
@@ -199,6 +223,7 @@
 
         @media (max-width: 650px) {
             .quiz-container {
+                align-items: center;
                 padding: 15px;
                 flex-direction: column;
                 min-width: 450px;
@@ -207,10 +232,6 @@
             .options p {
                 font-size: 16px;
                 padding: 6px;
-            }
-
-            .question-grid {
-                grid-template-columns: repeat(4, 1fr);
             }
 
             .question-number {
@@ -224,6 +245,10 @@
 
             .finish-btn {
                 font-size: 18px;
+            }
+
+            .sidebar {
+                width: 100%;
             }
 
             .back-btn,
@@ -262,12 +287,19 @@
                 font-size: 14px;
             }
         }
+
+        .swal-custom-button {
+            background-color: rgb(122, 157, 221) !important;
+            color: white !important;
+            font-weight: bold;
+            border-radius: 5px;
+        }
     </style>
 @endsection
 
 @section('content')
     <section id="quiz" class="relative w-screen h-screen">
-        {{-- @include('user.rally.quizRules') --}}
+        @include('user.rally.quizRules')
         <div class="quiz-wrapper flex-col">
             <h2 class="quiz-title font-orbitron">Final Test Capital 2025</h2>
             <div class="quiz-container flex font-quicksand">
@@ -283,10 +315,10 @@
                     </div>
                     <div class="flex justify-between">
                         <button class="back-btn w-28" onclick="previousQuestion()">Previous</button>
-                        <button class="next-btn w-28" id="next-btn" onclick="nextQuestion()">Next</button>  
+                        <button class="next-btn w-28" id="next-btn" onclick="nextQuestion()">Next</button>
                     </div>
                 </div>
-                
+
 
                 <!-- Sidebar Navigasi & Timer -->
                 <div class="sidebar">
@@ -304,25 +336,32 @@
         const quizRules = document.getElementById('quiz-rules');
         document.getElementById('start-quiz-btn').addEventListener('click', function() {
             fetch("{{ route('quiz.start') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}" 
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                quizRules.classList.add('hidden');
-                console.log("Quiz End Time:", data.quiz_end_time);
-                alert("Quiz started! You have 30 minutes.");
-
-                let quizEndTime = new Date(data.quiz_end_time);
-                startCountdown(quizEndTime);
-            })
-            .catch(error => console.error("Error starting quiz:", error));
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    quizRules.classList.add('hidden');
+                    console.log("Quiz End Time:", data.quiz_end_time);
+                    Swal.fire({
+                        title: "Quiz started!",
+                        text: "You have 30 minutes to finish the quiz.",
+                        icon: "info",
+                        confirmButtonText: "OK",
+                        customClass: {
+                            confirmButton: 'swal-custom-button'
+                        }
+                    })
+                    let quizEndTime = new Date(data.quiz_end_time);
+                    startCountdown(quizEndTime);
+                })
+                .catch(error => console.error("Error starting quiz:", error));
         });
     </script>
-    
+
     <script>
         let currentQuestion = 0;
         let questions = @json($questions);
@@ -342,10 +381,11 @@
             optionsContainer.innerHTML = "";
 
             let filteredAnswers = answers[currentQ.id] || [];
-           // const optionLabels = ["A", "B", "C", "D"]; //optional
+            // const optionLabels = ["A", "B", "C", "D"]; //optional
 
             filteredAnswers.forEach((answer, index) => {
-                let isChecked = storedAnswers[currentQ.id] == answer.id ? "checked" : ""; //to store user previous ans as checked
+                let isChecked = storedAnswers[currentQ.id] == answer.id ? "checked" :
+                    ""; //to store user previous ans as checked
 
                 let option = document.createElement("div");
                 option.classList.add("option");
@@ -368,18 +408,21 @@
 
         function tempAnswer(question_id, answer_id) {
             fetch("{{ route('quiz.save') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                },
-                body: JSON.stringify({ question_id: question_id, answer_id: answer_id }) 
-            })
-            .then(response => response.json())
-            .then(data => {
-                storedAnswers = data.storedAnswers; 
-            })
-            .catch(error => console.error("Error saving answer:", error));
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({
+                        question_id: question_id,
+                        answer_id: answer_id
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    storedAnswers = data.storedAnswers;
+                })
+                .catch(error => console.error("Error saving answer:", error));
         }
 
         function selectAnswer(index) {
@@ -400,25 +443,41 @@
             }
         }
 
-        function finishQuiz() {
+        function finishQuiz(autoSubmit = false) {
             let answers = Object.values(storedAnswers);
-            Swal.fire({
-                title: "Are you sure?",
-                text: "Once submitted, you cannot change your answers!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, submit!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                        fetch("{{ route('quiz.submit') }}", {
+
+            if (autoSubmit) {
+                // Auto-submit tanpa konfirmasi
+                submitQuiz(answers);
+            } else {
+                // Konfirmasi sebelum submit
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "Once submitted, you cannot change your answers!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, submit!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        submitQuiz(answers);
+                    }
+                });
+            }
+        }
+
+        // Fungsi terpisah untuk submit quiz ke server
+        function submitQuiz(answers) {
+            fetch("{{ route('quiz.submit') }}", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         "X-CSRF-TOKEN": "{{ csrf_token() }}"
                     },
-                    body: JSON.stringify({ answers }) 
+                    body: JSON.stringify({
+                        answers
+                    })
                 })
                 .then(response => response.json())
                 .then(data => {
@@ -426,14 +485,16 @@
                         title: "Quiz Submitted!",
                         text: "Your answers have been recorded.",
                         icon: "success"
+                        confirmButtonText: "OK"
                     }).then(() => {
-                        window.location.href = "{{ route('home') }}"; 
+                        localStorage.removeItem("quizStarted"); // Hapus status kuis
+                        localStorage.setItem("quizFinished", "true");
+                        window.location.href = "{{ route('home') }}";
                     });
                 })
-                .catch(error => console.error("Error saving answer:", error));
-                }
-            });
+                .catch(error => console.error("Error submitting quiz:", error));
         }
+
 
         function updateQuestionGrid() {
             const questionGrid = document.getElementById("question-grid");
@@ -464,13 +525,18 @@
                 let seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
 
                 // Display time
-                timerDisplay.innerHTML = `Time Left: ${minutes}m ${seconds}s`;
+                timerDisplay.innerHTML = `00:${minutes}:${seconds}`;
 
                 if (remainingTime <= 0) {
                     clearInterval(timerInterval);
                     timerDisplay.innerHTML = "Time's up!";
-                    alert("Time is up! Submitting quiz...");
+                    Swal.fire({
+                        text: "Time is up! Submitting quiz...",
+                        icon: "warning"
+                        confirmButtonText: "OK!"
+                    })
                     // Auto-submit logic can be added here
+                    finishQuiz(true);
                 }
             }
 
@@ -482,5 +548,40 @@
             const display = document.getElementById("timer");
             // startTimer(30 * 60, display);
         };
+
+        // langsung ke hlm quiz tanpa melalui quizRules jika sudah pernah klik start sebelumnya 
+        document.addEventListener("DOMContentLoaded", function() {
+            if (localStorage.getItem("quizStarted")) {
+                document.getElementById('quiz-rules').classList.add('hidden');
+            } else {
+                document.getElementById('quiz-rules').classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('start-quiz-btn').addEventListener('click', function() {
+            fetch("{{ route('quiz.start') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    localStorage.setItem("quizStarted", true); // Simpan status
+                    document.getElementById('quiz-rules').classList.add('hidden');
+
+                    let quizEndTime = new Date(data.quiz_end_time);
+                    startCountdown(quizEndTime);
+                })
+                .catch(error => console.error("Error starting quiz:", error));
+        });
+
+        // jika sudah menyelesaikan kuis, maka tidak bisa kembali ke halaman quiz
+        document.addEventListener("DOMContentLoaded", function() {
+            if (localStorage.getItem("quizFinished")) {
+                window.location.href = "{{ route('home') }}"; // Redirect ke home atau halaman lain
+            }
+        });
     </script>
 @endsection
