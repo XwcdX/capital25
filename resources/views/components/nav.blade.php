@@ -164,8 +164,10 @@
         transform: translate3d(-150%, 0, 0);
         display: flex;
         flex-direction: column;
+        /* justify-items: center;
+        align-items: center; */
         margin-left: -40px;
-        /* padding-left: 50px; */
+        padding-left: 50px;
         transition: transform 0.5s ease-in-out;
         will-change: transform;
         text-align: center;
