@@ -25,11 +25,11 @@ class MapController extends Controller
         $phases = Phase::orderBy('phase')->get();
 
         // posisi pos rally di map
-        $rallyPositions = [
-            'Rally 1' => ['x' => 30, 'y' => 40],
-            'Rally 2' => ['x' => 50, 'y' => 60],
-            'Rally 3' => ['x' => 70, 'y' => 75],
-        ];
+        // $rallyPositions = [
+        //     'Pos 1' => ['x' => 10, 'y' => 10],
+        //     'Pos 2' => ['x' => 50, 'y' => 60],
+        //     'Pos 3' => ['x' => 70, 'y' => 75],
+        // ];
 
         $currentPhase = $phases->firstWhere('status', 1) ?? $phases->last();
 
@@ -48,6 +48,6 @@ class MapController extends Controller
         }
 
         $title = 'Map';
-        return view('user.map', compact('title', 'phases', 'currentPhase', 'rallies', 'visitedRalliesByPhase', 'rallyPositions'));
+        return view('user.map', compact('title', 'phases', 'currentPhase', 'rallies', 'visitedRalliesByPhase'));
     }
 }

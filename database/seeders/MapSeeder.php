@@ -25,10 +25,20 @@ class MapSeeder extends Seeder
         DB::insert("INSERT INTO rallies (id, name, created_at, updated_at) VALUES 
             (?, ?, ?, ?), 
             (?, ?, ?, ?), 
+            (?, ?, ?, ?), 
+            (?, ?, ?, ?), 
+            (?, ?, ?, ?), 
+            (?, ?, ?, ?), 
+            (?, ?, ?, ?), 
             (?, ?, ?, ?)", [
-            Str::uuid(), 'Rally 1', now(), now(),
-            Str::uuid(), 'Rally 2', now(), now(),
-            Str::uuid(), 'Rally 3', now(), now()
+            Str::uuid(), 'Pos 1', now(), now(),
+            Str::uuid(), 'Pos 2', now(), now(),
+            Str::uuid(), 'Pos 3', now(), now(),
+            Str::uuid(), 'Pos 4', now(), now(),
+            Str::uuid(), 'Pos 5', now(), now(),
+            Str::uuid(), 'Pos 6', now(), now(),
+            Str::uuid(), 'Pos 7', now(), now(),
+            Str::uuid(), 'Pos 8', now(), now()
         ]);
 
         // Ambil semua Phase yang sudah ada
