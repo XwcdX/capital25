@@ -260,7 +260,13 @@ class AdminController extends BaseController
             return [
                 'id' => $question->id,
                 'question' => $question->question,  
-                'choices'  => $question->answers->pluck('answer_text')->toArray(),  
+                'choices' => $question->answers->map(function ($answer) {
+                    return [
+                        'id' => $answer->id,
+                        'text' => $answer->answer_text,
+                        'correct' => $answer->is_correct,
+                    ];
+                })->toArray(),
                 'correct'  => $question->answers->where('is_correct', 1)->pluck('answer_text')->first() 
             ];
         });
@@ -291,4 +297,23 @@ class AdminController extends BaseController
         }
     }
 
+    function editAnswer(Request $r)
+    {
+        foreach ($r->choices as $choice) {
+            $answer = Answer::find($choice['id']);
+            
+            if ($answer) {
+                // same answer (no changes)
+                if ($answer->answer_text === $choice['answer_text'] && $answer->is_correct == ($choice['id'] == $r->correct_answer_id ? 1 : 0)) {
+                    continue; 
+                }
+                
+                $answer->answer_text = $choice['answer_text'];
+                $answer->is_correct = $choice['id'] == $r->correct_answer_id ? 1 : 0;
+                $answer->save();
+            }
+        }
+        
+        return response()->json(['message' => 'Choices updated successfully']);
+    }
 }

@@ -58,6 +58,14 @@
             word-wrap: break-word; 
             overflow-wrap: break-word;
         }
+        textarea {
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
+        }
+
+        textarea::-webkit-scrollbar {
+            display: none;
+        }
     </style>
 @endSection
 
@@ -183,7 +191,7 @@
                 title: "Answer Choices",
                 width: 600,
                 html: choices.map((choice, index) =>
-                    `<p>${labels[index]}. ${choice === correctAns ? `<b>${choice}</b>` : choice}</p> <br>`
+                    `<p>${labels[index]}. ${choice.text === correctAns ? `<b>${choice.text}</b>` : choice.text}</p> <br>`
                 ).join(""),
                 icon: "info",
                 showCancelButton: true,
@@ -202,38 +210,23 @@
             Swal.fire({
                 title: "Edit Answer Choices",
                 html: `
-                    <div>
-                        <div class="flex items-center ">
-                            <label class="font-bold">A:</label>
-                            <textarea id="choiceA" class="swal2-textarea !m-2 !w-full !h-24 !text-base" placeholder="Choice A">${choices[0]}</textarea>
-                            <br>
-                        </div>
+                        <div>
+                        ${choices.map((choice, index) => `
+                            <div class="flex items-center">
+                                <label class="font-bold">${String.fromCharCode(65 + index)}:</label>
+                                <textarea id="choice-${choice.id}" class="swal2-textarea !m-2 !w-[90%] !h-24 !text-base"
+                                    placeholder="Choice ${String.fromCharCode(65 + index)}">${choice.text}</textarea>
+                            </div>
+                        `).join("")}
 
-                        <div class="flex items-center ">
-                            <label class="font-bold">B:</label>
-                            <textarea id="choiceA" class="swal2-textarea !m-2 !w-[90%] !h-24 !text-base" placeholder="Choice A">${choices[1]}</textarea>
-                            <br>
-                        </div>
-
-                        <div class="flex items-center ">
-                            <label class="font-bold">C:</label>
-                            <textarea id="choiceA" class="swal2-textarea !m-2 !w-[90%] !h-24 !text-base" placeholder="Choice A">${choices[2]}</textarea>
-                            <br>
-                        </div>
-
-                        <div class="flex items-center ">
-                            <label class="font-bold">D:</label>
-                            <textarea id="choiceA" class="swal2-textarea !m-2 !w-[90%] !h-24 !text-base" placeholder="Choice A">${choices[3]}</textarea>
-                            <br>
-                        </div>
-
-                        <div class="flex items-center ">                       
-                            <h1 class="mt-3">Correct Answer</h1>
+                        <div class="flex items-center mt-3">                       
+                            <h1>Correct Answer</h1>
                             <select id="correctChoice" class="swal2-select">
-                                <option value="${choices[0]}" ${choices[0] === correctAns ? "selected" : ""}>A</option>
-                                <option value="${choices[1]}" ${choices[1] === correctAns ? "selected" : ""}>B</option>
-                                <option value="${choices[2]}" ${choices[2] === correctAns ? "selected" : ""}>C</option>
-                                <option value="${choices[3]}" ${choices[3] === correctAns ? "selected" : ""}>D</option>
+                                ${choices.map(choice => `
+                                    <option value="${choice.id}" ${choice.correct ? "selected" : ""}>
+                                        ${String.fromCharCode(65 + choices.indexOf(choice))}
+                                    </option>
+                                `).join("")}
                             </select>
                         </div>
                     </div>
@@ -243,20 +236,40 @@
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 preConfirm: () => {
-                    const updatedChoices = [
-                        document.getElementById("choiceA").value.trim(),
-                        document.getElementById("choiceB").value.trim(),
-                        document.getElementById("choiceC").value.trim(),
-                        document.getElementById("choiceD").value.trim(),
-                    ];
-                    const newCorrectAns = document.getElementById("correctChoice").value.trim();
+                    const updatedChoices = choices.map(choice => ({
+                        id: choice.id,
+                        answer_text: document.getElementById(`choice-${choice.id}`).value.trim()
+                    }));
 
-                    if (updatedChoices.some(choice => choice === "")) {
+                    const newCorrectAnsId = document.getElementById("correctChoice").value;
+
+                    if (updatedChoices.some(choice => choice.text === "")) {
                         Swal.showValidationMessage("All choices must be filled!");
                         return false;
                     }
 
-                    return { updatedChoices, newCorrectAns };
+                    return { updatedChoices, newCorrectAnsId };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch("{{ route('admin.editAnswer') }}", { 
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+                        },  
+                        body: JSON.stringify({
+                            choices: result.value.updatedChoices,
+                            correct_answer_id: result.value.newCorrectAnsId,
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        Swal.fire("Success!", "Choices have been updated.", "success");
+                    })
+                    .catch(error => {
+                        Swal.fire("Error!", "Something went wrong.", "error");
+                    });
                 }
             });
         }

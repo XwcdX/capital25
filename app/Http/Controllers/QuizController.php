@@ -53,36 +53,37 @@ class QuizController extends Controller
     {
         $teamId = session()->get('team_id');
         $answers = $r->input('answers');
-        
-        $correctAnswers = Answer::whereIn('id', $answers) 
-        ->where('is_correct', true)->with('question')->get(); 
 
-        // insert the answer and the tea
-        $team = Team::findOrFail($teamId);
-        $teamAnswers = [];
-    
-        foreach ($answers as $answerId) {
-            $teamAnswers[$answerId] = ['team_id' => $teamId,];
-        }
-    
-        foreach ($answers as $answerId) {
-            DB::table('team_answers')->insert([
-                'id' => Str::uuid(), 
-                'team_id' => $teamId,
-                'answer_id' => $answerId,
-            ]);
-        }
-
-        //calculate the total points (based on correct answers)
-        $this->calculatePoint($correctAnswers, $teamId);
+        DB::beginTransaction();
         
-        return response()->json(['success' => true, 'message' => 'Quiz is successfully submitted!']);
+        try {
+            foreach ($answers as $answerId) {
+                DB::table('team_answers')->insert([
+                    'id' => Str::uuid(), 
+                    'team_id' => $teamId,
+                    'answer_id' => $answerId,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
+            $correctAnswers = Answer::whereIn('id', $answers) 
+            ->where('is_correct', true)->with('question')->get();
+            $this->calculatePoint($correctAnswers, $teamId);
+
+            DB::commit();
+
+            return response()->json(['success' => true, 'message' => 'Quiz successfully submitted!']);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => 'Failed to submit quiz!', 'error' => $e->getMessage()], 500);
+        }
     }
 
     function calculatePoint($correctAnswers, $teamId)
     {
-        $team = Team::findOrFail($teamId);
-        $totalPoints = $correctAnswers->sum(fn($answer) => $answer->question->point); 
-        $team->increment('green_points', $totalPoints); 
+        $totalPoints = $correctAnswers->sum(fn($answer) => $answer->question->points);
+        Team::where('id', $teamId)->increment('green_points', $totalPoints);
     }
 }
