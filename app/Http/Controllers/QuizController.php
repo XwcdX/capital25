@@ -16,6 +16,12 @@ class QuizController extends Controller
 {
     public function index()
     {
+        // cant access if the team have been completed quiz
+        $teamId = session('team_id');
+        if (DB::table('team_answers')->where('team_id', $teamId)->exists()) {
+            return back()->with('error', 'Your team has already completed this quiz!');
+        }
+
         $questions = Question::all();
         $answers = Answer::orderBy('question_id')->orderBy('sort_order')->get()->groupBy('question_id');
         $storedAnswers = session()->get('storedAnswers', []);

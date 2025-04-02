@@ -488,8 +488,6 @@
                         confirmButtonText: "OK",
                         confirmButtonColor: "3085d6",
                     }).then(() => {
-                        // localStorage.removeItem("quizStarted"); // Hapus status kuis
-                        // localStorage.setItem("quizFinished", "true");
                         window.location.href = "{{ route('home') }}";
                     });
                 })
@@ -569,20 +567,12 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    // localStorage.setItem("quizStarted", true); // Simpan status
                     document.getElementById('quiz-rules').classList.add('hidden');
 
                     let quizEndTime = new Date(data.quiz_end_time);
                     startCountdown(quizEndTime);
                 })
                 .catch(error => console.error("Error starting quiz:", error));
-        });
-
-        // jika sudah menyelesaikan kuis, maka tidak bisa kembali ke halaman quiz
-        document.addEventListener("DOMContentLoaded", function() {
-            // if (localStorage.getItem("quizFinished")) {
-            //     window.location.href = "{{ route('home') }}"; // Redirect ke home atau halaman lain
-            // }
         });
     </script>
 @endsection
