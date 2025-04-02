@@ -17,5 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(DivisionSeeder::class);
         $this->call(AdminSeeder::class);
         $this->call(PhaseSeeder::class);
+        $this->call(RallySeeder::class);
+        $this->call(CommoditySeeder::class);
     }
 }

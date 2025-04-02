@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Commodity;
 use App\Models\Team;
 use App\Models\User;
-use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -14,11 +16,12 @@ use Illuminate\Validation\Rule;
 
 class UserController extends BaseController
 {
-    protected $teamController;
+    protected $teamController, $commodityController;
     public function __construct(User $model)
     {
         parent::__construct($model);
         $this->teamController = new TeamController(new Team());
+        $this->commodityController = new CommodityController(new Commodity());
     }
 
     public function viewRegistUser()
@@ -182,4 +185,18 @@ class UserController extends BaseController
             return response()->json(['errors' => 'Failed to save users.'], 500);
         }
     }
+
+    public function viewCommodityShop()
+    {
+        $title = 'Commodity Shop';
+        $currentPhase = Cache::get("current_phase", "No Phase Set");
+
+        if ($currentPhase === "No Phase Set") {
+            return back()->with('error', 'The phase has not started yet.');
+        }
+
+        $commodities = $this->commodityController->getCurrentCommodities($currentPhase->id);
+        return view('user.rally.home', compact('commodities', 'currentPhase', 'title'));
+    }
+
 }

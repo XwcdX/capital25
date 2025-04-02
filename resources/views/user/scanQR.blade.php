@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Scanner</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.1.6/html5-qrcode.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="user-id" content="{{ Auth::user()->id }}">
@@ -148,21 +148,49 @@
 
             function startScanner(cameraId) {
                 const boxSize = window.innerWidth < 500 ? 300 : 500;
-                html5QrCode.start(cameraId, {
-                        fps: 45,
-                        qrbox: {
-                            width: boxSize,
-                            height: boxSize
-                        }
+                const config = {
+                    fps: 45,
+                    qrbox: {
+                        width: boxSize,
+                        height: boxSize
                     },
+                    // aspectRatio: 1.0,
+                    experimentalFeatures: {
+                        useBarCodeDetectorIfSupported: true
+                    },
+                    rememberLastUsedCamera: true
+                };
+                html5QrCode.start(cameraId,
+                    config,
                     onScanSuccess,
                     onScanFailure
                 ).then(() => {
+                    html5QrCode.applyVideoConstraints({
+                            focusMode: "continuous"
+                        })
+                        .catch(err => console.warn("Focus constraint not supported:", err));
+
                     const videoElement = document.querySelector("video");
                     if (videoElement) {
                         videoElement.style.transform = cameraId === "user" ? "scaleX(-1)" : "scaleX(1)";
                     }
                 }).catch(err => console.error("Camera initialization failed:", err));
+
+                // html5QrCode.start(cameraId, {
+                //         fps: 45,
+                //         qrbox: {
+                //             width: boxSize,
+                //             height: boxSize
+                //         }
+                //     },
+                //     onScanSuccess,
+                //     onScanFailure
+                // ).then(() => {
+                //     const videoElement = document.querySelector("video");
+                //     if (videoElement) {
+                //         videoElement.style.transform = cameraId === "user" ? "scaleX(-1)" : "scaleX(1)";
+                //     }
+                // }).catch(err => console.error("Camera initialization failed:", err));
             }
 
             Html5Qrcode.getCameras().then(devices => {

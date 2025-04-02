@@ -29,7 +29,7 @@ class RallyController extends BaseController
         $rallies = $this->model::with(['teams' => function ($query) {
             $query->withPivot(['qr_expired_at'])->orderBy('qr_expired_at');
         }])->get();
-        return view('admin.rally-post', compact('title', 'rallies'));
+        return view('admin.rally.rally-post', compact('title', 'rallies'));
     }
 
     public function generateRallyQrCode($rallyId)
