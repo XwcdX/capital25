@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CommodityController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\StorageController;
 use App\Http\Controllers\UserController;
@@ -28,6 +29,9 @@ Route::middleware(['isLogin'])->group(function () {
 
     Route::get('/scanQR', [RallyController::class, 'viewScanner']);
     Route::post('/scanQR', [RallyController::class, 'scanQRCode'])->name('scanQR');
+
+    Route::get('/viewCommodityShop', [UserController::class,'viewCommodityShop'])->name('viewCommodityShop');
+    Route::post('/buyMultipleCommodities', [CommodityController::class,'buyMultipleCommodities'])->name('buy.multiple.commodities');
 
     Route::post('/quiz/start', [QuizController::class, 'startQuiz'])->name('quiz.start');
     Route::post('/quiz/save-answer', [QuizController::class, 'saveAnswer'])->name('quiz.save');
@@ -64,6 +68,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('/phase-control', [AdminController::class, 'viewPhaseControl'])->name('phaseControl');
         Route::post('/update-phase', [AdminController::class, 'updatePhase'])->name('updatePhase');
+
+        Route::get('/central-hub', [AdminController::class, 'viewCentralHub'])->name('centralHub');
+        Route::post('/buyCommodity', [AdminController::class,'buyCommodity'])->name('buyCommodity');
+
+        // Quiz
+        Route::get('/question', [AdminController::class, 'viewQuizQuestions'])->name('viewQuestions');
+        Route::put('/question/{id}', [AdminController::class, 'editQuestion'])->name('editQuestion');
+
+
     });
 });
 // password-reset

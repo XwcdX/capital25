@@ -13,20 +13,42 @@ class RallySeeder extends Seeder
      */
     public function run(): void
     {
-        //
         $rallies = [
-            ['name' => 'pos 1'],
-            ['name' => 'pos 2'],
-            ['name' => 'pos 3'],
-            ['name' => 'pos 4'],
-            ['name' => 'pos 5'],
-            ['name' => 'pos 6'],
-            ['name' => 'pos 7'],
-            ['name' => 'pos 8'],
+            [
+                "post" => 1,
+                "name" => "Natural Resources"
+            ],
+            [
+                "post" => 2,
+                "name" => "Raw Material Extraction"
+            ],
+            [
+                "post" => 3,
+                "name" => "Production"
+            ],
+            [
+                "post" => 4,
+                "name" => "Packing and Distribution"
+            ],
+            [
+                "post" => 5,
+                "name" => "Use and Maintenance "
+            ],
+            [
+                "post" => 6,
+                "name" => "Disposal"
+            ],
+            [
+                "post" => 7,
+                "name" => "Recycling"
+            ],
+            [
+                "post" => 8,
+                "name" => "Waste Management"
+            ]
         ];
 
-        foreach ($rallies as $rally)
-        {
+        foreach ($rallies as $rally) {
             Rally::create($rally);
         }
     }

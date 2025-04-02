@@ -29,7 +29,7 @@ class RallyController extends BaseController
         $rallies = $this->model::with(['teams' => function ($query) {
             $query->withPivot(['qr_expired_at'])->orderBy('qr_expired_at');
         }])->get();
-        return view('admin.rally-post', compact('title', 'rallies'));
+        return view('admin.rally.rally-post', compact('title', 'rallies'));
     }
 
     public function generateRallyQrCode($rallyId)
@@ -47,6 +47,15 @@ class RallyController extends BaseController
             'team_id' => 'required|uuid|exists:teams,id',
             'qr_data' => 'required|string',
             'phase_id' => 'required|uuid|exists:phases,id'
+        ],[
+            'team_id.required' => 'Team ID is required',
+            'team_id.uuid' => 'Team ID must be a valid UUID',
+            'team_id.exists' => 'Team ID not found',
+            'qr_data.required' => 'QR data is required',
+            'qr_data.string' => 'QR data must be a string',
+            'phase_id.required' => "Please wait, the phase hasn't started yet.",
+            'phase_id.uuid' => 'Phase ID must be a valid UUID',
+            'phase_id.exists' => 'Phase ID not found',
         ]);
 
         if ($validator->fails()) {
