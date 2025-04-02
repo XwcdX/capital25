@@ -14,9 +14,9 @@ class PhaseUpdated implements ShouldBroadcastNow
 
     public $phaseId;
 
-    public function __construct($phaseId)
+    public function __construct($phase)
     {
-        $this->phaseId = $phaseId;
+        $this->phaseId = $phase->id;
     }
 
     public function broadcastOn()

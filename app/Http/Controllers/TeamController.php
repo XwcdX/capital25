@@ -34,8 +34,34 @@ class TeamController extends BaseController
     }
     public function getValidatedTeam()
     {
-        return $this->model::with(['users', 'admins'])->where('valid', 1)->get();;
+        return $this->model::with(['users', 'admins'])->where('valid', 1)->get();
+        ;
     }
+
+    public function getTeam($teamId)
+    {
+        return $this->model::findOrFail($teamId);
+    }
+
+    public function getTeamsWithCommodities($phaseId)
+    {
+        $teams = $this->model::whereHas('commodities', function ($query) use ($phaseId) {
+            $query->where('commodity_histories.phase_id', $phaseId);
+        })
+            ->with([
+                'commodities' => function ($query) use ($phaseId) {
+                    $query->where('commodity_histories.phase_id', $phaseId);
+                }
+            ])
+            ->get();
+        
+        $teams->each(function ($team) {
+            $team->setRelation('commodities', $team->commodities->unique('id'));
+        });
+
+        return $teams;
+    }
+
 
     public function updateValidAndEmail(Request $request, string $id)
     {
