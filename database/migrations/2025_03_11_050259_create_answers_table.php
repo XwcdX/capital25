@@ -14,11 +14,14 @@ return new class extends Migration
         Schema::create('answers', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('question_id');
-            $table->string('answer_text');
+            $table->longText('answer_text');
             $table->boolean('is_correct')->default(false);
+            $table->integer('sort_order');
             $table->timestamps();
 
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
+            
+            $table->index(['question_id', 'sort_order']);
         });
     }
 

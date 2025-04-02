@@ -98,9 +98,16 @@
                 </button>
             </a> --}}
         </div>
+        
+        <div class="w-full px-8 flex justify-start">
+            <button id="add-question" class="bg-primary text-sm text-white p-2 rounded-lg flex items-start justify-start">
+                + Add Question
+            </button>
+        </div>
+
         <div id="datatable" class="w-full h-full px-5 py-5" data-te-max-height="460" data-te-fixed-header="true"></div>
     </div>
-@endsection()
+@endsection
 
 @section('script')
     <script>
@@ -108,6 +115,7 @@
         let data = @json($groupedQuestions, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
         data = typeof data === 'string' ? JSON.parse(data) : data;
         console.log(data);
+        
         let questions = data.map((dt, index) => ({
             index: index + 1,  
             name: dt.question,  
@@ -120,7 +128,7 @@
                     <button class="edit-btn bg-blue-700 hover:bg-blue-800 w-16 text-white py-1 rounded-lg" 
                         onclick="editQuestion('${dt.id}', '${dt.question}')">Edit</button>
                     <button class="delete-btn bg-[#d33] hover:bg-red-800 w-16 text-white py-1 rounded-lg" 
-                        onclick="deleteQuestion(${index})">Delete</button>
+                        onclick="deleteQuestion('${dt.id}')">Delete</button>
                 </div>
             `
         }));
@@ -185,6 +193,118 @@
             search(e.target.value);
         });
 
+        document.getElementById('add-question').addEventListener('click', function() {
+            let optionsHtml = '';
+            for (let i = 0; i < 4; i++) {
+                optionsHtml += ` 
+                    <div class="flex items-center">
+                        <label class="font-bold">${String.fromCharCode(65 + i)}:</label>
+                        <textarea id="choice-${i}" class="swal2-textarea !m-2 !w-[90%] !h-24 !text-base" placeholder="Option ${i + 1}"></textarea>
+                    </div>`;
+            }
+
+            let correctAnswerOptions = '';
+            for (let i = 0; i < 4; i++) {
+                correctAnswerOptions += `<option value="${i}">${String.fromCharCode(65 + i)}</option>`;
+            }
+
+            Swal.fire({
+                title: 'Add New Question',
+                html:`
+                    <p class="text-center font-bold">New Question</p>
+                    <textarea id="new-question" class="swal2-textarea !m-2 !w-[90%] !h-12 !text-base" placeholder="Question"></textarea>
+                    <p class="text-center font-bold">Answer Choices</p>
+                    ${optionsHtml}
+                    <select id="correct-ans" class="swal2-select mt-3">
+                        <option value="" disabled selected>Select correct answer</option>
+                        ${correctAnswerOptions}
+                    </select>
+                `,
+                focusConfirm: false,
+                preConfirm: () => {
+                    const options = [];
+                    for (let i = 0; i < 4; i++) {  
+                        options.push(document.getElementById(`choice-${i}`).value);
+                    }
+
+                    return {
+                        question: document.getElementById('new-question').value,
+                        options: options,
+                        correct_answer: document.getElementById('correct-ans').value
+                    }
+                },
+                showCancelButton: true,
+                confirmButtonText: "Add Question",
+                cancelButtonText: "Close",
+                cancelButtonColor: "#d33",
+                allowOutsideClick: false,
+                didOpen: () => {
+                    document.getElementById('new-question').focus();
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let isValid = true;
+                    const errors = [];
+                    
+                    if (!result.value.question?.trim()) {
+                        errors.push('Question is required');
+                        isValid = false;
+                    }
+
+                    result.value.options.forEach((option, index) => {
+                        if (!option?.trim()) {
+                            errors.push(`Option ${String.fromCharCode(65 + index)} is required`);
+                            isValid = false;
+                        }
+                    });
+
+                    if (!result.value.correct_answer) {
+                        errors.push('Correct answer must be selected');
+                        isValid = false;
+                    }
+
+                    if (!isValid) {
+                        Swal.fire({
+                            title: 'Error!',
+                            html: errors.join('<br>'),
+                            icon: 'error',
+                        }); return;
+                    }
+
+                    fetch("{{ route('admin.addQuestion')}}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                        },
+                        body: JSON.stringify({
+                            question: result.value.question.trim(),
+                            options: result.value.options.map(opt => opt.trim()),
+                            correct_answer: parseInt(result.value.correct_answer)
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: "Question Added!",
+                                text: data.message,
+                                icon: "success",
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire("Error!", data.message, "error");
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire("Error!", "Something went wrong!", "error");
+                        console.error('Error:', error);
+                    });
+                }
+            });
+        });
+
         function showAnswers(choices, correctAns) {
             const labels = ["A", "B", "C", "D"];
             Swal.fire({
@@ -197,7 +317,6 @@
                 showCancelButton: true,
                 confirmButtonText: "Edit",
                 cancelButtonText: "Close",
-                confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -233,7 +352,6 @@
                 `,
                 showCancelButton: true,
                 confirmButtonText: "Save",
-                confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 preConfirm: () => {
                     const updatedChoices = choices.map(choice => ({
@@ -283,7 +401,6 @@
                 showCancelButton: true,
                 confirmButtonText: "Update",
                 cancelButtonText: "Cancel",
-                confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 preConfirm: (newQuestion) => {
                     if (!newQuestion) {
@@ -311,7 +428,6 @@
                                 title: "Updated!",
                                 text: data.message,
                                 icon: "success",
-                                confirmButtonColor: "#3085d6"
                             }).then(() => {
                                 location.reload();
                             });
@@ -327,7 +443,50 @@
         }
 
         function deleteQuestion(id){
-            
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.showLoading();
+                    
+                    fetch(`{{ route('admin.deleteQuestion', '__ID__') }}`.replace('__ID__', id), {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        Swal.fire(
+                            'Deleted!',
+                            'Your question has been deleted.',
+                            'success'
+                        ).then(() => {
+                            window.location.reload();
+                        });
+                    })
+                    .catch(error => {
+                        Swal.fire(
+                            'Error!',
+                            'Failed to delete question: ' + error.message,
+                            'error'
+                        );
+                        console.error('Delete error:', error);
+                    });
+                }
+            });
         }
     </script>
 @endSection

@@ -21,6 +21,8 @@ use App\Models\Question;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class AdminController extends BaseController
 {
@@ -255,7 +257,10 @@ class AdminController extends BaseController
     // quiz
     public function viewQuizQuestions()
     {
-        $questions = Question::with('answers')->get();
+        $questions = Question::with(['answers' => function($query) {
+            $query->orderBy('sort_order'); 
+        }])->get();
+
         $groupedQuestions = $questions->map(function ($question) {
             return [
                 'id' => $question->id,
@@ -273,6 +278,64 @@ class AdminController extends BaseController
         $title = 'Quiz Questions';
 
         return view('admin.quiz.questions', compact('groupedQuestions', 'title'));
+    }
+
+    public function addQuestion(Request $r)
+    {
+        // Validate the request data
+        $validator = Validator::make($r->all(), [
+            'question' => 'required|string',
+            'options' => 'required|array|size:4',
+            'options.*' => 'required|string',
+            'correct_answer' => 'required|integer|between:0,3'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        DB::beginTransaction();
+        try {
+            $question = Question::create([
+                'question' => $r->question,
+            ]);
+
+            $answers = [];
+            foreach ($r->options as $index => $choice) {
+                $answers[] = [
+                    'id' => Str::uuid(),
+                    'question_id' => $question->id,
+                    'answer_text' => $choice,
+                    'is_correct' => ($index) == $r->correct_answer,
+                    'sort_order' => $index + 1, 
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ];
+            }
+
+            // Bulk insert for better performance
+            Answer::insert($answers);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Question added successfully',
+                'question_id' => $question->id
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to add question',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function editQuestion(Request $r, $id)
@@ -297,6 +360,28 @@ class AdminController extends BaseController
         }
     }
 
+    public function deleteQuestion($id)
+    {
+        try {
+            DB::transaction(function () use ($id) {
+                $question = Question::findOrFail($id);
+                $question->delete();
+            });
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Question deleted successfully'
+            ]);
+    
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete question',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     function editAnswer(Request $r)
     {
         foreach ($r->choices as $choice) {
@@ -315,5 +400,35 @@ class AdminController extends BaseController
         }
         
         return response()->json(['message' => 'Choices updated successfully']);
+    }
+
+    // quiz results
+    function viewQuizResults()
+    {
+        $teams = Team::with(['answers.question'])->get();
+        $results = $teams->map(function ($team) {
+            return [
+                'team_id' => $team->id,
+                'team_name' => $team->name,
+                'correct_answers' => $team->answers->where('is_correct', 1)->count(),
+                'total_points' => $team->answers->where('is_correct', 1)->sum('question.points'),
+                // map the choices made by the team 
+                'choices' => $team->answers->map(function ($answer) {
+                    return [
+                        'answer_id' => $answer->id,
+                        'answer_text' => $answer->text,
+                        'is_correct' => $answer->is_correct,
+                        'question' => [
+                            'question_id' => $answer->question->id,
+                            'question_text' => $answer->question->question,
+                            'points' => $answer->question->points,
+                        ]
+                    ];
+                }),
+            ];
+        });
+        $title = "Quiz Results";
+
+        return view('admin.quiz.results', compact('results', 'title'));
     }
 }

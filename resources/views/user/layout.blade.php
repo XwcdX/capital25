@@ -133,6 +133,10 @@
             overflow: hidden;
             overflow-x: hidden;
         }
+
+        .swal2-confirm {
+            background-color: #3085d6;
+        }
     </style>
 
     <script>

@@ -376,7 +376,7 @@
             const nextButton = document.getElementById("next-btn");
             const currentQ = questions[currentQuestion];
 
-            questionText.textContent = `${currentQuestion + 1}. ${currentQ.question}`;
+            questionText.innerHTML = `${currentQuestion + 1}. ${currentQ.question}`;
             questionText.classList.add("font-bold");
             optionsContainer.innerHTML = "";
 
@@ -481,14 +481,15 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    Swal.fire({
+                     Swal.fire({
                         title: "Quiz Submitted!",
                         text: "Your answers have been recorded.",
-                        icon: "success"
-                        confirmButtonText: "OK"
+                        icon: "success",
+                        confirmButtonText: "OK",
+                        confirmButtonColor: "3085d6",
                     }).then(() => {
-                        localStorage.removeItem("quizStarted"); // Hapus status kuis
-                        localStorage.setItem("quizFinished", "true");
+                        // localStorage.removeItem("quizStarted"); // Hapus status kuis
+                        // localStorage.setItem("quizFinished", "true");
                         window.location.href = "{{ route('home') }}";
                     });
                 })
@@ -532,7 +533,7 @@
                     timerDisplay.innerHTML = "Time's up!";
                     Swal.fire({
                         text: "Time is up! Submitting quiz...",
-                        icon: "warning"
+                        icon: "warning",
                         confirmButtonText: "OK!"
                     })
                     // Auto-submit logic can be added here
@@ -551,11 +552,11 @@
 
         // langsung ke hlm quiz tanpa melalui quizRules jika sudah pernah klik start sebelumnya 
         document.addEventListener("DOMContentLoaded", function() {
-            if (localStorage.getItem("quizStarted")) {
-                document.getElementById('quiz-rules').classList.add('hidden');
-            } else {
-                document.getElementById('quiz-rules').classList.remove('hidden');
-            }
+            // if (localStorage.getItem("quizStarted")) {
+            //     document.getElementById('quiz-rules').classList.add('hidden');
+            // } else {
+            //     document.getElementById('quiz-rules').classList.remove('hidden');
+            // }
         });
 
         document.getElementById('start-quiz-btn').addEventListener('click', function() {
@@ -568,7 +569,7 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    localStorage.setItem("quizStarted", true); // Simpan status
+                    // localStorage.setItem("quizStarted", true); // Simpan status
                     document.getElementById('quiz-rules').classList.add('hidden');
 
                     let quizEndTime = new Date(data.quiz_end_time);
@@ -579,9 +580,9 @@
 
         // jika sudah menyelesaikan kuis, maka tidak bisa kembali ke halaman quiz
         document.addEventListener("DOMContentLoaded", function() {
-            if (localStorage.getItem("quizFinished")) {
-                window.location.href = "{{ route('home') }}"; // Redirect ke home atau halaman lain
-            }
+            // if (localStorage.getItem("quizFinished")) {
+            //     window.location.href = "{{ route('home') }}"; // Redirect ke home atau halaman lain
+            // }
         });
     </script>
 @endsection

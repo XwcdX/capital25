@@ -17,7 +17,7 @@ class QuizController extends Controller
     public function index()
     {
         $questions = Question::all();
-        $answers = Answer::all()->groupBy('question_id');
+        $answers = Answer::orderBy('question_id')->orderBy('sort_order')->get()->groupBy('question_id');
         $storedAnswers = session()->get('storedAnswers', []);
         $title = 'Quiz';
 

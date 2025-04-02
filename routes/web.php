@@ -66,9 +66,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/update-phase', [AdminController::class, 'updatePhase'])->name('updatePhase');
 
         // Quiz
-        Route::get('/question', [AdminController::class, 'viewQuizQuestions'])->name('viewQuestions');
-        Route::put('/question/{id}', [AdminController::class, 'editQuestion'])->name('editQuestion');
         Route::post('/question/edit-answer', [AdminController::class, 'editAnswer'])->name('editAnswer');
+        Route::put('/question/{id}', [AdminController::class, 'editQuestion'])->name('editQuestion');
+        Route::delete('/question/{id}', [AdminController::class, 'deleteQuestion'])->name('deleteQuestion'); 
+        Route::post('/question', [AdminController::class, 'addQuestion'])->name('addQuestion'); 
+        Route::get('/question', [AdminController::class, 'viewQuizQuestions'])->name('viewQuestions');
+        Route::get('/quiz-result', [AdminController::class, 'viewQuizResults'])->name('viewResults');
 
     });
 });
