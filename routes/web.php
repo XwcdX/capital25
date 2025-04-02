@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CommodityController;
+use App\Http\Controllers\MapController;
 use App\Http\Controllers\StorageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PasswordResetTokenController;
+use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RallyController;
 use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +21,7 @@ Route::get('/email/verify/{id}/{hash}', [TeamController::class, 'email'])
     ->middleware(['auth', 'signed'])
     ->name('verification.verify');
 Route::middleware(['isLogin'])->group(function () {
+    Route::get('/map', [MapController::class, 'showMap'])->name('map');
     Route::get('/team/data', [UserController::class, 'viewRegistUser'])->middleware(['isValidated'])->name('user.regist');
     Route::post('/team/data/save', [UserController::class, 'saveUsers'])->middleware(['isValidated'])->name('user.save');
 
@@ -29,7 +32,12 @@ Route::middleware(['isLogin'])->group(function () {
 
     Route::get('/viewCommodityShop', [UserController::class,'viewCommodityShop'])->name('viewCommodityShop');
     Route::post('/buyMultipleCommodities', [CommodityController::class,'buyMultipleCommodities'])->name('buy.multiple.commodities');
-});
+
+    Route::post('/quiz/start', [QuizController::class, 'startQuiz'])->name('quiz.start');
+    Route::post('/quiz/save-answer', [QuizController::class, 'saveAnswer'])->name('quiz.save');
+    Route::post('/quiz/submit-quiz', [QuizController::class, 'submitQuiz'])->name('quiz.submit');
+    Route::get('/quiz', [QuizController::class, 'index'])->name('quiz');
+}); 
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'login'])->name('login');
@@ -63,6 +71,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('/central-hub', [AdminController::class, 'viewCentralHub'])->name('centralHub');
         Route::post('/buyCommodity', [AdminController::class,'buyCommodity'])->name('buyCommodity');
+
+        // Quiz
+        Route::get('/question', [AdminController::class, 'viewQuizQuestions'])->name('viewQuestions');
+        Route::put('/question/{id}', [AdminController::class, 'editQuestion'])->name('editQuestion');
+
+
     });
 });
 // password-reset

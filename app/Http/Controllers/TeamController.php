@@ -190,6 +190,8 @@ class TeamController extends BaseController
             return redirect()->to(route('login'))->with('error', $error);
         }
         Auth::login($team);
+        session(['team_id' => $team->id]);
+        
         if (!$team->hasVerifiedEmail()) {
             event(new Registered($team));
             $request->session()->put('email', $creds['email']);

@@ -156,4 +156,11 @@ class Team extends Authenticatable implements MustVerifyEmail
             ->withPivot('phase_id', 'quantity', 'return_rate')
             ->withTimestamps();
     }
+
+    public function answers()
+    {
+        return $this->belongsToMany(Answer::class, 'team_answers')
+            ->withPivot('answer_id')
+            ->withTimestamps();
+    }
 }

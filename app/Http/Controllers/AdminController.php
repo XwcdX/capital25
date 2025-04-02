@@ -19,6 +19,9 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Auth\Events\Registered;
 use App\Http\Controllers\BaseController;
 use App\Models\Phase;
+use App\Models\Answer;
+use App\Models\Question;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -279,4 +282,44 @@ class AdminController extends BaseController
         event(new PhaseUpdated($phase));
         return back()->with('success', 'Phase updated successfully.');
     }
+
+    // quiz
+    public function viewQuizQuestions()
+    {
+        $questions = Question::with('answers')->get();
+        $groupedQuestions = $questions->map(function ($question) {
+            return [
+                'id' => $question->id,
+                'question' => $question->question,  
+                'choices'  => $question->answers->pluck('answer_text')->toArray(),  
+                'correct'  => $question->answers->where('is_correct', 1)->pluck('answer_text')->first() 
+            ];
+        });
+        $title = 'Quiz Questions';
+
+        return view('admin.quiz.questions', compact('groupedQuestions', 'title'));
+    }
+
+    public function editQuestion(Request $r, $id)
+    {
+        $question = Question::findOrFail($id);
+    
+        $validator = Validator::make($r->all(), [
+            'question' => 'required|string|max:255',
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'message' => $validator->errors()->first()], 422);
+        }
+    
+        try {
+            $question->question = $r->input('question');
+            $question->save();
+    
+            return response()->json(['success' => true, 'message' => 'Question updated successfully!', 'question' => $question]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Failed to update question.'], 500);
+        }
+    }
+
 }
