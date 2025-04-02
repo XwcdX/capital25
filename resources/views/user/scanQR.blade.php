@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="user-id" content="{{ Auth::user()->id }}">
+    <meta name="scan-url" content="{{ route('scanQR') }}">
     @vite(['resources/js/app.js'])
     <style>
         body,
@@ -98,21 +99,24 @@
 
     <h1>Scan Rally QR Code</h1>
     <div id="reader"></div>
-    <p id="scanned-result"></p>
+    <p id="scanned-result" class="d-done"></p>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        function startScanning(selectedCameraId) {
             let phaseId = localStorage.getItem("current_phase_id");
-
+            let scanUrl = document.querySelector('meta[name="scan-url"]').getAttribute('content'); 
             const html5QrCode = new Html5Qrcode("reader");
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             const teamId = document.querySelector('meta[name="user-id"]').getAttribute('content');
 
-            function onScanSuccess(decodedText) {
+            const onScanSuccess = (decodedText, decodedResult) => {
+                const result = document.getElementById("scanned-result");
+                result.innerHTML = `Scanned: <strong>${decodedText}</strong>`;
+                result.classList.remove("d-none");
+
                 console.log("Decoded:", decodedText);
-                document.getElementById('scanned-result').innerText = `Scanned: ${decodedText}`;
 
                 html5QrCode.stop().then(() => {
-                    fetch('{{ route('scanQR') }}', {
+                    fetch( scanUrl, {
                             method: "POST",
                             headers: {
                                 "X-CSRF-TOKEN": csrfToken,
@@ -123,7 +127,13 @@
                                 qr_data: decodedText,
                                 phase_id: phaseId,
                             })
-                        }).then(response => response.json())
+                        }).then(response => {
+                            console.log("Response received:", response);
+                            if (!response.ok) {
+                                return response.text().then(text => { throw new Error(text) });
+                            }
+                            return response.json();
+                        })
                         .then(data => {
                             if (data.success) {
                                 swal("Success", "Scanned Successfully! ", "success");
@@ -140,51 +150,49 @@
                             swal("Error", "An unexpected error occurred.", "error");
                         });
                 }).catch(err => console.error("Stop failed", err));
-            }
 
-            function onScanFailure(error) {
-                console.warn("Scan error:", error);
-            }
+                //     html5QrCode.stop().then(() => {
+                //     console.log("Scanning stopped.");
+                // }).catch((err) => {
+                //     console.error("Error stopping scanner:", err);
+                // });
+                 };
+             
 
-            function startScanner(cameraId) {
-                const boxSize = window.innerWidth < 500 ? 300 : 500;
-                html5QrCode.start(cameraId, {
-                        fps: 45,
-                        qrbox: {
-                            width: boxSize,
-                            height: boxSize
-                        }
-                    },
-                    onScanSuccess,
-                    onScanFailure
-                ).then(() => {
-                    const videoElement = document.querySelector("video");
-                    if (videoElement) {
-                        videoElement.style.transform = cameraId === "user" ? "scaleX(-1)" : "scaleX(1)";
-                    }
-                }).catch(err => console.error("Camera initialization failed:", err));
-            }
+            const onScanFailure = (error) => {
+                console.log("Scan failed:", error);
+            };
+            const boxSize = window.innerWidth < 500 ? 300 : 500;
 
-            Html5Qrcode.getCameras().then(devices => {
-                if (devices.length > 0) {
-                    const backCamera = devices.find(device => device.label.toLowerCase().includes(
-                        "back")) || devices[0];
-                    startScanner(backCamera.id);
-                } else {
-                    console.error("No cameras found.");
-                    swal("Error", "No available cameras detected.", "error");
+            const config = {
+                fps: 30,
+                qrbox: {
+                    width: boxSize,
+                    height: boxSize
                 }
-            }).catch(err => {
-                console.error("Camera access error:", err);
-                swal("Error", "Failed to access camera.", "error");
-            });
+            };
+            html5QrCode.start(selectedCameraId, config, onScanSuccess, onScanFailure);
+        }
 
-            Echo.channel("phase-updates")
-                .listen(".PhaseUpdated", (event) => {
-                    localStorage.setItem("current_phase_id", event.phase_id);
-                    phaseId = event.phase_id;
-                });
+        Html5Qrcode.getCameras().then(devices => {
+            if (devices.length > 0) {
+                let backCamera = devices.find(device => device.label.toLowerCase().includes("back"));
+                let selectedCameraId = backCamera ? backCamera.id : devices[0].id;
+                startScanning(selectedCameraId);
+            } else {
+                console.error("No cameras found.");
+                swal("Error", "No available cameras detected.", "error");
+            }
+        }).catch(err => {
+            console.error("Camera access error:", err);
+            swal("Error", "Failed to access camera.", "error");
         });
+
+        Echo.channel("phase-updates")
+            .listen(".PhaseUpdated", (event) => {
+                localStorage.setItem("current_phase_id", event.phase_id);
+                phaseId = event.phase_id;
+            });
     </script>
 </body>
 
