@@ -7,6 +7,7 @@ use App\Models\Rally;
 use App\Utils\HttpResponseCode;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -20,16 +21,17 @@ class RallyController extends BaseController
 
     public function viewScanner()
     {
-        return view('user.scanQR', ['title' => 'QR Scanner']);
+        return view('user.scanQR', ['title' => 'QR Scanner', 'currentPhase' => Cache::get('current_phase')]);
     }
 
     public function viewRallyPost()
     {
         $title = 'Rally Post';
+        $currentPhase = Cache::get('current_phase');
         $rallies = $this->model::with(['teams' => function ($query) {
             $query->withPivot(['qr_expired_at'])->orderBy('qr_expired_at');
         }])->get();
-        return view('admin.rally.rally-post', compact('title', 'rallies'));
+        return view('admin.rally.rally-post', compact('title', 'rallies', 'currentPhase'));
     }
 
     public function generateRallyQrCode($rallyId)
@@ -43,6 +45,7 @@ class RallyController extends BaseController
 
     public function scanQrCode(Request $request)
     {
+        Log::info($request->all());
         $validator = Validator::make($request->all(), [
             'team_id' => 'required|uuid|exists:teams,id',
             'qr_data' => 'required|string',
@@ -59,7 +62,7 @@ class RallyController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->error('Validation failed', HttpResponseCode::HTTP_BAD_REQUEST, $validator->errors());
+            return $this->error($validator->errors()->first(), HttpResponseCode::HTTP_BAD_REQUEST);
         }
 
         $teamId = $request->input('team_id');

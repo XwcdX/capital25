@@ -84,12 +84,10 @@
             const closeQrModalButton = document.getElementById("closeQrModal");
             const closeModalButton = document.getElementById("closeModalButton");
 
-            let phaseId = localStorage.getItem("current_phase_id") || "default";
+            let phaseId = {!! json_encode(optional($currentPhase)->id) !!};
 
             Echo.channel("phase-updates")
                 .listen(".PhaseUpdated", (event) => {
-                    console.log("Phase Updated:", event);
-                    localStorage.setItem("current_phase_id", event.phase_id);
                     phaseId = event.phase_id;
 
                     const selectedRallyId = rallyDropdown.value;
@@ -108,8 +106,6 @@
                 rallyChannel.stopListening(".rally.history.updated");
 
                 rallyChannel.listen(".rally.history.updated", (event) => {
-                    console.log("Rally history updated:", event);
-
                     if (event.rallyHistory.length > 0) {
                         const newPhaseId = event.rallyHistory[0].pivot.phase_id;
                         if (phaseId !== newPhaseId) {
