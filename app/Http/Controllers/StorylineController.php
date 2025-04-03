@@ -16,11 +16,11 @@ class StorylineController extends Controller
         
         $currentPhase = 1;
 
-        $maxUnlockedPhase = 4;
+        // $maxUnlockedPhase = 4;
 
-        // $maxUnlockedPhase = DB::table('phases')
-        // ->where('status','active')
-        // ->max('phase');
+        $maxUnlockedPhase = DB::table('phases')
+        ->where('status', 1)
+        ->max('phase');
 
         
     $storylines =[

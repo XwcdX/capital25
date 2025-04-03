@@ -83,8 +83,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/question', [AdminController::class, 'viewQuizQuestions'])->name('viewQuestions');
         Route::get('/quiz-result', [AdminController::class, 'viewQuizResults'])->name('viewResults');
 
-    });
-});
+        //storyline
+        Route::get('/storyline', [StorylineController::class, 'index'])->name('storyline.index');
+        // Route::get('/storyline/change/{phase}', [StorylineController::class, 'changePhase'])->name('storyline.changePhase');
+
+        //lifecycle homepage
+        Route::get('/Lifecycle', [LifecycleHomepageController::class,'index'])->name('LifecycleHomepage.index');
+            });
+        });
 // password-reset
 Route::get('/{role}/forget-password', [PasswordResetTokenController::class, 'forgetPassword'])->name('forget.password');
 Route::post('forget-password', [PasswordResetTokenController::class, 'sendEmail'])->name('forget.password.post')->middleware('throttle:resetPasswordEmail');
@@ -93,9 +99,4 @@ Route::post('/reset-password', [PasswordResetTokenController::class, 'resetPassw
 
 Route::get('/storage/{path?}', [StorageController::class, 'getImage'])->where('path', '.*');
 
-//storyline
-Route::get('/storyline', [StorylineController::class, 'index'])->name('storyline.index');
-Route::get('/storyline/change/{phase}', [StorylineController::class, 'changePhase'])->name('storyline.changePhase');
 
-//lifecycle homepage
-Route::get('/Lifecycle', [LifecycleHomepageController::class,'index'])->name('LifecycleHomepage.index');

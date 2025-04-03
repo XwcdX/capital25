@@ -92,6 +92,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         let currentPhase = {{ $currentPhase }};
         let maxPhase = {{$maxUnlockedPhase}}; 
+        let totalPhases = 4;
         let storylines = @json($storylines);
 
         const titleElement = document.getElementById("fase-title");
@@ -105,7 +106,7 @@
             
             //atur show/hide, >1 show, else hide, <maxUnlock show, else hide
             prevButton.style.visibility = (currentPhase > 1) ? "visible" : "hidden";
-            nextButton.style.visibility = (currentPhase < maxPhase) ? "visible" : "hidden";
+            nextButton.style.visibility = (currentPhase < maxPhase && currentPhase < maxPhase) ? "visible" : "hidden";
         }
 
         prevButton.addEventListener("click", function () {
@@ -116,7 +117,7 @@
         });
 
         nextButton.addEventListener("click", function () {
-            if (currentPhase < maxPhase) {
+            if (currentPhase < totalPhases) {
                 currentPhase++;
                 updateStoryline();
             }
