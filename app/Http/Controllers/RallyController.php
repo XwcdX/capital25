@@ -43,6 +43,7 @@ class RallyController extends BaseController
 
     public function scanQrCode(Request $request)
     {
+        Log::info($request->all());
         $validator = Validator::make($request->all(), [
             'team_id' => 'required|uuid|exists:teams,id',
             'qr_data' => 'required|string',
@@ -59,7 +60,7 @@ class RallyController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->error('Validation failed', HttpResponseCode::HTTP_BAD_REQUEST, $validator->errors());
+            return $this->error($validator->errors()->first(), HttpResponseCode::HTTP_BAD_REQUEST);
         }
 
         $teamId = $request->input('team_id');

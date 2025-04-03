@@ -5,9 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Scanner</title>
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript">
-        < script src = "https://cdn.jsdelivr.net/npm/sweetalert2@11" >
-    </script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="user-id" content="{{ Auth::user()->id }}">
     <meta name="scan-url" content="{{ route('scanQR') }}">
@@ -113,46 +112,39 @@
                 const result = document.getElementById("scanned-result");
                 result.innerHTML = `Scanned: <strong>${decodedText}</strong>`;
                 result.classList.remove("d-none");
-
-                console.log("Decoded:", decodedText);
-
-                html5QrCode.stop().then(() => {
-                    fetch(scanUrl, {
-                            method: "POST",
-                            headers: {
-                                "X-CSRF-TOKEN": csrfToken,
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                team_id: teamId,
-                                qr_data: decodedText,
-                                phase_id: phaseId,
+                if (html5QrCode.isScanning) {
+                    html5QrCode.stop().then(() => {
+                        fetch(scanUrl, {
+                                method: "POST",
+                                headers: {
+                                    "X-CSRF-TOKEN": csrfToken,
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    team_id: teamId,
+                                    qr_data: decodedText,
+                                    phase_id: phaseId,
+                                })
                             })
-                        }).then(response => {
-                            console.log("Response received:", response);
-                            if (!response.ok) {
-                                return response.text().then(text => {
-                                    throw new Error(text)
-                                });
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            if (data.success) {
-                                swal("Success", "Scanned Successfully! ", "success");
-                                window.dispatchEvent(new CustomEvent("rallyScanned", {
-                                    detail: {
-                                        rallyId: data.data.rally_id
-                                    }
-                                }));
-                            } else {
-                                swal("Error", data.message || "An unexpected error occurred.", "error");
-                            }
-                        }).catch(err => {
-                            console.error("Fetch error:", err);
-                            swal("Error", "An unexpected error occurred.", "error");
-                        });
-                }).catch(err => console.error("Stop failed", err));
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    swal.fire("Success", "Scanned Successfully! ", "success");
+                                    window.dispatchEvent(new CustomEvent("rallyScanned", {
+                                        detail: {
+                                            rallyId: data.data.rally_id
+                                        }
+                                    }));
+                                } else {
+                                    swal.fire("Error", data.message || "An unexpected error occurred.",
+                                        "error");
+                                }
+                            }).catch(err => {
+                                console.error("Fetch error:", err);
+                                swal.fire("Error", "An unexpected error occurred.", "error");
+                            });
+                    }).catch(err => console.error("Stop failed", err));
+                }
             };
 
 
@@ -178,18 +170,19 @@
                 startScanning(selectedCameraId);
             } else {
                 console.error("No cameras found.");
-                swal("Error", "No available cameras detected.", "error");
+                swal.fire("Error", "No available cameras detected.", "error");
             }
         }).catch(err => {
             console.error("Camera access error:", err);
-            swal("Error", "Failed to access camera.", "error");
+            swal.fire("Error", "Failed to access camera.", "error");
         });
-
-        Echo.channel("phase-updates")
-            .listen(".PhaseUpdated", (event) => {
-                localStorage.setItem("current_phase_id", event.phase_id);
-                phaseId = event.phase_id;
-            });
+        document.addEventListener("DOMContentLoaded", function() {
+            Echo.channel("phase-updates")
+                .listen(".PhaseUpdated", (event) => {
+                    localStorage.setItem("current_phase_id", event.phase_id);
+                    phaseId = event.phase_id;
+                });
+        })
     </script>
 </body>
 
