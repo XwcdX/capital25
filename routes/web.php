@@ -88,7 +88,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Route::get('/storyline/change/{phase}', [StorylineController::class, 'changePhase'])->name('storyline.changePhase');
 
         //lifecycle homepage
-        Route::get('/Lifecycle', [LifecycleHomepageController::class,'index'])->name('LifecycleHomepage.index');
+        Route::get('/lifecycle', [LifecycleHomepageController::class,'index'])->name('LifecycleHomepage.index');
             });
         });
 // password-reset
