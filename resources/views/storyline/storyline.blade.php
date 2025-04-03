@@ -61,7 +61,7 @@
         {{-- Main Box --}}
         <div class="relative rounded-3xl mt-4 bg-[#fffdf7] md:w-full w-[35rem] max-w-lg md:max-w-3xl h-[28rem] p-5 md:p-8 flex flex-col my-5 mx-5 px-3">
             <div class="mb-2 break-words text-center">
-                <h1 id="fase-title" class="text-xl md:text-3xl text-[#03300f] font-bold">Fase {{$currentPhase}}</h1>
+                <h1 id="fase-title" class="uppercase text-xl md:text-3xl text-[#03300f] font-bold font-orbitron">FASE {{$currentPhase}}</h1>
             </div>
 
             {{-- Tombol Previous --}}
@@ -70,7 +70,7 @@
             </button>
 
             {{-- Konten Storyline --}}
-            <div class ="wrapper ">
+            <div class ="wrapper font-quicksand">
             <div class="overflow-y-auto justify-items-center mt-3 mx-auto md:mt-4 md:px-30 px-3 content-scroll custom-scrollbar">
                 <p id="storyline-text" class="text-[#03300f] font-bold text-justify text-sm md:text-lg leading-relaxed">
                     {{ $storylines[$currentPhase] ?? 'Fase tidak ditemukan' }}
