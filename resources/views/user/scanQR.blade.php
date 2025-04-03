@@ -102,7 +102,7 @@
     <p id="scanned-result" class="d-done"></p>
     <script>
         function startScanning(selectedCameraId) {
-            let phaseId = localStorage.getItem("current_phase_id");
+            let phaseId = {!! json_encode(optional($currentPhase)->id) !!};
             let scanUrl = document.querySelector('meta[name="scan-url"]').getAttribute('content');
             const html5QrCode = new Html5Qrcode("reader");
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -179,7 +179,6 @@
         document.addEventListener("DOMContentLoaded", function() {
             Echo.channel("phase-updates")
                 .listen(".PhaseUpdated", (event) => {
-                    localStorage.setItem("current_phase_id", event.phase_id);
                     phaseId = event.phase_id;
                 });
         })

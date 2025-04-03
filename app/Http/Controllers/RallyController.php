@@ -7,6 +7,7 @@ use App\Models\Rally;
 use App\Utils\HttpResponseCode;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -20,7 +21,7 @@ class RallyController extends BaseController
 
     public function viewScanner()
     {
-        return view('user.scanQR', ['title' => 'QR Scanner']);
+        return view('user.scanQR', ['title' => 'QR Scanner', 'currentPhase' => Cache::get('current_phase')]);
     }
 
     public function viewRallyPost()
