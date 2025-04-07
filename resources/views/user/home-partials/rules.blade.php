@@ -9,6 +9,10 @@
         transform: scale(1.2);
         transition: all .2s;
     }
+
+    .brightness-75 {
+        transition: filter 0.25s ease-in;
+    }
 </style>
 
 <section id="rules"
@@ -17,7 +21,7 @@
     <div class="flex max-md:flex-col max-md:space-y-16 md:space-x-8 lg:space-x-20 xl:space-x-28 md:ml-4 lg:ml-12 [@media(min-width:1350px)]:ml-40"
         data-aos="fade-left" data-aos-duration="1000">
         <div class="w-[150px] md:w-[200px] lg:w-[250px] xl:w-[300px] flex flex-col items-center justify-center relative">
-            <img class="guidebook peer cursor-pointer hover:scale-[1.2] scale-[1] transition-all duration-200"
+            <img id="guidebook-img" class="guidebook relative peer cursor-pointer hover:scale-[1.2] scale-[1] transition-all duration-200  filter"
                 src="{{ asset('assets/rules/guidebook.png') }}" alt="">
             <h1
                 class="peer-hover:translate-y-8 transition-all duration-200  [text-shadow:0_0_10px_rgba(255,243,102,0.8)] 
@@ -25,14 +29,14 @@
             font-oxanium font-black text-2xl md:text-3xl lg:text-4xl text-white">
                 Guidebook</h1>
             <i class="fa-solid fa-lock absolute inset-0 flex items-center justify-center text-white 
-                w-full h-full text-[9rem] md:text-[12rem] lg:text-[15rem] leading-none 
-                opacity-0 transition-opacity duration-1000 cursor-pointer animate-shake"
+                w-full h-full text-[5rem] md:text-[7rem] lg:text-[9rem] leading-none 
+                opacity-0 transition-opacity duration-1000 cursor-pointer"
                 id="guidebookLock"></i>
         </div>
 
         <div class="w-[150px] md:w-[200px] lg:w-[250px] xl:w-[300px] flex flex-col items-center justify-center"
             data-aos="fade-left" data-aos-duration="1000">
-            <img class="rules peer cursor-pointer hover:scale-[1.2] scale-[1] transition-all duration-200"
+            <img id="rules-img" class="rules peer cursor-pointer hover:scale-[1.2] scale-[1] transition-all duration-200"
                 src="{{ asset('assets/rules/rules.png') }}" alt="">
             <h1 class="peer cursor-pointer hover:scale-[1.2] scale-[1] transition-all duration-200"
                 src="{{ asset('assets/rules/guidebook.png') }}" alt="">
@@ -42,8 +46,8 @@
                 font-oxanium font-black text-2xl md:text-3xl lg:text-4xl text-white">
                     Rules</h1>
                 <i class="fa-solid fa-lock absolute inset-0 flex items-center justify-center text-white 
-                    w-full h-full text-[9rem] md:text-[12rem] lg:text-[15rem] leading-none 
-                    opacity-0 transition-opacity duration-1000 cursor-pointer animate-shake"
+                    w-full h-full text-[5rem] md:text-[7rem] lg:text-[9rem] leading-none 
+                    opacity-0 transition-opacity duration-1000 cursor-pointer "
                     id="rulesLock"></i>
         </div>
     </div>
@@ -53,7 +57,9 @@
 </section>
 
 <script>
-    function showLockMessage(lockElement) {
+    const guidebook = document.getElementById('guidebook-img');
+    const rules = document.getElementById('rules-img');
+    function showLockMessage(lockElement, img) {
         Swal.fire({
             icon: 'error',
             title: 'Locked',
@@ -62,17 +68,21 @@
             confirmButtonColor: "#56843a",
         }).then(() => {
             lockElement.classList.remove('opacity-0');
+            lockElement.classList.remove('animate-shake'); 
+            void lockElement.offsetWidth; 
+            lockElement.classList.add('animate-shake');
             setInterval(() => {
+                img.classList.add('brightness-75');
                 lockElement.classList.toggle('opacity-0');
             }, 1000);
         });
     }
 
     document.getElementById("guidebookLock").addEventListener("click", function () {
-        showLockMessage(this);
+        showLockMessage(this, guidebook);
     });
 
     document.getElementById("rulesLock").addEventListener("click", function () {
-        showLockMessage(this);
+        showLockMessage(this, rules);
     });
 </script>

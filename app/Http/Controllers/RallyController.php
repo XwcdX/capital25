@@ -7,6 +7,7 @@ use App\Models\Rally;
 use App\Utils\HttpResponseCode;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -20,16 +21,17 @@ class RallyController extends BaseController
 
     public function viewScanner()
     {
-        return view('user.scanQR', ['title' => 'QR Scanner']);
+        return view('user.scanQR', ['title' => 'QR Scanner', 'currentPhase' => Cache::get('current_phase')]);
     }
 
     public function viewRallyPost()
     {
         $title = 'Rally Post';
+        $currentPhase = Cache::get('current_phase');
         $rallies = $this->model::with(['teams' => function ($query) {
             $query->withPivot(['qr_expired_at'])->orderBy('qr_expired_at');
         }])->get();
-        return view('admin.rally-post', compact('title', 'rallies'));
+        return view('admin.rally.rally-post', compact('title', 'rallies', 'currentPhase'));
     }
 
     public function generateRallyQrCode($rallyId)
@@ -43,14 +45,24 @@ class RallyController extends BaseController
 
     public function scanQrCode(Request $request)
     {
+        Log::info($request->all());
         $validator = Validator::make($request->all(), [
             'team_id' => 'required|uuid|exists:teams,id',
             'qr_data' => 'required|string',
             'phase_id' => 'required|uuid|exists:phases,id'
+        ],[
+            'team_id.required' => 'Team ID is required',
+            'team_id.uuid' => 'Team ID must be a valid UUID',
+            'team_id.exists' => 'Team ID not found',
+            'qr_data.required' => 'QR data is required',
+            'qr_data.string' => 'QR data must be a string',
+            'phase_id.required' => "Please wait, the phase hasn't started yet.",
+            'phase_id.uuid' => 'Phase ID must be a valid UUID',
+            'phase_id.exists' => 'Phase ID not found',
         ]);
 
         if ($validator->fails()) {
-            return $this->error('Validation failed', HttpResponseCode::HTTP_BAD_REQUEST, $validator->errors());
+            return $this->error($validator->errors()->first(), HttpResponseCode::HTTP_BAD_REQUEST);
         }
 
         $teamId = $request->input('team_id');
