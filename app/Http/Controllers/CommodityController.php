@@ -92,10 +92,25 @@ class CommodityController extends BaseController
                         'return_rate' => $commodity->return_rate,
                     ]);
                 }
-            }
+                $itemPrice = $commodity->price * $item['quantity'];
 
-            $team->coin -= $totalPrice;
-            $team->save();
+                $transactionData = [
+                    'transaction_type' => 'coin',
+                    'action' => 'debit',
+                    'amount' => $itemPrice,
+                    'commodity_id' => $commodity->id,
+                    'description' => "Purchased {$item['quantity']} x {$commodity->name}",
+                ];
+
+                $transRequest = new Request($transactionData);
+                $response = $this->teamController->updateBalance($transRequest);
+                $responseData = $response->getData();
+
+                if (isset($responseData->error)) {
+                    DB::rollBack();
+                    return $this->error($responseData->error);
+                }
+            }
 
             DB::commit();
             return $this->success('Commodity(ies) purchased successfully.');
@@ -145,8 +160,23 @@ class CommodityController extends BaseController
                 ->where('return_rate', $commodity->return_rate)
                 ->update(['quantity' => $newQuantity]);
 
-            $team->coin -= $totalPrice;
-            $team->save();
+            $transactionData = [
+                'team_id' => $team->id,
+                'transaction_type' => 'coin',
+                'action' => 'debit',
+                'amount' => $totalPrice,
+                'commodity_id' => $commodity->id,
+                'description' => "Purchased {$validated['quantity']} x {$commodity->name}",
+            ];
+
+            $transRequest = new Request($transactionData);
+            $response = $this->teamController->updateBalance($transRequest);
+            $responseData = $response->getData();
+
+            if (isset($responseData->error)) {
+                DB::rollBack();
+                return $this->error($responseData->error);
+            }
 
             DB::commit();
             return $this->success('Commodity purchased successfully for the team.');

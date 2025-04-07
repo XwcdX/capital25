@@ -30,7 +30,7 @@ Route::middleware(['isLogin'])->group(function () {
     Route::get('/scanQR', [RallyController::class, 'viewScanner']);
     Route::post('/scanQR', [RallyController::class, 'scanQRCode'])->name('scanQR');
 
-    Route::get('/viewCommodityShop', [UserController::class,'viewCommodityShop'])->name('viewCommodityShop');
+    Route::get('/rally', [RallyController::class,'rallyHome'])->name('rally.home');
     Route::post('/buyMultipleCommodities', [CommodityController::class,'buyMultipleCommodities'])->name('buy.multiple.commodities');
 
     Route::post('/quiz/start', [QuizController::class, 'startQuiz'])->name('quiz.start');

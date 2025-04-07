@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('phases', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->tinyInteger('phase')->unique();
+            $table->time('end_time')->nullable();
             $table->timestamps();
         });
     }

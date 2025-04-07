@@ -274,8 +274,14 @@ class AdminController extends BaseController
 
         try {
             $phase = Phase::findOrFail($phaseId);
+            $phase->end_time = now()->addHours(1.25)->format('H:i:s');
+            if (!$phase->save()) {
+                return back()->with('error', 'Failed to update phase.');
+            }
         } catch (ModelNotFoundException $e) {
             return back()->with('error', 'Phase not found.');
+        } catch (Exception $e) {
+            return back()->with('error', 'Failed to update phase: ' . $e->getMessage());
         }
 
         Cache::forever("current_phase", $phase);
@@ -290,9 +296,9 @@ class AdminController extends BaseController
         $groupedQuestions = $questions->map(function ($question) {
             return [
                 'id' => $question->id,
-                'question' => $question->question,  
-                'choices'  => $question->answers->pluck('answer_text')->toArray(),  
-                'correct'  => $question->answers->where('is_correct', 1)->pluck('answer_text')->first() 
+                'question' => $question->question,
+                'choices' => $question->answers->pluck('answer_text')->toArray(),
+                'correct' => $question->answers->where('is_correct', 1)->pluck('answer_text')->first()
             ];
         });
         $title = 'Quiz Questions';
@@ -303,19 +309,19 @@ class AdminController extends BaseController
     public function editQuestion(Request $r, $id)
     {
         $question = Question::findOrFail($id);
-    
+
         $validator = Validator::make($r->all(), [
             'question' => 'required|string|max:255',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json(['success' => false, 'message' => $validator->errors()->first()], 422);
         }
-    
+
         try {
             $question->question = $r->input('question');
             $question->save();
-    
+
             return response()->json(['success' => true, 'message' => 'Question updated successfully!', 'question' => $question]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Failed to update question.'], 500);

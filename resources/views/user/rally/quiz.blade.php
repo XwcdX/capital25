@@ -313,7 +313,6 @@
             .then(response => response.json())
             .then(data => {
                 quizRules.classList.add('hidden');
-                console.log("Quiz End Time:", data.quiz_end_time);
                 alert("Quiz started! You have 30 minutes.");
 
                 let quizEndTime = new Date(data.quiz_end_time);

@@ -52,11 +52,11 @@
                 <input id="team-search-input" type="search" placeholder="Search teams by name">
                 <button id="team-search-button">Search</button>
             </div>
-    
+
             @php
                 $teams = json_decode($data);
             @endphp
-    
+
             @if ($teams)
                 @foreach ($teams as $team)
                     <div class="team-container" data-team-name="{{ strtolower($team->name) }}">
@@ -86,6 +86,11 @@
 @section('script')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            Echo.channel("phase-updates")
+                .listen(".PhaseUpdated", (event) => {
+                    window.location.reload();
+                });
+
             const searchInput = document.getElementById('team-search-input');
             const searchButton = document.getElementById('team-search-button');
 

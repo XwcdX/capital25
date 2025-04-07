@@ -124,7 +124,7 @@ class Team extends Authenticatable implements MustVerifyEmail
 
     public function relations()
     {
-        return ['rallies', 'users', 'admins', 'phases', 'commodities'];
+        return ['rallies', 'users', 'admins', 'phases', 'commodities', 'cluezone'];
     }
 
     public function rallies()
@@ -162,5 +162,15 @@ class Team extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Answer::class, 'team_answers')
             ->withPivot('answer_id')
             ->withTimestamps();
+    }
+
+    public function cluezone()
+    {
+        return $this->hasMany(ClueZone::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'team_id');
     }
 }
