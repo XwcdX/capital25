@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\PhaseUpdated;
 use App\Imports\AdminImport;
+use App\Mail\ReminderEmail;
 use App\Models\Admin;
 use App\Models\Commodity;
 use App\Models\Team;
@@ -24,6 +25,7 @@ use App\Models\Question;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Support\Facades\Mail;
 
 class AdminController extends BaseController
 {
@@ -326,6 +328,30 @@ class AdminController extends BaseController
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Failed to update question.'], 500);
         }
+    }
+
+    public function sendEmailToNotCompletedTeam()
+    {
+        $teams = $this->teamController->getNotCompletedTeam();
+
+        foreach ($teams as $team) {
+            $data['teamName'] = $team->name;
+
+            Mail::to($team->email)->queue(new ReminderEmail($data));
+        }
+        return back()->with('success','Email sent to teams without users.');
+    }
+
+    public function sendEmailToTeamWithoutUser()
+    {
+        $teams = $this->teamController->getTeamWithNoUser();
+
+        foreach ($teams as $team) {
+            $data['teamName'] =  $team->name;
+
+            Mail::to($team->email)->queue(new ReminderEmail($data));
+        }
+        return back()->with('success','Email sent to teams without users.'); 
     }
 
 }

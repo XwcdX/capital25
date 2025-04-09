@@ -35,7 +35,19 @@ class TeamController extends BaseController
     public function getValidatedTeam()
     {
         return $this->model::with(['users', 'admins'])->where('valid', 1)->get();
-        ;
+    }
+
+    public function getNotCompletedTeam()
+    {
+        return $this->model::with('users')
+            ->withCount('users')
+            ->having('users_count', '<', 4)
+            ->get();
+    }
+
+    public function getTeamWithNoUser()
+    {
+        return $this->model::doesntHave('users')->get();
     }
 
     public function getTeam($teamId)
@@ -297,20 +309,20 @@ class TeamController extends BaseController
     public function updateBalance(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'team_id'           => 'nullable|uuid',
-            'transaction_type'  => 'required|in:coin,green_point',
-            'action'            => 'required|in:credit,debit',
-            'amount'            => 'required|numeric|min:0.01',
-            'commodity_id'      => 'nullable|uuid',
-            'quantity'          => 'nullable|integer|min:1',
-            'meta'              => 'nullable|array',
-            'description'       => 'nullable|string',
+            'team_id' => 'nullable|uuid',
+            'transaction_type' => 'required|in:coin,green_point',
+            'action' => 'required|in:credit,debit',
+            'amount' => 'required|numeric|min:0.01',
+            'commodity_id' => 'nullable|uuid',
+            'quantity' => 'nullable|integer|min:1',
+            'meta' => 'nullable|array',
+            'description' => 'nullable|string',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()->first()], 422);
         }
-    
+
         $data = $validator->validated();
 
         $team = isset($data['team_id'])

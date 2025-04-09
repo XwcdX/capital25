@@ -56,6 +56,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/view-registered-team', [AdminController::class, 'viewRegisteredTeam'])->name('viewRegisteredTeam');
         Route::get('/view-validate-team', [AdminController::class, 'viewValidateTeam'])->name('viewValidateTeam');
         Route::get('/view-validated-team', [AdminController::class, 'viewValidatedTeam'])->name('viewValidatedTeam');
+        Route::post('/send-reminder-not-completed', [AdminController::class, 'sendEmailToNotCompletedTeam'])->name('sendReminderNotCompleted');
+        Route::post('/send-reminder-no-team', [AdminController::class, 'sendEmailToTeamWithoutUser'])->name('sendReminderNoTeam');
+
 
         Route::patch('/team-status-change/{id}', [TeamController::class, 'updateValidAndEmail'])->name('team.statusChange');
         Route::get('/get-completed-team', [TeamController::class, 'getCompletedTeam'])->name('team.getCompletedTeam');
