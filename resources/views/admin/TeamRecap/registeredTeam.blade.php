@@ -77,17 +77,18 @@
                     Download Excel
                 </button>
             </a> --}}
-            <form action="{{route('admin.sendReminderNotCompleted')}}" method="POST">
+            <form action="{{ route('admin.sendReminderNotCompleted') }}" method="POST">
                 @csrf
                 <button type="submit" data-te-ripple-init data-te-ripple-color="light"
-                    class="save w-full inline-block rounded bg-success px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-success-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-success-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-success-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]">
+                    class="sendReminder w-full inline-block rounded bg-success px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-success-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-success-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-success-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]">
                     Send Reminder: Incomplete Team
                 </button>
             </form>
-            <form action="{{route('admin.sendReminderNoTeam')}}" method="POST">
+
+            <form action="{{ route('admin.sendReminderNoTeam') }}" method="POST">
                 @csrf
                 <button type="submit" data-te-ripple-init data-te-ripple-color="light"
-                    class="save w-full inline-block rounded mt-2 bg-success px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-success-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-success-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-success-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]">
+                    class="sendReminder w-full inline-block rounded mt-2 bg-success px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-success-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-success-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-success-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]">
                     Send Reminder: No Team Members
                 </button>
             </form>
@@ -98,6 +99,26 @@
 
 @section('script')
     <script>
+        document.querySelectorAll('.sendReminder').forEach(function(button) {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const form = this.closest('form');
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to send this reminder?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, send it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
         const customDatatable = document.getElementById("datatable");
         let data = @json($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
         data = typeof data === 'string' ? JSON.parse(data) : data;
@@ -218,25 +239,25 @@
                         </div>
                         <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                             ${user.food_allergy !== null && user.food_allergy !== "-" ? `
-                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
-                                    onclick="showTextModal('Food Allergy', '${user.food_allergy}')">Food Allergy</button>
-                                    ` : ''}
+                                        <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                                            onclick="showTextModal('Food Allergy', '${user.food_allergy}')">Food Allergy</button>
+                                            ` : ''}
                             ${user.drug_allergy !== null && user.drug_allergy !== "-" ? `
-                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-green-500 text-white rounded-md hover:bg-green-600 transition"
-                                    onclick="showTextModal('Drug Allergy', '${user.drug_allergy}')">Drug Allergy</button>
-                                    ` : ''}
+                                        <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-green-500 text-white rounded-md hover:bg-green-600 transition"
+                                            onclick="showTextModal('Drug Allergy', '${user.drug_allergy}')">Drug Allergy</button>
+                                            ` : ''}
                             ${user.medical_history !== null && user.medical_history !== "-" ? `
-                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition"
-                                    onclick="showTextModal('Medical History', '${user.medical_history}')">Medical History</button>
-                                    ` : ''}
+                                        <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition"
+                                            onclick="showTextModal('Medical History', '${user.medical_history}')">Medical History</button>
+                                            ` : ''}
                             ${user.student_card !== null && user.student_card !== "-" ? `
-                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-orange-500 text-white rounded-md hover:bg-orange-600 transition"
-                                    onclick="showImageModal('Student Card', '${user.student_card}')">Student Card</button>
-                                    ` : ''}
+                                        <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-orange-500 text-white rounded-md hover:bg-orange-600 transition"
+                                            onclick="showImageModal('Student Card', '${user.student_card}')">Student Card</button>
+                                            ` : ''}
                             ${user.twibbon !== null && user.twibbon !== "-" ? `
-                                <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-red-500 text-white rounded-md hover:bg-red-600 transition"
-                                    onclick="showImageModal('Twibbon', '${user.twibbon}')">Twibbon</button>
-                                    ` : ''}
+                                        <button class="w-full px-3 col-span-1 md:col-span-2 sm:px-5 py-2 sm:py-3 text-sm sm:text-base bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+                                            onclick="showImageModal('Twibbon', '${user.twibbon}')">Twibbon</button>
+                                            ` : ''}
                         </div>
                     </div>
                 `;
