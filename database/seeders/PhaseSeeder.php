@@ -17,9 +17,7 @@ class PhaseSeeder extends Seeder
         $phases = 4;
         for ($i = 1; $i <= $phases; $i++) {
             Phase::create([
-                // 'id' => Str::uuid(),
-                'phase' => $i,
-                // 'status' => false,
+                'phase' => $i
             ]);
         }
     }

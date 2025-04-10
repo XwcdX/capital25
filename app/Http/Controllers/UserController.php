@@ -185,18 +185,4 @@ class UserController extends BaseController
             return response()->json(['errors' => 'Failed to save users.'], 500);
         }
     }
-
-    public function viewCommodityShop()
-    {
-        $title = 'Commodity Shop';
-        $currentPhase = Cache::get("current_phase", "No Phase Set");
-
-        if ($currentPhase === "No Phase Set") {
-            return back()->with('error', 'The phase has not started yet.');
-        }
-
-        $commodities = $this->commodityController->getCurrentCommodities($currentPhase->id);
-        return view('user.rally.home', compact('commodities', 'currentPhase', 'title'));
-    }
-
 }

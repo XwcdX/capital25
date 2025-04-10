@@ -35,7 +35,19 @@ class TeamController extends BaseController
     public function getValidatedTeam()
     {
         return $this->model::with(['users', 'admins'])->where('valid', 1)->get();
-        ;
+    }
+
+    public function getNotCompletedTeam()
+    {
+        return $this->model::with('users')
+            ->withCount('users')
+            ->having('users_count', '<', 4)
+            ->get();
+    }
+
+    public function getTeamWithNoUser()
+    {
+        return $this->model::doesntHave('users')->get();
     }
 
     public function getTeam($teamId)
@@ -54,7 +66,7 @@ class TeamController extends BaseController
                 }
             ])
             ->get();
-        
+
         $teams->each(function ($team) {
             $team->setRelation('commodities', $team->commodities->unique('id'));
         });
@@ -191,7 +203,7 @@ class TeamController extends BaseController
         }
         Auth::login($team);
         session(['team_id' => $team->id]);
-        
+
         if (!$team->hasVerifiedEmail()) {
             event(new Registered($team));
             $request->session()->put('email', $creds['email']);
@@ -292,5 +304,85 @@ class TeamController extends BaseController
     public function exportValidatedTeam()
     {
         return Excel::download(new TeamsWithUsersExport, 'validated_team.xlsx');
+    }
+
+    public function updateBalance(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'team_id' => 'nullable|uuid',
+            'transaction_type' => 'required|in:coin,green_point',
+            'action' => 'required|in:credit,debit',
+            'amount' => 'required|numeric|min:0.01',
+            'commodity_id' => 'nullable|uuid',
+            'quantity' => 'nullable|integer|min:1',
+            'meta' => 'nullable|array',
+            'description' => 'nullable|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->first()], 422);
+        }
+
+        $data = $validator->validated();
+
+        $team = isset($data['team_id'])
+            ? $this->model::findOrFail($data['team_id'])
+            : Auth::user();
+
+        return DB::transaction(function () use ($data, $team) {
+            if ($data['action'] === 'debit') {
+                if ($data['transaction_type'] === 'coin' && $team->coin < $data['amount']) {
+                    return response()->json(['error' => 'Insufficient coin balance'], 422);
+                }
+                if ($data['transaction_type'] === 'green_point' && $team->green_points < $data['amount']) {
+                    return response()->json(['error' => 'Insufficient green points balance'], 422);
+                }
+            }
+
+            $transaction = $team->transactions()->create([
+                'transaction_type' => $data['transaction_type'],
+                'action' => $data['action'],
+                'amount' => $data['amount'],
+                'commodity_id' => $data['commodity_id'] ?? null,
+                'quantity' => $data['quantity'] ?? null,
+                'meta' => isset($data['meta']) ? json_encode($data['meta']) : null,
+                'description' => $data['description'] ?? null,
+            ]);
+
+            if ($data['transaction_type'] === 'coin') {
+                $team->coin = $data['action'] === 'credit'
+                    ? $team->coin + $data['amount']
+                    : $team->coin - $data['amount'];
+            } else {
+                $team->green_points = $data['action'] === 'credit'
+                    ? $team->green_points + $data['amount']
+                    : $team->green_points - $data['amount'];
+            }
+            $team->save();
+
+            return response()->json([
+                'success' => true,
+                'transaction' => $transaction,
+                'team' => $team,
+            ]);
+        });
+    }
+
+    public function getGreenpointTransactions()
+    {
+        $team = Auth::user();
+        return $team->transactions()
+            ->where('transaction_type', 'green_point')
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
+
+    public function getCoinTransactions()
+    {
+        $team = Auth::user();
+        return $team->transactions()
+            ->where('transaction_type', 'coin')
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 }

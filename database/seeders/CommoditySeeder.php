@@ -4,14 +4,10 @@ namespace Database\Seeders;
 
 use App\Models\Commodity;
 use App\Models\Phase;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class CommoditySeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $phase1 = Phase::where('phase', 1)->first()->id;
@@ -23,144 +19,288 @@ class CommoditySeeder extends Seeder
                 [
                     "name" => "Kacang Tanah",
                     "image" => "assets/phase1/KACANG_TANAH.png",
-                    "description" => "Kacang Tanah adalah tanaman polong-polongan yang banyak dibudidayakan di Indonesia. Kacang ini memiliki banyak manfaat, antara lain sebagai sumber protein nabati, lemak sehat, dan vitamin.",
-                    "price" => 0,
-                    "return_rate" => 0,
+                    "description" => "Komoditas unggulan India, tahan kekeringan",
+                    "price" => 200,
+                    "return_rate" => 0.1000,
                 ],
                 [
                     "name" => "Padi",
                     "image" => "assets/phase1/PADI",
-                    "description" => "Padi adalah tanaman serealia yang menjadi makanan pokok bagi sebagian besar penduduk dunia, terutama di Asia. Padi memiliki banyak manfaat, antara lain sebagai sumber karbohidrat, serat, dan vitamin.",
-                    "price" => 0,
-                    "return_rate" => 0,
+                    "description" => "Komoditas rentan kekeringan",
+                    "price" => 250,
+                    "return_rate" => 0.0500,
                 ],
                 [
                     "name" => "Gula",
                     "image" => "assets/phase1/GULA",
-                    "description" => "Gula adalah bahan makanan yang digunakan sebagai pemanis. Gula memiliki banyak manfaat, antara lain sebagai sumber energi, meningkatkan rasa makanan, dan memberikan rasa manis pada minuman.",
-                    "price" => 0,
-                    "return_rate" => 0,
+                    "description" => "Pemerintah India menghentikan ekspor gula karena curah hujan rendah",
+                    "price" => 300,
+                    "return_rate" => 0.0500,
                 ],
                 [
                     "name" => "Bawang Merah",
                     "image" => "assets/phase1/BAWANG_MERAH.png",
-                    "description" => "Bawang Merah adalah tanaman umbi-umbian yang banyak dibudidayakan di Indonesia. Bawang Merah memiliki banyak manfaat, antara lain sebagai bumbu masakan, sumber antioksidan, dan meningkatkan sistem kekebalan tubuh.",
-                    "price" => 0,
-                    "return_rate" => 0
+                    "description" => "Komoditas unggulan India, tahan kekeringan",
+                    "price" => 300,
+                    "return_rate" => 0.1000,
                 ],
                 [
-                    "name" => "Kacang Polong",
-                    "image" => "assets/phase1/KACANG_POLONG.png",
-                    "description" => "Kacang Polong adalah tanaman polong-polongan yang banyak dibudidayakan di Indonesia. Kacang Polong memiliki banyak manfaat, antara lain sebagai sumber protein nabati, serat, dan vitamin.",
-                    "price" => 0,
-                    "return_rate" => 0
+                    "name" => "Kacang Pistachio",
+                    "image" => "assets/phase1/KACANG_PISTACHIO",
+                    "description" => "Bukan komoditas unggulan India, tetapi komoditas tahan kekeringan",
+                    "price" => 350,
+                    "return_rate" => 0.0750,
                 ],
                 [
                     "name" => "Pestisida Organik",
                     "image" => "assets/phase1/PESTISIDA_ORGANIK.png",
-                    "description"=> "Pestisida Organik adalah pestisida yang terbuat dari bahan-bahan alami dan tidak mengandung bahan kimia berbahaya. Pestisida Organik memiliki banyak manfaat, antara lain sebagai pengendali hama dan penyakit tanaman, ramah lingkungan, dan aman bagi kesehatan.",
-                    "price" => 0,
-                    "return_rate" => 0
+                    "description" => "Permintaan meningkat seiring berkembangnya masalah lingkungan",
+                    "price" => 450,
+                    "return_rate" => 0.1000,
                 ],
                 [
                     "name" => "Pupuk Hayati",
                     "image" => "assets/phase1/PUPUK_HAYATI.png",
-                    "description"=> "Pupuk Hayati adalah pupuk yang terbuat dari bahan-bahan alami dan mengandung mikroorganisme yang bermanfaat bagi tanaman. Pupuk Hayati memiliki banyak manfaat, antara lain meningkatkan kesuburan tanah, memperbaiki struktur tanah, dan meningkatkan hasil pertanian.",
-                    "price" => 0,
-                    "return_rate" => 0
+                    "description" => "Permintaan meningkat seiring berkembangnya masalah lingkungan",
+                    "price" => 500,
+                    "return_rate" => 0.1000,
                 ],
                 [
-                    "name" => "Processed Food",
+                    "name" => "Processed Foods",
                     "image" => "assets/phase1/PROCESSED_FOOD.png",
-                    "description"=> "Processed Food adalah makanan yang telah diolah dan dikemas untuk memudahkan penyimpanan dan konsumsi. Processed Food memiliki banyak manfaat, antara lain praktis, tahan lama, dan mudah disajikan.",
-                    "price" => 0,
-                    "return_rate" => 0
+                    "description" => "Tidak terlalu relevan dengan storyline, tetapi apabila kekeringan, bahan makanan menipis",
+                    "price" => 400,
+                    "return_rate" => 0.0750,
                 ],
                 [
                     "name" => "Susu Bubuk",
                     "image" => "assets/phase1/SUSU_BUBUK.png",
-                    "description"=> "Susu Bubuk adalah susu yang telah dikeringkan menjadi bubuk untuk memudahkan penyimpanan dan konsumsi. Susu Bubuk memiliki banyak manfaat, antara lain sebagai sumber kalsium, protein, dan vitamin.",
-                    "price" => 0,
-                    "return_rate" => 0
+                    "description" => "Tidak terlalu relevan dengan storyline, tetapi apabila kekeringan, pakan ternak menipis",
+                    "price" => 350,
+                    "return_rate" => 0.0750,
                 ],
                 [
                     "name" => "Kain Katun",
                     "image" => "assets/phase1/KAIN_KATUN.png",
-                    "description"=> "Kain Katun adalah kain yang terbuat dari serat kapas dan banyak digunakan untuk pakaian. Kain Katun memiliki banyak manfaat, antara lain nyaman dipakai, menyerap keringat, dan mudah dicuci.",
-                    "price" => 0,
-                    "return_rate" => 0
+                    "description" => "Berasal dari tanaman kapas yang rentan kekeringan",
+                    "price" => 250,
+                    "return_rate" => 0.0500,
                 ],
             ],
             [
                 [
-                    "name" => "Kerang",
+                    "name" => "Kerang Remis",
                     "image" => "assets/phase2/KERANG.png",
-                    "description"=> "Kerang adalah hewan laut yang memiliki cangkang keras dan banyak dibudidayakan di Indonesia. Kerang memiliki banyak manfaat, antara lain sebagai sumber protein, omega-3, dan mineral.",
-                    "price" => 0,
-                    "return_rate" => 0,
+                    "description" => "Tahan terhadap kenaikan suhu dan dapat berkembang lebih baik.",
+                    "price" => 150,
+                    "return_rate" => 0.1000,
                 ],
                 [
-                    "name" => "Rumput Laut",
+                    "name" => "Makroalga (Rumput Laut)",
                     "image" => "assets/phase2/RUMPUT_LAUT.png",
-                    "description"=> "Rumput Laut adalah tanaman laut yang banyak dibudidayakan di Indonesia. Rumput Laut memiliki banyak manfaat, antara lain sebagai sumber serat, vitamin, dan mineral.",
-                    "price" => 0,
-                    "return_rate" => 0,
+                    "description" => "Sumber makanan alternatif jika plankton menurun.",
+                    "price" => 200,
+                    "return_rate" => 0.1000,
                 ],
                 [
                     "name" => "Filter Air",
                     "image" => "assets/phase2/FILTER_AIR.png",
-                    "description"=> "Filter Air adalah alat yang digunakan untuk menyaring air agar bersih dan aman untuk dikonsumsi. Filter Air memiliki banyak manfaat, antara lain menghilangkan kotoran, bakteri, dan zat berbahaya dari air.",
-                    "price" => 0,
-                    "return_rate" => 0,
+                    "description" => "Mengolah air untuk menyaring polutan tetapi bukan solusi untuk peningkatan suhu air.",
+                    "price" => 450,
+                    "return_rate" => 0.0750,
                 ],
                 [
                     "name" => "Obat Ikan",
                     "image" => "assets/phase2/OBAT_IKAN.png",
-                    "description"=> "Obat Ikan adalah obat yang digunakan untuk mengobati penyakit pada ikan. Obat Ikan memiliki banyak manfaat, antara lain mengobati infeksi, meningkatkan kesehatan ikan, dan mencegah penyebaran penyakit.",
-                    "price" => 0,
-                    "return_rate" => 0
+                    "description" => "Mengatasi peningkatan penyakit pada perikanan.",
+                    "price" => 300,
+                    "return_rate" => 0.1000,
                 ],
                 [
                     "name" => "Ikan Kakap Merah",
                     "image" => "assets/phase2/IKAN_KAKAP_MERAH.png",
-                    "description"=> "Ikan Kakap Merah adalah ikan laut yang banyak dibudidayakan di Indonesia. Ikan Kakap Merah memiliki banyak manfaat, antara lain sebagai sumber protein, omega-3, dan vitamin.",
-                    "price" => 0,
-                    "return_rate" => 0
+                    "description" => "Rentan terhadap perubahan suhu dan ketersediaan makanan.",
+                    "price" => 250,
+                    "return_rate" => 0.0500,
                 ],
                 [
                     "name" => "Kepiting Salju Norwegia",
                     "image" => "assets/phase2/KEPITING_SALJU_NORWEGIA.png",
-                    "description"=> "Kepiting Salju Norwegia adalah jenis kepiting yang banyak dibudidayakan di Norwegia. Kepiting Salju Norwegia memiliki banyak manfaat, antara lain sebagai sumber protein, omega-3, dan mineral.",
-                    "price" => 0,
-                    "return_rate" => 0
+                    "description" => "Jumlah tangkapan menurun karena rentan terhadap perubahan suhu tinggi.",
+                    "price" => 500,
+                    "return_rate" => 0.0500,
                 ],
                 [
                     "name" => "Ikan Makerel",
                     "image" => "assets/phase2/IKAN_MAKEREL.png",
-                    "description"=>"Ikan Makerel adalah ikan laut yang banyak dibudidayakan di Indonesia. Ikan Makerel memiliki banyak manfaat, antara lain sebagai sumber protein, omega-3, dan vitamin.",
-                    "price" => 0,
-                    "return_rate" => 0
+                    "description" => "Ikan tropis yang bisa bermigrasi ke perairan Norwegia yang lebih hangat, tetapi bukan solusi untuk perairan panas.",
+                    "price" => 200,
+                    "return_rate" => 0.0750,
                 ],
                 [
                     "name" => "Udang Pembersih",
                     "image" => "assets/phase2/UDANG_PEMBERSIH.png",
-                    "description"=> "Udang Pembersih adalah jenis udang yang banyak dibudidayakan di Indonesia. Udang Pembersih memiliki banyak manfaat, antara lain sebagai sumber protein, omega-3, dan vitamin.",
-                    "price" => 0,
-                    "return_rate" => 0
+                    "description" => "Membersihkan parasit dari tubuh ikan.",
+                    "price" => 300,
+                    "return_rate" => 0.1000,
                 ],
                 [
                     "name" => "Nanobubble Generator",
                     "image" => "assets/phase2/NANOBUBBLE_GENERATOR.png",
-                    "description"=> "Nanobubble Generator adalah alat yang digunakan untuk menghasilkan gelembung nanometer dalam air. Nanobubble Generator memiliki banyak manfaat, antara lain meningkatkan kualitas air, meningkatkan oksigen terlarut, dan mengurangi zat berbahaya dalam air.",
-                    "price" => 0,
-                    "return_rate" => 0
+                    "description" => "Meningkatkan kelimpahan dan keberagaman fitoplankton, sekaligus kualitas perairan.",
+                    "price" => 500,
+                    "return_rate" => 0.0750,
                 ],
                 [
                     "name" => "Cacing Darah",
                     "image" => "assets/phase2/CACING_DARAH.png",
-                    "description"=> "Cacing Darah adalah jenis cacing yang banyak dibudidayakan di Indonesia. Cacing Darah memiliki banyak manfaat, antara lain sebagai sumber protein, omega-3, dan vitamin.",
-                    "price" => 0,
-                    "return_rate" => 0
+                    "description" => "Pakan ikan alami bernutrisi, tetapi bukan obat dan tidak akan cukup membantu dengan permasalahan storyline.",
+                    "price" => 200,
+                    "return_rate" => 0.0500,
+                ],
+            ],
+            [
+                [
+                    "name" => "Lithium",
+                    "image" => "assets/phase3/LITHIUM.png",
+                    "description" => "Bahan baku utama baterai EV, permintaan global meningkat.",
+                    "price" => 500,
+                    "return_rate" => 0.1000,
+                ],
+                [
+                    "name" => "Kobalt",
+                    "image" => "assets/phase3/KOBALT.png",
+                    "description" => "Digunakan dalam katoda baterai EV, rantai pasok rentan dan mahal.",
+                    "price" => 350,
+                    "return_rate" => 0.0750,
+                ],
+                [
+                    "name" => "Nikel",
+                    "image" => "assets/phase3/NIKEL",
+                    "description" => "Komponen utama baterai EV tipe NMC (Nickel Manganese Cobalt), namun kurang ramah lingkungan saat proses ekstraksi.",
+                    "price" => 450,
+                    "return_rate" => 0.0750,
+                ],
+                [
+                    "name" => "Tembaga",
+                    "image" => "assets/phase3/TEMBAGA.png",
+                    "description" => "Dibutuhkan dalam sistem kelistrikan EV, motor, dan charging. Namun, tidak bertampak langsung terhadap pengurangan emisi atau efisiensi energi.",
+                    "price" => 350,
+                    "return_rate" => 0.0500,
+                ],
+                [
+                    "name" => "Cat Otomotif",
+                    "image" => "assets/phase3/CAT_OTOMOTIF.png",
+                    "description" => "Digunakan dalam finishing kendaraan, tapi tidak berdampak langsung terhadap pengurangan emisi atau efisiensi energi.",
+                    "price" => 200,
+                    "return_rate" => 0.0500,
+                ],
+                [
+                    "name" => "Panel Surya",
+                    "image" => "assets/phase3/PANEL_SURYA.png",
+                    "description" => "Digunakan untuk proses isi ulang baterai kendaraan EV.",
+                    "price" => 300,
+                    "return_rate" => 0.1000,
+                ],
+                [
+                    "name" => "EV Charging Unit",
+                    "image" => "assets/phase3/EV_CHARGING_UNIT.png",
+                    "description" => "Infrastruktur penting untuk mendukung pertumbuhan EV.",
+                    "price" => 500,
+                    "return_rate" => 0.1000,
+                ],
+                [
+                    "name" => "Ban Karet Sintetis",
+                    "image" => "assets/phase3/BAN_KARET_SINTETIS.png",
+                    "description" => "Dipakai di semua kendaraan, tapi tidak spesifik mendukung transisi EV atau target karbon.",
+                    "price" => 200,
+                    "return_rate" => 0.0500,
+                ],
+                [
+                    "name" => "Hydrogen Fuel Cell",
+                    "image" => "assets/phase3/HYDROGEN_FUEL_CELL.png",
+                    "description" => "Alternatif teknologi rendah emisi untuk kendaraan berat.",
+                    "price" => 450,
+                    "return_rate" => 0.1000,
+                ],
+                [
+                    "name" => "Bioplastik Otomotif",
+                    "image" => "assets/phase3/BIOPLASTIK_OTOMOTIF.png",
+                    "description" => "Material ramah lingkungan untuk interior kendaraan, namun kurang kokoh.",
+                    "price" => 350,
+                    "return_rate" => 0.0750,
+                ],
+            ],
+            [
+                [
+                    "name" => "Kemasan Bioplastik",
+                    "image" => "assets/phase4/KEMASAN_BIOPLASTIK.png",
+                    "description" => "Jenis plastik biodegradable yang mengurangi ketergantungan pada plastik konvensional, tetapi rapuh dengan daya tahan yang rendah.",
+                    "price" => 300,
+                    "return_rate" => 0.0750,
+                ],
+                [
+                    "name" => "Sumur Resapan",
+                    "image" => "assets/phase4/SUMUR_RESAPAN.png",
+                    "description" => "Menginvestasi dalam skala yang besar dapat menambah cadangan air tanah negara sekaligus mengurangi laju kota tenggelam dengan mencegah banjir.",
+                    "price" => 350,
+                    "return_rate" => 0.1000,
+                ],
+                [
+                    "name" => "Edible Packaging",
+                    "image" => "assets/phase4/EDIBLE_PACKAGING.png",
+                    "description" => "Alternatif kemasan yang ramah lingkungan tetapi memiliki biaya produksi yang tinggi dan umur simpan yang pendek.",
+                    "price" => 250,
+                    "return_rate" => 0.0750,
+                ],
+                [
+                    "name" => "Green Roof",
+                    "image" => "assets/phase4/GREEN_ROOF.png",
+                    "description" => "Membantu mengurangi emisi dan polusi perkotaan sekaligus masalah kekurangan air.",
+                    "price" => 300,
+                    "return_rate" => 0.1000,
+                ],
+                [
+                    "name" => "Batu Bara Berkalori Rendah",
+                    "image" => "assets/phase4/BATU_BARA_BERKALORI_RENDAH.png",
+                    "description" => "Bahan bakar beremisi tinggi yang kurang efisien dibanding batu bara biasa dan akan terhambat oleh kebijakan transisi energi pemerintah.",
+                    "price" => 200,
+                    "return_rate" => 0.0500,
+                ],
+                [
+                    "name" => "Resin Plastik Daur Ulang",
+                    "image" => "assets/phase4/RESIN_PLASTIK_DAUR_ULANG.png",
+                    "description" => "Mengurangi ketergantungan pada plastik baru sehingga dapat menjadi solusi untuk limbah produksi manufaktur plastik.",
+                    "price" => 400,
+                    "return_rate" => 0.1000,
+                ],
+                [
+                    "name" => "Sedotan Bambu",
+                    "image" => "assets/phase4/SEDOTAN_BAMBU.png",
+                    "description" => "Alternatif sedotan plastik dan Tiongkok merupakan penghasil bambu terbesar di dunia, namun sedotan bambu mengandung PFAS yang berbahaya bagi satwa liar dan lingkungan.",
+                    "price" => 150,
+                    "return_rate" => 0.0750,
+                ],
+                [
+                    "name" => "Sensor Kualitas Udara",
+                    "image" => "assets/phase4/SENSOR_KUALITAS_UDARA.png",
+                    "description" => "Membantu pengawasan langsung di zona manufaktur besar, namun tidak dapat menyelesaikan masalah.",
+                    "price" => 350,
+                    "return_rate" => 0.0500,
+                ],
+                [
+                    "name" => "Insulasi Serat Kayu",
+                    "image" => "assets/phase4/INSULASI_SERAT_KAYU.png",
+                    "description" => "Mengurangi energi pendingin atau pemanas sehingga menekan emisi karbon dari bangunan pabrik dan apartemen kota. Namun, rentan terhadap api, serangga, dan dapat menjadi tempat jamur berkembang biak.",
+                    "price" => 200,
+                    "return_rate" => 0.0750,
+                ],
+                [
+                    "name" => "Mesin Industri Hemat Energi",
+                    "image" => "assets/phase4/MESIN_INDUSTRI_HEMAT_ENERGI.png",
+                    "description" => "Komoditas penting untuk modernisasi pabrik-pabrik tua agar hemat energi dan kurangi jejak karbon.",
+                    "price" => 500,
+                    "return_rate" => 0.1000,
                 ],
             ],
         ];
@@ -183,4 +323,5 @@ class CommoditySeeder extends Seeder
             }
         }
     }
+
 }

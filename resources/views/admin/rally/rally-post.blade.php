@@ -110,15 +110,16 @@
                         const newPhaseId = event.rallyHistory[0].pivot.phase_id;
                         if (phaseId !== newPhaseId) {
                             phaseId = newPhaseId;
-                            localStorage.setItem("current_phase_id", newPhaseId);
                             subscribeToRallyChannel(rallyId);
                         }
                     }
-
+                    console.log(event.rallyHistory);
+                    
                     const updatedTeamData = event.rallyHistory.map(history => ({
                         teamId: history.id,
                         teamName: history.name,
                         coin: history.coin,
+                        qrExpiredAt: history.pivot.qr_expired_at,
                         rallyId: history.pivot.rally_id
                     }));
 
@@ -134,8 +135,6 @@
 
 
             function updateTeamData(updatedTeams) {
-                console.log(updatedTeams);
-
                 updatedTeams.forEach(team => {
                     let teamElement = document.querySelector(`#team-${team.teamId}`);
 
@@ -154,6 +153,18 @@
                         teamElement.id = `team-${team.teamId}`;
                         teamList.appendChild(teamElement);
                     }
+
+                    const rallyContainer = document.querySelector(`[data-rally-id="${team.rallyId}"]`);
+                    if (!rallyContainer) return;
+
+                    let qrExpiredAtElement = rallyContainer.querySelector(`#qrExpiredAt-${team.teamId}`);
+                    if (!qrExpiredAtElement) {
+                        qrExpiredAtElement = document.createElement("h3");
+                        qrExpiredAtElement.id = `qrExpiredAt-${team.teamId}`;
+                        qrExpiredAtElement.classList.add("text-lg", "font-semibold");
+                        rallyContainer.appendChild(qrExpiredAtElement);
+                    }
+                    qrExpiredAtElement.textContent = `QR Expired At: ${team.qrExpiredAt}`;
 
                     teamElement.textContent = `${team.teamName} - Score: ${team.coin}`;
                 });
@@ -189,6 +200,12 @@
                         confirmButtonText: "OK"
                     });
                     return;
+                }
+
+                const selectedRallyTeams = document.querySelector(`[data-rally-id="${rallyId}"]`);
+                const teamList = selectedRallyTeams.querySelector(".team-list");
+                if (teamList) {
+                    teamList.innerHTML = '';
                 }
 
                 qrCodeModal.classList.remove("hidden");

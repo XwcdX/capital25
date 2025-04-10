@@ -10,9 +10,6 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RallyController;
 use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\StorylineController;
-use App\Models\Phase;
-use App\Http\Controllers\LifecycleHomepageController;
 
 Route::get('/', [TeamController::class, 'home'])->name('home');
 Route::get('/login', [TeamController::class, 'login'])->name('login');
@@ -33,7 +30,7 @@ Route::middleware(['isLogin'])->group(function () {
     Route::get('/scanQR', [RallyController::class, 'viewScanner']);
     Route::post('/scanQR', [RallyController::class, 'scanQRCode'])->name('scanQR');
 
-    Route::get('/viewCommodityShop', [UserController::class,'viewCommodityShop'])->name('viewCommodityShop');
+    Route::get('/rally', [RallyController::class,'rallyHome'])->name('rally.home');
     Route::post('/buyMultipleCommodities', [CommodityController::class,'buyMultipleCommodities'])->name('buy.multiple.commodities');
 
     Route::post('/quiz/start', [QuizController::class, 'startQuiz'])->name('quiz.start');
@@ -59,6 +56,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/view-registered-team', [AdminController::class, 'viewRegisteredTeam'])->name('viewRegisteredTeam');
         Route::get('/view-validate-team', [AdminController::class, 'viewValidateTeam'])->name('viewValidateTeam');
         Route::get('/view-validated-team', [AdminController::class, 'viewValidatedTeam'])->name('viewValidatedTeam');
+        Route::post('/send-reminder-not-completed', [AdminController::class, 'sendEmailToNotCompletedTeam'])->name('sendReminderNotCompleted');
+        Route::post('/send-reminder-no-team', [AdminController::class, 'sendEmailToTeamWithoutUser'])->name('sendReminderNoTeam');
+
 
         Route::patch('/team-status-change/{id}', [TeamController::class, 'updateValidAndEmail'])->name('team.statusChange');
         Route::get('/get-completed-team', [TeamController::class, 'getCompletedTeam'])->name('team.getCompletedTeam');
@@ -83,12 +83,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/question', [AdminController::class, 'viewQuizQuestions'])->name('viewQuestions');
         Route::get('/quiz-result', [AdminController::class, 'viewQuizResults'])->name('viewResults');
 
-        //storyline
-        Route::get('/storyline', [StorylineController::class, 'index'])->name('storyline.index');
-        // Route::get('/storyline/change/{phase}', [StorylineController::class, 'changePhase'])->name('storyline.changePhase');
-
-        //lifecycle homepage
-        Route::get('/lifecycle', [LifecycleHomepageController::class,'index'])->name('LifecycleHomepage.index');
             });
         });
 // password-reset
@@ -98,5 +92,3 @@ Route::get('/reset-password/{role}/{token}', [PasswordResetTokenController::clas
 Route::post('/reset-password', [PasswordResetTokenController::class, 'resetPasswordPost'])->name('reset.password.post');
 
 Route::get('/storage/{path?}', [StorageController::class, 'getImage'])->where('path', '.*');
-
-

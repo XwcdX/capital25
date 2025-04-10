@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\PhaseUpdated;
 use App\Imports\AdminImport;
+use App\Mail\ReminderEmail;
 use App\Models\Admin;
 use App\Models\Commodity;
 use App\Models\Team;
@@ -24,6 +25,7 @@ use App\Models\Question;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -276,8 +278,14 @@ class AdminController extends BaseController
 
         try {
             $phase = Phase::findOrFail($phaseId);
+            $phase->end_time = now()->addHours(1.25)->format('H:i:s');
+            if (!$phase->save()) {
+                return back()->with('error', 'Failed to update phase.');
+            }
         } catch (ModelNotFoundException $e) {
             return back()->with('error', 'Phase not found.');
+        } catch (Exception $e) {
+            return back()->with('error', 'Failed to update phase: ' . $e->getMessage());
         }
 
         Cache::forever("current_phase", $phase);
@@ -372,23 +380,47 @@ class AdminController extends BaseController
     public function editQuestion(Request $r, $id)
     {
         $question = Question::findOrFail($id);
-    
+
         $validator = Validator::make($r->all(), [
             'question' => 'required|string|max:255',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json(['success' => false, 'message' => $validator->errors()->first()], 422);
         }
-    
+
         try {
             $question->question = $r->input('question');
             $question->save();
-    
+
             return response()->json(['success' => true, 'message' => 'Question updated successfully!', 'question' => $question]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Failed to update question.'], 500);
         }
+    }
+
+    public function sendEmailToNotCompletedTeam()
+    {
+        $teams = $this->teamController->getNotCompletedTeam();
+
+        foreach ($teams as $team) {
+            $data['teamName'] = $team->name;
+
+            Mail::to($team->email)->queue(new ReminderEmail($data));
+        }
+        return back()->with('success','Email sent to teams without users.');
+    }
+
+    public function sendEmailToTeamWithoutUser()
+    {
+        $teams = $this->teamController->getTeamWithNoUser();
+
+        foreach ($teams as $team) {
+            $data['teamName'] =  $team->name;
+
+            Mail::to($team->email)->queue(new ReminderEmail($data));
+        }
+        return back()->with('success','Email sent to teams without users.'); 
     }
 
     public function deleteQuestion($id)

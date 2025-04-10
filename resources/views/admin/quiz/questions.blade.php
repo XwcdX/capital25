@@ -114,8 +114,6 @@
         const customDatatable = document.getElementById("datatable");
         let data = @json($groupedQuestions, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
         data = typeof data === 'string' ? JSON.parse(data) : data;
-        console.log(data);
-        
         let questions = data.map((dt, index) => ({
             index: index + 1,  
             name: dt.question,  
