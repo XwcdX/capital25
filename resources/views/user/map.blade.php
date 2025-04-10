@@ -3,7 +3,7 @@
 @section('style')
     <style>
         .landing-container {
-             filter: blur(5px);
+            filter: blur(5px);
             transition: opacity 0.3s ease-in-out;
         }
 
@@ -35,14 +35,20 @@
         .map-container {
             text-align: center;
             position: relative;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .relative {
+            padding: 0 60px;
         }
 
         .map-image {
-            height: 90%;
-            /* max-width: 600px; */
-            border-radius: 10px;
+            width: 100%
+                /* max-width: 600px; */
+                border-radius: 10px;
             display: block;
-            margin: 0 auto;
+            margin: 0 60px;
         }
 
         .carousel-container {
@@ -56,13 +62,32 @@
         .carousel-btn {
             background-color: var(--cap-green4);
             color: white;
+            position: absolute;
+            top: 40%;
+            z-index: 20;
             border: none;
-            padding: 10px 10px;
-            border-radius: 5px;
+            /* padding: 10px; */
+            border-radius: 50%;
             cursor: pointer;
-            font-size: 16px;
-            min-width: 80px;
-            font-family: 'Quicksand';
+            width: 6%;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .carousel-btn:hover {
+            background-color: var(--cap-green3);
+            transform: scale(1.1);
+        }
+
+        .prev-btn {
+            left: 10px;
+        }
+
+        .next-btn {
+            right: 10px;
         }
 
         @keyframes blinkGlow {
@@ -100,18 +125,35 @@
             font-weight: bold;
         }
 
+
         @media (max-width: 600px) {
             .phase-title {
                 font-size: 1.5rem;
             }
 
-            .modal-content{
+            .modal-content {
                 max-width: 400px;
+            }
+
+            .map-image {
+                margin: 0 30px;
+            }
+
+            .relative {
+                padding: 0 30px;
             }
 
             #rallyTooltip {
                 font-size: 10px;
                 padding: 4px 8px;
+            }
+
+            .prev-btn {
+                left: 5px;
+            }
+
+            .next-btn {
+                right: 5px;
             }
         }
     </style>
@@ -132,67 +174,79 @@
                         style="{{ $phase->id == $currentPhase->id ? 'display:block;' : 'display:none;' }}">
 
                         <div class="relative w-full mx-auto">
-                            <!-- Map Image -->
-                            <img src="{{ asset('assets/Icon pos map/Map/Map.png') }}"
-                                alt="Map for Phase {{ $currentPhase->phase }}" class="w-full h-auto">
+                            <button class="carousel-btn prev-btn flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" stroke-width="4">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                                </svg>
+                            </button>
 
-                            <!-- Extra Icons (Clue Zone & Basecamp) -->
-                            @php
-                                $rallyPositions = [
-                                    'Pos 7' => ['x' => 2, 'y' => 8, 'name' => 'Recycling'],
-                                    'Pos 1' => ['x' => 8, 'y' => 8, 'name' => 'Natural Resources '],
-                                    'Pos 2' => ['x' => 14, 'y' => 8, 'name' => 'Raw Material Extraction'],
-                                    'Pos 3' => ['x' => 20, 'y' => 8, 'name' => 'Production'],
-                                    'Pos 4' => ['x' => 26, 'y' => 8, 'name' => 'Packing and Distribution'],
-                                    'Pos 5' => ['x' => 62.5, 'y' => 8, 'name' => 'Use and Maintenance '],
-                                    'Pos 6' => ['x' => 62.3, 'y' => 82, 'name' => 'Disposal'],
-                                    'Pos 8' => ['x' => 68.3, 'y' => 82, 'name' => 'Waste Management'],
-                                ];
+                            <div class="map-container">
+                                <!-- Map Image -->
+                                <img src="{{ asset('assets/Icon pos map/Map/Map.png') }}"
+                                    alt="Map for Phase {{ $currentPhase->phase }}" class="w-full h-auto">
 
-                                $extraIcons = [
-                                    'Clue Zone' => ['x' => 56, 'y' => 8, 'icon' => 'clue zone.png'],
-                                    'Basecamp' => ['x' => 86.3, 'y' => 81.5, 'icon' => 'Basecamp.png'],
-                                ];
-
-                                $centralHub = [
-                                    'Central Hub' => ['x' => 45, 'y' => 70, 'icon' => 'central hub.png'],
-                                ];
-                            @endphp
-
-                            @foreach ($extraIcons as $name => $position)
-                                <img src="{{ asset('assets/Icon pos map/' . $position['icon']) }}" alt="{{ $name }}"
-                                    class="absolute rally-icon blinking-glow" data-name="{{ $name }}"
-                                    style="width:6%; height:auto; top: {{ $position['y'] }}%; left: {{ $position['x'] }}%;">
-                            @endforeach
-
-
-                            <!-- Rally Position Icons -->
-                            @foreach ($rallies as $rally)
+                                <!-- Extra Icons (Clue Zone & Basecamp) -->
                                 @php
-                                    $isVisited = in_array($rally->id, $visitedRalliesByPhase[$phase->id] ?? []);
-                                    $iconName = $rally->name . ($isVisited ? '' : ' (2)') . '.png';
-                                @endphp
-                                <img src="{{ asset('assets/Icon pos map/' . $iconName) }}" alt="{{ $rally->name }}"
-                                    data-name="{{ $rally->name }}&#10; {{ $rallyPositions[$rally->name]['name'] }}"
-                                    class="absolute rally-icon"
-                                    style="width:6%; height:auto; top: {{ $rallyPositions[$rally->name]['y'] ?? 50 }}%; left: {{ $rallyPositions[$rally->name]['x'] ?? 50 }}%;">
-                            @endforeach
+                                    $rallyPositions = [
+                                        'Pos 7' => ['x' => 2, 'y' => 8, 'name' => 'Recycling'],
+                                        'Pos 1' => ['x' => 8, 'y' => 8, 'name' => 'Natural Resources '],
+                                        'Pos 2' => ['x' => 14, 'y' => 8, 'name' => 'Raw Material Extraction'],
+                                        'Pos 3' => ['x' => 20, 'y' => 8, 'name' => 'Production'],
+                                        'Pos 4' => ['x' => 26, 'y' => 8, 'name' => 'Packing and Distribution'],
+                                        'Pos 5' => ['x' => 62.5, 'y' => 8, 'name' => 'Use and Maintenance '],
+                                        'Pos 6' => ['x' => 62.3, 'y' => 82, 'name' => 'Disposal'],
+                                        'Pos 8' => ['x' => 68.3, 'y' => 82, 'name' => 'Waste Management'],
+                                    ];
 
-                            {{-- Central Hub --}}
-                            @foreach ($centralHub as $name => $position)
-                                <img src="{{ asset('assets/Icon pos map/' . $position['icon']) }}"
-                                    alt="{{ $name }}" class="absolute rally-icon" data-name="{{ $name }}"
-                                    style="top: {{ $position['y'] }}%; left: {{ $position['x'] }}%; width: 25%; height: auto; transform: translate(-50%, -50%);">
-                            @endforeach
+                                    $extraIcons = [
+                                        'Clue Zone' => ['x' => 56.5, 'y' => 8.2, 'icon' => 'clue zone.png'],
+                                        'Basecamp' => ['x' => 86.5, 'y' => 81.7, 'icon' => 'Basecamp.png'],
+                                    ];
+
+                                    $centralHub = [
+                                        'Central Hub' => ['x' => 45, 'y' => 70.3, 'icon' => 'central hub.png'],
+                                    ];
+                                @endphp
+
+                                @foreach ($extraIcons as $name => $position)
+                                    <img src="{{ asset('assets/Icon pos map/' . $position['icon']) }}"
+                                        alt="{{ $name }}" class="absolute rally-icon blinking-glow"
+                                        data-name="{{ $name }}"
+                                        style="width:5%; height:auto; top: {{ $position['y'] }}%; left: {{ $position['x'] }}%;">
+                                @endforeach
+
+
+                                <!-- Rally Position Icons -->
+                                @foreach ($rallies as $rally)
+                                    @php
+                                        $isVisited = in_array($rally->id, $visitedRalliesByPhase[$phase->id] ?? []);
+                                        $iconName = $rally->name . ($isVisited ? '' : ' (2)') . '.png';
+                                    @endphp
+                                    <img src="{{ asset('assets/Icon pos map/' . $iconName) }}" alt="{{ $rally->name }}"
+                                        data-name="{{ $rally->name }}&#10; {{ $rallyPositions[$rally->name]['name'] }}"
+                                        class="absolute rally-icon"
+                                        style="width:6%; height:auto; top: {{ $rallyPositions[$rally->name]['y'] ?? 50 }}%; left: {{ $rallyPositions[$rally->name]['x'] ?? 50 }}%;">
+                                @endforeach
+
+                                {{-- Central Hub --}}
+                                @foreach ($centralHub as $name => $position)
+                                    <img src="{{ asset('assets/Icon pos map/' . $position['icon']) }}"
+                                        alt="{{ $name }}" class="absolute rally-icon"
+                                        data-name="{{ $name }}"
+                                        style="top: {{ $position['y'] }}%; left: {{ $position['x'] }}%; width: 25%; height: auto; transform: translate(-50%, -50%);">
+                                @endforeach
+                            </div>
+
+                            <button class="carousel-btn next-btn flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" stroke-width="4">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 @endforeach
-            </div>
-
-
-            <div class="carousel-container">
-                <button id="prevPhase" class="carousel-btn">Previous</button>
-                <button id="nextPhase" class="carousel-btn">Next</button>
             </div>
         </div>
     </div>
@@ -206,9 +260,6 @@
             const slides = document.querySelectorAll(".carousel-slide");
             const phaseTitle = document.getElementById("phaseTitle");
 
-            const prevBtn = document.getElementById("prevPhase");
-            const nextBtn = document.getElementById("nextPhase");
-
             function updatePhase(direction) {
                 slides[currentPhaseIndex].style.display = "none";
                 currentPhaseIndex = (currentPhaseIndex + direction + totalPhases) % totalPhases;
@@ -219,12 +270,20 @@
             }
 
             function updateButtons() {
-                prevBtn.style.visibility = currentPhaseIndex === 0 ? "hidden" : "visible";
-                nextBtn.style.visibility = currentPhaseIndex === totalPhases - 1 ? "hidden" : "visible";
-            }
+                const activeSlide = slides[currentPhaseIndex];
+                const prevBtn = activeSlide.querySelector(".prev-btn");
+                const nextBtn = activeSlide.querySelector(".next-btn");
 
-            document.getElementById("nextPhase").addEventListener("click", () => updatePhase(1));
-            document.getElementById("prevPhase").addEventListener("click", () => updatePhase(-1));
+                document.querySelectorAll(".prev-btn").forEach(btn => btn.style.visibility = "hidden");
+                document.querySelectorAll(".next-btn").forEach(btn => btn.style.visibility = "hidden");
+
+                if (currentPhaseIndex > 0) prevBtn.style.visibility = "visible";
+                if (currentPhaseIndex < totalPhases - 1) nextBtn.style.visibility = "visible";
+
+
+                prevBtn.onclick = () => updatePhase(-1);
+                nextBtn.onclick = () => updatePhase(1);
+            }
 
             document.getElementById("mapModal").style.display = "flex";
 
