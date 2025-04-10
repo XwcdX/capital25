@@ -1,23 +1,27 @@
 <div id="storylineModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[1002]" onclick="closeModal('storylineModal')">
-    <div class="modal-content bg-[#fffdf7] rounded-3xl w-[90%] sm:w-[55rem] max-w-lg md:max-w-3xl h-[28rem] p-5 md:p-8 flex flex-col relative" onclick="event.stopPropagation();">
+    <div class="bg-[#fffdf7] rounded-3xl w-[90%] sm:w-[55rem] max-w-lg md:max-w-3xl h-[28rem] p-5 md:px-12 md:py-10 flex flex-col relative" onclick="event.stopPropagation();">
         <div class="mb-2 text-center">
-            <h1 id="fase-title" class="text-xl md:text-3xl text-[#03300f] font-bold">Fase {{ $currentPhase }}</h1>
+            <h1 id="fase-title" class="text-xl md:text-3xl text-[#03300f] font-bold ">Fase {{ $currentPhase }}</h1>
         </div>
-        <button id="prev-btn" type="button" class="absolute left-0 top-1/2 transform -translate-y-1/2">
+
+        <button id="prev-btn" type="button" class="absolute left-0 top-1/2 -translate-y-1/2 ml-2">
             <img src="{{ asset('assets/storyline/left.png') }}" class="h-6 w-6 md:h-10 md:w-10">
         </button>
-        <div class="wrapper">
-            <div class="overflow-y-auto content-scroll custom-scrollbar">
-                <p id="storyline-text" class="text-[#03300f] font-bold text-justify text-sm md:text-lg leading-relaxed">
+
+        <div class="relative w-full h-[20rem] overflow-hidden pl-[20px]">
+            <div class="h-full overflow-y-auto pr-[16px] pb-8  custom-scroll font-quicksand">
+                <p id="storyline-text" class="text-[#03300f] font-bold text-justify text-sm md:text-lg leading-relaxed font-quicksand">
                     {{ $currentPhase->phase ?? 'Fase tidak ditemukan' }}
                 </p>
             </div>
         </div>
-        <button id="next-btn" type="button" class="absolute right-0 top-1/2 transform -translate-y-1/2">
-            <img src="{{ asset('assets/storyline/left.png') }}" class="h-6 w-6 md:h-10 md:w-10 rotate-180">
+
+        <button id="next-btn" type="button" class="absolute right-0 top-1/2 -translate-y-1/2 mr-2">
+            <img src="{{ asset('assets/storyline/left.png') }}" class="h-6 w-6 md:h-10 md:w-10 rotate-180 ">
         </button>
     </div>
 </div>
+
 
 <script>
 document.addEventListener("DOMContentLoaded", function(){
