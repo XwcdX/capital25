@@ -31,8 +31,7 @@ class MapController extends Controller
         //     'Pos 3' => ['x' => 70, 'y' => 75],
         // ];
 
-        $currentPhase = $phases->firstWhere('status', 1) ?? $phases->last();
-
+        $currentPhase = $phases->whereNotNull('end_time')->sortByDesc('end_time')->first();
         // ambil data pos yang dikunjungi per fase
         $activePhases = $phases->where('phase', '<=', optional($currentPhase)->phase ?? 0)->pluck('id')->toArray();
         $visitedRalliesByPhase = [];

@@ -190,7 +190,7 @@
                                 @php
                                     $rallyPositions = [
                                         'Pos 7' => ['x' => 2, 'y' => 8, 'name' => 'Recycling'],
-                                        'Pos 1' => ['x' => 8, 'y' => 8, 'name' => 'Natural Resources '],
+                                        'Pos 1' => ['x' => 8, 'y' => 8, 'name' => 'Natural Resources'],
                                         'Pos 2' => ['x' => 14, 'y' => 8, 'name' => 'Raw Material Extraction'],
                                         'Pos 3' => ['x' => 20, 'y' => 8, 'name' => 'Production'],
                                         'Pos 4' => ['x' => 26, 'y' => 8, 'name' => 'Packing and Distribution'],
@@ -255,6 +255,7 @@
 @section('script')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            let maxActivePhase = @json($currentPhase->phase);            
             let currentPhaseIndex = {{ $phases->search(fn($phase) => $phase->id == $currentPhase->id) }};
             const totalPhases = {{ count($phases) }};
             const slides = document.querySelectorAll(".carousel-slide");
@@ -278,7 +279,7 @@
                 document.querySelectorAll(".next-btn").forEach(btn => btn.style.visibility = "hidden");
 
                 if (currentPhaseIndex > 0) prevBtn.style.visibility = "visible";
-                if (currentPhaseIndex < totalPhases - 1) nextBtn.style.visibility = "visible";
+                if (currentPhaseIndex < totalPhases - 1 && currentPhaseIndex < maxActivePhase - 1) nextBtn.style.visibility = "visible";
 
 
                 prevBtn.onclick = () => updatePhase(-1);

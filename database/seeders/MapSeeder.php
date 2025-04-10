@@ -11,36 +11,6 @@ class MapSeeder extends Seeder
 {
     public function run()
     {
-        // Matikan sementara foreign key checks
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-        // Hapus data rally_histories dan rallies
-        DB::table('rally_histories')->delete();
-        DB::table('rallies')->delete();
-
-        // Hidupkan kembali foreign key checks
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
-        // Buat 3 Rally
-        DB::insert("INSERT INTO rallies (id, name, created_at, updated_at) VALUES 
-            (?, ?, ?, ?), 
-            (?, ?, ?, ?), 
-            (?, ?, ?, ?), 
-            (?, ?, ?, ?), 
-            (?, ?, ?, ?), 
-            (?, ?, ?, ?), 
-            (?, ?, ?, ?), 
-            (?, ?, ?, ?)", [
-            Str::uuid(), 'Pos 1', now(), now(),
-            Str::uuid(), 'Pos 2', now(), now(),
-            Str::uuid(), 'Pos 3', now(), now(),
-            Str::uuid(), 'Pos 4', now(), now(),
-            Str::uuid(), 'Pos 5', now(), now(),
-            Str::uuid(), 'Pos 6', now(), now(),
-            Str::uuid(), 'Pos 7', now(), now(),
-            Str::uuid(), 'Pos 8', now(), now()
-        ]);
-
         // Ambil semua Phase yang sudah ada
         $phases = DB::table('phases')->pluck('id')->toArray();
         if (empty($phases)) {
