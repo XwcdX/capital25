@@ -242,11 +242,11 @@
                 @endfor
                 @php
                     if ($firstEmptyIndex === null && !isset($proof)) {
-                        $firstEmptyIndex = 4;
+                        $firstEmptyIndex = 4; 
                     }
                 @endphp
 
-                <div id="form-5" class="form-slide p-12 w-full flex flex-col items-center justify-center"
+                {{-- <div id="form-5" class="form-slide p-12 w-full flex flex-col items-center justify-center"
                     @if ($firstEmptyIndex === 4) data-first-empty="true" @endif>
                     <h2 class="text-2xl sm:text-4xl font-bold mb-4 col-span-12 text-white text-center">
                         Informasi Pembayaran
@@ -316,7 +316,7 @@
                             </span>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
             <div class="button-wrapper flex justify-center items-center my-5"></div>
         </div>
@@ -408,18 +408,18 @@
                 }
                 if (fileNameSpan) fileNameSpan.textContent = "No file chosen";
             } else {
-                const fileInput = document.getElementById('proof_of_payment');
-                const previewContainer = document.getElementById('proof_preview');
-                const proofImage = document.getElementById('proof_image');
-                removeButton = document.getElementById('remove-proof-of-payment');
+                // const fileInput = document.getElementById('proof_of_payment');
+                // const previewContainer = document.getElementById('proof_preview');
+                // const proofImage = document.getElementById('proof_image');
+                // removeButton = document.getElementById('remove-proof-of-payment');
 
-                if (fileInput) fileInput.value = "";
-                fileNameLabel.textContent = "Drag & Drop your Image here or click to upload";
-                if (proofImage) proofImage.src = "#";
-                if (previewContainer) previewContainer.classList.add('hidden');
+                // if (fileInput) fileInput.value = "";
+                // fileNameLabel.textContent = "Drag & Drop your Image here or click to upload";
+                // if (proofImage) proofImage.src = "#";
+                // if (previewContainer) previewContainer.classList.add('hidden');
 
-                const dropContainer = document.getElementById('drop_container');
-                if (dropContainer) dropContainer.classList.remove('hidden');
+                // const dropContainer = document.getElementById('drop_container');
+                // if (dropContainer) dropContainer.classList.remove('hidden');
             }
 
             if (removeButton) removeButton.classList.add('hidden');
@@ -442,24 +442,24 @@
             }
         }
 
-        dropArea.addEventListener('dragover', (event) => {
-            event.preventDefault();
-            dropArea.classList.add('dragover');
-        });
+        // dropArea.addEventListener('dragover', (event) => {
+        //     event.preventDefault();
+        //     dropArea.classList.add('dragover');
+        // });
 
-        dropArea.addEventListener('dragleave', () => {
-            dropArea.classList.remove('dragover');
-        });
+        // dropArea.addEventListener('dragleave', () => {
+        //     dropArea.classList.remove('dragover');
+        // });
 
-        dropArea.addEventListener('drop', (event) => {
-            event.preventDefault();
-            dropArea.classList.remove('dragover');
-            const files = event.dataTransfer.files;
-            if (files.length > 0) {
-                proofInput.files = files;
-                handleProofUpload();
-            }
-        });
+        // dropArea.addEventListener('drop', (event) => {
+        //     event.preventDefault();
+        //     dropArea.classList.remove('dragover');
+        //     const files = event.dataTransfer.files;
+        //     if (files.length > 0) {
+        //         proofInput.files = files;
+        //         handleProofUpload();
+        //     }
+        // });
 
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('input[type="number"]').forEach(input => {

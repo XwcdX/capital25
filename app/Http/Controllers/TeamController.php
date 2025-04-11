@@ -30,7 +30,10 @@ class TeamController extends BaseController
     }
     public function getCompletedTeam()
     {
-        return $this->model::with('users')->whereNotNull('proof_of_payment')->get();
+        return $this->model::with('users')
+            ->withCount('users')
+            ->having('users_count', '=', 4)
+            ->get();
     }
     public function getValidatedTeam()
     {
@@ -141,6 +144,7 @@ class TeamController extends BaseController
     public function regist(Request $request)
     {
         $creds = $request->only('name', 'email', 'password', 'school', 'domicile');
+        $creds['proof_of_payment'] = $request->file('proof_of_payment');
         $validate = Validator::make(
             $creds,
             [
@@ -149,6 +153,7 @@ class TeamController extends BaseController
                 'password' => 'required|string',
                 'school' => 'required|string',
                 'domicile' => ['required', 'regex:/^[A-Za-z]+(?:\s[A-Za-z]+)*-[A-Za-z]+(?:\s[A-Za-z]+)*$/'],
+                'proof_of_payment' => 'required|file|mimes:jpeg,png|max:2048',
             ],
             [
                 'name.required' => 'Name is required',
@@ -168,6 +173,18 @@ class TeamController extends BaseController
             return $this->error($validate->errors()->first());
         }
         $creds['password'] = Hash::make($creds['password']);
+        if ($request->hasFile('proof_of_payment')) {
+            $proofOfPayment = $request->file('proof_of_payment');
+
+            $fileName = sprintf(
+                'Proof_of_Payment_%s_CAPITAL_2025.%s',
+                $creds['name'],
+                $proofOfPayment->getClientOriginalExtension()
+            );
+
+            $filePath = $proofOfPayment->storeAs('proof_of_payment', $fileName, 'public');
+            $creds['proof_of_payment'] = 'storage/' . $filePath;
+        }
         $team = $this->model::create($creds);
         Auth::login($team);
         event(new Registered($team));

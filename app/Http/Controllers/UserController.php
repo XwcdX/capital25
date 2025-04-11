@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ConfirmationEmail;
 use App\Models\Commodity;
 use App\Models\Team;
 use App\Models\User;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -150,7 +152,7 @@ class UserController extends BaseController
             if ($proofOfPayment) {
                 $proofValidator = Validator::make(
                     ['proof_of_payment' => $proofOfPayment],
-                    ['proof_of_payment' => 'file|mimes:jpeg,png,pdf|max:2048']
+                    ['proof_of_payment' => 'file|mimes:jpeg,png|max:2048']
                 );
 
                 if ($proofValidator->fails()) {
@@ -178,6 +180,12 @@ class UserController extends BaseController
                 return response()->json(['errors' => $errors], 422);
             }
             DB::commit();
+            if (count($users) >= 4) {
+                $data = [
+                    'name' => $currentTeam->name,
+                ];
+                Mail::to($currentTeam->email)->queue(new ConfirmationEmail($data));
+            }
             session(['users' => $users]);
             return response()->json(['message' => 'Users saved successfully.'], 200);
         } catch (\Exception $e) {
