@@ -299,7 +299,10 @@
 
 @section('content')
     <section id="quiz" class="relative w-screen h-screen">
-        @include('user.rally.quizRules')
+        @if (!session()->has('quiz_end_time'))
+            @include('user.rally.quizRules')
+        @endif
+
         <div class="quiz-wrapper flex-col">
             <h2 class="quiz-title font-orbitron">Final Test Capital 2025</h2>
             <div class="quiz-container flex font-quicksand">
@@ -309,8 +312,7 @@
                         <h3 id="question-text">Loading...</h3>
                         <div class="options mt-2 space-y-2" id="options-container"></div>
                         <div class="navigation-buttons">
-                            <button class="finish-btn" id="submit-btn" onclick="finishQuiz()"
-                                style="display: none;">Submit</button>
+                            <button class="finish-btn" id="submit-btn" onclick="finishQuiz()" style="display: none;"></button>
                         </div>
                     </div>
                     <div class="flex justify-between">
