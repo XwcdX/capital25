@@ -22,7 +22,7 @@
 
         <div id="teamsContainer">
             @foreach ($rallies as $rally)
-                <div class="rally-teams hidden" data-rally-id="{{ $rally->id }}" data-rally-post="{{ $rally->post }}">
+                <div class="rally-teams hidden" data-rally-id="{{ $rally->id }}" data-rally-post="{{ $rally->post }}" data-rally-name="{{ $rally->name }}">
                     <h2 class="text-xl font-semibold">{{ $rally->name }}</h2>
                     <div class="scan-count mb-2 font-medium text-gray-700">
                         Total Teams Scanned: <span id="scannedCount-{{ $rally->id }}">0</span>
@@ -90,23 +90,19 @@
 
                 rallyChannel.stopListening(".rally.history.updated");
                 rallyChannel.listen(".rally.history.updated", (event) => {
-                    if (event.rallyHistory.length > 0) {
-                        const newPhaseId = event.rallyHistory[0].pivot.phase_id;
-                        if (phaseId !== newPhaseId) {
-                            phaseId = newPhaseId;
-                            subscribeToRallyChannel(rallyId);
-                        }
-                    }
-
                     const updatedTeamData = event.rallyHistory.map(history => ({
                         teamId: history.id,
                         teamName: history.name,
                         coin: history.coin,
                         qrExpiredAt: history.pivot.qr_expired_at,
-                        rallyId: history.pivot.rally_id
+                        rallyId: history.pivot.rally_id,
+                        selectedRank: null,
+                        locked: false
                     }));
 
-                    updateTeamData(updatedTeamData);
+                    updatedTeamsGlobal = updatedTeamData;
+                    renderTeams();
+
                     Swal.fire({
                         title: "Rally Updated",
                         text: "New rally data received.",
@@ -114,11 +110,6 @@
                         confirmButtonText: "OK"
                     });
                 });
-            }
-
-            function updateTeamData(updatedTeams) {
-                updatedTeamsGlobal = updatedTeams;
-                renderTeams();
             }
 
             function renderTeams() {
@@ -144,23 +135,46 @@
                     const rankSelect = document.createElement("select");
                     rankSelect.dataset.teamId = team.teamId;
                     rankSelect.className = "rank-select border ml-2";
+                    if (team.locked) {
+                        rankSelect.disabled = true;
+                    }
+
                     const defaultOption = document.createElement("option");
                     defaultOption.value = "";
                     defaultOption.textContent = "-- Select Rank --";
                     rankSelect.appendChild(defaultOption);
 
+                    const ranksSelectedByOthers = updatedTeamsGlobal
+                        .filter(t => t.teamId !== team.teamId && t.selectedRank)
+                        .map(t => t.selectedRank);
+
                     for (let i = 1; i <= totalScanned; i++) {
+                        if (ranksSelectedByOthers.includes(i) && team.selectedRank != i) {
+                            continue;
+                        }
                         const option = document.createElement("option");
                         option.value = i;
                         option.textContent = i;
+                        if (team.selectedRank == i) {
+                            option.selected = true;
+                        }
                         rankSelect.appendChild(option);
                     }
                     li.appendChild(rankSelect);
                     teamList.appendChild(li);
 
-                    rankSelect.addEventListener("change", function() {
-                        handleRankChange(team.teamId, this.value);
-                    });
+                    if (!team.locked) {
+                        rankSelect.addEventListener("change", function() {
+                            const selectedValue = parseInt(this.value) || null;
+                            const teamIndex = updatedTeamsGlobal.findIndex(t => t.teamId === team
+                                .teamId);
+                            if (teamIndex > -1) {
+                                updatedTeamsGlobal[teamIndex].selectedRank = selectedValue;
+                            }
+                            renderTeams();
+                            handleRankChange(team.teamId, selectedValue);
+                        });
+                    }
                 });
             }
 
@@ -234,7 +248,7 @@
                             if (totalAllocated !== rewardValue) {
                                 Swal.showValidationMessage(
                                     `Total allocated reward (${totalAllocated}) must equal ${rewardValue}`
-                                    );
+                                );
                             }
                             return allocationData;
                         },
@@ -257,14 +271,17 @@
                         }
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            const allocationData = result
-                            .value;
+                            const allocationData = result.value;
                             const updatePromises = [];
                             allocationData.forEach(allocation => {
                                 if (allocation.allocated > 0) {
                                     const commodity = commodities.find(c => c.id ===
                                         allocation.commodityId);
                                     if (commodity) {
+                                        const rallyName = rallyContainer.dataset
+                                            .rallyName || 'Current Rally';
+                                        const descriptionText =
+                                            `In Rally "${rallyName}", Rank ${selectedRank} was finalized with an allocation of ${allocation.allocated} reward unit(s) towards ${commodity.name}.`;
                                         const computedReward = allocation.allocated * (
                                                 commodity.price * commodity.return_rate) *
                                             commodity.quantity;
@@ -276,7 +293,7 @@
                                                 amount: computedReward,
                                                 commodity_id: commodity.id,
                                                 quantity: allocation.allocated,
-                                                description: `Rank ${selectedRank} with ${allocation.allocated} reward on ${commodity.name}`
+                                                description: descriptionText
                                             })
                                         );
                                     }
@@ -285,6 +302,12 @@
                             if (updatePromises.length > 0) {
                                 Promise.all(updatePromises)
                                     .then(() => {
+                                        const teamIndex = updatedTeamsGlobal.findIndex(t => t
+                                            .teamId === teamId);
+                                        if (teamIndex > -1) {
+                                            updatedTeamsGlobal[teamIndex].locked = true;
+                                        }
+                                        renderTeams();
                                         Swal.fire({
                                             title: 'Success',
                                             text: 'Reward allocated successfully.',

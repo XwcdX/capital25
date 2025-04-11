@@ -22,14 +22,14 @@ class Phase extends Model
     public function teams()
     {
         return $this->belongsToMany(Team::class, 'rally_histories')
-                    ->withPivot('qr_expired_at', 'scanned_at', 'rank', 'point')
+                    ->withPivot('qr_expired_at', 'scanned_at')
                     ->withTimestamps();
     }
 
     public function rallies()
     {
         return $this->belongsToMany(Rally::class, 'rally_histories')
-            ->withPivot('qr_expired_at', 'scanned_at', 'rank', 'point')
+            ->withPivot('qr_expired_at', 'scanned_at')
             ->withTimestamps();
     }
 }

@@ -36,8 +36,6 @@ class RallyHistorySeeder extends Seeder
                         'phase_id'      => $phase->id,
                         'qr_expired_at' => Carbon::now()->addHours(2),
                         'scanned_at'    => (rand(0, 1) ? Carbon::now()->toDateTimeString() : null),
-                        'rank'          => rand(1, 3),
-                        'point'         => rand(10, 100),
                         'created_at'    => now(),
                         'updated_at'    => now(),
                     ]);

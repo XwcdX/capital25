@@ -18,8 +18,6 @@ return new class extends Migration
             $table->uuid('phase_id');
             $table->timestamp('qr_expired_at');
             $table->timestamp('scanned_at')->nullable();
-            $table->tinyInteger('rank')->nullable()->comment('1: rank 1, 2: rank 2, 3: rank 3, etc');
-            $table->unsignedInteger('reward')->nullable();
             $table->timestamps();
 
             $table->foreign('rally_id')->references('id')->on('rallies')->onDelete('cascade');
