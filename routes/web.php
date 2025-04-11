@@ -30,14 +30,14 @@ Route::middleware(['isLogin'])->group(function () {
     Route::get('/scanQR', [RallyController::class, 'viewScanner']);
     Route::post('/scanQR', [RallyController::class, 'scanQRCode'])->name('scanQR');
 
-    Route::get('/rally', [RallyController::class,'rallyHome'])->name('rally.home');
-    Route::post('/buyMultipleCommodities', [CommodityController::class,'buyMultipleCommodities'])->name('buy.multiple.commodities');
+    Route::get('/rally', [RallyController::class, 'rallyHome'])->name('rally.home');
+    Route::post('/buyMultipleCommodities', [CommodityController::class, 'buyMultipleCommodities'])->name('buy.multiple.commodities');
 
     Route::post('/quiz/start', [QuizController::class, 'startQuiz'])->name('quiz.start');
     Route::post('/quiz/save-answer', [QuizController::class, 'saveAnswer'])->name('quiz.save');
     Route::post('/quiz/submit-quiz', [QuizController::class, 'submitQuiz'])->name('quiz.submit');
     Route::get('/quiz', [QuizController::class, 'index'])->name('quiz');
-}); 
+});
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'login'])->name('login');
@@ -73,7 +73,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/update-phase', [AdminController::class, 'updatePhase'])->name('updatePhase');
 
         Route::get('/central-hub', [AdminController::class, 'viewCentralHub'])->name('centralHub');
-        Route::post('/buyCommodity', [AdminController::class,'buyCommodity'])->name('buyCommodity');
+        Route::post('/buyCommodity', [AdminController::class, 'buyCommodity'])->name('buyCommodity');
+
+        Route::get('/get-team-commodity', [TeamController::class, 'getTeamCommodity'])
+            ->name('getTeamCommodity');
+        Route::post('/update-balance', [TeamController::class, 'updateBalance'])
+            ->name('updateBalance');
 
         // Quiz
         Route::get('/question', [AdminController::class, 'viewQuizQuestions'])->name('viewQuestions');

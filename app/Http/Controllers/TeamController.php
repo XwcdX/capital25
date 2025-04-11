@@ -6,6 +6,7 @@ use App\Exports\TeamsWithUsersExport;
 use App\Mail\ConfirmationEmail;
 use App\Mail\TeamValidationEmail;
 use App\Models\Team;
+use App\Utils\HttpResponseCode;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -76,6 +77,38 @@ class TeamController extends BaseController
 
         return $teams;
     }
+
+    public function getTeamCommodity(Request $request)
+    {
+        $validated = $request->validate([
+            'team_id' => 'required|uuid',
+            'phase_id' => 'required|uuid',
+        ]);
+
+        $teamCommodity = $this->model::with([
+            'commodities' => function ($query) use ($validated) {
+                $query->where('commodity_histories.phase_id', $validated['phase_id']);
+            }
+        ])->findOrFail($validated['team_id']);
+
+        $commodities = $teamCommodity->commodities;
+
+        if ($commodities->isEmpty()) {
+            return $this->error('This team does not have any commodity associated for the current phase.', HttpResponseCode::HTTP_BAD_REQUEST);
+        }
+
+        $data = $commodities->map(function ($commodity) {
+            return [
+                'id' => $commodity->id,
+                'name' => $commodity->name,
+                'price' => $commodity->price,
+                'return_rate' => $commodity->return_rate,
+                'quantity' => $commodity->pivot->quantity ?? 0,
+            ];
+        });
+        return $this->success('Data retrieved successfully', $data);
+    }
+
 
 
     public function updateValidAndEmail(Request $request, string $id)

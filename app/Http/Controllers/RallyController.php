@@ -82,7 +82,42 @@ class RallyController extends BaseController
                 $query->withPivot(['qr_expired_at'])->orderBy('qr_expired_at');
             }
         ])->get();
-        return view('admin.rally.rally-post', compact('title', 'rallies', 'currentPhase'));
+        $rewardMapping = [
+            1 => [
+                'teams_range' => '4-5',
+                'reward' => [60, 50, 45, 40, 35]
+            ],
+            2 => [
+                'teams_range' => '5',
+                'reward' => [55, 45, 40, 30, 20]
+            ],
+            3 => [
+                'teams_range' => '4-7',
+                'reward' => [55, 50, 45, 40, 35, 30, 25]
+            ],
+            4 => [
+                'teams_range' => '4-7',
+                'reward' => [65, 60, 55, 50, 45, 40, 35]
+            ],
+            5 => [
+                'teams_range' => '4-7',
+                'reward' => [60, 50, 45, 40, 35, 30, 25]
+            ],
+            6 => [
+                'teams_range' => '4',
+                'reward' => [50, 40, 35, 30]
+            ],
+            7 => [
+                'teams_range' => '4',
+                'reward' => [60, 50, 40, 35]
+            ],
+            8 => [
+                'teams_range' => '4',
+                'reward' => [55, 45, 35, 30]
+            ],
+        ];
+
+        return view('admin.rally.rally-post', compact('title', 'rallies', 'currentPhase', 'rewardMapping'));
     }
 
     public function generateRallyQrCode($rallyId)
@@ -159,6 +194,31 @@ class RallyController extends BaseController
                 );
             }
 
+            $allowedRanges = [
+                1 => [4, 5],
+                2 => [5, 5],
+                3 => [4, 7],
+                4 => [4, 7],
+                5 => [4, 7],
+                6 => [4, 4],
+                7 => [4, 4],
+                8 => [4, 4],
+            ];
+            $post = $rally->post;
+            $allowed = isset($allowedRanges[$post]) ? $allowedRanges[$post] : [0, PHP_INT_MAX];
+
+            $currentCount = $rally->teams()
+                ->wherePivot('phase_id', $phaseId)
+                ->wherePivot('qr_expired_at', $qrExpireAtCarbon)
+                ->count();
+
+            if ($currentCount >= $allowed[1]) {
+                return $this->error(
+                    "The number of scanned teams for rally post {$post} has reached the maximum allowed ({$allowed[1]}).",
+                    HttpResponseCode::HTTP_BAD_REQUEST
+                );
+            }
+
             if ($rally->teams()->wherePivot('team_id', $teamId)->exists()) {
                 $rally->teams()->attach($teamId, [
                     'phase_id' => $phaseId,
@@ -189,50 +249,6 @@ class RallyController extends BaseController
                 'input' => $request->all(),
             ]);
             return $this->error('Invalid QR code.', HttpResponseCode::HTTP_BAD_REQUEST);
-        }
-    }
-
-    public function updateRankAndPoint(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'team_id' => 'required|uuid|exists:teams,id',
-            'rally_id' => 'required|uuid|exists:rallies,id',
-            'rank' => 'required|integer|in:1,2,3',
-        ]);
-
-        if ($validator->fails()) {
-            Log::warning('Rank and point update validation failed', [
-                'errors' => $validator->errors(),
-                'input' => $request->all(),
-            ]);
-            return $this->error('Validation failed', HttpResponseCode::HTTP_BAD_REQUEST, $validator->errors());
-        }
-
-        $teamId = $request->input('team_id');
-        $rallyId = $request->input('rally_id');
-        $rank = $request->input('rank');
-
-        $points = match ($rank) {
-            1 => 30,
-            2 => 20,
-            3 => 10,
-            default => null,
-        };
-
-        try {
-            $rally = $this->model::findOrFail($rallyId);
-
-            $rally->teams()->updateExistingPivot($teamId, [
-                'rank' => $rank,
-                'point' => $points,
-            ]);
-            return $this->success('Rank and point updated successfully.');
-        } catch (\Exception $e) {
-            Log::error('Error during rank and point update', [
-                'error' => $e->getMessage(),
-                'input' => $request->all(),
-            ]);
-            return $this->error('Error updating rank and point.', HttpResponseCode::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
