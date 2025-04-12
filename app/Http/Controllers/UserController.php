@@ -77,7 +77,7 @@ class UserController extends BaseController
                         'string',
                         'max:15',
                         Rule::unique('users', 'phone_number')->ignore($userId),
-                        'regex:/^08[0-9]{1,2}-?[0-9]{4}-?[0-9]{4,5}$/',
+                        'regex:/^08[0-9]{1,2}-?[0-9]{3,4}-?[0-9]{4,5}$/',
                     ],
                     'position' => 'required|integer|in:0,1,2,3',
                     'line_id' => [
