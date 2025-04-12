@@ -6,6 +6,7 @@ use App\Exports\TeamsWithUsersExport;
 use App\Mail\ConfirmationEmail;
 use App\Mail\TeamValidationEmail;
 use App\Models\Team;
+use App\Utils\HttpResponseCode;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -30,7 +31,10 @@ class TeamController extends BaseController
     }
     public function getCompletedTeam()
     {
-        return $this->model::with('users')->whereNotNull('proof_of_payment')->get();
+        return $this->model::with('users')
+            ->withCount('users')
+            ->having('users_count', '=', 4)
+            ->get();
     }
     public function getValidatedTeam()
     {
@@ -73,6 +77,38 @@ class TeamController extends BaseController
 
         return $teams;
     }
+
+    public function getTeamCommodity(Request $request)
+    {
+        $validated = $request->validate([
+            'team_id' => 'required|uuid',
+            'phase_id' => 'required|uuid',
+        ]);
+
+        $teamCommodity = $this->model::with([
+            'commodities' => function ($query) use ($validated) {
+                $query->where('commodity_histories.phase_id', $validated['phase_id']);
+            }
+        ])->findOrFail($validated['team_id']);
+
+        $commodities = $teamCommodity->commodities;
+
+        if ($commodities->isEmpty()) {
+            return $this->error('This team does not have any commodity associated for the current phase.', HttpResponseCode::HTTP_BAD_REQUEST);
+        }
+
+        $data = $commodities->map(function ($commodity) {
+            return [
+                'id' => $commodity->id,
+                'name' => $commodity->name,
+                'price' => $commodity->price,
+                'return_rate' => $commodity->return_rate,
+                'quantity' => $commodity->pivot->quantity ?? 0,
+            ];
+        });
+        return $this->success('Data retrieved successfully', $data);
+    }
+
 
 
     public function updateValidAndEmail(Request $request, string $id)
@@ -141,6 +177,7 @@ class TeamController extends BaseController
     public function regist(Request $request)
     {
         $creds = $request->only('name', 'email', 'password', 'school', 'domicile');
+        $creds['proof_of_payment'] = $request->file('proof_of_payment');
         $validate = Validator::make(
             $creds,
             [
@@ -149,6 +186,7 @@ class TeamController extends BaseController
                 'password' => 'required|string',
                 'school' => 'required|string',
                 'domicile' => ['required', 'regex:/^[A-Za-z]+(?:\s[A-Za-z]+)*-[A-Za-z]+(?:\s[A-Za-z]+)*$/'],
+                'proof_of_payment' => 'required|file|mimes:jpeg,png|max:2048',
             ],
             [
                 'name.required' => 'Name is required',
@@ -168,6 +206,18 @@ class TeamController extends BaseController
             return $this->error($validate->errors()->first());
         }
         $creds['password'] = Hash::make($creds['password']);
+        if ($request->hasFile('proof_of_payment')) {
+            $proofOfPayment = $request->file('proof_of_payment');
+
+            $fileName = sprintf(
+                'Proof_of_Payment_%s_CAPITAL_2025.%s',
+                $creds['name'],
+                $proofOfPayment->getClientOriginalExtension()
+            );
+
+            $filePath = $proofOfPayment->storeAs('proof_of_payment', $fileName, 'public');
+            $creds['proof_of_payment'] = 'storage/' . $filePath;
+        }
         $team = $this->model::create($creds);
         Auth::login($team);
         event(new Registered($team));
