@@ -58,7 +58,7 @@
     .nav-overlay {
         opacity: 0;
         visibility: hidden;
-        background: transparent;
+        background: rgba(0, 0, 0, 0.65);
         position: fixed;
         top: 0;
         left: 0;
@@ -133,7 +133,7 @@
     }
 </style>
 
-<div id="navbar">
+<div id="navbar ">
     <nav class="navbar">
         <div class="nav-container">
             <input class="checkbox" type="checkbox" id="nav-toggle" />
@@ -143,7 +143,7 @@
                 <span class="line line3"></span>
             </label>
             <div class="nav-overlay" onclick="document.getElementById('nav-toggle').checked = false;"></div>
-            <ul class="menu-items">
+            <ul class="menu-items font-quicksand flex flex-col items-center justify-center">
                 <li>
                     <a href="javascript:void(0)"
                         onclick="openStorylineModal(); document.getElementById('nav-toggle').checked = false;">Storyline</a>
@@ -155,6 +155,13 @@
                 <li>
                     <a href="javascript:void(0)"
                         onclick="openInventoryModal(); document.getElementById('nav-toggle').checked = false;">Inventory</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)"
+                        onclick="openMapModal(); document.getElementById('nav-toggle').checked = false;">Map</a>
+                </li>
+                <li>
+                    <a href="{{ route('quiz') }}">Final Test</a>
                 </li>
             </ul>
         </div>
@@ -184,6 +191,15 @@
         var modal = document.getElementById("inventory-modal");
         if (modal) {
             modal.classList.remove("hidden");
+        } else {
+            console.warn("Inventory modal not found.");
+        }
+    }
+
+    function openMapModal() {
+        var overlay = document.getElementById('overlay-map');
+        if (overlay) {
+            overlay.classList.remove("hidden");
         } else {
             console.warn("Inventory modal not found.");
         }

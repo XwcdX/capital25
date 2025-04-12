@@ -9,6 +9,15 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <style>
+        :root {
+            --cap-green6: #14240a;
+            --cap-green5: #25483d;
+            --cap-green4: #56843a;
+            --cap-green3: #82b741;
+            --cap-green2: #a8c747;
+            --cap-green1: #e6e773;
+            /*yellow*/
+        }
         .swal2-popup.swal-high-z-index {
             z-index: 100000 !important;
         }
@@ -22,7 +31,8 @@
             width: 100% !important;
             height: 100% !important;
             overflow-y: auto !important;
-            padding-right: 10px !important;
+            /* padding-right: 10px !important; */
+            margin-left: 10px;
         }
 
         .custom-scrollbar::-webkit-scrollbar {
@@ -63,6 +73,79 @@
                 margin-left: 2rem !important;
             }
         }
+        
+        .content-scroll{
+            height: 100% !important;
+            overflow-y: auto;
+            padding-right: 15px !important; 
+            padding-bottom: 2rem !important;
+        }
+
+        .custom-scroll{
+            width: 100% !important;
+            height: 100% !important;
+            overflow-y: auto !important; 
+            padding-right: 16px !important;
+            margin-right: 20px !important;
+            
+        }
+        
+        .custom-scroll::-webkit-scrollbar {
+            width: 0.8rem !important;
+            position: absolute;
+        }
+        
+        
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #dedede!important; 
+            border-radius: 50px !important;
+            max-height: 20px !important;
+            min-height: 0px !important;
+        }
+        
+        .custom-scroll::-webkit-scrollbar-track {
+            background-color: #a8a8a8 !important;
+            border-radius: 50px !important;
+            margin: 30px !important;
+        }
+
+        @font-face {
+            font-family: 'orbitron';
+            src: url('/assets/fonts/heading-orbitron.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'quicksand';
+            src: url('/assets/fonts/quicksand.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'oxanium';
+            src: url('/assets/fonts/oxanium.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        .font-orbitron {
+            font-family: 'orbitron';
+        }
+
+        .font-quicksand {
+            font-family: 'quicksand';
+        }
+
+        .font-oxanium {
+            font-family: 'oxanium';
+        }
+
+        .font-league {
+            font-family: 'League Spartan'
+        }
+
     </style>
 </head>
 
@@ -71,7 +154,7 @@
     <img src="{{ asset('assets/lifecycleHPDummy/dummyBG.jpeg') }}" class="absolute inset-0 w-full h-full object-cover">
 
     <!-- Greenpoint & Coins Buttons -->
-    <div class="absolute top-0 right-0 my-3 mr-3 flex space-x-3 flex-wrap z-[2]">
+    <div class="absolute top-0 right-0 my-3 mr-3 flex space-x-3 flex-wrap z-[2] font-oxanium">
         <button onclick="openModal('greenpointModal');"
             class="hover:bg-slate-400 hover:cursor-pointer bg-white text-[#3e5c49] rounded-full w-[10rem] min-w-[6rem] h-12 flex items-center justify-center px-3">
             <span class="text-xl mr-2">🍃</span>
@@ -85,9 +168,9 @@
     </div>
 
     <!-- Main Content -->
-    <div class="flex flex-col items-center justify-center h-full text-white">
-        <h1 class="z-[1] mt-[200px] text-8xl font-semibold">Lifecycle Simulation</h1>
-        <h2 class="z-[1] text-8xl font-bold">CAPITAL 2025</h2>
+    <div class="flex flex-col items-center justify-center h-full text-white font-oxanium">
+        <h1 class="z-[1]  text-8xl font-semibold  drop-shadow-[0_0_8px_rgba(0,0,0,0.9)]">Lifecycle Simulation</h1>
+        <h2 class="z-[1] text-8xl font-bold  drop-shadow-[0_0_8px_rgba(0,0,0,0.9)]">CAPITAL 2025</h2>
         <div class="mt-[100px] text-3xl font-bold">
             ROUND {{ $currentPhase->phase ?? 'N/A' }}
         </div>
@@ -103,11 +186,12 @@
             onclick="event.stopPropagation();">
             <div class="flex flex-row mb-3.5">
                 <span class="text-xl mr-2">🍃</span>
-                <span class="text-3xl text-[#3e5c49]">{{ $team->green_points }}</span>
+                <span class="text-3xl text-[#3e5c49] font-oxanium">{{ $team->green_points }}</span>
             </div>
-            <h1 class="text-white font-bold text-center mt-2 pl-5 text-lg sm:text-2xl">Riwayat Transaksi</h1>
+           
             <div
-                class="h-[50vh] sm:h-[18rem] w-full sm:w-[40rem] overflow-y-auto rounded-l-[2vw] rounded-r-[1.5vw] bg-[#3e5c49] custom-scrollbar">
+                class="h-[50vh] sm:h-[18rem] w-full sm:w-[40rem] overflow-y-auto rounded-l-[2vw] rounded-r-[1.5vw] bg-[#3e5c49] custom-scrollbar font-quicksand">
+                <h1 class="text-white font-bold text-center mt-3 pl-5 text-lg sm:text-2xl font-oxanium">Riwayat Transaksi</h1>
                 <div class="wrapper w-full">
                     <div class="custom-scrollbar mt-4 pb-10 overflow-x-hidden pr-3 w-full">
                         @foreach ($transactionsGreenPoint as $transaction)
@@ -121,16 +205,16 @@
                             @endphp
                             <div
                                 class="flex justify-between items-center text-white font-semibold text-2xl ml-5 mr-5 mb-5 w-full">
-                                <div class="flex flex-row w-[95%]">
-                                    <div class="flex-1 text-center">
+                                <div class="flex flex-row w-[95%] text-lg">
+                                    <div class="flex-1 text-center ">
                                         <span>{{ $date }}</span><br>
                                         <span>{{ $time }}</span>
                                     </div>
                                     <div
-                                        class="flex-1 text-center {{ $transaction->action === 'debit' ? 'text-[#e80909]' : 'text-green-500' }}">
+                                        class="flex-1 flex items-center justify-center text-center text-xl {{ $transaction->action === 'debit' ? 'text-[#e80909]' : 'text-green-500' }}">
                                         <span>{{ $amountDisplay }}</span>
                                     </div>
-                                    <div class="flex-1 text-center">
+                                    <div class="flex-1 text-center ">
                                         <span>{{ $transaction->description }}</span>
                                     </div>
                                 </div>
@@ -151,13 +235,14 @@
             onclick="event.stopPropagation();">
             <div class="flex flex-row mb-3.5">
                 <span class="text-xl mr-2">💰</span>
-                <span class="text-3xl text-[#3e5c49]">{{ $team->coin }}</span>
+                <span class="text-3xl text-[#3e5c49] font-oxanium">{{ $team->coin }}</span>
             </div>
-            <h1 class="text-white font-bold text-center mt-2 pl-5 text-lg sm:text-2xl">Riwayat Transaksi</h1>
+            
             <div
-                class="h-[50vh] sm:h-[18rem] w-full sm:w-[40rem] overflow-y-auto rounded-l-[2vw] rounded-r-[1.5vw] bg-[#3e5c49] custom-scrollbar">
-                <div class="wrapper w-full">
-                    <div class="custom-scrollbar mt-4 pb-10 overflow-x-hidden pr-3 w-full">
+                class="h-[50vh] sm:h-[18rem] w-full sm:w-[40rem] overflow-y-auto rounded-l-[2vw] rounded-r-[1.5vw] bg-[#3e5c49] custom-scrollbar font-quicksand">
+                <h1 class="text-white font-bold text-center mt-3 pl-5 text-lg sm:text-2xl font-oxanium">Riwayat Transaksi</h1>
+                <div class="wrapper w-full ">
+                    <div class="custom-scrollbar mt-4 pb-10 overflow-x-hidden pr-3 pl-3 w-full">
                         @foreach ($transactionsCoin as $transaction)
                             @php
                                 $date = \Carbon\Carbon::parse($transaction->created_at)->format('d/m/Y');
@@ -169,13 +254,13 @@
                             @endphp
                             <div
                                 class="flex justify-between items-center text-white font-semibold text-2xl ml-5 mr-5 mb-5 w-full">
-                                <div class="flex flex-row w-[95%]">
-                                    <div class="flex-1 text-center">
+                                <div class="flex flex-row w-[95%] text-lg">
+                                    <div class="flex-1  text-center">
                                         <span>{{ $date }}</span><br>
                                         <span>{{ $time }}</span>
                                     </div>
                                     <div
-                                        class="flex-1 text-center {{ $transaction->action === 'debit' ? 'text-[#e80909]' : 'text-green-500' }}">
+                                        class="flex-1 flex items-center justify-center font-oxanium text-center text-xl {{ $transaction->action === 'debit' ? 'text-[#e80909]' : 'text-green-500' }}">
                                         <span>{{ $amountDisplay }}</span>
                                     </div>
                                     <div class="flex-1 text-center">
@@ -191,11 +276,24 @@
         </div>
     </div>
 
-
     @include('components.rallynav')
     @include('user.rally.storyline')
     @include('user.rally.tradezone')
-    @include('user.rally.inventory')
+    @include('user.rally.inventory')    
+    @include('user.rally.map')
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            @if (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: @json(session('error')), 
+                    confirmButtonColor: '#3085d6'
+                });
+            @endif
+        });
+    </script>
 
     <script>
         function openModal(id) {
@@ -228,6 +326,7 @@
         }
         updateCountdown();
     </script>
+    
 </body>
 
 </html>

@@ -28,7 +28,7 @@ class MapSeeder extends Seeder
         }
 
         // Masukkan data rally_histories dengan SQL query langsung
-        $query = "INSERT INTO rally_histories (id, rally_id, team_id, phase_id, qr_expired_at, scanned_at, `rank`, `point`, created_at, updated_at) VALUES ";
+        $query = "INSERT INTO rally_histories (id, rally_id, team_id, phase_id, qr_expired_at, scanned_at, `rank`, `rewart`, created_at, updated_at) VALUES ";
         $values = [];
         $bindings = [];
 

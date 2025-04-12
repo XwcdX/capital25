@@ -189,14 +189,14 @@
                                 <!-- Extra Icons (Clue Zone & Basecamp) -->
                                 @php
                                     $rallyPositions = [
-                                        'Pos 7' => ['x' => 2, 'y' => 8, 'name' => 'Recycling'],
-                                        'Pos 1' => ['x' => 8, 'y' => 8, 'name' => 'Natural Resources'],
-                                        'Pos 2' => ['x' => 14, 'y' => 8, 'name' => 'Raw Material Extraction'],
-                                        'Pos 3' => ['x' => 20, 'y' => 8, 'name' => 'Production'],
-                                        'Pos 4' => ['x' => 26, 'y' => 8, 'name' => 'Packing and Distribution'],
-                                        'Pos 5' => ['x' => 62.5, 'y' => 8, 'name' => 'Use and Maintenance '],
-                                        'Pos 6' => ['x' => 62.3, 'y' => 82, 'name' => 'Disposal'],
-                                        'Pos 8' => ['x' => 68.3, 'y' => 82, 'name' => 'Waste Management'],
+                                        '7' => ['x' => 2, 'y' => 8, 'name' => 'Recycling'],
+                                        '1' => ['x' => 8, 'y' => 8, 'name' => 'Natural Resources'],
+                                        '2' => ['x' => 14, 'y' => 8, 'name' => 'Raw Material Extraction'],
+                                        '3' => ['x' => 20, 'y' => 8, 'name' => 'Production'],
+                                        '4' => ['x' => 26, 'y' => 8, 'name' => 'Packing and Distribution'],
+                                        '5' => ['x' => 62.5, 'y' => 8, 'name' => 'Use and Maintenance '],
+                                        '6' => ['x' => 62.3, 'y' => 82, 'name' => 'Disposal'],
+                                        '8' => ['x' => 68.3, 'y' => 82, 'name' => 'Waste Management'],
                                     ];
 
                                     $extraIcons = [
@@ -221,12 +221,12 @@
                                 @foreach ($rallies as $rally)
                                     @php
                                         $isVisited = in_array($rally->id, $visitedRalliesByPhase[$phase->id] ?? []);
-                                        $iconName = $rally->name . ($isVisited ? '' : ' (2)') . '.png';
+                                        $iconName =  'Pos ' . $rally->post . ($isVisited ? '' : ' (2)') . '.png';
                                     @endphp
                                     <img src="{{ asset('assets/Icon pos map/' . $iconName) }}" alt="{{ $rally->name }}"
-                                        data-name="{{ $rally->name }}&#10; {{ $rallyPositions[$rally->name]['name'] }}"
+                                        data-name="Post {{ $rally->post }}&#10; {{ $rallyPositions[$rally->post]['name'] }}"
                                         class="absolute rally-icon"
-                                        style="width:6%; height:auto; top: {{ $rallyPositions[$rally->name]['y'] ?? 50 }}%; left: {{ $rallyPositions[$rally->name]['x'] ?? 50 }}%;">
+                                        style="width:6%; height:auto; top: {{ $rallyPositions[$rally->post]['y'] ?? 50 }}%; left: {{ $rallyPositions[$rally->post]['x'] ?? 50 }}%;">
                                 @endforeach
 
                                 {{-- Central Hub --}}

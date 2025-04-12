@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\RallyParticipant;
 use App\Models\Commodity;
+use App\Models\Phase;
 use App\Models\Rally;
 use App\Models\Team;
 use App\Utils\HttpResponseCode;
@@ -11,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -60,13 +62,29 @@ class RallyController extends BaseController
             Data menunjukkan satu dari enam kota di China mengalami penurunan tanah melebihi 10 mm per tahun."
         ];
 
+        //map
+         $rallies = Rally::all();
+         $phases = Phase::orderBy('phase')->get();
+         $activePhases = Phase::whereNotNull('end_time')->orderBy('phase')->get(); 
+         $visitedRalliesByPhase = DB::table('rally_histories')
+         ->where('team_id', $team->id)
+         ->whereIn('phase_id', $activePhases->pluck('id')->toArray())
+         ->whereNotNull('scanned_at')
+         ->get()
+         ->groupBy('phase_id')
+         ->map(function ($items) {
+             return $items->pluck('rally_id')->unique()->values()->toArray();
+         })
+         ->toArray();
+
         $transactionsGreenPoint = $this->teamController->getGreenpointTransactions();
         $transactionsCoin = $this->teamController->getCoinTransactions();
         $inventories = $team->commodities()->get();
         $commodities = $this->commodityController->getCurrentCommodities($currentPhase->id);
-        return view('user.rally.home', compact('title', 'team', 'transactionsGreenPoint', 'transactionsCoin', 'currentPhase', 'storylines', 'inventories', 'commodities'));
+        return view('user.rally.home', compact('title', 'team', 'transactionsGreenPoint', 'transactionsCoin', 'currentPhase', 'storylines', 'inventories', 'commodities', 'rallies', 'phases', 'activePhases', 'visitedRalliesByPhase'));
 
     }
+
 
     public function viewScanner()
     {

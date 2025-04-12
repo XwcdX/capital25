@@ -23,30 +23,23 @@ class MapController extends Controller
         // ambil semua rallies dan phases
         $rallies = Rally::all();
         $phases = Phase::orderBy('phase')->get();
-
-        // posisi pos rally di map
-        // $rallyPositions = [
-        //     'Pos 1' => ['x' => 10, 'y' => 10],
-        //     'Pos 2' => ['x' => 50, 'y' => 60],
-        //     'Pos 3' => ['x' => 70, 'y' => 75],
-        // ];
-
+        $activePhases = Phase::whereNotNull('end_time')->orderBy('phase')->get();
         $currentPhase = $phases->whereNotNull('end_time')->sortByDesc('end_time')->first();
-        // ambil data pos yang dikunjungi per fase
-        $activePhases = $phases->where('phase', '<=', optional($currentPhase)->phase ?? 0)->pluck('id')->toArray();
-        $visitedRalliesByPhase = [];
 
+        // $activePhases = $phases->where('phase', '<=', optional($currentPhase)->phase ?? 0)->pluck('id')->toArray();
 
-        foreach ($activePhases as $phaseId) {
-            $visitedRalliesByPhase[$phaseId] = DB::table('rally_histories')
-                ->where('phase_id', $phaseId)
-                ->where('team_id', $teamId)
-                ->whereNotNull('scanned_at')
-                ->pluck('rally_id')
-                ->toArray();
-        }
+        $visitedRalliesByPhase = DB::table('rally_histories')
+        ->where('team_id', $teamId)
+        ->whereIn('phase_id', $activePhases->pluck('id')->toArray())
+        ->whereNotNull('scanned_at')
+        ->get()
+        ->groupBy('phase_id')
+        ->map(function ($items) {
+            return $items->pluck('rally_id')->unique()->values()->toArray();
+        })
+        ->toArray();
 
         $title = 'Map';
-        return view('user.map', compact('title', 'phases', 'currentPhase', 'rallies', 'visitedRalliesByPhase'));
+        return view('user.map', compact('title', 'phases','currentPhase', 'rallies', 'visitedRalliesByPhase'));
     }
 }
