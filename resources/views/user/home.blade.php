@@ -324,7 +324,7 @@
                 },
                 {
                     question: "Bagaimana cara melakukan pembayaran biaya pendaftaran?",
-                    answer: "Biaya pendaftaran bisa dibayarkan dengan transfer melalui <b>Blu by BCA Digital (005737903186) - Pricilla Chealsea Saputra</b>. Bukti transfer dapat diunggah ke halaman Pendaftaran -> Kolom Bukti Transfer.",
+                    answer: "Biaya pendaftaran bisa dibayarkan dengan transfer melalui <b> BCA (8292779282) - Pricilla Chealsea Saputra</b>. Bukti transfer dapat diunggah ke halaman Pendaftaran -> Kolom Bukti Transfer.",
                 },
                 {
                     question: "Apakah peserta harus mengikuti seluruh rangkaian acara CAPITAL 2025 yang ada?",
