@@ -32,6 +32,10 @@ Route::middleware(['isLogin'])->group(function () {
 
     Route::get('/rally', [RallyController::class, 'rallyHome'])->name('rally.home');
     Route::post('/buyMultipleCommodities', [CommodityController::class, 'buyMultipleCommodities'])->name('buy.multiple.commodities');
+    Route::post(
+        '/commodities/{phase}/reduce‑return‑rates',
+        [CommodityController::class, 'reduceAllCommodityReturnRates']
+    )->name('commodities.reduceReturnRates');
 
     Route::post('/quiz/start', [QuizController::class, 'startQuiz'])->name('quiz.start');
     Route::post('/quiz/save-answer', [QuizController::class, 'saveAnswer'])->name('quiz.save');
@@ -83,13 +87,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Quiz
         Route::post('/question/edit-answer', [AdminController::class, 'editAnswer'])->name('editAnswer');
         Route::put('/question/{id}', [AdminController::class, 'editQuestion'])->name('editQuestion');
-        Route::delete('/question/{id}', [AdminController::class, 'deleteQuestion'])->name('deleteQuestion'); 
-        Route::post('/question', [AdminController::class, 'addQuestion'])->name('addQuestion'); 
+        Route::delete('/question/{id}', [AdminController::class, 'deleteQuestion'])->name('deleteQuestion');
+        Route::post('/question', [AdminController::class, 'addQuestion'])->name('addQuestion');
         Route::get('/question', [AdminController::class, 'viewQuizQuestions'])->name('viewQuestions');
         Route::get('/quiz-result', [AdminController::class, 'viewQuizResults'])->name('viewResults');
 
-            });
-        });
+    });
+});
 // password-reset
 Route::get('/{role}/forget-password', [PasswordResetTokenController::class, 'forgetPassword'])->name('forget.password');
 Route::post('forget-password', [PasswordResetTokenController::class, 'sendEmail'])->name('forget.password.post')->middleware('throttle:resetPasswordEmail');

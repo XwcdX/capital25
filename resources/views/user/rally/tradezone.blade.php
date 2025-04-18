@@ -82,7 +82,6 @@
         margin-top: 5%;
     }
 
-    /* Cart icon styling */
     #cartIcon {
         position: fixed;
         bottom: 20px;
@@ -101,7 +100,6 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
-    /* Cart modal styling */
     #cartModal {
         position: fixed;
         inset: 0;
@@ -122,13 +120,11 @@
         overflow-y: auto;
     }
 
-    /* SweetAlert popup override */
     .swal2-popup.swal-high-z-index {
         z-index: 100000 !important;
     }
 </style>
 
-<!-- Tradezone Modal -->
 <div id="tradezone-modal" class="hidden fixed inset-0 z-[1010] flex items-center justify-center bg-[rgba(0,0,0,0.5)]"
     onclick="closeTradezoneModal()">
     <div id="tradezone-wrapper">
@@ -145,7 +141,6 @@
                 <div id="tradezone-scrollable-content"
                     class="h-[430px] overflow-y-scroll overflow-x-hidden w-full max-w-[1400px] px-4 relative">
                     <div id="tradezone-container" class="commodity-grid">
-                        <!-- Items will be rendered here -->
                     </div>
                 </div>
             </div>
@@ -163,7 +158,6 @@
                     <div class="flex flex-col items-center w-full md:w-1/2">
                         <h2 id="tradezone-zoom-title" class="text-xl md:text-3xl font-bold text-[#415943] mb-4"></h2>
                         <p id="tradezone-zoom-price" class="text-lg md:text-2xl font-bold text-[#415943]"></p>
-                        <!-- New buttons for Buy Now and Add to Cart -->
                         <div class="mt-4 flex space-x-4">
                             <button id="buyNowButton" class="bg-green-500 text-white font-bold py-2 px-4 rounded">Buy
                                 Now</button>

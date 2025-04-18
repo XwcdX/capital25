@@ -102,7 +102,7 @@ class TeamController extends BaseController
                 'id' => $commodity->id,
                 'name' => $commodity->name,
                 'price' => $commodity->price,
-                'return_rate' => $commodity->return_rate,
+                'return_rate' => $commodity->pivot->return_rate,
                 'quantity' => $commodity->pivot->quantity ?? 0,
             ];
         });

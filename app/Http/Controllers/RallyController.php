@@ -62,20 +62,19 @@ class RallyController extends BaseController
             Data menunjukkan satu dari enam kota di China mengalami penurunan tanah melebihi 10 mm per tahun."
         ];
 
-        //map
-         $rallies = Rally::all();
-         $phases = Phase::orderBy('phase')->get();
-         $activePhases = Phase::whereNotNull('end_time')->orderBy('phase')->get(); 
-         $visitedRalliesByPhase = DB::table('rally_histories')
-         ->where('team_id', $team->id)
-         ->whereIn('phase_id', $activePhases->pluck('id')->toArray())
-         ->whereNotNull('scanned_at')
-         ->get()
-         ->groupBy('phase_id')
-         ->map(function ($items) {
-             return $items->pluck('rally_id')->unique()->values()->toArray();
-         })
-         ->toArray();
+        $rallies = $this->model::all();
+        $phases = Phase::orderBy('phase')->get();
+        $activePhases = Phase::whereNotNull('end_time')->orderBy('phase')->get();
+        $visitedRalliesByPhase = DB::table('rally_histories')
+            ->where('team_id', $team->id)
+            ->whereIn('phase_id', $activePhases->pluck('id')->toArray())
+            ->whereNotNull('scanned_at')
+            ->get()
+            ->groupBy('phase_id')
+            ->map(function ($items) {
+                return $items->pluck('rally_id')->unique()->values()->toArray();
+            })
+            ->toArray();
 
         $transactionsGreenPoint = $this->teamController->getGreenpointTransactions();
         $transactionsCoin = $this->teamController->getCoinTransactions();
@@ -96,10 +95,21 @@ class RallyController extends BaseController
         $title = 'Rally Post';
         $currentPhase = Cache::get('current_phase');
         $rallies = $this->model::with([
-            'teams' => function ($query) {
-                $query->withPivot(['qr_expired_at'])->orderBy('qr_expired_at');
+            'teams' => function ($query) use ($currentPhase) {
+                $query->wherePivot('phase_id', $currentPhase->id)->withPivot(['qr_expired_at'])->orderBy('qr_expired_at');
             }
         ])->get();
+        foreach ($rallies as $rally) {
+            $maxExpires = $rally->teams
+                ->pluck('pivot.qr_expired_at')
+                ->max();
+
+            $filtered = $rally->teams
+                ->filter(fn($team) => $team->pivot->qr_expired_at === $maxExpires)
+                ->values();
+
+            $rally->setRelation('teams', $filtered);
+        }
         $rewardMapping = [
             1 => [
                 'teams_range' => '4-5',
@@ -140,7 +150,7 @@ class RallyController extends BaseController
 
     public function generateRallyQrCode($rallyId)
     {
-        $qrExpireAt = now()->addMinutes(5)->timestamp;
+        $qrExpireAt = now()->addMinutes(10)->timestamp;
         $data = "$rallyId|$qrExpireAt";
         $signature = hash_hmac('sha256', $data, env('QR_SECRET_KEY'));
         $qrData = base64_encode("$data|$signature");

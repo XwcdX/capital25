@@ -46,7 +46,7 @@ class CommoditySeeder extends Seeder
                 ],
                 [
                     "name" => "Kacang Pistachio",
-                    "image" => "assets/phase1/KACANG_PISTACHIO",
+                    "image" => "assets/phase1/KACANG_PISTACHIO.png",
                     "description" => "Bukan komoditas unggulan India, tetapi komoditas tahan kekeringan",
                     "price" => 350,
                     "return_rate" => 0.0750,

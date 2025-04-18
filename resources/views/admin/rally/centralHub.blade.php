@@ -88,7 +88,16 @@
         document.addEventListener('DOMContentLoaded', function() {
             Echo.channel("phase-updates")
                 .listen(".PhaseUpdated", (event) => {
-                    window.location.reload();
+                    Swal.fire({
+                        title: 'New Phase Started!',
+                        text: `Phase ${event.phase} is now started!`,
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
                 });
 
             const searchInput = document.getElementById('team-search-input');
