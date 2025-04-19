@@ -76,12 +76,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/update-phase', [AdminController::class, 'updatePhase'])->name('updatePhase');
 
         Route::get('/central-hub', [AdminController::class, 'viewCentralHub'])->name('centralHub');
+        Route::get('/investment-lab', [AdminController::class, 'viewInvestmentLab'])->name('investmentLab');
         Route::post('/buyCommodity', [AdminController::class, 'buyCommodity'])->name('buyCommodity');
-
-        Route::get('/get-team-commodity', [TeamController::class, 'getTeamCommodity'])
-            ->name('getTeamCommodity');
-        Route::post('/update-balance', [TeamController::class, 'updateBalance'])
-            ->name('updateBalance');
+        Route::get('/get-team-commodity', [TeamController::class, 'getTeamCommodity'])->name('getTeamCommodity');
+        Route::post('/update-balance', [TeamController::class, 'updateBalance'])->name('updateBalance');
+        Route::post('/team/convert', [TeamController::class, 'convertCoinToGreenPoint'])->name('team.convert');
 
         // Quiz
         Route::post('/question/edit-answer', [AdminController::class, 'editAnswer'])->name('editAnswer');
