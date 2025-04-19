@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\RallyParticipant;
+use App\Models\ClueZone;
 use App\Models\Commodity;
 use App\Models\Phase;
 use App\Models\Rally;
@@ -19,12 +20,13 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class RallyController extends BaseController
 {
-    protected $commodityController, $teamController;
+    protected $commodityController, $teamController, $clueZoneController;
     public function __construct(Rally $model)
     {
         parent::__construct($model);
         $this->commodityController = new CommodityController(new Commodity());
         $this->teamController = new TeamController(new Team());
+        $this->clueZoneController = new ClueZoneController(new ClueZone());
     }
 
     public function rallyHome()
@@ -75,13 +77,12 @@ class RallyController extends BaseController
                 return $items->pluck('rally_id')->unique()->values()->toArray();
             })
             ->toArray();
-
+        $clueZoneTicket = $this->clueZoneController->getCurrentTeamTicket($team->id, $currentPhase->id);
         $transactionsGreenPoint = $this->teamController->getGreenpointTransactions();
         $transactionsCoin = $this->teamController->getCoinTransactions();
         $inventories = $team->commodities()->get();
         $commodities = $this->commodityController->getCurrentCommodities($currentPhase->id);
-        return view('user.rally.home', compact('title', 'team', 'transactionsGreenPoint', 'transactionsCoin', 'currentPhase', 'storylines', 'inventories', 'commodities', 'rallies', 'phases', 'activePhases', 'visitedRalliesByPhase'));
-
+        return view('user.rally.home', compact('title', 'team', 'clueZoneTicket', 'transactionsGreenPoint', 'transactionsCoin', 'currentPhase', 'storylines', 'inventories', 'commodities', 'rallies', 'phases', 'activePhases', 'visitedRalliesByPhase'));
     }
 
 

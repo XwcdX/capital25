@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ClueZoneController;
 use App\Http\Controllers\CommodityController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\StorageController;
@@ -32,10 +33,8 @@ Route::middleware(['isLogin'])->group(function () {
 
     Route::get('/rally', [RallyController::class, 'rallyHome'])->name('rally.home');
     Route::post('/buyMultipleCommodities', [CommodityController::class, 'buyMultipleCommodities'])->name('buy.multiple.commodities');
-    Route::post(
-        '/commodities/{phase}/reduce‑return‑rates',
-        [CommodityController::class, 'reduceAllCommodityReturnRates']
-    )->name('commodities.reduceReturnRates');
+    Route::post('/commodities/{phase}/reduce‑return‑rates', [CommodityController::class, 'reduceAllCommodityReturnRates'])->name('commodities.reduceReturnRates');
+    Route::post('/buyClueZoneTicket', [ClueZoneController::class, 'buyTicket'])->name('cluezone.buy');
 
     Route::post('/quiz/start', [QuizController::class, 'startQuiz'])->name('quiz.start');
     Route::post('/quiz/save-answer', [QuizController::class, 'saveAnswer'])->name('quiz.save');

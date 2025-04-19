@@ -154,6 +154,10 @@
                 </li>
                 <li>
                     <a href="javascript:void(0)"
+                        onclick="openCluezoneModal(); document.getElementById('nav-toggle').checked = false;">Clue Zone</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)"
                         onclick="openInventoryModal(); document.getElementById('nav-toggle').checked = false;">Inventory</a>
                 </li>
                 <li>
@@ -184,6 +188,14 @@
             modal.classList.remove("hidden");
         } else {
             console.warn("tradezone modal not found.");
+        }
+    }
+    function openCluezoneModal() {
+        var modal = document.getElementById("cluezone-modal");
+        if (modal) {
+            modal.classList.remove("hidden");
+        } else {
+            console.warn("cluezone modal not found.");
         }
     }
 

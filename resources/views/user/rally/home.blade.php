@@ -150,8 +150,7 @@
     </style>
 </head>
 
-<body class="relative h-screen w-screen">
-    <!-- Background image -->
+<body class="fixed h-screen w-screen">
     <img src="{{ asset('assets/lifecycleHPDummy/dummyBG.jpeg') }}" class="absolute inset-0 w-full h-full object-cover">
 
     <!-- Greenpoint & Coins Buttons -->
@@ -284,6 +283,7 @@
     @include('user.rally.tradezone')
     @include('user.rally.inventory')
     @include('user.rally.map')
+    @include('user.rally.cluezone')
 
     @if (session('error'))
         <script>
@@ -291,6 +291,16 @@
                 icon: 'error',
                 title: 'Error!',
                 text: @json(session('error')),
+                confirmButtonColor: '#3085d6'
+            });
+        </script>
+    @endif
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: @json(session('success')),
                 confirmButtonColor: '#3085d6'
             });
         </script>
@@ -345,8 +355,17 @@
 
             if (timeLeft <= 60 * 60 * 1000) {
                 document
-                    .querySelectorAll("a[onclick*='openTradezoneModal']")
-                    .forEach(el => el.classList.add("opacity-50", "pointer-events-none"));
+                    .querySelectorAll("a[onclick*='openTradezoneModal'], a[onclick*='openCluezoneModal']")
+                    .forEach(el => {
+                        el.classList.add("opacity-50", "pointer-events-none");
+                    });
+
+                ['cluezone-modal', 'tradezone-modal'].forEach(id => {
+                    const m = document.getElementById(id);
+                    if (m && !m.classList.contains('hidden')) {
+                        m.classList.add('hidden');
+                    }
+                });
             }
 
             if (timeLeft <= 60 * 60 * 1000 && localStorage.getItem("hasReducedReturnRates") === "false") {

@@ -9,6 +9,13 @@ class ClueZone extends Model
 {
     use HasUuids;
 
+    protected $fillable = [
+        'team_id',
+        'phase_id',
+        'quantity',
+        'price',
+    ];
+
     public function team()
     {
         return $this->belongsTo(Team::class);
