@@ -24,34 +24,108 @@
             z-index: 100000 !important;
         }
 
+        /* custom css class buat swal */
+
+        /* buat atur ukuran popup nya cst*/
+        .custom-swal-popup{
+            background-color: #ece7e3;
+            border-radius: 20px !important; 
+            width:  28rem;
+            height: 15rem;
+            /* padding: 10px; */
+            font-size: 13px;
+            color: #25483d;
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            
+        }
+
+        /* buat button */
+        .custom-swal-cancelBtn{
+            font-size: 15px;
+            font-weight: bold;
+            background-color: #ece7e3;
+            color: #25483d;
+            border: 2px solid #25483d !important;
+            border-radius: 20px;
+            padding-right: 3rem;
+            padding-left: 3rem;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+        }
+
+        .custom-swal-confirmBtn{
+            font-size: 15px;
+            font-weight: bold;
+            background-color: #25483d;
+            color: #ece7e3;
+            border-radius: 20px;
+            border: 2px solid #25483d !important;
+            padding-right: 3rem;
+            padding-left: 3rem;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+        }
+
+        /* .custom-swal-confirmBtn:hover{
+            background-color: #ece7e3;
+            border: 2px solid #25483d !important;
+            color: #25483d;
+        } */
+
+         /* .custom-swal-cancelBtn:hover{
+            background-color: #25483d;
+            color: #ece7e3;
+        } */
+
+        .custom-swal-message{
+            font-weight: bold;
+            text-align: center;
+            margin-top: -0.8rem;
+        }
+
+        .custom-swal-title{
+            font-size: 15px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: -1.2rem;
+        }
+
         .wrapper {
             height: 15rem !important;
             padding-right: 20px !important;
         }
 
         .custom-scrollbar {
+            max-height: 80vh !important; 
             width: 100% !important;
             height: 100% !important;
-            overflow-y: auto !important;
-            /* padding-right: 10px !important; */
-            margin-left: 10px;
+            overflow-y: scroll !important;
+            padding-right: 30px !important; 
+            max-height: 18rem !important; 
+            scroll-behavior: smooth !important;  
         }
 
         .custom-scrollbar::-webkit-scrollbar {
-            width: 1.5rem !important;
-            position: absolute;
+            width: 15px  !important;
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #dedede !important;
-            border-radius: 50px !important;
-            max-height: 20px !important;
+            background: #ece7e3 !important;
+            border-radius: 10px !important;
+            height: 70px !important;
+            max-height: 10px !important;
+        
         }
 
         .custom-scrollbar::-webkit-scrollbar-track {
-            background-color: #a8a8a8 !important;
-            border-radius: 50px !important;
-            margin: 30px !important;
+            background: linear-gradient(to bottom, #415943 0%, #415943 var(--scroll-progress), #D4D4D6 var(--scroll-progress), #D4D4D6 100%)!important;   
+            border-radius: 15px !important;
         }
 
         .modal-content {
@@ -147,6 +221,26 @@
         .font-league {
             font-family: 'League Spartan'
         }
+
+
+        /* benerin main bg pas akses swal biar gak kek ke facelift*/
+        body.swal2-shown{
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        }
+
+        body{
+            margin-right: 0;
+            overflow: auto;
+        }
+
+        html,body{
+            height: 100%;
+            position: relative;
+        }
     </style>
 </head>
 
@@ -182,20 +276,131 @@
     <!-- Greenpoint Modal -->
     <div id="greenpointModal" class="hidden z-[3] fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
         onclick="closeModalOnOverlay(event, 'greenpointModal')">
-        <div class="modal-content bg-white rounded-[2.5vw] w-[90%] sm:w-[55rem] h-auto max-h-[90vh] flex flex-col items-center px-[8rem] pt-[2.3rem] pb-[2rem]"
+        <div class="modal-content bg-white rounded-[2.5vw] w-[90%] sm:w-[55rem] h-[40%] sm:h-[27rem] max-h-[90vh] flex flex-col items-center pt-[2.3rem] px-[5rem] pb-[3.5rem]"
             onclick="event.stopPropagation();">
             <div class="flex flex-row mb-3.5">
                 <span class="text-xl mr-2">🍃</span>
                 <span class="text-3xl text-[#3e5c49] font-oxanium">{{ $team->green_points }}</span>
             </div>
 
+            {{-- <button id="mascotTest" onclick = "showMascotError('TransactionPeriod_over')">Test</button> --}} {{-- buat tes swal--}}
+
             <div
-                class="h-[50vh] sm:h-[18rem] w-full sm:w-[40rem] overflow-y-auto rounded-l-[2vw] rounded-r-[1.5vw] bg-[#3e5c49] custom-scrollbar font-quicksand">
-                <h1 class="text-white font-bold text-center mt-3 pl-5 text-lg sm:text-2xl font-oxanium">Riwayat
+                class="h-[90%] sm:h[20rem] w-full sm:w-[48rem] rounded-l-[2vw] rounded-r-[1.5vw] bg-[#3e5c49] font-quicksand pr-[10px] mx-[10rem] flex flex-col">
+                <div class="custom-scrollbar overflow-y-scroll pr-3 mt-5 sm:mt-1 flex-1">
+                <div class="sm:mt-0">
+                <h1 class="text-white font-bold justify-center text-center mt-0 sm:mt-[1rem] pl-9 ml-9 mr-auto pr-auto text-lg sm:text-2xl font-oxanium ">Riwayat
                     Transaksi</h1>
-                <div class="wrapper w-full">
-                    <div class="custom-scrollbar mt-4 pb-10 overflow-x-hidden pr-3 w-full">
-                        @foreach ($transactionsGreenPoint as $transaction)
+                    <div class="mt-4 pb-10 overflow-x-hidden w-full">
+
+                                                {{-- TEST SCROLL  --}}
+                                                  {{-- <div class="flex justify-between items-center text-white font-semibold text-2xl ml-5 mr-5 mb-5 w-full">
+                                                    <div class="flex flex-row w-[95%] text-lg">
+                                                        <div class="flex flex-col items-center justify-center text-center">
+                                                            <span>16/04/2025</span>
+                                                            <span>08:45:00</span>
+                                                        </div>
+                                                        <div class="flex-1 flex items-center justify-center font-oxanium text-center text-xl text-green-500">
+                                                            <span>+200</span>
+                                                        </div>
+                                                        <div class="flex-1 text-center">
+                                                            <span>Quest reward</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                        
+                                                <div class="flex justify-between items-center text-white font-semibold text-2xl ml-5 mr-5 mb-5 w-full">
+                                                    <div class="flex flex-row w-[95%] text-lg">
+                                                        <div class="flex flex-col items-center justify-center text-center">
+                                                            <span>16/04/2025</span>
+                                                            <span>08:45:00</span>
+                                                        </div>
+                                                        <div class="flex-1 flex items-center justify-center font-oxanium text-center text-xl text-green-500">
+                                                            <span>+200</span>
+                                                        </div>
+                                                        <div class="flex-1 text-center">
+                                                            <span>Quest reward</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                        
+                                                <div class="flex justify-between items-center text-white font-semibold text-2xl ml-5 mr-5 mb-5 w-full">
+                                                    <div class="flex flex-row w-[95%] text-lg">
+                                                        <div class="flex flex-col items-center justify-center text-center">
+                                                            <span>16/04/2025</span>
+                                                            <span>08:45:00</span>
+                                                        </div>
+                                                        <div class="flex-1 flex items-center justify-center font-oxanium text-center text-xl text-green-500">
+                                                            <span>+200</span>
+                                                        </div>
+                                                        <div class="flex-1 text-center">
+                                                            <span>Quest reward</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="flex justify-between items-center text-white font-semibold text-2xl ml-5 mr-5 mb-5 w-full">
+                                                    <div class="flex flex-row w-[95%] text-lg">
+                                                        <div class="flex flex-col items-center justify-center text-center">
+                                                            <span>16/04/2025</span>
+                                                            <span>08:45:00</span>
+                                                        </div>
+                                                        <div class="flex-1 flex items-center justify-center font-oxanium text-center text-xl text-green-500">
+                                                            <span>+200</span>
+                                                        </div>
+                                                        <div class="flex-1 text-center">
+                                                            <span>Quest reward</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                        
+                                                <div class="flex justify-between items-center text-white font-semibold text-2xl ml-5 mr-5 mb-5 w-full">
+                                                    <div class="flex flex-row w-[95%] text-lg">
+                                                        <div class="flex flex-col items-center justify-center text-center">
+                                                            <span>16/04/2025</span>
+                                                            <span>08:45:00</span>
+                                                        </div>
+                                                        <div class="flex-1 flex items-center justify-center font-oxanium text-center text-xl text-green-500">
+                                                            <span>+200</span>
+                                                        </div>
+                                                        <div class="flex-1 text-center">
+                                                            <span>Quest reward</span>
+                                                        </div>
+                                                    </div>
+                                                </div> 
+                                                <div class="flex justify-between items-center text-white font-semibold text-2xl ml-5 mr-5 mb-5 w-full">
+                                                    <div class="flex flex-row w-[95%] text-lg">
+                                                        <div class="flex flex-col items-center justify-center text-center">
+                                                            <span>16/04/2025</span>
+                                                            <span>08:45:00</span>
+                                                        </div>
+                                                        <div class="flex-1 flex items-center justify-center font-oxanium text-center text-xl text-green-500">
+                                                            <span>+200</span>
+                                                        </div>
+                                                        <div class="flex-1 text-center">
+                                                            <span>Quest reward</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                        
+                                                <div class="flex justify-between items-center text-white font-semibold text-2xl ml-5 mr-5 mb-5 w-full">
+                                                    <div class="flex flex-row w-[95%] text-lg">
+                                                        <div class="flex flex-col items-center justify-center text-center">
+                                                            <span>16/04/2025</span>
+                                                            <span>08:45:00</span>
+                                                        </div>
+                                                        <div class="flex-1 flex items-center justify-center font-oxanium text-center text-xl text-green-500">
+                                                            <span>+200</span>
+                                                        </div>
+                                                        <div class="flex-1 text-center">
+                                                            <span>Quest reward</span>
+                                                        </div>
+                                                    </div>
+                                                </div>  --}}
+                                               {{--Dummy End  --}}
+                                                
+
+                         @foreach ($transactionsGreenPoint as $transaction)
                             @php
                                 $date = \Carbon\Carbon::parse($transaction->created_at)->format('d/m/Y');
                                 $time = \Carbon\Carbon::parse($transaction->created_at)->format('H:i:s');
@@ -203,7 +408,7 @@
                                     $transaction->action === 'debit'
                                         ? '-' . $transaction->amount
                                         : '+' . $transaction->amount;
-                            @endphp
+                            @endphp 
                             <div
                                 class="flex justify-between items-center text-white font-semibold text-2xl ml-5 mr-5 mb-5 w-full">
                                 <div class="flex flex-row w-[95%] text-lg">
@@ -221,18 +426,19 @@
                                 </div>
                             </div>
                             <hr class="border-t border-gray-400 my-2 w-full">
-                        @endforeach
+                        @endforeach 
                     </div>
                 </div>
             </div>
         </div>
+            </div>
     </div>
 
 
-    <!-- Coin Modal -->
+     <!-- Coin Modal -->
     <div id="coinModal" class="hidden z-[3] fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
         onclick="closeModalOnOverlay(event, 'coinModal')">
-        <div class="modal-content bg-white rounded-[2.5vw] w-[90%] sm:w-[55rem] h-auto max-h-[90vh] flex flex-col items-center pt-[2.3rem] pb-[2rem]"
+        <div class="modal-content bg-white rounded-[2.5vw] w-[90%] sm:w-[55rem] h-[40%] sm:h-[27rem] max-h-[90vh] flex flex-col items-center pt-[2.3rem] px-[5rem] pb-[3.5rem]"
             onclick="event.stopPropagation();">
             <div class="flex flex-row mb-3.5">
                 <span class="text-xl mr-2">💰</span>
@@ -240,11 +446,15 @@
             </div>
 
             <div
-                class="h-[50vh] sm:h-[18rem] w-full sm:w-[40rem] overflow-y-auto rounded-l-[2vw] rounded-r-[1.5vw] bg-[#3e5c49] custom-scrollbar font-quicksand">
-                <h1 class="text-white font-bold text-center mt-3 pl-5 text-lg sm:text-2xl font-oxanium">Riwayat
+                class="h-[90%] sm:h[20rem] w-full sm:w-[48rem] rounded-l-[2vw] rounded-r-[1.5vw] bg-[#3e5c49] font-quicksand pr-[10px] mx-[10rem] flex flex-col">
+                <div class="custom-scrollbar overflow-y-scroll pr-3 mt-5 sm:mt-1 flex-1">
+                    <div class="sm:mt-0">
+                <h1 class="text-white font-bold text-center mt-3 ml-9 pl-9 mr-auto pr-auto sm:ml-8 text-lg sm:text-2xl font-oxanium">Riwayat
                     Transaksi</h1>
-                <div class="wrapper w-full ">
-                    <div class="custom-scrollbar mt-4 pb-10 overflow-x-hidden pr-3 pl-3 w-full">
+                 {{-- <div class="wrapper w-full">    --}}
+{{-- kalau konten panjang jadi double scrollbar ^ --}}
+
+                    <div class="mt-4 pb-10 pr-3 w-full">
                         @foreach ($transactionsCoin as $transaction)
                             @php
                                 $date = \Carbon\Carbon::parse($transaction->created_at)->format('d/m/Y');
@@ -277,6 +487,7 @@
             </div>
         </div>
     </div>
+    </div>
 
     @include('components.rallynav')
     @include('user.rally.storyline')
@@ -305,8 +516,87 @@
             });
         </script>
     @endif
+        
 
     <script>
+
+        
+    // MASCOT ERROR SWAL --> buat transaction period over and also insufficient cash
+function showMascotError(type){
+            let message = '';
+            let image = '';
+            let code = '';
+
+            switch(type){
+                
+                case 'TransactionPeriod_over':
+                    message = '<p class="custom-swal-message"> The Transaction Window period is over. If you want to make a purchase, please visit the Central Hub. </p>';
+                    btntxt = 'BACK',
+                    code= '1'
+                    break;
+                case 'insufficient_cash':
+                    message = '<p class="custom-swal-message"> Sorry, you cannot complete the purchase because your balance is insufficient. </p>';
+                    btntxt = 'OKAY',
+                    code = '2'
+                    break;
+
+            }
+
+            const confirmBtnClass = code === '1' ? 'custom-swal-cancelBtn' : 'custom-swal-confirmBtn';
+            
+            Swal.fire({
+                html: message,
+                imageUrl : '/assets/swalMascots/sadMascot.png',
+                imageWidth: 75,
+                imageHeight: 75,
+                confirmButtonText: btntxt,
+                customClass: {
+                    confirmButton: confirmBtnClass,
+                    popup: 'custom-swal-popup'
+                }
+            });
+        }
+
+        //CONFIRMATION MASCOT SWAL --> buat konfirmasi mau beli barang
+       function showMascotConfirmation(){
+        Swal.fire({
+            html: 
+            '<p class ="custom-swal-message"> Are you sure you want to make the puchase? Make sure to double-check before proceeding! </p>',
+            imageUrl: 'assets/swalMascots/thinkingMascot.png',
+            imageHeight: 75,
+            imageWidth: 75,
+            showCancelButton: true,
+            confirmButtonText: 'YES',
+            cancelButtonText: 'NO',
+            customClass:{
+                popup: 'custom-swal-popup',
+                cancelButton: 'custom-swal-cancelBtn',
+                confirmButton: 'custom-swal-confirmBtn'
+            }
+
+        });
+       }
+
+       //SUCCESS MASCOT SWAL --> ini buat yang kayak sukses dimasukkan ke cart
+       function showMascotSuccess(){
+            Swal.fire({
+                html: '<p class ="custom-swal-message"> The item has been added to your cart! </p>',
+                title: 'Great choice!',                        
+                imageUrl: 'assets/swalMascots/happyMascot.png',
+                imageHeight: 75,
+                imageWidth: 75,
+                confirmButtonText: 'OKAY',
+                customClass:{
+                    popup: 'custom-swal-popup',
+                    confirmButton: 'custom-swal-confirmBtn',
+                    title: 'custom-swal-title'
+                }
+
+            });
+
+       }
+
+
         document.addEventListener("DOMContentLoaded", function() {
             if (!localStorage.getItem("currentPhaseId")) {
                 localStorage.setItem("currentPhaseId", "{{ $currentPhase->id }}");
@@ -398,6 +688,29 @@
             setTimeout(updateCountdown, 1000);
         }
         updateCountdown();
+
+
+        // benerin scrollbar
+document.querySelectorAll('.custom-scrollbar').forEach(scrollableContent => {
+    
+    function updateScrollbar() {
+        const scrollTop = scrollableContent.scrollTop;
+        const maxScroll = scrollableContent.scrollHeight - scrollableContent.clientHeight;
+
+        let scrollPercentage = 0;
+        if (maxScroll > 0) {
+            scrollPercentage = (scrollTop / maxScroll) * 100;
+        }
+
+        scrollableContent.style.setProperty('--scroll-progress', scrollPercentage + '%');
+    }
+
+    scrollableContent.addEventListener('scroll', updateScrollbar);
+    updateScrollbar();
+});
+
+
+
     </script>
 
 </body>
