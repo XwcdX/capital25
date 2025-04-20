@@ -45,6 +45,10 @@ class RallySeeder extends Seeder
             [
                 "post" => 8,
                 "name" => "Waste Management"
+            ],
+            [
+                "post" => 9,
+                "name" => "Bonus Post"
             ]
         ];
 

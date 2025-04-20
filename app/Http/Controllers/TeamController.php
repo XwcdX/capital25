@@ -25,6 +25,11 @@ class TeamController extends BaseController
     {
         parent::__construct($model);
     }
+    public function updateGreenPoint(){
+        $this->model::query()->update([
+            'green_points' => DB::raw('green_points * 1.5')
+        ]);
+    }
     public function getAllTeam()
     {
         return $this->model::with('users')->get();

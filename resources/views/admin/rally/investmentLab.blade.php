@@ -12,7 +12,8 @@
 
         <div class="overflow-x-auto">
             <ul id="team-list" class="min-w-[800px] space-y-2">
-                <li class="flex justify-between items-center p-3 border-b bg-gray-100 sticky top-0 z-10" data-name='headerDataNameBruteForce'>
+                <li class="flex justify-between items-center p-3 border-b bg-gray-100 sticky top-0 z-10"
+                    data-name='headerDataNameBruteForce'>
                     <span class="w-[25%] font-semibold">Name</span>
                     <span class="w-[25%] font-semibold">Green Point</span>
                     <span class="w-[25%] font-semibold">Coin</span>
@@ -40,12 +41,26 @@
 @section('script')
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            Echo.channel("phase-updates")
+                .listen(".PhaseUpdated", (event) => {
+                    Swal.fire({
+                        title: 'New Phase Started!',
+                        text: `Phase ${event.phase} is now started!`,
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
+                });
             const search = document.getElementById('team-search');
 
             const filterTeams = () => {
                 const q = search.value.toLowerCase();
                 document.querySelectorAll('#team-list li').forEach(li => {
-                    li.style.display = (li.dataset.name.includes(q) || li.dataset.name.includes('headerDataNameBruteForce')) ? '' : 'none';
+                    li.style.display = (li.dataset.name.includes(q) || li.dataset.name.includes(
+                        'headerDataNameBruteForce')) ? '' : 'none';
                 });
             };
 
