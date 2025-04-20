@@ -266,6 +266,12 @@ class AdminController extends BaseController
         $title = 'Central Hub';
         return view("admin.rally.centralHub", compact("data", "currentPhase", "title"));
     }
+    public function viewInvestmentLab()
+    {
+        $title = 'Investment Lab';
+        $teams = $this->teamController->getAllTeam();
+        return view("admin.rally.investmentLab", compact("teams", "title"));
+    }
 
     public function buyCommodity(Request $request)
     {

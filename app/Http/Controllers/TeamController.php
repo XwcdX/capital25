@@ -102,7 +102,7 @@ class TeamController extends BaseController
                 'id' => $commodity->id,
                 'name' => $commodity->name,
                 'price' => $commodity->price,
-                'return_rate' => $commodity->return_rate,
+                'return_rate' => $commodity->pivot->return_rate,
                 'quantity' => $commodity->pivot->quantity ?? 0,
             ];
         });
@@ -416,6 +416,55 @@ class TeamController extends BaseController
                 'team' => $team,
             ]);
         });
+    }
+
+    public function convertCoinToGreenPoint(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'team_id' => 'required|uuid|exists:teams,id',
+            'amount' => 'required|numeric|min:0.01',
+        ]);
+        if ($validator->fails()) {
+            return $this->error($validator->errors()->first(), 422);
+        }
+
+        $data = $validator->validated();
+        $team = Team::findOrFail($data['team_id']);
+        $amt = $data['amount'];
+
+        try {
+            DB::transaction(function () use ($team, $amt) {
+                $debitReq = Request::create('', 'POST', [
+                    'team_id' => $team->id,
+                    'transaction_type' => 'coin',
+                    'action' => 'debit',
+                    'amount' => $amt,
+                    'description' => "Convert {$amt} coin → green_point",
+                ]);
+                $debitResp = $this->updateBalance($debitReq);
+                $dec = $debitResp->getData(true);
+                if (!$debitResp->isOk() || empty($dec['success'])) {
+                    throw new \Exception($dec['error'] ?? 'Failed to debit coins');
+                }
+
+                $creditReq = Request::create('', 'POST', [
+                    'team_id' => $team->id,
+                    'transaction_type' => 'green_point',
+                    'action' => 'credit',
+                    'amount' => $amt,
+                    'description' => "Converted {$amt} coin → green_point",
+                ]);
+                $creditResp = $this->updateBalance($creditReq);
+                $crc = $creditResp->getData(true);
+                if (!$creditResp->isOk() || empty($crc['success'])) {
+                    throw new \Exception($crc['error'] ?? 'Failed to credit green points');
+                }
+            });
+        } catch (\Exception $e) {
+            return $this->error($e->getMessage(), 422);
+        }
+
+        return $this->success("Converted {$amt} coin(s) to green points for Team {$team->name}");
     }
 
     public function getGreenpointTransactions()

@@ -22,7 +22,8 @@
 
         <div id="teamsContainer">
             @foreach ($rallies as $rally)
-                <div class="rally-teams hidden" data-rally-id="{{ $rally->id }}" data-rally-post="{{ $rally->post }}" data-rally-name="{{ $rally->name }}">
+                <div class="rally-teams hidden" data-rally-id="{{ $rally->id }}" data-rally-post="{{ $rally->post }}"
+                    data-rally-name="{{ $rally->name }}">
                     <h2 class="text-xl font-semibold">{{ $rally->name }}</h2>
                     <div class="scan-count mb-2 font-medium text-gray-700">
                         Total Teams Scanned: <span id="scannedCount-{{ $rally->id }}">0</span>
@@ -56,9 +57,44 @@
 
 @section('script')
     <script>
+        const initialTeams = {
+            @foreach ($rallies as $rally)
+                "{{ $rally->id }}": {!! json_encode(
+                    $rally->teams->map(
+                        fn($team) => [
+                            'teamId' => $team->id,
+                            'teamName' => $team->name,
+                            'coin' => $team->pivot->coin ?? null,
+                            'qrExpiredAt' => $team->pivot->qr_expired_at,
+                            'rallyId' => $rally->id,
+                            'selectedRank' => null,
+                            'locked' => false,
+                        ],
+                    ),
+                ) !!},
+            @endforeach
+        };
+        console.log(initialTeams);
+    </script>
+
+    <script>
         var rewardMapping = @json($rewardMapping);
 
         document.addEventListener("DOMContentLoaded", () => {
+            Echo.channel("phase-updates")
+                .listen(".PhaseUpdated", (event) => {
+                    Swal.fire({
+                        title: 'New Phase Started!',
+                        text: `Phase ${event.phase} is now started!`,
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
+                });
+
             let rallyChannel = null;
             const rallyDropdown = document.getElementById("rallyDropdown");
             const openQrModalButton = document.getElementById("openQrModal");
@@ -197,137 +233,118 @@
                 if (rewardMapping[rallyPost] && rewardMapping[rallyPost].reward[selectedRank - 1]) {
                     rewardValue = rewardMapping[rallyPost].reward[selectedRank - 1];
                 }
-
                 getTeamCommodity(teamId).then(commodities => {
-                    let htmlContent = `
-                        <div>
-                            <strong>Total Reward for this Rank: ${rewardValue}</strong>
-                        </div>
-                        <div>
-                            <strong>Remaining Reward: </strong><span id="remainingReward">${rewardValue}</span>
-                        </div>
-                        <hr>
-                    `;
-
-                    commodities.forEach(commodity => {
-                        htmlContent += `
-                        <div class="commodity-row" data-commodity-id="${commodity.id}" style="margin-bottom:1em; border-bottom:1px solid #ccc; padding-bottom:0.5em;">
-                            <div><strong>Commodity:</strong> ${commodity.name}</div>
-                            <div><strong>Price:</strong> ${commodity.price}</div>
-                            <div><strong>Return Rate:</strong> ${(commodity.return_rate * 100).toFixed(2)}%</div>
-                            <div><strong>Quantity:</strong> ${commodity.quantity}</div>
-                            <div>
-                                <label>Allocated Reward:</label>
-                                <input type="number" id="allocatedReward-${commodity.id}" class="swal2-input allocated-reward" placeholder="Enter allocation amount" value="0">
-                            </div>
-                        </div>
-                        `;
+                    const groups = {};
+                    commodities.forEach(c => {
+                        if (!groups[c.id]) {
+                            groups[c.id] = {
+                                id: c.id,
+                                name: c.name,
+                                price: c.price,
+                                records: []
+                            };
+                        }
+                        groups[c.id].records.push({
+                            quantity: c.quantity,
+                            return_rate: c.return_rate
+                        });
                     });
 
+                    const optionsHtml = Object.values(groups)
+                        .map(g => `<option value="${g.id}">${g.name}</option>`)
+                        .join("");
+
+                    let detailsHtml = "";
+                    Object.values(groups).forEach(g => {
+                        detailsHtml += `
+                                <div style="margin-bottom:1em; border-bottom:1px solid #ccc; padding-bottom:0.5em;">
+                                <div><strong>Commodity:</strong> ${g.name}</div>
+                                <div><strong>Price:</strong> ${g.price}</div>
+                            `;
+                        g.records.forEach(r => {
+                            detailsHtml += `
+                            <div>
+                                <strong>Quantity:</strong> ${r.quantity},
+                                <strong>Return Rate:</strong> ${(r.return_rate * 100).toFixed(2)}%
+                            </div>
+                            `;
+                        });
+                        detailsHtml += `</div>`;
+                    });
+
+                    const htmlContent = `
+                            <div><strong>Total Reward Units:</strong> ${rewardValue}</div>
+                            <div style="margin-top:1em">
+                                <label for="commoditySelect"><strong>Pick one commodity:</strong></label><br>
+                                <select id="commoditySelect" class="swal2-input" style="text-align:left">
+                                ${optionsHtml}
+                                </select>
+                            </div>
+                            <hr>
+                            <div style="margin-top:1em">
+                                ${detailsHtml}
+                            </div>
+                            `;
+
                     Swal.fire({
-                        title: 'Allocate Reward',
+                        title: 'Allocate Entire Reward to One Commodity',
                         html: htmlContent,
                         focusConfirm: false,
                         showCancelButton: true,
                         confirmButtonText: 'Save',
                         preConfirm: () => {
-                            let totalAllocated = 0;
-                            const allocationData = [];
-                            const inputs = Swal.getPopup().querySelectorAll(
-                            '.allocated-reward');
-                            inputs.forEach(input => {
-                                const value = parseFloat(input.value) || 0;
-                                totalAllocated += value;
-                                const commodityId = input.id.replace('allocatedReward-',
-                                    '');
-                                allocationData.push({
-                                    commodityId: commodityId,
-                                    allocated: value
-                                });
-                            });
-                            if (totalAllocated !== rewardValue) {
-                                Swal.showValidationMessage(
-                                    `Total allocated reward (${totalAllocated}) must equal ${rewardValue}`
-                                );
+                            const sel = Swal.getPopup().querySelector('#commoditySelect');
+                            if (!sel.value) {
+                                Swal.showValidationMessage('Please select a commodity');
                             }
-                            return allocationData;
-                        },
-                        didOpen: () => {
-                            const inputs = Swal.getPopup().querySelectorAll(
-                            '.allocated-reward');
-                            inputs.forEach(input => {
-                                input.addEventListener('input', () => {
-                                    let total = 0;
-                                    inputs.forEach(inp => {
-                                        total += parseFloat(inp
-                                            .value) || 0;
-                                    });
-                                    const remaining = rewardValue - total;
-                                    Swal.getPopup().querySelector(
-                                            '#remainingReward').textContent =
-                                        remaining;
-                                });
-                            });
+                            return sel.value;
                         }
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            const allocationData = result.value;
-                            const updatePromises = [];
-                            allocationData.forEach(allocation => {
-                                if (allocation.allocated > 0) {
-                                    const commodity = commodities.find(c => c.id ===
-                                        allocation.commodityId);
-                                    if (commodity) {
-                                        const rallyName = rallyContainer.dataset
-                                            .rallyName || 'Current Rally';
-                                        const descriptionText =
-                                            `In Rally "${rallyName}", Rank ${selectedRank} was finalized with an allocation of ${allocation.allocated} reward unit(s) towards ${commodity.name}.`;
-                                        const computedReward = allocation.allocated * (
-                                                commodity.price * commodity.return_rate) *
-                                            commodity.quantity;
-                                        updatePromises.push(
-                                            updateBalanceForTeam({
-                                                team_id: teamId,
-                                                transaction_type: 'coin',
-                                                action: 'credit',
-                                                amount: computedReward,
-                                                commodity_id: commodity.id,
-                                                quantity: allocation.allocated,
-                                                description: descriptionText
-                                            })
-                                        );
-                                    }
-                                }
-                            });
-                            if (updatePromises.length > 0) {
-                                Promise.all(updatePromises)
-                                    .then(() => {
-                                        const teamIndex = updatedTeamsGlobal.findIndex(t => t
-                                            .teamId === teamId);
-                                        if (teamIndex > -1) {
-                                            updatedTeamsGlobal[teamIndex].locked = true;
-                                        }
-                                        renderTeams();
-                                        Swal.fire({
-                                            title: 'Success',
-                                            text: 'Reward allocated successfully.',
-                                            icon: 'success'
-                                        });
-                                    })
-                                    .catch(() => {
-                                        Swal.fire({
-                                            title: 'Error',
-                                            text: 'An error occurred while updating balance.',
-                                            icon: 'error'
-                                        });
-                                    });
-                            } else {
-                                Swal.fire({
-                                    title: 'Info',
-                                    text: 'No allocation was made.',
-                                    icon: 'info'
+                            const chosenId = result.value;
+                            const group = groups[chosenId];
+                            const price = group.price;
+                            const rallyName = rallyContainer.dataset.rallyName || 'Current Rally';
+
+                            const updatePromises = group.records.map(r => {
+                                const computedReward = rewardValue * (price * r
+                                    .return_rate) * r.quantity;
+
+                                const description =
+                                    `Rally "${rallyName}", Rank ${selectedRank}: ` +
+                                    `${rewardValue} unit(s) → ${group.name} @ ${ (r.return_rate*100).toFixed(2) }% (qty ${r.quantity}).`;
+
+                                return updateBalanceForTeam({
+                                    team_id: teamId,
+                                    transaction_type: 'coin',
+                                    action: 'credit',
+                                    amount: computedReward,
+                                    commodity_id: chosenId,
+                                    quantity: rewardValue,
+                                    description
                                 });
-                            }
+                            });
+
+                            Promise.all(updatePromises)
+                                .then(() => {
+                                    const idx = updatedTeamsGlobal.findIndex(t => t.teamId ===
+                                        teamId);
+                                    if (idx > -1) updatedTeamsGlobal[idx].locked = true;
+                                    renderTeams();
+
+                                    Swal.fire({
+                                        title: 'Success',
+                                        text: 'Reward allocated successfully.',
+                                        icon: 'success'
+                                    });
+                                })
+                                .catch(() => {
+                                    Swal.fire({
+                                        title: 'Error',
+                                        text: 'Failed to update balances.',
+                                        icon: 'error'
+                                    });
+                                });
                         }
                     });
                 }).catch(error => {
@@ -358,11 +375,12 @@
                 const selectedRallyTeams = document.querySelector(`[data-rally-id="${rallyId}"]`);
                 if (selectedRallyTeams) selectedRallyTeams.classList.remove("hidden");
 
-                if (rallyId !== "") {
-                    const firstOption = rallyDropdown.querySelector("option:first-child");
-                    if (firstOption && firstOption.value === "") firstOption.remove();
-                    subscribeToRallyChannel(rallyId);
-                }
+                if (!rallyId) return;
+                updatedTeamsGlobal = initialTeams[rallyId] || [];
+                renderTeams();
+                subscribeToRallyChannel(rallyId);
+                const firstOpt = rallyDropdown.querySelector("option:first-child[value='']");
+                if (firstOpt) firstOpt.remove();
             });
 
             openQrModalButton.addEventListener("click", () => {
@@ -376,9 +394,14 @@
                     });
                     return;
                 }
-                const selectedRallyTeams = document.querySelector(`[data-rally-id="${rallyId}"]`);
-                const teamList = selectedRallyTeams.querySelector(".team-list");
-                if (teamList) teamList.innerHTML = '';
+                updatedTeamsGlobal = [];
+                const container = document.querySelector(`[data-rally-id="${rallyId}"]`);
+                if (container) {
+                    const countEl = container.querySelector(`#scannedCount-${rallyId}`);
+                    if (countEl) countEl.textContent = '0';
+                    const teamList = container.querySelector('.team-list');
+                    if (teamList) teamList.innerHTML = '';
+                }
 
                 qrCodeModal.classList.remove("hidden");
                 qrCodeContainer.classList.add("hidden");

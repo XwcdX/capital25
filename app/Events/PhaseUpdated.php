@@ -12,11 +12,11 @@ class PhaseUpdated implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $phaseId;
+    public $phase;
 
     public function __construct($phase)
     {
-        $this->phaseId = $phase->id;
+        $this->phase = $phase;
     }
 
     public function broadcastOn()
@@ -32,7 +32,9 @@ class PhaseUpdated implements ShouldBroadcastNow
     public function broadcastWith()
     {
         return [
-            'phase_id' => $this->phaseId
+            'phase_id' => $this->phase->id,
+            'phase' => $this->phase->phase,
+            'end_time' => $this->phase->end_time
         ];
     }
 }

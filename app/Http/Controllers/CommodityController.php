@@ -187,23 +187,31 @@ class CommodityController extends BaseController
     }
 
 
-    public function reduceAllCommodityReturnRates()
+    public function reduceAllCommodityReturnRates(string $phaseId)
     {
         DB::beginTransaction();
         try {
-            DB::statement("UPDATE commodities 
-            SET return_rate = CASE 
-                WHEN return_rate = 0.10 THEN 0.075 
-                WHEN return_rate = 0.075 THEN 0.05 
-                WHEN return_rate = 0.05 THEN 0.0375 
-                ELSE return_rate 
-            END
-            WHERE return_rate IN (0.10, 0.075, 0.05)");
+            DB::statement("
+                UPDATE commodities
+                SET return_rate = CASE 
+                    WHEN return_rate = 0.10 THEN 0.075 
+                    WHEN return_rate = 0.075 THEN 0.05 
+                    WHEN return_rate = 0.05 THEN 0.0375 
+                    ELSE return_rate 
+                END
+                WHERE phase_id = :phaseId
+                AND return_rate IN (0.10, 0.075, 0.05)
+            ", ['phaseId' => $phaseId]);
+
             DB::commit();
-            return back()->with('success', 'Commodity return rates have been reduced successfully.');
+            return response()->json(['success' => true]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'An error occurred while reducing commodity return rates.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Error reducing rates',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 }
