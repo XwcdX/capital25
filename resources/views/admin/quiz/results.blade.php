@@ -180,7 +180,7 @@
 
         function showTeamAnswers(choices, team) {
             let choicesHtml = choices.map(choice => `
-                <p><strong>Q:</strong> ${choice.question_text} <br> 
+                <p><strong>Q:</strong> ${choice.question['question_text']} <br> 
                 <strong>A:</strong> ${choice.answer_text} 
                 (${choice.is_correct ? '<span style="color: green;">Correct</span>' : '<span style="color: red;">Incorrect</span>'})</p>
             `).join('');
@@ -190,11 +190,8 @@
                 width: 600,
                 html: choicesHtml,
                 icon: "info",
-                showCancelButton: true,
                 confirmButtonText: "Edit",
-                cancelButtonText: "Close",
                 confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
             });
         }
     </script>

@@ -131,11 +131,112 @@
             display: none;
         }
     }
+
+    /* mobile nav css */
+    .els-wrap {
+        display: flex;
+        align-items: center;
+        width: 25px;
+        color: rgb(51, 51, 51);
+        /* padding: 0 20px; */
+        border-radius: 100px;
+        overflow: hidden;
+        text-decoration: none;
+        cursor: pointer;
+        background-size: 1200px;
+        background-position: 100% 50%;
+        background-image: radial-gradient(circle at right, #25362d, rgb(216, 216, 255));
+        transition:
+            width 200ms ease-in-out,
+            padding 200ms ease-in-out,
+            border-radius 300ms ease-in-out,
+            background-position 900ms ease-in-out;
+    }
+
+    .icon-nav {
+        font-size: 20px;
+        margin-right: 25px;
+        position: relative;
+        z-index: 2;
+        transition: font-size 250ms ease-out, margin-right 200ms ease-out;
+    }
+
+    .nav-label {
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        opacity: 0;
+        position: relative;
+        z-index: 2;
+        font-size: 12px;
+        transition: opacity 400ms ease-out;
+        transition-delay: 130ms;
+    }
+
+    .els-wrap:hover,
+    .els-wrap:focus {
+        background-position: 0 50%;
+        padding: 3px 13px;
+        border-radius: 50px;
+        width: auto;
+    }
+
+    .els-wrap:hover .icon-nav,
+    .els-wrap:focus .icon-nav {
+        font-size: 14px;
+        margin-right: 10px;
+    }
+
+    .els-wrap:hover .nav-label,
+    .els-wrap:focus .nav-label {
+        opacity: 1;
+    }
+
 </style>
 
 <div id="navbar ">
-    <nav class="navbar">
-        <div class="nav-container">
+    {{-- mobile nav --}}
+    <nav id="nav-mobile" class="bg-[#25362d] ">
+        <div class="flex justify-center block lg:hidden font-quicksand">
+                <div class="w-full h-[70px] shadow-[0_10px_40px_rgba(51,51,51,0.7)] flex items-center justify-between px-10">
+                
+                    <a href="javascript:void(0)" class="els-wrap el-1"
+                    onclick="openStorylineModal(); document.getElementById('nav-toggle').checked = false;">
+                    <div class="icon-nav">
+                        <i class="far fa-user-circle text-white"></i>
+                    </div>
+                    <p class="nav-label">Storyline</p>
+                    </a>
+                    
+                    <a href="#" class="els-wrap el-2"
+                    onclick="openTradezoneModal(); document.getElementById('nav-toggle').checked = false;">
+                    <div class="icon-nav">
+                        <i class="fas fa-align-center text-white"></i>
+                    </div>
+                    <p class="nav-label">Tradezone</p>
+                    </a>
+                    
+                    <a href="#" class="els-wrap el-3 text-white"
+                    onclick="openInventoryModal(); document.getElementById('nav-toggle').checked = false;">
+                    <div class="icon-nav">
+                        <i class="far fa-comment-dots text-white"></i>
+                    </div>
+                    <p class="nav-label">Inventory</p>
+                    </a>
+
+                    <a href="{{ route('quiz') }}" class="els-wrap el-4">
+                    <div class="icon-nav">
+                        <i class="far fa-bell text-white"></i>
+                    </div>
+                    <p class="nav-label">Final Test</p>
+                    </a>
+          
+                </div>
+        
+        </div>
+    </nav>
+
+    <nav id="nav-lg" class="navbar">
+        <div class="nav-container  hidden lg:block">
             <input class="checkbox" type="checkbox" id="nav-toggle" />
             <label for="nav-toggle" class="hamburger-lines">
                 <span class="line line1"></span>
@@ -151,6 +252,10 @@
                 <li>
                     <a href="javascript:void(0)"
                         onclick="openTradezoneModal(); document.getElementById('nav-toggle').checked = false;">Tradezone</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)"
+                        onclick="openCluezoneModal(); document.getElementById('nav-toggle').checked = false;">Clue Zone</a>
                 </li>
                 <li>
                     <a href="javascript:void(0)"
@@ -184,6 +289,14 @@
             modal.classList.remove("hidden");
         } else {
             console.warn("tradezone modal not found.");
+        }
+    }
+    function openCluezoneModal() {
+        var modal = document.getElementById("cluezone-modal");
+        if (modal) {
+            modal.classList.remove("hidden");
+        } else {
+            console.warn("cluezone modal not found.");
         }
     }
 

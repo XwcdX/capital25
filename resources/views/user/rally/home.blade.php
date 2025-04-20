@@ -150,35 +150,40 @@
     </style>
 </head>
 
-<body class="relative h-screen w-screen">
-    <!-- Background image -->
-    <img src="{{ asset('assets/lifecycleHPDummy/dummyBG.jpeg') }}" class="absolute inset-0 w-full h-full object-cover">
+<body class="flex flex-col h-screen w-screen">
+    <img src="{{ asset('assets/lifecycleHPDummy/dummyBG.jpeg') }}" class="absolute z-[-1] inset-0 w-full h-full object-cover">
 
-    <!-- Greenpoint & Coins Buttons -->
-    <div class="absolute top-0 right-0 my-3 mr-3 flex space-x-3 flex-wrap z-[2] font-oxanium">
-        <button onclick="openModal('greenpointModal');"
-            class="hover:bg-slate-400 hover:cursor-pointer bg-white text-[#3e5c49] rounded-full w-[10rem] min-w-[6rem] h-12 flex items-center justify-center px-3">
-            <span class="text-xl mr-2">🍃</span>
-            <span class="text-2xl">{{ $team->green_points }}</span>
+    <!-- Greenpoint, Coin, map Buttons -->
+    <div class="absolute top-0 right-0 my-3 mr-3 flex flex-col items-end space-y-2 flex-wrap z-[2] font-oxanium">
+        <div class="flex space-x-2">
+            <button onclick="openModal('greenpointModal');"
+                class="hover:bg-slate-400 hover:cursor-pointer bg-white text-[#3e5c49] rounded-full w-[7rem] md:w-[10rem] space-x-1 flex items-center justify-center py-1.5">
+                <span class="text-lg md:text-xl">🍃</span>
+                <span class="text-base md:text-2xl">{{ $team->green_points }}</span>
+            </button>
+            <button onclick="openModal('coinModal');"
+                class="hover:bg-slate-400 hover:cursor-pointer bg-white text-[#3e5c49] rounded-full w-[7rem] md:w-[10rem] space-x-1 flex items-center justify-center py-1.5">
+                <span class="text-lg md:text-xl">💰</span>
+                <span class="text-base md:text-2xl">{{ $team->coin }}</span>
+            </button>
+        </div>
+        <button class="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--cap-green3)] rounded-full" onclick="openMapModal(); document.getElementById('nav-toggle').checked = false;">
+            <img class="w-[80%] " src="{{ asset('assets/treasure-map.png')}}" alt="">
         </button>
-        <button onclick="openModal('coinModal');"
-            class="hover:bg-slate-400 hover:cursor-pointer bg-white text-[#3e5c49] rounded-full w-[10rem] min-w-[6rem] h-12 flex items-center justify-center px-3">
-            <span class="text-xl mr-2">💰</span>
-            <span class="text-2xl">{{ $team->coin }}</span>
-        </button>
+        
     </div>
 
     <!-- Main Content -->
-    <div class="flex flex-col items-center justify-center h-full text-white font-oxanium">
-        <h1 class="z-[1]  text-8xl font-semibold  drop-shadow-[0_0_8px_rgba(0,0,0,0.9)]">Lifecycle Simulation</h1>
-        <h2 class="z-[1] text-8xl font-bold  drop-shadow-[0_0_8px_rgba(0,0,0,0.9)]">CAPITAL 2025</h2>
-        <div class="mt-[100px] text-3xl font-bold">
+    <main class="flex flex-col items-center justify-center h-full text-white font-oxanium">
+        <h1 class="z-[1] text-3xl md:text-5xl lg:text-7xl font-semibold  drop-shadow-[0_0_8px_rgba(0,0,0,1)]">Lifecycle Simulation</h1>
+        <h2 class="z-[1] text-4xl md:text-6xl lg:text-8xl font-bold  drop-shadow-[0_0_8px_rgba(0,0,0,1)]">CAPITAL 2025</h2>
+        <div class="mt-[100px] text-3xl font-bold drop-shadow-[0_0_8px_rgba(0,0,0,1)] mb-2  ">
             ROUND {{ $currentPhase->phase ?? 'N/A' }}
         </div>
         <div id="timer"
-            class="absolute bottom-20 left-1/2 transform -translate-x-1/2 text-[#415943] bg-white text-black px-20 py-5 rounded-full text-3xl font-bold shadow-lg">
+            class=" text-[#415943] bg-white text-black px-12 py-5 rounded-full text-2xl font-bold shadow-xl">
         </div>
-    </div>
+    </main>
 
     <!-- Greenpoint Modal -->
     <div id="greenpointModal" class="hidden z-[3] fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
@@ -278,12 +283,13 @@
             </div>
         </div>
     </div>
-
+    
     @include('components.rallynav')
     @include('user.rally.storyline')
     @include('user.rally.tradezone')
     @include('user.rally.inventory')
     @include('user.rally.map')
+    @include('user.rally.cluezone')
 
     @if (session('error'))
         <script>
@@ -291,6 +297,16 @@
                 icon: 'error',
                 title: 'Error!',
                 text: @json(session('error')),
+                confirmButtonColor: '#3085d6'
+            });
+        </script>
+    @endif
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: @json(session('success')),
                 confirmButtonColor: '#3085d6'
             });
         </script>
@@ -345,8 +361,17 @@
 
             if (timeLeft <= 60 * 60 * 1000) {
                 document
-                    .querySelectorAll("a[onclick*='openTradezoneModal']")
-                    .forEach(el => el.classList.add("opacity-50", "pointer-events-none"));
+                    .querySelectorAll("a[onclick*='openTradezoneModal'], a[onclick*='openCluezoneModal']")
+                    .forEach(el => {
+                        el.classList.add("opacity-50", "pointer-events-none");
+                    });
+
+                ['cluezone-modal', 'tradezone-modal'].forEach(id => {
+                    const m = document.getElementById(id);
+                    if (m && !m.classList.contains('hidden')) {
+                        m.classList.add('hidden');
+                    }
+                });
             }
 
             if (timeLeft <= 60 * 60 * 1000 && localStorage.getItem("hasReducedReturnRates") === "false") {

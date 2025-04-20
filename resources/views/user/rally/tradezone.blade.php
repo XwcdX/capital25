@@ -159,9 +159,8 @@
         margin-top: 5%;
     }
 
-
-    /* #cartIcon {
-        position: fixed;
+    #cartIcon {
+        position: absolute;
         bottom: 20px;
         right: 20px;
         background: #007bff;

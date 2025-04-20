@@ -1,5 +1,5 @@
 <div id="storylineModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[1002]" onclick="closeModal('storylineModal')">
-    <div class="bg-[#fffdf7] rounded-3xl w-[90%] sm:w-[55rem] max-w-lg md:max-w-3xl h-[28rem] p-5 md:px-12 md:py-10 flex flex-col relative" onclick="event.stopPropagation();">
+    <div class="bg-[#fffdf7] rounded-3xl w-[90%] sm:w-[55rem] max-w-lg md:max-w-3xl h-[28rem] p-5 md:px-12 md:py-10 flex flex-col justify-center relative" onclick="event.stopPropagation();">
         <div class="mb-2 text-center">
             <h1 id="fase-title" class="text-xl md:text-3xl text-[#03300f] font-bold font-oxanium">Fase {{ $currentPhase }}</h1>
         </div>

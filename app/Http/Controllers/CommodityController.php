@@ -7,6 +7,7 @@ use App\Models\Team;
 use App\Utils\HttpResponseCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -129,36 +130,64 @@ class CommodityController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return $this->error($validator->errors()->first(), HttpResponseCode::HTTP_BAD_REQUEST);
+            return $this->error(
+                $validator->errors()->first(),
+                HttpResponseCode::HTTP_BAD_REQUEST
+            );
         }
 
+        $phase =  Cache::get("current_phase", "No Phase Set");
         $validated = $validator->validated();
-
         $team = $this->teamController->getTeam($validated['team_id']);
         $commodity = $this->model::findOrFail($validated['commodity_id']);
-        $totalPrice = $commodity->price * $validated['quantity'];
+        $qty = $validated['quantity'];
+        $totalPrice = $commodity->price * $qty;
+
+        $existingRecord = $commodity->teams()
+            ->where('team_id', $team->id)
+            ->first();
+
+        if (!$existingRecord) {
+            return $this->error(
+                'This commodity is not available for this team.',
+                HttpResponseCode::HTTP_BAD_REQUEST
+            );
+        }
 
         if ($team->coin < $totalPrice) {
-            return $this->error('The team does not have enough coin for this purchase.');
+            return $this->error(
+                'The team does not have enough coin for this purchase.',
+                HttpResponseCode::HTTP_BAD_REQUEST
+            );
         }
 
         DB::beginTransaction();
         try {
-            $existingRecord = $commodity->teams()
-                ->where('team_id', $team->id)
-                ->first();
-
-            if (!$existingRecord) {
-                DB::rollBack();
-                return $this->error('This commodity is not available for this team.', HttpResponseCode::HTTP_BAD_REQUEST);
-            }
-
-            $newQuantity = $existingRecord->pivot->quantity + $validated['quantity'];
-            DB::table('commodity_histories')
+            $historyRow = DB::table('commodity_histories')
                 ->where('team_id', $team->id)
                 ->where('commodity_id', $commodity->id)
                 ->where('return_rate', $commodity->return_rate)
-                ->update(['quantity' => $newQuantity]);
+                ->where('phase_id', $phase->id)
+                ->first();
+
+            if ($historyRow) {
+                DB::table('commodity_histories')
+                    ->where('id', $historyRow->id)
+                    ->update([
+                        'quantity' => DB::raw("quantity + {$qty}"),
+                        'updated_at' => now(),
+                    ]);
+            } else {
+                DB::table('commodity_histories')->insert([
+                    'team_id' => $team->id,
+                    'commodity_id' => $commodity->id,
+                    'phase_id' => $phase->id,
+                    'return_rate' => $commodity->return_rate,
+                    'quantity' => $qty,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
 
             $transactionData = [
                 'team_id' => $team->id,
@@ -166,25 +195,28 @@ class CommodityController extends BaseController
                 'action' => 'debit',
                 'amount' => $totalPrice,
                 'commodity_id' => $commodity->id,
-                'description' => "Purchased {$validated['quantity']} x {$commodity->name}",
+                'description' => "Purchased {$qty} x {$commodity->name}",
             ];
 
             $transRequest = new Request($transactionData);
             $response = $this->teamController->updateBalance($transRequest);
-            $responseData = $response->getData();
+            $respBody = $response->getData();
 
-            if (isset($responseData->error)) {
-                DB::rollBack();
-                return $this->error($responseData->error);
+            if (isset($respBody->error)) {
+                throw new \Exception($respBody->error);
             }
 
             DB::commit();
             return $this->success('Commodity purchased successfully for the team.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return $this->error($e->getMessage(), HttpResponseCode::HTTP_BAD_REQUEST);
+            return $this->error(
+                $e->getMessage(),
+                HttpResponseCode::HTTP_BAD_REQUEST
+            );
         }
     }
+
 
 
     public function reduceAllCommodityReturnRates(string $phaseId)

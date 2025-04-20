@@ -266,6 +266,12 @@ class AdminController extends BaseController
         $title = 'Central Hub';
         return view("admin.rally.centralHub", compact("data", "currentPhase", "title"));
     }
+    public function viewInvestmentLab()
+    {
+        $title = 'Investment Lab';
+        $teams = $this->teamController->getAllTeam();
+        return view("admin.rally.investmentLab", compact("teams", "title"));
+    }
 
     public function buyCommodity(Request $request)
     {
@@ -275,22 +281,24 @@ class AdminController extends BaseController
     public function updatePhase(Request $request)
     {
         $phaseId = $request->input('phase_id');
+        $phase = Phase::findOrFail($phaseId);
 
         try {
-            $phase = Phase::findOrFail($phaseId);
-            $phase->end_time = now()->addHours(1.25)->format('H:i:s');
-            if (!$phase->save()) {
-                return back()->with('error', 'Failed to update phase.');
-            }
+            DB::transaction(function() use ($phase){
+                $phase->end_time = now()->addMinutes(75)->format('H:i:s');
+                $phase->save();
+
+                $this->teamController->updateGreenPoint();
+            });
+            
+            Cache::forever("current_phase", $phase);
+            event(new PhaseUpdated($phase));
+            return back()->with('success', 'Phase and green points updated successfully.');
         } catch (ModelNotFoundException $e) {
             return back()->with('error', 'Phase not found.');
         } catch (Exception $e) {
             return back()->with('error', 'Failed to update phase: ' . $e->getMessage());
         }
-
-        Cache::forever("current_phase", $phase);
-        event(new PhaseUpdated($phase));
-        return back()->with('success', 'Phase updated successfully.');
     }
 
     // quiz
@@ -367,7 +375,7 @@ class AdminController extends BaseController
                 'question_id' => $question->id
             ]);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             return response()->json([
                 'success' => false,
@@ -394,7 +402,7 @@ class AdminController extends BaseController
             $question->save();
 
             return response()->json(['success' => true, 'message' => 'Question updated successfully!', 'question' => $question]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => 'Failed to update question.'], 500);
         }
     }
@@ -436,7 +444,7 @@ class AdminController extends BaseController
                 'message' => 'Question deleted successfully'
             ]);
     
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete question',
@@ -479,7 +487,7 @@ class AdminController extends BaseController
                 'choices' => $team->answers->map(function ($answer) {
                     return [
                         'answer_id' => $answer->id,
-                        'answer_text' => $answer->text,
+                        'answer_text' => $answer->answer_text,
                         'is_correct' => $answer->is_correct,
                         'question' => [
                             'question_id' => $answer->question->id,

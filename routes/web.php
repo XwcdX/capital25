@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ClueZoneController;
 use App\Http\Controllers\CommodityController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\StorageController;
@@ -32,10 +33,8 @@ Route::middleware(['isLogin'])->group(function () {
 
     Route::get('/rally', [RallyController::class, 'rallyHome'])->name('rally.home');
     Route::post('/buyMultipleCommodities', [CommodityController::class, 'buyMultipleCommodities'])->name('buy.multiple.commodities');
-    Route::post(
-        '/commodities/{phase}/reduce‑return‑rates',
-        [CommodityController::class, 'reduceAllCommodityReturnRates']
-    )->name('commodities.reduceReturnRates');
+    Route::post('/commodities/{phase}/reduce‑return‑rates', [CommodityController::class, 'reduceAllCommodityReturnRates'])->name('commodities.reduceReturnRates');
+    Route::post('/buyClueZoneTicket', [ClueZoneController::class, 'buyTicket'])->name('cluezone.buy');
 
     Route::post('/quiz/start', [QuizController::class, 'startQuiz'])->name('quiz.start');
     Route::post('/quiz/save-answer', [QuizController::class, 'saveAnswer'])->name('quiz.save');
@@ -77,12 +76,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/update-phase', [AdminController::class, 'updatePhase'])->name('updatePhase');
 
         Route::get('/central-hub', [AdminController::class, 'viewCentralHub'])->name('centralHub');
+        Route::get('/investment-lab', [AdminController::class, 'viewInvestmentLab'])->name('investmentLab');
         Route::post('/buyCommodity', [AdminController::class, 'buyCommodity'])->name('buyCommodity');
-
-        Route::get('/get-team-commodity', [TeamController::class, 'getTeamCommodity'])
-            ->name('getTeamCommodity');
-        Route::post('/update-balance', [TeamController::class, 'updateBalance'])
-            ->name('updateBalance');
+        Route::get('/get-team-commodity', [TeamController::class, 'getTeamCommodity'])->name('getTeamCommodity');
+        Route::post('/update-balance', [TeamController::class, 'updateBalance'])->name('updateBalance');
+        Route::post('/team/convert', [TeamController::class, 'convertCoinToGreenPoint'])->name('team.convert');
 
         // Quiz
         Route::post('/question/edit-answer', [AdminController::class, 'editAnswer'])->name('editAnswer');

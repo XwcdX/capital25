@@ -4,14 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\ClueZone;
 use App\Models\Phase;
+use App\Models\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
 class ClueZoneController extends BaseController
 {
-    public function __construct(ClueZone $zone){
+    protected $teamController;
+    public function __construct(ClueZone $zone)
+    {
         parent::__construct($zone);
+        $this->teamController = new TeamController(new Team());
     }
     public function buyTicket(Request $request)
     {
@@ -55,6 +59,22 @@ class ClueZoneController extends BaseController
 
         $totalPrice = $ticketPrice * $quantityToBuy;
 
+        $reqs = new Request([
+            'team_id' => $team->id,
+            'transaction_type' => 'coin',
+            'action' => 'debit',
+            'amount' => $totalPrice,
+            'description' => "Bought {$quantityToBuy} ticket(s) in phase {$currentPhaseInt}",
+        ]);
+        $resp = $this->teamController->updateBalance($reqs);
+        $status = $resp->getStatusCode();
+        $payload = $resp->getData(true);
+
+        if ($status === 422 || empty($payload['success'] ?? null)) {
+            $error = $payload['error'] ?? $payload['errors'] ?? 'Failed to update balance';
+            return redirect()->back()->with('error', $error);
+        }
+
         if ($existingTicket) {
             $existingTicket->quantity += $quantityToBuy;
             $existingTicket->price += $totalPrice;
@@ -69,5 +89,12 @@ class ClueZoneController extends BaseController
         }
 
         return redirect()->back()->with('success', 'Ticket(s) purchased successfully!');
+    }
+
+    public function getCurrentTeamTicket($teamId, $phaseId)
+    {
+        return $this->model->with('phase')->where('team_id', $teamId)
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 }
