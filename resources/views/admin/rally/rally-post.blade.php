@@ -74,27 +74,12 @@
                 ) !!},
             @endforeach
         };
-        console.log(initialTeams);
     </script>
 
     <script>
         var rewardMapping = @json($rewardMapping);
 
         document.addEventListener("DOMContentLoaded", () => {
-            Echo.channel("phase-updates")
-                .listen(".PhaseUpdated", (event) => {
-                    Swal.fire({
-                        title: 'New Phase Started!',
-                        text: `Phase ${event.phase} is now started!`,
-                        icon: 'info',
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.reload();
-                        }
-                    });
-                });
-
             let rallyChannel = null;
             const rallyDropdown = document.getElementById("rallyDropdown");
             const openQrModalButton = document.getElementById("openQrModal");
@@ -105,17 +90,29 @@
             const closeQrModalButton = document.getElementById("closeQrModal");
             const closeModalButton = document.getElementById("closeModalButton");
 
+            let phase = {!! json_encode(optional($currentPhase)->phase) !!};
             let phaseId = {!! json_encode(optional($currentPhase)->id) !!};
 
             let updatedTeamsGlobal = [];
 
             Echo.channel("phase-updates")
                 .listen(".PhaseUpdated", (event) => {
-                    phaseId = event.phase_id;
-                    const selectedRallyId = rallyDropdown.value;
-                    if (selectedRallyId) {
-                        subscribeToRallyChannel(selectedRallyId);
-                    }
+                    Swal.fire({
+                        title: 'New Phase Started!',
+                        text: `Phase ${event.phase} is now started!`,
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            phaseId = event.phase_id;
+                            phase = event.phase;
+                            const selectedRallyId = rallyDropdown.value;
+                            renderTeams();
+                            if (selectedRallyId) {
+                                subscribeToRallyChannel(selectedRallyId);
+                            }
+                        }
+                    });
                 });
 
             function subscribeToRallyChannel(rallyId) {
@@ -153,12 +150,65 @@
                 const rallyContainer = document.querySelector(`[data-rally-id="${rallyId}"]`);
                 if (!rallyContainer) return;
 
+                const rallyPost = rallyContainer.dataset.rallyPost;
                 const scanCountElement = rallyContainer.querySelector(`#scannedCount-${rallyId}`);
                 scanCountElement.textContent = updatedTeamsGlobal.length;
 
-                const teamList = rallyContainer.querySelector(".team-list");
-                teamList.innerHTML = '';
+                const ul = rallyContainer.querySelector(".team-list");
+                ul.innerHTML = '';
                 const totalScanned = updatedTeamsGlobal.length;
+
+                const bonusCoins = {
+                    1: 500,
+                    2: 1000,
+                    3: 2000,
+                    4: 4000
+                };
+                const amt = bonusCoins[phase] || 0;
+
+                if (rallyPost === '9') {
+                    updatedTeamsGlobal.forEach(team => {
+                        const li = document.createElement('li');
+                        li.textContent = team.teamName;
+                        ul.appendChild(li);
+                    });
+
+                    const btnLi = document.createElement('li');
+                    btnLi.classList.add('list-none');
+                    const btn = document.createElement('button');
+                    btn.textContent = `Distribute ${amt} Coins to Each Team`;
+                    btn.className = 'bg-green-500 text-white px-4 py-2 rounded mt-2';
+                    btn.addEventListener('click', () => {
+                        if (!updatedTeamsGlobal.length) {
+                            return Swal.fire('No teams to reward', '', 'info');
+                        }
+                        Swal.fire({
+                            title: 'Confirm Distribution',
+                            text: `This will credit each of the ${updatedTeamsGlobal.length} teams with ${amt} coins.`,
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonText: 'Yes, distribute'
+                        }).then(res => {
+                            if (!res.isConfirmed) return;
+                            const promises = updatedTeamsGlobal.map(team =>
+                                updateBalanceForTeam({
+                                    team_id: team.teamId,
+                                    transaction_type: 'coin',
+                                    action: 'credit',
+                                    amount: amt,
+                                    description: `Bonus post in phase ${phase}`
+                                })
+                            );
+                            Promise.all(promises)
+                                .then(() => Swal.fire('Success', 'Coins distributed!', 'success'))
+                                .catch(() => Swal.fire('Error', 'Failed to distribute coins.',
+                                    'error'));
+                        });
+                    });
+                    btnLi.appendChild(btn);
+                    ul.appendChild(btnLi);
+                    return;
+                }
 
                 updatedTeamsGlobal.forEach(team => {
                     const li = document.createElement("li");
@@ -197,7 +247,7 @@
                         rankSelect.appendChild(option);
                     }
                     li.appendChild(rankSelect);
-                    teamList.appendChild(li);
+                    ul.appendChild(li);
 
                     if (!team.locked) {
                         rankSelect.addEventListener("change", function() {
@@ -312,7 +362,7 @@
 
                                 const description =
                                     `Rally "${rallyName}", Rank ${selectedRank}: ` +
-                                    `${rewardValue} unit(s) → ${group.name} @ ${ (r.return_rate*100).toFixed(2) }% (qty ${r.quantity}).`;
+                                    `${rewardValue} reward(s) → ${group.name} @ ${ (r.return_rate*100).toFixed(2) }% (qty ${r.quantity}).`;
 
                                 return updateBalanceForTeam({
                                     team_id: teamId,
