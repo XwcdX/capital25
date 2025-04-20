@@ -95,9 +95,6 @@
             margin: 0 30px;
         }
 
-        .relative {
-            padding: 0 30px;
-        }
 
         #rallyTooltip {
             font-size: 10px;
@@ -117,8 +114,8 @@
 
 <div id="overlay-map" class="hidden w-screen h-screen fixed inset-0 bg-black bg-opacity-50 z-[1001]">
 
-<div id="mapModal" class="relative  flex items-center justify-center z-[1002]" onclick="event.stopPropagation()">
-    <div class="bg-white w-[80%] max-w-[850px] max-h-[700px] rounded-lg shadow-xl p-4 text-center relative">
+<div id="mapModal" class="relative flex items-center justify-center z-[1002] rotate-90" onclick="event.stopPropagation()">
+    <div class="bg-white w-[90%] max-w-[850px]  max-h-[700px] rounded-lg shadow-xl md:p-4 text-center relative">
         <h2 class="text-2xl md:text-3xl font-bold font-['Oxanium'] mb-2 text-cap-green" id="phaseTitle">
             Fase {{ $currentPhase->phase }}
         </h2>

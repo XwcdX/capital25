@@ -83,7 +83,7 @@
     }
 
     #cartIcon {
-        position: fixed;
+        position: absolute;
         bottom: 20px;
         right: 20px;
         background: #007bff;
@@ -174,9 +174,9 @@
 </div>
 
 <!-- Cart Icon -->
-<div id="cartIcon">
+{{-- <div id="cartIcon">
     <i class="fa fa-shopping-cart"></i>
-</div>
+</div> --}}
 
 <!-- Cart Modal -->
 <div id="cartModal" class="hidden" onclick="closeCartModal()">
