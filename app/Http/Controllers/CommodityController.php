@@ -143,16 +143,16 @@ class CommodityController extends BaseController
         $qty = $validated['quantity'];
         $totalPrice = $commodity->price * $qty;
 
-        // $existingRecord = $commodity->teams()
-        //     ->where('team_id', $team->id)
-        //     ->first();
+        $existingRecord = $commodity->teams()
+            ->where('team_id', $team->id)
+            ->first();
 
-        // if (!$existingRecord) {
-        //     return $this->error(
-        //         'This commodity is not available for this team.',
-        //         HttpResponseCode::HTTP_BAD_REQUEST
-        //     );
-        // }
+        if (!$existingRecord) {
+            return $this->error(
+                'This commodity is not available for this team.',
+                HttpResponseCode::HTTP_BAD_REQUEST
+            );
+        }
 
         if ($team->coin < $totalPrice) {
             return $this->error(
