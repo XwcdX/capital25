@@ -645,7 +645,7 @@
 
         document.addEventListener("DOMContentLoaded", function() {
             if (!localStorage.getItem("currentPhaseId")) {
-                localStorage.setItem("currentPhaseId", "{{ $currentPhase ? $currentPhase->id : 0}}");
+                localStorage.setItem("currentPhaseId", "{{ $currentPhase ? $currentPhase->id : 0 }}");
             }
             if (!localStorage.getItem("hasReducedReturnRates")) {
                 localStorage.setItem("hasReducedReturnRates", "false");
@@ -676,18 +676,23 @@
             document.getElementById(id).classList.add("hidden");
         }
 
-        let countdownString = "{{ $currentPhase ? $currentPhase->end_time : '00:00:00'}}";
-        let todayDate = new Date().toISOString().split('T')[0];
-        let countdownTime = new Date(todayDate + "T" + countdownString + "+07:00").getTime();
+        let countdownString = "{{ $currentPhase ? $currentPhase->end_time : '00:00:00' }}";
+        const nowDate = new Date();
+        const yyyy = nowDate.getFullYear();
+        const mm = String(nowDate.getMonth() + 1).padStart(2, '0');
+        const dd = String(nowDate.getDate()).padStart(2, '0');
+        const [h, m, s] = countdownString.split(':').map(Number);
+
+        const countdownTime = new Date(
+            yyyy,
+            nowDate.getMonth(),
+            dd,
+            h, m, s
+        ).getTime();
 
         function updateCountdown() {
             let now = new Date().getTime();
             let timeLeft = countdownTime - now;
-
-            if (timeLeft <= 0) {
-                document.getElementById("timer").textContent = "Time's up!";
-                return;
-            }
 
             if (timeLeft <= 60 * 60 * 1000) {
                 document
@@ -702,6 +707,11 @@
                         m.classList.add('hidden');
                     }
                 });
+            }
+            
+            if (timeLeft <= 0) {
+                document.getElementById("timer").textContent = "Time's up!";
+                return;
             }
 
             if (timeLeft <= 60 * 60 * 1000 && localStorage.getItem("hasReducedReturnRates") === "false") {
