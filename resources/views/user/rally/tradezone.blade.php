@@ -34,7 +34,8 @@
         height: 50%;
         border-radius: 12px;
         padding: 20px;
-        background-color: #f4f0ea; /* atau sesuai warna background */
+        background-color: #f4f0ea;
+        /* atau sesuai warna background */
         font-family: 'Poppins', sans-serif;
     }
 
@@ -88,7 +89,7 @@
         height: 300px;
         margin-right: 3%;
     }
-    
+
     #tradezone-wrapper {
         display: flex;
         align-items: center;
@@ -101,11 +102,11 @@
 
     #tradezone-zoom-container .popup-content {
         max-width: 90vw;
-        height: 80vh;    
+        height: 80vh;
         padding: 2vw 3vw;
     }
 
-    
+
     #tradezone-back {
         display: flex;
         flex-direction: column;
@@ -161,23 +162,19 @@
 
     #cartIcon {
         position: absolute;
-        bottom: 20px;
-        right: 20px;
-        background: #007bff;
+        right: 8px;
         color: #fff;
-        border-radius: 50%;
         width: 60px;
         height: 60px;
         display: flex;
-        align-items: center;
+        align-items: top;
         justify-content: center;
         font-size: 28px;
         cursor: pointer;
         z-index: 1020;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    } */
+    }
 
-    #cartModal {
+    */ #cartModal {
         position: fixed;
         inset: 0;
         z-index: 1025;
@@ -201,7 +198,7 @@
         position: fixed;
         inset: 0;
         background: rgba(0, 0, 0, 0.8);
-        z-index: 1024; 
+        z-index: 1024;
     }
 
     .swal2-popup.swal-high-z-index {
@@ -209,6 +206,7 @@
     }
 
     @media (max-width: 768px) {
+
         .custom-success-popup,
         .custom-swal-popup,
         #cartModal .modal-content {
@@ -274,7 +272,6 @@
         #addToCartButton {
             font-size: 3vw;
             padding: 2% 5%;
-            
         }
 
         #tradezone-back-button img,
@@ -286,15 +283,13 @@
         #tradezone-back-button img {
             width: 10vw;
             height: 10vw;
-            margin-left: 50%;
-            
+            margin-left: 35%;
         }
 
         #tradezone-back-button {
             display: flex;
-            align-items: center; 
+            align-items: center;
             justify-content: flex-start;
-            
         }
 
         .popup-header {
@@ -302,6 +297,12 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 1rem;
+        }
+    }
+
+    @media (max-width: 412px) {
+        #tradezone-back-button img {
+            margin-left: 70%;
         }
     }
 
@@ -347,17 +348,20 @@
         }
 
         #tradezone-zoom-container .popup-content {
-            height:80vh;
+            height: 80vh;
             max-height: 120%;
             padding: 12%;
             padding-top: 15%;
-        
+
         }
 
         #tradezone-zoom-image {
-            width: 20vw; /* ubah dari 20vw jadi 30vw untuk ukuran yang lebih nyaman */
-            height: 20vw; /* pastikan tetap square */
-            margin: 2vh auto; /* center gambar secara vertikal */
+            width: 20vw;
+            /* ubah dari 20vw jadi 30vw untuk ukuran yang lebih nyaman */
+            height: 20vw;
+            /* pastikan tetap square */
+            margin: 2vh auto;
+            /* center gambar secara vertikal */
             display: block;
         }
 
@@ -372,8 +376,6 @@
             font-size: 1.5vw;
             padding: 1.5% 3%;
             margin-top: 20%;
-           
-        
         }
 
 
@@ -390,9 +392,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 5vw;      
+            width: 5vw;
             height: 5vw;
-            
+        }
+
+        #cartIcon{
+            top: 14px;
+            right: 20px;
         }
 
         #tradezone-back-button img,
@@ -405,9 +411,9 @@
             width: 7vw;
             height: 7vw;
             margin-top: 1.5vh;
-            
-        
-            
+
+
+
         }
 
         #cartModal .modal-content {
@@ -486,9 +492,6 @@
             padding: 1.5vw 4vw;
         }
     }
-
-   
-
 </style>
 
 <div id="tradezone-modal" class="hidden fixed inset-0 z-[1010] flex items-center justify-center bg-[rgba(0,0,0,0.5)]"
@@ -520,7 +523,8 @@
                 onclick="event.stopPropagation()">
                 <div class="flex flex-col md:flex-row w-full h-full items-center justify-center">
                     <div class="flex flex-col items-center w-full md:w-1/2">
-                        <img id="tradezone-zoom-image" class="w-40 h-40 object-cover rounded-lg mt-15 shadow-xl border-[3px] border-[#415943]">
+                        <img id="tradezone-zoom-image"
+                            class="w-40 h-40 object-cover rounded-lg mt-15 shadow-xl border-[3px] border-[#415943]">
                         <p id="tradezone-zoom-price" class="text-lg md:text-2xl font-bold text-[#415943]"></p>
                     </div>
                     <div class="flex flex-col items-center w-full md:w-1/2">
@@ -530,10 +534,10 @@
                     </div>
                 </div>
                 <div class="mt-6 flex space-x-4">
-                    <button id="buyNowButton" class="bg-[#415943] text-white font-bold py-2 px-6 rounded-3xl">BUY
+                    <button id="buyNowButton" class="bg-[#415943] text-white font-bold w-[120px] md:w-[300px] py-2 px-6 rounded-3xl">BUY
                         NOW</button>
                     <button id="addToCartButton"
-                        class="border border-[#415943] text-[#415943] font-bold py-2 px-6 rounded-3xl">ADD TO
+                        class="border border-[#415943] text-[#415943] font-bold w-[120px] md:w-[300px] py-2 px-6 rounded-3xl">ADD TO
                         CART</button>
                 </div>
 
@@ -560,7 +564,8 @@
         <div id="cartItems" class="overflow-y-auto h-[50vh]">
         </div>
         <div class="flex justify-center mt-4 space-x-4">
-            <button id="checkoutCartButton" class="bg-[#415943] text-white font-bold py-2 px-6 rounded-3xl">Checkout</button>
+            <button id="checkoutCartButton"
+                class="bg-[#415943] text-white font-bold py-2 px-6 rounded-3xl">Checkout</button>
             <button id="closeCartButton"
                 class="border border-[#415943] text-[#415943] font-bold py-2 px-6 rounded-3xl">Close</button>
         </div>
@@ -727,7 +732,7 @@
         }
 
         cartIcon.addEventListener('click', () => {
-            
+
             tradezoneModal.classList.add('hidden');
             tradezoneZoomContainer.classList.add('hidden');
             tradezoneContainerUtama.classList.add('hidden');
@@ -743,86 +748,77 @@
                     "info");
                 return;
             }
-           
 
             let payloadItems = cart.map(item => ({
                 commodity_id: item.id,
                 quantity: item.quantity
             }));
 
-            let totalPrice = 0;
-            cart.forEach(item => {
-                totalPrice += item.price * item.quantity;
-            });
-  // Cek apakah uang mencukupi
-    let userBalance = {{ $team->coin }};
-    if (totalPrice < userBalance) {
-        // Jika uang mencukupi, tampilkan konfirmasi
-        Swal.fire({
-    title: '',
-    html: `
-        <div class="text-lg md:text-xl font-bold text-[#415943]">Are you sure you want to make the purchase?</div>
-        <div class="text-lg md:text-xl font-bold text-[#415943]">Make sure to double-check before proceeding!</div>
-    `,
-    showCancelButton: true,
-    confirmButtonText: "YES",
-    cancelButtonText: "NO",
-    customClass: {
-        popup: 'custom-swal-popup',
-        confirmButton: 'custom-swal-confirm',
-        cancelButton: 'custom-swal-cancel'
-    },
-    buttonsStyling: false
+            Swal.fire({
+                title: '',
+                html: `
+                    <div class="text-lg md:text-xl font-bold text-[#415943]">Are you sure you want to make the purchase?</div>
+                    <div class="text-lg md:text-xl font-bold text-[#415943]">Make sure to double-check before proceeding!</div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: "YES",
+                cancelButtonText: "NO",
+                customClass: {
+                    popup: 'custom-swal-popup',
+                    confirmButton: 'custom-swal-confirm',
+                    cancelButton: 'custom-swal-cancel'
+                },
+                buttonsStyling: false
 
-        }).then((result) => {
-            if (result.isConfirmed) {
-                let payloadItems = cart.map(item => ({
-                    commodity_id: item.id,
-                    quantity: item.quantity
-                }));
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let payloadItems = cart.map(item => ({
+                        commodity_id: item.id,
+                        quantity: item.quantity
+                    }));
 
-                // Proses pembelian
-                fetch("{{ route('buy.multiple.commodities') }}", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                        },
-                        body: JSON.stringify({
-                            items: payloadItems
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            Swal.fire({
-                            title: '',
-                            html: `
-                                <div class="text-lg md:text-xl font-bold text-[#415943]">Great choice!</div>
-                                <div class="text-lg md:text-xl font-bold text-[#415943]">The item has been added to your cart!</div>
-                            `,
-                            showConfirmButton: true,
-                            confirmButtonText: "OKAY",
-                            customClass: {
-                                popup: 'custom-success-popup',
-                                confirmButton: 'custom-success-confirm'
+                    fetch("{{ route('buy.multiple.commodities') }}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": "{{ csrf_token() }}"
                             },
-                            buttonsStyling: false
-                        }).then(() => {
-                                localStorage.removeItem("commodityCart");
-                                window.location.reload();
-                            });
-                        } else {
-                            Swal.fire("Error", data.message, "error");
-                        }
-                    })
-                    .catch(error => {
-                        Swal.fire("Error", "An error occurred during checkout.", "error");
-                    });
-            }
+                            body: JSON.stringify({
+                                items: payloadItems
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire({
+                                    title: '',
+                                    html: `
+                                        <div class="text-lg md:text-xl font-bold text-[#415943]">Great choice!</div>
+                                        <div class="text-lg md:text-xl font-bold text-[#415943]">The item has been added to your cart!</div>
+                                    `,
+                                    showConfirmButton: true,
+                                    confirmButtonText: "OKAY",
+                                    customClass: {
+                                        popup: 'custom-success-popup',
+                                        confirmButton: 'custom-success-confirm'
+                                    },
+                                    buttonsStyling: false
+                                }).then(() => {
+                                    localStorage.removeItem("commodityCart");
+                                    window.location.reload();
+                                });
+                            } else {
+                                Swal.fire("Error", data.message, "error");
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire("Error", "An error occurred during checkout.",
+                                "error");
+                        });
+                }
+            });
+
         });
-    }
-});
 
 
         document.getElementById("buyNowButton").addEventListener("click", function() {
