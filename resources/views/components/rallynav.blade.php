@@ -262,10 +262,6 @@
                         onclick="openInventoryModal(); document.getElementById('nav-toggle').checked = false;">Inventory</a>
                 </li>
                 <li>
-                    <a href="javascript:void(0)"
-                        onclick="openMapModal(); document.getElementById('nav-toggle').checked = false;">Map</a>
-                </li>
-                <li>
                     <a href="{{ route('quiz') }}">Final Test</a>
                 </li>
             </ul>
