@@ -236,7 +236,7 @@
     </nav>
 
     <nav id="nav-lg" class="navbar">
-        <div class="nav-container  hidden lg:block">
+        <div class="nav-container  max-lg:!hidden lg:block">
             <input class="checkbox" type="checkbox" id="nav-toggle" />
             <label for="nav-toggle" class="hamburger-lines">
                 <span class="line line1"></span>
