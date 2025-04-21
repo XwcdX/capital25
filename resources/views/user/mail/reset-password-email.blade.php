@@ -41,7 +41,7 @@
             <p>Hello!</p>
             <p>Please click the button below to reset your account's password...</p>
             <p>Ignore this email if this is not you.</p>
-            <a href="https://capital.petra.ac.id/team/{{ $token }}">
+            <a href="{{route("reset.password", ['role' => $role, 'token' => $token])}}">
                 <button class="message-box__button bg-[#56843a]">Reset Password</button>
             </a>
             <p>Thank you.</p>

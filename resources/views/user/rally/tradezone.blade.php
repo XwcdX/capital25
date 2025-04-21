@@ -174,7 +174,7 @@
         z-index: 1020;
     }
 
-    */ #cartModal {
+    #cartModal {
         position: fixed;
         inset: 0;
         z-index: 1025;
@@ -711,7 +711,7 @@
                                 </div>
                             </div>
                             <!-- Harga + Tombol Delete -->
-                            <div class="flex justify-between md:justify-end items-center w-full md:w-auto space-x-3 md:space-x-5">
+                            <div class="flex justify-between md:justify-end items-center w-[85%] md:w-auto space-x-3 md:space-x-5">
                                 <p class="text-sm md:text-lg font-semibold text-[#415943]">$${item.price}</p>
                                 <button onclick="deleteCartItem(${index})" class="text-red-500 text-xs md:text-sm font-bold">Delete</button>
                             </div>
@@ -720,7 +720,7 @@
                 });
 
                 html += `
-                     <div class="grid grid-cols-3 gap-2 items-center font-bold mt-4 pt-4 border-t border-gray-400">
+                     <div class="grid grid-cols-3 gap-2 items-center font-bold mt-4 pt-4 border-gray-400">
                         <div class="text-sm md:text-lg font-semibold text-[#415943] text-left">Total</div>
                         <div class="text-sm md:text-lg font-semibold text-[#415943] text-center">${totalQty} pcs</div>
                         <div class="text-sm md:text-lg font-semibold text-[#415943] text-right">$${totalPrice.toLocaleString()}</div>
