@@ -487,7 +487,7 @@ class AdminController extends BaseController
                 'choices' => $team->answers->map(function ($answer) {
                     return [
                         'answer_id' => $answer->id,
-                        'answer_text' => $answer->text,
+                        'answer_text' => $answer->answer_text,
                         'is_correct' => $answer->is_correct,
                         'question' => [
                             'question_id' => $answer->question->id,
