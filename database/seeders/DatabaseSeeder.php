@@ -19,8 +19,9 @@ class DatabaseSeeder extends Seeder
         // $this->call(AdminSeeder::class);
         $this->call(PhaseSeeder::class);
         $this->call(CommoditySeeder::class);
-        $this->call(QuestionSeeder::class);
-        $this->call(AnswerSeeder::class);
+        // $this->call(QuestionSeeder::class);
+        // $this->call(AnswerSeeder::class);
         // $this->call(RallyHistorySeeder::class);
+        $this->call(QnASeeder::class);
     }
 }
