@@ -97,9 +97,9 @@
                 margin-top: 140px;
             }
 
-            #inventory-title {
+            /* #inventory-title {
                 margin-top: 5%;
-            }
+            } */
 
             /* For Tablets */
             @media (max-width: 1024px) {
@@ -176,9 +176,9 @@
                     padding: 0.6rem;
                     margin-top: 55%;
                 }
-                #inventory-title {
+                /* #inventory-title {
                     margin-top: 30%;
-                }
+                } */
                 #container-utama {
                     min-height: 350px;
                     margin-bottom: 5%;
@@ -205,10 +205,10 @@
                     padding: 0.3rem;
                     margin-top: 40%;
                 }
-                #inventory-title {
+                /* #inventory-title {
                     margin-top: 1px;
                     margin-bottom: 10px;
-                }
+                } */
                 #container-utama {
                     min-height: 230px;
                     margin-top: 10px;
@@ -237,9 +237,9 @@
                     margin-bottom: 23%;
                     padding-bottom: 15%;
                 }
-                #inventory-title {
+                /* #inventory-title {
                     margin-top: 20%;
-                }
+                } */
                 #container-utama {
                     min-height: 200px;
                 }

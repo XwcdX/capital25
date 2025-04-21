@@ -43,7 +43,7 @@
             text-align: center;
             font-size: 2rem;
             font-weight: bold;
-            text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff00ff, 0 0 40px #ff00ff, 0 0 50px #ff00ff, 0 0 60px #ff00ff, 0 0 70px #ff00ff;
+            text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #82b741, 0 0 40px #82b741, 0 0 50px #82b741, 0 0 60px #82b741, 0 0 70px #82b741;
             color: #fff;
             z-index: 2;
         }
@@ -99,7 +99,7 @@
 
     <h1>Scan Rally QR Code</h1>
     <div id="reader"></div>
-    <p id="scanned-result" class="d-done"></p>
+    {{-- <p id="scanned-result" class="d-done"></p> --}}
     <script>
         function startScanning(selectedCameraId) {
             let phaseId = {!! json_encode(optional($currentPhase)->id) !!};
@@ -109,9 +109,9 @@
             const teamId = document.querySelector('meta[name="user-id"]').getAttribute('content');
 
             const onScanSuccess = (decodedText, decodedResult) => {
-                const result = document.getElementById("scanned-result");
-                result.innerHTML = `Scanned: <strong>${decodedText}</strong>`;
-                result.classList.remove("d-none");
+                // const result = document.getElementById("scanned-result");
+                // result.innerHTML = `Scanned: <strong>${decodedText}</strong>`;
+                // result.classList.remove("d-none");
                 if (html5QrCode.isScanning) {
                     html5QrCode.stop().then(() => {
                         fetch(scanUrl, {
@@ -129,12 +129,23 @@
                             .then(response => response.json())
                             .then(data => {
                                 if (data.success) {
-                                    swal.fire("Success", "Scanned Successfully! ", "success");
-                                    window.dispatchEvent(new CustomEvent("rallyScanned", {
-                                        detail: {
-                                            rallyId: data.data.rally_id
+                                    swal.fire({
+                                        title: "Success",
+                                        text: "Scanned Successfully!",
+                                        icon: "success",
+                                        didOpen: () => {
+                                            window.dispatchEvent(new CustomEvent(
+                                            "rallyScanned", {
+                                                detail: {
+                                                    rallyId: data.data.rally_id
+                                                }
+                                            }));
                                         }
-                                    }));
+                                    }).then((res) => {
+                                        if (res.isConfirmed) {
+                                            window.location.href = '{{ route('rally.home') }}';
+                                        }
+                                    });
                                 } else {
                                     swal.fire("Error", data.message || "An unexpected error occurred.",
                                         "error");

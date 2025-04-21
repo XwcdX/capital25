@@ -507,7 +507,7 @@
                 <div id="tradezone-scrollable-content"
                     class="h-[430px] overflow-y-scroll overflow-x-hidden w-full max-w-[1400px] px-4 relative">
                     <div id="tradezone-container"
-                        class="commodity-grid grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 sm:gap-4 w-full">
+                        class="commodity-grid grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4 w-full">
                     </div>
                 </div>
             </div>
