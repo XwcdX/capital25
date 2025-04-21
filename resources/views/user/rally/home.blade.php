@@ -27,10 +27,10 @@
         /* custom css class buat swal */
 
         /* buat atur ukuran popup nya cst*/
-        .custom-swal-popup{
+        .custom-swal-popup {
             background-color: #ece7e3;
-            border-radius: 20px !important; 
-            width:  28rem;
+            border-radius: 20px !important;
+            width: 28rem;
             height: 15rem;
             /* padding: 10px; */
             font-size: 13px;
@@ -41,7 +41,7 @@
         }
 
         /* buat button */
-        .custom-swal-cancelBtn{
+        .custom-swal-cancelBtn {
             font-size: 15px;
             font-weight: bold;
             background-color: #ece7e3;
@@ -56,7 +56,7 @@
             display: flex;
         }
 
-        .custom-swal-confirmBtn{
+        .custom-swal-confirmBtn {
             font-size: 15px;
             font-weight: bold;
             background-color: #25483d;
@@ -77,16 +77,16 @@
             color: #25483d;
         } */
 
-         /* .custom-swal-cancelBtn:hover{
+        /* .custom-swal-cancelBtn:hover{
             background-color: #25483d;
             color: #ece7e3;
         } */
 
         /*lbh panjang*/
-        .custom-swal-popup1{
-        background-color: #ece7e3;
+        .custom-swal-popup1 {
+            background-color: #ece7e3;
             border-radius: 20px !important;
-            width:  28rem;
+            width: 28rem;
             height: 18rem;
             font-size: 13px;
             color: #25483d;
@@ -96,13 +96,13 @@
         }
 
 
-        .custom-swal-message{
+        .custom-swal-message {
             font-weight: bold;
             text-align: center;
             margin-top: -0.8rem;
         }
 
-        .custom-swal-title{
+        .custom-swal-title {
             font-size: 15px;
             font-weight: bold;
             text-align: center;
@@ -115,17 +115,17 @@
         }
 
         .custom-scrollbar {
-            max-height: 80vh !important; 
+            max-height: 80vh !important;
             width: 100% !important;
             height: 100% !important;
             overflow-y: scroll !important;
-            padding-right: 30px !important; 
-            max-height: 18rem !important; 
-            scroll-behavior: smooth !important;  
+            padding-right: 30px !important;
+            max-height: 18rem !important;
+            scroll-behavior: smooth !important;
         }
 
         .custom-scrollbar::-webkit-scrollbar {
-            width: 15px  !important;
+            width: 15px !important;
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb {
@@ -133,11 +133,11 @@
             border-radius: 10px !important;
             height: 70px !important;
             max-height: 10px !important;
-        
+
         }
 
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: linear-gradient(to bottom, #415943 0%, #415943 var(--scroll-progress), #D4D4D6 var(--scroll-progress), #D4D4D6 100%)!important;   
+            background: linear-gradient(to bottom, #415943 0%, #415943 var(--scroll-progress), #D4D4D6 var(--scroll-progress), #D4D4D6 100%) !important;
             border-radius: 15px !important;
         }
 
@@ -237,20 +237,21 @@
 
 
         /* benerin main bg pas akses swal biar gak kek ke facelift*/
-        body.swal2-shown{
-        position: fixed !important;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        body.swal2-shown {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
         }
 
-        body{
+        body {
             margin-right: 0;
             overflow: auto;
         }
 
-        html,body{
+        html,
+        body {
             height: 100%;
             position: relative;
         }
@@ -258,7 +259,8 @@
 </head>
 
 <body class="flex flex-col h-screen w-screen">
-    <img src="{{ asset('assets/lifecycleHPDummy/dummyBG.jpeg') }}" class="absolute z-[-1] inset-0 w-full h-full object-cover">
+    <img src="{{ asset('assets/lifecycleHPDummy/dummyBG.jpeg') }}"
+        class="absolute z-[-1] inset-0 w-full h-full object-cover">
 
     <!-- Greenpoint, Coin, map Buttons -->
     <div class="absolute top-0 right-0 my-3 mr-3 flex flex-col items-end space-y-2 flex-wrap z-[2] font-oxanium">
@@ -274,16 +276,19 @@
                 <span class="text-base md:text-2xl">{{ $team->coin }}</span>
             </button>
         </div>
-        <button class="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--cap-green3)] rounded-full" onclick="openMapModal(); document.getElementById('nav-toggle').checked = false;">
-            <img class="w-[80%] " src="{{ asset('assets/treasure-map.png')}}" alt="">
+        <button class="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--cap-green3)] rounded-full"
+            onclick="openMapModal(); document.getElementById('nav-toggle').checked = false;">
+            <img class="w-[80%] " src="{{ asset('assets/treasure-map.png') }}" alt="">
         </button>
-        
+
     </div>
 
     <!-- Main Content -->
     <main class="flex flex-col items-center justify-center h-full text-white font-oxanium">
-        <h1 class="z-[1] text-3xl md:text-5xl lg:text-7xl font-semibold  drop-shadow-[0_0_8px_rgba(0,0,0,1)]">Lifecycle Simulation</h1>
-        <h2 class="z-[1] text-4xl md:text-6xl lg:text-8xl font-bold  drop-shadow-[0_0_8px_rgba(0,0,0,1)]">CAPITAL 2025</h2>
+        <h1 class="z-[1] text-3xl md:text-5xl lg:text-7xl font-semibold  drop-shadow-[0_0_8px_rgba(0,0,0,1)]">Lifecycle
+            Simulation</h1>
+        <h2 class="z-[1] text-4xl md:text-6xl lg:text-8xl font-bold  drop-shadow-[0_0_8px_rgba(0,0,0,1)]">CAPITAL 2025
+        </h2>
         <div class="mt-[100px] text-3xl font-bold drop-shadow-[0_0_8px_rgba(0,0,0,1)] mb-2  ">
             ROUND {{ $currentPhase->phase ?? 'N/A' }}
         </div>
@@ -302,18 +307,20 @@
                 <span class="text-3xl text-[#3e5c49] font-oxanium">{{ $team->green_points }}</span>
             </div>
 
-            {{-- <button id="mascotTest" onclick = "showMascotError('TransactionPeriod_over')">Test</button> --}} {{-- buat tes swal--}}
+            {{-- <button id="mascotTest" onclick = "showMascotError('TransactionPeriod_over')">Test</button> --}} {{-- buat tes swal --}}
 
             <div
                 class="h-[90%] sm:h[20rem] w-full sm:w-[48rem] rounded-l-[2vw] rounded-r-[1.5vw] bg-[#3e5c49] font-quicksand pr-[10px] mx-[10rem] flex flex-col">
                 <div class="custom-scrollbar overflow-y-scroll pr-3 mt-5 sm:mt-1 flex-1">
-                <div class="sm:mt-0">
-                <h1 class="text-white font-bold justify-center text-center mt-0 sm:mt-[1rem] pl-9 ml-9 mr-auto pr-auto text-lg sm:text-2xl font-oxanium ">Riwayat
-                    Transaksi</h1>
-                    <div class="mt-4 pb-10 overflow-x-hidden w-full">
+                    <div class="sm:mt-0">
+                        <h1
+                            class="text-white font-bold justify-center text-center mt-0 sm:mt-[1rem] pl-9 ml-9 mr-auto pr-auto text-lg sm:text-2xl font-oxanium ">
+                            Riwayat
+                            Transaksi</h1>
+                        <div class="mt-4 pb-10 overflow-x-hidden w-full">
 
-                                                {{-- TEST SCROLL  --}}
-                                                  {{-- <div class="flex justify-between items-center text-white font-semibold text-2xl ml-5 mr-5 mb-5 w-full">
+                            {{-- TEST SCROLL  --}}
+                            {{-- <div class="flex justify-between items-center text-white font-semibold text-2xl ml-5 mr-5 mb-5 w-full">
                                                     <div class="flex flex-row w-[95%] text-lg">
                                                         <div class="flex flex-col items-center justify-center text-center">
                                                             <span>16/04/2025</span>
@@ -416,45 +423,45 @@
                                                         </div>
                                                     </div>
                                                 </div>  --}}
-                                               {{--Dummy End  --}}
-                                                
+                            {{-- Dummy End  --}}
 
-                         @foreach ($transactionsGreenPoint as $transaction)
-                            @php
-                                $date = \Carbon\Carbon::parse($transaction->created_at)->format('d/m/Y');
-                                $time = \Carbon\Carbon::parse($transaction->created_at)->format('H:i:s');
-                                $amountDisplay =
-                                    $transaction->action === 'debit'
-                                        ? '-' . $transaction->amount
-                                        : '+' . $transaction->amount;
-                            @endphp 
-                            <div
-                                class="flex justify-between items-center text-white font-semibold text-2xl ml-5 mr-5 mb-5 w-full">
-                                <div class="flex flex-row w-[95%] text-lg">
-                                    <div class="flex flex-col items-center justify-center text-center">
-                                        <span>{{ $date }}</span>
-                                        <span>{{ $time }}</span>
-                                    </div>
-                                    <div
-                                        class="flex-1 flex items-center justify-center text-center text-xl {{ $transaction->action === 'debit' ? 'text-[#e80909]' : 'text-green-500' }}">
-                                        <span>{{ $amountDisplay }}</span>
-                                    </div>
-                                    <div class="flex-1 text-center ">
-                                        <span>{{ $transaction->description }}</span>
+
+                            @foreach ($transactionsGreenPoint as $transaction)
+                                @php
+                                    $date = \Carbon\Carbon::parse($transaction->created_at)->format('d/m/Y');
+                                    $time = \Carbon\Carbon::parse($transaction->created_at)->format('H:i:s');
+                                    $amountDisplay =
+                                        $transaction->action === 'debit'
+                                            ? '-' . $transaction->amount
+                                            : '+' . $transaction->amount;
+                                @endphp
+                                <div
+                                    class="flex justify-between items-center text-white font-semibold text-2xl ml-5 mr-5 mb-5 w-full">
+                                    <div class="flex flex-row w-[95%] text-lg">
+                                        <div class="flex flex-col items-center justify-center text-center">
+                                            <span>{{ $date }}</span>
+                                            <span>{{ $time }}</span>
+                                        </div>
+                                        <div
+                                            class="flex-1 flex items-center justify-center text-center text-xl {{ $transaction->action === 'debit' ? 'text-[#e80909]' : 'text-green-500' }}">
+                                            <span>{{ $amountDisplay }}</span>
+                                        </div>
+                                        <div class="flex-1 text-center ">
+                                            <span>{{ $transaction->description }}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <hr class="border-t border-gray-400 my-2 w-full">
-                        @endforeach 
+                                <hr class="border-t border-gray-400 my-2 w-full">
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-            </div>
     </div>
 
 
-     <!-- Coin Modal -->
+    <!-- Coin Modal -->
     <div id="coinModal" class="hidden z-[3] fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
         onclick="closeModalOnOverlay(event, 'coinModal')">
         <div class="modal-content bg-white rounded-[2.5vw] w-[90%] sm:w-[55rem] h-[40%] sm:h-[27rem] max-h-[90vh] flex flex-col items-center pt-[2.3rem] px-[5rem] pb-[3.5rem]"
@@ -468,46 +475,48 @@
                 class="h-[90%] sm:h[20rem] w-full sm:w-[48rem] rounded-l-[2vw] rounded-r-[1.5vw] bg-[#3e5c49] font-quicksand pr-[10px] mx-[10rem] flex flex-col">
                 <div class="custom-scrollbar overflow-y-scroll pr-3 mt-5 sm:mt-1 flex-1">
                     <div class="sm:mt-0">
-                <h1 class="text-white font-bold text-center mt-3 ml-9 pl-9 mr-auto pr-auto sm:ml-8 text-lg sm:text-2xl font-oxanium">Riwayat
-                    Transaksi</h1>
-                 {{-- <div class="wrapper w-full">    --}}
-{{-- kalau konten panjang jadi double scrollbar ^ --}}
+                        <h1
+                            class="text-white font-bold text-center mt-3 ml-9 pl-9 mr-auto pr-auto sm:ml-8 text-lg sm:text-2xl font-oxanium">
+                            Riwayat
+                            Transaksi</h1>
+                        {{-- <div class="wrapper w-full">    --}}
+                        {{-- kalau konten panjang jadi double scrollbar ^ --}}
 
-                    <div class="mt-4 pb-10 pr-3 w-full">
-                        @foreach ($transactionsCoin as $transaction)
-                            @php
-                                $date = \Carbon\Carbon::parse($transaction->created_at)->format('d/m/Y');
-                                $time = \Carbon\Carbon::parse($transaction->created_at)->format('H:i:s');
-                                $amountDisplay =
-                                    $transaction->action === 'debit'
-                                        ? '-' . $transaction->amount
-                                        : '+' . $transaction->amount;
-                            @endphp
-                            <div
-                                class="flex justify-between items-center text-white font-semibold text-2xl ml-5 mr-5 mb-5 w-full">
-                                <div class="flex flex-row w-[95%] text-lg">
-                                    <div class="flex flex-col items-center justify-center text-center">
-                                        <span>{{ $date }}</span>
-                                        <span>{{ $time }}</span>
-                                    </div>
-                                    <div
-                                        class="flex-1 flex items-center justify-center font-oxanium text-center text-xl {{ $transaction->action === 'debit' ? 'text-[#e80909]' : 'text-green-500' }}">
-                                        <span>{{ $amountDisplay }}</span>
-                                    </div>
-                                    <div class="flex-1 text-center">
-                                        <span>{{ $transaction->description }}</span>
+                        <div class="mt-4 pb-10 pr-3 w-full">
+                            @foreach ($transactionsCoin as $transaction)
+                                @php
+                                    $date = \Carbon\Carbon::parse($transaction->created_at)->format('d/m/Y');
+                                    $time = \Carbon\Carbon::parse($transaction->created_at)->format('H:i:s');
+                                    $amountDisplay =
+                                        $transaction->action === 'debit'
+                                            ? '-' . $transaction->amount
+                                            : '+' . $transaction->amount;
+                                @endphp
+                                <div
+                                    class="flex justify-between items-center text-white font-semibold text-2xl ml-5 mr-5 mb-5 w-full">
+                                    <div class="flex flex-row w-[95%] text-lg">
+                                        <div class="flex flex-col items-center justify-center text-center">
+                                            <span>{{ $date }}</span>
+                                            <span>{{ $time }}</span>
+                                        </div>
+                                        <div
+                                            class="flex-1 flex items-center justify-center font-oxanium text-center text-xl {{ $transaction->action === 'debit' ? 'text-[#e80909]' : 'text-green-500' }}">
+                                            <span>{{ $amountDisplay }}</span>
+                                        </div>
+                                        <div class="flex-1 text-center">
+                                            <span>{{ $transaction->description }}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <hr class="border-t border-gray-400 my-2 w-full">
-                        @endforeach
+                                <hr class="border-t border-gray-400 my-2 w-full">
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    </div>
-    
+
     @include('components.rallynav')
     @include('user.rally.storyline')
     @include('user.rally.tradezone')
@@ -535,56 +544,56 @@
             });
         </script>
     @endif
-        
+
 
     <script>
+        function showMascotError() {
+            Swal.fire({
+                title: 'Error',
+                text: data.message,
+                imageUrl: '/assets/swalMascots/sadMascot.png',
+                imageHeight: 75,
+                imageWidth: 75,
+                confirmButtonText: 'OKAY',
+                customClass: {
+                    title: 'custom-swal-title',
+                    text: 'custom-swal-message',
+                    confirmButton: 'custom-swal-confirmBtn',
+                    popup: 'custom-swal-popup1'
+                }
+            })
 
-        
-function showMascotError(){
-    Swal.fire({
-        title: 'Error',
-        text: data.message,
-        imageUrl: '/assets/swalMascots/sadMascot.png',
-        imageHeight: 75,
-        imageWidth: 75,
-        confirmButtonText: 'OKAY',
-        customClass:{
-            title: 'custom-swal-title',
-            text: 'custom-swal-message',
-            confirmButton: 'custom-swal-confirmBtn',
-            popup: 'custom-swal-popup1'
         }
-    })
-
-}
 
 
-    // MASCOT ERROR SWAL --> buat transaction period over and also insufficient cash
-function showMascotError1(type){
+        // MASCOT ERROR SWAL --> buat transaction period over and also insufficient cash
+        function showMascotError1(type) {
             let message = '';
             let image = '';
             let code = '';
 
-            switch(type){
-                
+            switch (type) {
+
                 case 'TransactionPeriod_over':
-                    message = '<p class="custom-swal-message"> The Transaction Window period is over. If you want to make a purchase, please visit the Central Hub. </p>';
+                    message =
+                        '<p class="custom-swal-message"> The Transaction Window period is over. If you want to make a purchase, please visit the Central Hub. </p>';
                     btntxt = 'BACK',
-                    code= '1'
+                        code = '1'
                     break;
                 case 'insufficient_cash':
-                    message = '<p class="custom-swal-message"> Sorry, you cannot complete the purchase because your balance is insufficient. </p>';
+                    message =
+                        '<p class="custom-swal-message"> Sorry, you cannot complete the purchase because your balance is insufficient. </p>';
                     btntxt = 'OKAY',
-                    code = '2'
+                        code = '2'
                     break;
 
             }
 
             const confirmBtnClass = code === '1' ? 'custom-swal-cancelBtn' : 'custom-swal-confirmBtn';
-            
+
             Swal.fire({
                 html: message,
-                imageUrl : '/assets/swalMascots/sadMascot.png',
+                imageUrl: '/assets/swalMascots/sadMascot.png',
                 imageWidth: 75,
                 imageHeight: 75,
                 confirmButtonText: btntxt,
@@ -596,35 +605,34 @@ function showMascotError1(type){
         }
 
         //CONFIRMATION MASCOT SWAL --> buat konfirmasi mau beli barang
-       function showMascotConfirmation(){
-        Swal.fire({
-            html: 
-            '<p class ="custom-swal-message"> Are you sure you want to make the puchase? Make sure to double-check before proceeding! </p>',
-            imageUrl: 'assets/swalMascots/thinkingMascot.png',
-            imageHeight: 75,
-            imageWidth: 75,
-            showCancelButton: true,
-            confirmButtonText: 'YES',
-            cancelButtonText: 'NO',
-            customClass:{
-                popup: 'custom-swal-popup1',
-                cancelButton: 'custom-swal-cancelBtn',
-                confirmButton: 'custom-swal-confirmBtn'
-            }
+        function showMascotConfirmation() {
+            Swal.fire({
+                html: '<p class ="custom-swal-message"> Are you sure you want to make the puchase? Make sure to double-check before proceeding! </p>',
+                imageUrl: 'assets/swalMascots/thinkingMascot.png',
+                imageHeight: 75,
+                imageWidth: 75,
+                showCancelButton: true,
+                confirmButtonText: 'YES',
+                cancelButtonText: 'NO',
+                customClass: {
+                    popup: 'custom-swal-popup1',
+                    cancelButton: 'custom-swal-cancelBtn',
+                    confirmButton: 'custom-swal-confirmBtn'
+                }
 
-        });
-       }
+            });
+        }
 
-       //SUCCESS MASCOT SWAL --> ini buat yang kayak sukses dimasukkan ke cart
-       function showMascotSuccess(){
+        //SUCCESS MASCOT SWAL --> ini buat yang kayak sukses dimasukkan ke cart
+        function showMascotSuccess() {
             Swal.fire({
                 html: '<p class ="custom-swal-message"> The item has been added to your cart! </p>',
-                title: 'Great choice!',                        
+                title: 'Great choice!',
                 imageUrl: 'assets/swalMascots/happyMascot.png',
                 imageHeight: 75,
                 imageWidth: 75,
                 confirmButtonText: 'OKAY',
-                customClass:{
+                customClass: {
                     popup: 'custom-swal-popup1',
                     confirmButton: 'custom-swal-confirmBtn',
                     title: 'custom-swal-title'
@@ -632,12 +640,12 @@ function showMascotError1(type){
 
             });
 
-       }
+        }
 
 
         document.addEventListener("DOMContentLoaded", function() {
             if (!localStorage.getItem("currentPhaseId")) {
-                localStorage.setItem("currentPhaseId", "{{ $currentPhase->id }}");
+                localStorage.setItem("currentPhaseId", "{{ $currentPhase ? $currentPhase->id : 0}}");
             }
             if (!localStorage.getItem("hasReducedReturnRates")) {
                 localStorage.setItem("hasReducedReturnRates", "false");
@@ -668,7 +676,7 @@ function showMascotError1(type){
             document.getElementById(id).classList.add("hidden");
         }
 
-        let countdownString = "{{ $currentPhase->end_time }}";
+        let countdownString = "{{ $currentPhase ? $currentPhase->end_time : '00:00:00'}}";
         let todayDate = new Date().toISOString().split('T')[0];
         let countdownTime = new Date(todayDate + "T" + countdownString + "+07:00").getTime();
 
@@ -729,26 +737,23 @@ function showMascotError1(type){
 
 
         // benerin scrollbar
-document.querySelectorAll('.custom-scrollbar').forEach(scrollableContent => {
-    
-    function updateScrollbar() {
-        const scrollTop = scrollableContent.scrollTop;
-        const maxScroll = scrollableContent.scrollHeight - scrollableContent.clientHeight;
+        document.querySelectorAll('.custom-scrollbar').forEach(scrollableContent => {
 
-        let scrollPercentage = 0;
-        if (maxScroll > 0) {
-            scrollPercentage = (scrollTop / maxScroll) * 100;
-        }
+            function updateScrollbar() {
+                const scrollTop = scrollableContent.scrollTop;
+                const maxScroll = scrollableContent.scrollHeight - scrollableContent.clientHeight;
 
-        scrollableContent.style.setProperty('--scroll-progress', scrollPercentage + '%');
-    }
+                let scrollPercentage = 0;
+                if (maxScroll > 0) {
+                    scrollPercentage = (scrollTop / maxScroll) * 100;
+                }
 
-    scrollableContent.addEventListener('scroll', updateScrollbar);
-    updateScrollbar();
-});
+                scrollableContent.style.setProperty('--scroll-progress', scrollPercentage + '%');
+            }
 
-
-
+            scrollableContent.addEventListener('scroll', updateScrollbar);
+            updateScrollbar();
+        });
     </script>
 
 </body>

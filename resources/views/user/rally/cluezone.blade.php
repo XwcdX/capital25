@@ -1,5 +1,5 @@
 @php
-    switch ($currentPhase->phase) {
+    switch ($currentPhase ? $currentPhase->phase : 'not started yet') {
         case 1:
             $ticketPrice = 1000;
             break;
@@ -95,7 +95,7 @@
 
             <div class="wrapper w-full">
                 <div class="custom-scrollbar mt-4 pb-10 overflow-x-hidden pr-3 pl-3 w-full">
-
+                    
                     @foreach ($clueZoneTicket as $tx)
                         @php
                             $date = $tx->created_at->format('d/m/Y');
