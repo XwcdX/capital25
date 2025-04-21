@@ -38,7 +38,6 @@
             white-space: normal;
             word-wrap: break-word;
             overflow-wrap: break-word;
-            
         }
 
         /* buat button */
@@ -82,6 +81,20 @@
             background-color: #25483d;
             color: #ece7e3;
         } */
+
+        /*lbh panjang*/
+        .custom-swal-popup1{
+        background-color: #ece7e3;
+            border-radius: 20px !important;
+            width:  28rem;
+            height: 18rem;
+            font-size: 13px;
+            color: #25483d;
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
 
         .custom-swal-message{
             font-weight: bold;
@@ -527,8 +540,27 @@
     <script>
 
         
+function showMascotError(){
+    Swal.fire({
+        title: 'Error',
+        text: data.message,
+        imageUrl: '/assets/swalMascots/sadMascot.png',
+        imageHeight: 75,
+        imageWidth: 75,
+        confirmButtonText: 'OKAY',
+        customClass:{
+            title: 'custom-swal-title',
+            text: 'custom-swal-message',
+            confirmButton: 'custom-swal-confirmBtn',
+            popup: 'custom-swal-popup1'
+        }
+    })
+
+}
+
+
     // MASCOT ERROR SWAL --> buat transaction period over and also insufficient cash
-function showMascotError(type){
+function showMascotError1(type){
             let message = '';
             let image = '';
             let code = '';
@@ -558,7 +590,7 @@ function showMascotError(type){
                 confirmButtonText: btntxt,
                 customClass: {
                     confirmButton: confirmBtnClass,
-                    popup: 'custom-swal-popup'
+                    popup: 'custom-swal-popup1'
                 }
             });
         }
@@ -575,7 +607,7 @@ function showMascotError(type){
             confirmButtonText: 'YES',
             cancelButtonText: 'NO',
             customClass:{
-                popup: 'custom-swal-popup',
+                popup: 'custom-swal-popup1',
                 cancelButton: 'custom-swal-cancelBtn',
                 confirmButton: 'custom-swal-confirmBtn'
             }
@@ -593,7 +625,7 @@ function showMascotError(type){
                 imageWidth: 75,
                 confirmButtonText: 'OKAY',
                 customClass:{
-                    popup: 'custom-swal-popup',
+                    popup: 'custom-swal-popup1',
                     confirmButton: 'custom-swal-confirmBtn',
                     title: 'custom-swal-title'
                 }
