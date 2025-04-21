@@ -258,7 +258,7 @@
     </style>
 </head>
 
-<body class="flex flex-col h-screen w-screen">
+<body class="flex flex-col h-lvh w-screen">
     <img src="{{ asset('assets/lifecycleHPDummy/dummyBG.jpeg') }}"
         class="absolute z-[-1] inset-0 w-full h-full object-cover">
 
