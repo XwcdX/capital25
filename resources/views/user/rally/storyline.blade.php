@@ -25,7 +25,7 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function(){
-    let currentPhase = {{ $currentPhase->phase }};
+    let currentPhase = {{ $currentPhase ? $currentPhase->phase : 0}};
     let maxPhase = currentPhase;
     let storylines = @json($storylines);
 

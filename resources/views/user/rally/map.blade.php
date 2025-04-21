@@ -119,12 +119,12 @@
 <div id="mapModal" class="relative flex items-center justify-center z-[1002]" onclick="event.stopPropagation()">
     <div class="bg-white w-[90%] max-w-[850px]  max-h-[700px] rounded-lg shadow-xl md:p-4 text-center relative">
         <h2 class="text-2xl md:text-3xl font-bold font-['Oxanium'] mb-2 text-cap-green" id="phaseTitle">
-            Fase {{ $currentPhase->phase }}
+            Fase {{ $currentPhase ? $currentPhase->phase : 'not started yet' }}
         </h2>
 
             <div id="mapCarousel">
                 @foreach ($phases as $phase)
-                    <div class="carousel-slide {{ $phase->id == $currentPhase->id ? 'block' : 'hidden' }}"
+                    <div class="carousel-slide {{ $phase->id == ($currentPhase ? $currentPhase->id : '') ? 'block' : 'hidden' }}"
                         data-phase="{{ $phase->phase }}" data-phase-id="{{ $phase->id }}">
 
                         <div class="relative w-full mx-auto px-8 md:px-16">
@@ -140,7 +140,7 @@
                             <!-- Map + Icons -->
                             <div class="text-center relative w-full mx-auto">
                                 <img src="{{ asset('assets/Icon pos map/Map/Map.png') }}"
-                                    alt="Map for Phase {{ $currentPhase->phase }}" class="w-full h-auto rounded-lg">
+                                    alt="Map for Phase {{ $currentPhase ? $currentPhase->phase  : 'not started yet' }}" class="w-full h-auto rounded-lg">
 
                                 @php
                                     $rallyPositions = [
@@ -223,8 +223,8 @@
             }
         });
 
-        let maxActivePhase = @json($currentPhase->phase);
-        let currentPhaseIndex = {{ $phases->search(fn($phase) => $phase->id == $currentPhase->id) }};
+        let maxActivePhase = @json($currentPhase ? $currentPhase->phase : 'not started yet');
+        let currentPhaseIndex = {{ $phases->search(fn($phase) => $phase->id == ($currentPhase ? $currentPhase->id : 0)) }};
         const totalPhases = {{ count($phases) }};
         const slides = document.querySelectorAll(".carousel-slide");
         const phaseTitle = document.getElementById("phaseTitle");

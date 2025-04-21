@@ -741,41 +741,40 @@
             cartModalOverlay.classList.remove('hidden');
         });
 
-        document.getElementById("checkoutCartButton").addEventListener("click", function() {
+      // EDIT "checkoutCartButton"
+      document.getElementById("checkoutCartButton").addEventListener("click", function() {
             let cart = JSON.parse(localStorage.getItem("commodityCart") || "[]");
             if (cart.length === 0) {
-                Swal.fire("Cart Empty", "Your cart is empty. Please add some items before checking out.",
-                    "info");
+                    Swal.fire({
+                    title: 'Cart Empty',
+                    html: ' <div class="custom-swal-message"> Your cart is empty. Please add some items before checking out. </div>',
+                    imageUrl: '/assets/swalMascots/sadMascot.png',
+                    imageHeight: 75,
+                    imageWidth: 75,
+                    confirmButtonText: 'OKAY',
+                    customClass: {
+                        title: 'custom-swal-title',
+                        confirmButton: 'custom-swal-confirmBtn',
+                        popup: 'custom-swal-popup1',
+                        text: 'custom-swal-message'
+                    }
+                });
                 return;
             }
+
 
             let payloadItems = cart.map(item => ({
                 commodity_id: item.id,
                 quantity: item.quantity
             }));
 
-            Swal.fire({
-                title: '',
-                html: `
-                    <div class="text-lg md:text-xl font-bold text-[#415943]">Are you sure you want to make the purchase?</div>
-                    <div class="text-lg md:text-xl font-bold text-[#415943]">Make sure to double-check before proceeding!</div>
-                `,
-                showCancelButton: true,
-                confirmButtonText: "YES",
-                cancelButtonText: "NO",
-                customClass: {
-                    popup: 'custom-swal-popup',
-                    confirmButton: 'custom-swal-confirm',
-                    cancelButton: 'custom-swal-cancel'
-                },
-                buttonsStyling: false
-
-            }).then((result) => {
+            showMascotConfirmation().then((result) => {
                 if (result.isConfirmed) {
                     let payloadItems = cart.map(item => ({
                         commodity_id: item.id,
                         quantity: item.quantity
                     }));
+
 
                     fetch("{{ route('buy.multiple.commodities') }}", {
                             method: "POST",
@@ -790,53 +789,166 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                Swal.fire({
-                                    title: '',
-                                    html: `
-                                        <div class="text-lg md:text-xl font-bold text-[#415943]">Great choice!</div>
-                                        <div class="text-lg md:text-xl font-bold text-[#415943]">The item has been added to your cart!</div>
-                                    `,
-                                    showConfirmButton: true,
-                                    confirmButtonText: "OKAY",
-                                    customClass: {
-                                        popup: 'custom-success-popup',
-                                        confirmButton: 'custom-success-confirm'
-                                    },
-                                    buttonsStyling: false
-                                }).then(() => {
+                                showMascotSuccess().then(() => {
                                     localStorage.removeItem("commodityCart");
                                     window.location.reload();
                                 });
                             } else {
-                                Swal.fire("Error", data.message, "error");
+                                Swal.fire({
+                                    title: 'Error',
+                                    html: `<div class="custom-swal-message">${data.message}</div>`,
+                                    imageUrl: '/assets/swalMascots/sadMascot.png',
+                                    imageHeight: 75,
+                                    imageWidth: 75,
+                                    confirmButtonText: 'BACK',
+                                    customClass:{
+                                    title: 'custom-swal-title',
+                                    popup: 'custom-swal-popup1',
+                                    confirmButton: 'custom-swal-cancelBtn'
+                                    }
+                            });
                             }
                         })
                         .catch(error => {
-                            Swal.fire("Error", "An error occurred during checkout.",
-                                "error");
+                            Swal.fire({
+                                    title: 'Error',
+                                    html: '<div class="custom-swal-message"> An error occured during checkout. </div>',
+                                    imageUrl: '/assets/swalMascots/sadMascot.png',
+                                    imageHeight: 75,
+                                    imageWidth: 75,
+                                    confirmButtonText: 'BACK',
+                                    customClass:{
+                                    title: 'custom-swal-title',
+                                    popup: 'custom-swal-popup1',
+                                    confirmButton: 'custom-swal-cancelBtn'
+                                    }
+                            });
+
                         });
                 }
             });
 
+
         });
 
 
+	// error ganti ke error mascot? Sad mascot.
+
+
+    // OG CODE
+    // document.getElementById("checkoutCartButton").addEventListener("click", function() {
+    //         let cart = JSON.parse(localStorage.getItem("commodityCart") || "[]");
+    //         if (cart.length === 0) {
+    //             Swal.fire("Cart Empty", "Your cart is empty. Please add some items before checking out.",
+    //                 "info");
+    //             return;
+    //         }
+
+
+    //         let payloadItems = cart.map(item => ({
+    //             commodity_id: item.id,
+    //             quantity: item.quantity
+    //         }));
+
+
+    //         Swal.fire({
+    //             title: '',
+    //             html: `
+    //                 <div class="text-lg md:text-xl font-bold text-[#415943]">Are you sure you want to make the purchase?</div>
+    //                 <div class="text-lg md:text-xl font-bold text-[#415943]">Make sure to double-check before proceeding!</div>
+    //             `,
+    //             showCancelButton: true,
+    //             confirmButtonText: "YES",
+    //             cancelButtonText: "NO",
+    //             customClass: {
+    //                 popup: 'custom-swal-popup',
+    //                 confirmButton: 'custom-swal-confirm',
+    //                 cancelButton: 'custom-swal-cancel'
+    //             },
+    //             buttonsStyling: false
+
+
+    //         }).then((result) => {
+    //             if (result.isConfirmed) {
+    //                 let payloadItems = cart.map(item => ({
+    //                     commodity_id: item.id,
+    //                     quantity: item.quantity
+    //                 }));
+
+
+    //                 fetch("{{ route('buy.multiple.commodities') }}", {
+    //                         method: "POST",
+    //                         headers: {
+    //                             "Content-Type": "application/json",
+    //                             "X-CSRF-TOKEN": "{{ csrf_token() }}"
+    //                         },
+    //                         body: JSON.stringify({
+    //                             items: payloadItems
+    //                         })
+    //                     })
+    //                     .then(response => response.json())
+    //                     .then(data => {
+    //                         if (data.success) {
+    //                             Swal.fire({
+    //                                 title: '',
+    //                                 html: `
+    //                                     <div class="text-lg md:text-xl font-bold text-[#415943]">Great choice!</div>
+    //                                     <div class="text-lg md:text-xl font-bold text-[#415943]">The item has been added to your cart!</div>
+    //                                 `,
+    //                                 showConfirmButton: true,
+    //                                 confirmButtonText: "OKAY",
+    //                                 customClass: {
+    //                                     popup: 'custom-success-popup',
+    //                                     confirmButton: 'custom-success-confirm'
+    //                                 },
+    //                                 buttonsStyling: false
+    //                             }).then(() => {
+    //                                 localStorage.removeItem("commodityCart");
+    //                                 window.location.reload();
+    //                             });
+    //                         } else {
+    //                             Swal.fire("Error", data.message, "error");
+    //                         }
+    //                     })
+    //                     .catch(error => {
+    //                         Swal.fire("Error", "An error occurred during checkout.",
+    //                             "error");
+    //                     });
+    //             }
+    //         });
+
+
+    //     });
+
+
+
+
+
+
+
+        //EDIT "buyNowButton"
         document.getElementById("buyNowButton").addEventListener("click", function() {
             Swal.fire({
                 title: "Confirm Purchase",
-                text: "Enter the quantity for " + currentTradeItem.name,
+                html: `<div class="custom-swal-message">Enter quantity for ${currentTradeItem.name}</div>`,
                 input: 'number',
                 inputAttributes: {
                     min: 1,
                     step: 1
                 },
                 inputValue: 1,
-                icon: "question",
+                imageUrl: 'assets/swalMascots/thinkingMascot.png',
+                imageHeight: 75,
+                imageWidth: 75,
                 showCancelButton: true,
                 confirmButtonText: "Buy Now",
                 cancelButtonText: "Cancel",
                 customClass: {
-                    popup: 'swal-high-z-index'
+                    popup: 'custom-swal-popup1',
+                    title: 'custom-swal-title',
+                    text: 'custom-swal-message',
+                    confirmButton: 'custom-swal-confirmBtn',
+                    cancelButton: 'custom-swal-cancelBtn'
                 }
             }).then((result) => {
                 if (result.isConfirmed && result.value) {
@@ -860,19 +972,29 @@
                             if (data.success) {
                                 Swal.fire({
                                     title: "Success",
-                                    text: "Purchase successful!",
-                                    icon: "success",
+                                    html: '<div class="custom-swal-message"> Purchase successful! </div>',
+                                    imageUrl: 'assets/swalMascots/happyMascot.png',
+                                    imageHeight: 75,
+                                    imageWidth: 75,
+                                    confirmButtonText: 'OKAY',
                                     customClass: {
-                                        popup: 'swal-high-z-index'
+                                        popup: 'custom-swal-popup1',
+                                        title: 'custom-swal-title',
+                                        confirmButton: 'custom-swal-confirmBtn'
                                     }
                                 }).then(() => window.location.reload());
                             } else {
                                 Swal.fire({
                                     title: "Error",
-                                    text: data.message,
-                                    icon: "error",
+                                    html: `<div class="custom-swal-message">${data.message}</div>`,
+                                    imageUrl: '/assets/swalMascots/sadMascot.png',
+                                    imageHeight: 75,
+                                    imageWidth: 75,
+                                    confirmButtonText: 'BACK',
                                     customClass: {
-                                        popup: 'swal-high-z-index'
+                                        popup: 'custom-swal-popup1',
+                                        title: 'custom-swal-title',
+                                        confirmButton: 'custom-swal-cancelBtn'
                                     }
                                 });
                             }
@@ -880,10 +1002,15 @@
                         .catch(error => {
                             Swal.fire({
                                 title: "Error",
-                                text: "An error occurred.",
-                                icon: "error",
+                                html: '<div class="custom-swal-message">An error occurred. </div>',
+                                imageUrl: '/assets/swalMascots/sadMascot.png',
+                                imageHeight: 75,
+                                imageWidth: 75,
+                                confirmButtonText: 'BACK',
                                 customClass: {
-                                    popup: 'swal-high-z-index'
+                                    popup: 'custom-swal-popup1',
+                                    title: 'custom-swal-title',
+                                     confirmButton: 'custom-swal-cancelBtn'
                                 }
                             });
                         });
@@ -891,22 +1018,103 @@
             });
         });
 
-        document.getElementById("addToCartButton").addEventListener("click", function() {
+
+        // OG CODE
+        // document.getElementById("buyNowButton").addEventListener("click", function() {
+        //     Swal.fire({
+        //         title: "Confirm Purchase",
+        //         text: "Enter the quantity for " + currentTradeItem.name,
+        //         input: 'number',
+        //         inputAttributes: {
+        //             min: 1,
+        //             step: 1
+        //         },
+        //         inputValue: 1,
+        //         icon: "question",
+        //         showCancelButton: true,
+        //         confirmButtonText: "Buy Now",
+        //         cancelButtonText: "Cancel",
+        //         customClass: {
+        //             popup: 'swal-high-z-index'
+        //         }
+        //     }).then((result) => {
+        //         if (result.isConfirmed && result.value) {
+        //             const quantity = parseInt(result.value);
+        //             const payload = {
+        //                 items: [{
+        //                     commodity_id: currentTradeItem.id,
+        //                     quantity: quantity
+        //                 }]
+        //             };
+        //             fetch("{{ route('buy.multiple.commodities') }}", {
+        //                     method: "POST",
+        //                     headers: {
+        //                         "Content-Type": "application/json",
+        //                         "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        //                     },
+        //                     body: JSON.stringify(payload)
+        //                 })
+        //                 .then(response => response.json())
+        //                 .then(data => {
+        //                     if (data.success) {
+        //                         Swal.fire({
+        //                             title: "Success",
+        //                             text: "Purchase successful!",
+        //                             icon: "success",
+        //                             customClass: {
+        //                                 popup: 'swal-high-z-index'
+        //                             }
+        //                         }).then(() => window.location.reload());
+        //                     } else {
+        //                         Swal.fire({
+        //                             title: "Error",
+        //                             text: data.message,
+        //                             icon: "error",
+        //                             customClass: {
+        //                                 popup: 'swal-high-z-index'
+        //                             }
+        //                         });
+        //                     }
+        //                 })
+        //                 .catch(error => {
+        //                     Swal.fire({
+        //                         title: "Error",
+        //                         text: "An error occurred.",
+        //                         icon: "error",
+        //                         customClass: {
+        //                             popup: 'swal-high-z-index'
+        //                         }
+        //                     });
+        //                 });
+        //         }
+        //     });
+        // });
+
+
+
+
+     //EDIT 'addToCartButton'
+     document.getElementById("addToCartButton").addEventListener("click", function() {
             Swal.fire({
                 title: "Add to Cart",
-                text: "Enter quantity for " + currentTradeItem.name,
+                html: `<div class="custom-swal-message">Enter quantity for ${currentTradeItem.name}</div>`,
                 input: 'number',
                 inputAttributes: {
                     min: 1,
                     step: 1
                 },
                 inputValue: 1,
-                icon: "info",
+                imageUrl: '/assets/swalMascots/thinkingMascot.png',
+                imageHeight: 75,
+                imageWidth: 75,
                 showCancelButton: true,
                 confirmButtonText: "Add to Cart",
                 cancelButtonText: "Cancel",
                 customClass: {
-                    popup: 'swal-high-z-index'
+                    popup: 'custom-swal-popup1',
+                    title: 'custom-swal-title',
+                    confirmButton: 'custom-swal-confirmBtn',
+                    cancelButton: 'custom-swal-cancelBtn'
                 }
             }).then((result) => {
                 if (result.isConfirmed && result.value) {
@@ -927,14 +1135,86 @@
                     localStorage.setItem("commodityCart", JSON.stringify(cart));
                     Swal.fire({
                         title: "Added",
-                        text: currentTradeItem.name + " has been added to your cart.",
-                        icon: "success",
+                        html: `<div class="custom-swal-message">${currentTradeItem.name} has been added to your cart.</div>`,
+                        imageUrl: 'assets/swalMascots/happyMascot.png',
+                        imageHeight: 75,
+                        imageWidth: 75,
+                        confirmButtonText: 'OKAY',
                         customClass: {
-                            popup: 'swal-high-z-index'
+                            popup: 'custom-swal-popup1',
+                            title: 'custom-swal-title',
+                            confirmButton: 'custom-swal-confirmBtn'
                         }
                     });
                 }
             });
         });
     })();
+
+
+
+    // OG CODE
+   //     document.getElementById("addToCartButton").addEventListener("click", function() {
+    //         Swal.fire({
+    //             title: "Add to Cart",
+    //             text: "Enter quantity for " + currentTradeItem.name,
+    //             input: 'number',
+    //             inputAttributes: {
+    //                 min: 1,
+    //                 step: 1
+    //             },
+    //             inputValue: 1,
+    //             icon: "info",
+    //             showCancelButton: true,
+    //             confirmButtonText: "Add to Cart",
+    //             cancelButtonText: "Cancel",
+    //             customClass: {
+    //                 popup: 'swal-high-z-index'
+    //             }
+    //         }).then((result) => {
+    //             if (result.isConfirmed && result.value) {
+    //                 const quantity = parseInt(result.value);
+    //                 let cart = JSON.parse(localStorage.getItem("commodityCart") || "[]");
+    //                 let existingItem = cart.find(i => i.id === currentTradeItem.id);
+    //                 if (existingItem) {
+    //                     existingItem.quantity += quantity;
+    //                 } else {
+    //                     cart.push({
+    //                         id: currentTradeItem.id,
+    //                         name: currentTradeItem.name,
+    //                         price: currentTradeItem.price,
+    //                         image: currentTradeItem.image,
+    //                         quantity: quantity
+    //                     });
+    //                 }
+    //                 localStorage.setItem("commodityCart", JSON.stringify(cart));
+    //                 Swal.fire({
+    //                     title: "Added",
+    //                     text: currentTradeItem.name + " has been added to your cart.",
+    //                     icon: "success",
+    //                     customClass: {
+    //                         popup: 'swal-high-z-index'
+    //                     }
+    //                 });
+    //             }
+    //         });
+    //     });
+    // )();
+
+
+
+
+
+
+
+
 </script>
+
+
+
+
+ 
+
+
+
+
