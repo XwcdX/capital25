@@ -214,9 +214,18 @@
                     </div>
                     <p class="nav-label">Tradezone</p>
                     </a>
+
                     
-                    <a href="#" class="els-wrap el-3 text-white"
-                    onclick="openInventoryModal(); document.getElementById('nav-toggle').checked = false;">
+                    <a href="#" class="els-wrap el-2"
+                    onclick=" document.getElementById('nav-toggle').checked = false;">
+                    <div class="icon-nav">
+                        <i class="fa-regular fa-object-group text-white"></i>
+                    </div>
+                    <p class="nav-label">Scan QR</p>
+                    </a>
+                    
+                    <a href="https://capital.petra.ac.id/scanQR" class="els-wrap el-3 text-white"
+                    onclick="document.getElementById('nav-toggle').checked = false;">
                     <div class="icon-nav">
                         <i class="far fa-comment-dots text-white"></i>
                     </div>
