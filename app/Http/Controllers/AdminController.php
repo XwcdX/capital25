@@ -266,6 +266,22 @@ class AdminController extends BaseController
         $title = 'Central Hub';
         return view("admin.rally.centralHub", compact("data", "currentPhase", "title"));
     }
+    public function viewServiceHub()
+    {
+        $currentPhase = Cache::get("current_phase", "No Phase Set");
+
+        if (!is_object($currentPhase) || !isset($currentPhase->id)) {
+            $data = json_encode([], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+        } else {
+            $data = json_encode(
+                $this->teamController->getAllTeamsWithPhaseCommodities($currentPhase->id),
+                JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+            );
+        }
+
+        $title = 'Central Hub';
+        return view("admin.rally.serviceHub", compact("data", "currentPhase", "title"));
+    }
     public function viewInvestmentLab()
     {
         $title = 'Investment Lab';

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\TeamsWithUsersExport;
 use App\Mail\ConfirmationEmail;
 use App\Mail\TeamValidationEmail;
+use App\Models\Commodity;
 use App\Models\Team;
 use App\Utils\HttpResponseCode;
 use Illuminate\Auth\Events\Registered;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\LazyCollection;
 use Maatwebsite\Excel\Facades\Excel;
 
 class TeamController extends BaseController
@@ -25,7 +27,8 @@ class TeamController extends BaseController
     {
         parent::__construct($model);
     }
-    public function updateGreenPoint(){
+    public function updateGreenPoint()
+    {
         $this->model::query()->update([
             'green_points' => DB::raw('green_points * 1.5')
         ]);
@@ -81,6 +84,18 @@ class TeamController extends BaseController
         });
 
         return $teams;
+    }
+
+    public function getAllTeamsWithPhaseCommodities($phaseId)
+    {
+        $commodities = Commodity::where("phase_id", $phaseId)->get();
+
+        return LazyCollection::make(function () use ($commodities) {
+            foreach ($this->model::cursor() as $team) {
+                $team->setRelation('commodities', $commodities);
+                yield $team;
+            }
+        });
     }
 
     public function getTeamCommodity(Request $request)

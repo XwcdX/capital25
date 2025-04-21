@@ -5,7 +5,8 @@
 
     }
 
-    .rule:hover, .fa-lock:hover {
+    .rule:hover,
+    .fa-lock:hover {
         transform: scale(1.2);
         transition: all .2s;
     }
@@ -20,8 +21,10 @@
     {{-- <h1 class="text-6xl lg:text-7xl text-[#14240a] z-[7] text-white font-oxanium font-black ">Rules</h1>     --}}
     <div class="flex max-md:flex-col max-md:space-y-16 md:space-x-8 lg:space-x-20 xl:space-x-28 md:ml-4 lg:ml-12 [@media(min-width:1350px)]:ml-40"
         data-aos="fade-left" data-aos-duration="1000">
-        <div class="w-[150px] md:w-[200px] lg:w-[250px] xl:w-[300px] flex flex-col items-center justify-center relative">
-            <img id="guidebook-img" class="guidebook relative peer cursor-pointer hover:scale-[1.2] scale-[1] transition-all duration-200  filter"
+        <a href="https://drive.google.com/file/d/1QxMv9HyWYHN9pp1x04003p9G_-vOr-u5/view?usp=sharing"
+            class="w-[150px] md:w-[200px] lg:w-[250px] xl:w-[300px] flex flex-col items-center justify-center relative">
+            <img id="guidebook-img"
+                class="guidebook relative peer cursor-pointer hover:scale-[1.2] scale-[1] transition-all duration-200  filter"
                 src="{{ asset('assets/rules/guidebook.png') }}" alt="">
             <h1
                 class="peer-hover:translate-y-8 transition-all duration-200  [text-shadow:0_0_10px_rgba(255,243,102,0.8)] 
@@ -32,11 +35,12 @@
                 w-full h-full text-[5rem] md:text-[7rem] lg:text-[9rem] leading-none 
                 opacity-0 transition-opacity duration-1000 cursor-pointer"
                 id="guidebookLock"></i>
-        </div>
+        </a>
 
-        <div class="w-[150px] md:w-[200px] lg:w-[250px] xl:w-[300px] flex flex-col items-center justify-center"
+        <a href="https://drive.google.com/file/d/1aL1HebpwiOb_87PZPkBRxw1mU93J4KdA/view?usp=sharing" class="w-[150px] md:w-[200px] lg:w-[250px] xl:w-[300px] flex flex-col items-center justify-center"
             data-aos="fade-left" data-aos-duration="1000">
-            <img id="rules-img" class="rules peer cursor-pointer hover:scale-[1.2] scale-[1] transition-all duration-200"
+            <img id="rules-img"
+                class="rules peer cursor-pointer hover:scale-[1.2] scale-[1] transition-all duration-200"
                 src="{{ asset('assets/rules/rules.png') }}" alt="">
             <h1 class="peer cursor-pointer hover:scale-[1.2] scale-[1] transition-all duration-200"
                 src="{{ asset('assets/rules/guidebook.png') }}" alt="">
@@ -49,7 +53,7 @@
                     w-full h-full text-[5rem] md:text-[7rem] lg:text-[9rem] leading-none 
                     opacity-0 transition-opacity duration-1000 cursor-pointer "
                     id="rulesLock"></i>
-        </div>
+        </a>
     </div>
 
     <img class="sprouty absolute z-[20] bottom-0 md:bottom-[15%] lg:bottom-[5%] xl:bottom-0 right-0 w-[165px] md:w-[250px] lg:w-[350px] xl:w-[450px]"
@@ -59,6 +63,25 @@
 <script>
     const guidebook = document.getElementById('guidebook-img');
     const rules = document.getElementById('rules-img');
+
+    function getUnlockDate() {
+        return new Date(2025, 3, 21, 19, 0, 0);
+    }
+
+    function handleLockClick(lockEl, imgEl) {
+        const now = new Date();
+        const unlockAt = getUnlockDate();
+
+        if (now < unlockAt) {
+            showLockMessage(lockEl, imgEl);
+        } else {
+            const a = lockEl.closest('a');
+            if (a && a.href) {
+                window.location.href = a.href;
+            }
+        }
+    }
+
     function showLockMessage(lockElement, img) {
         Swal.fire({
             icon: 'error',
@@ -68,8 +91,8 @@
             confirmButtonColor: "#56843a",
         }).then(() => {
             lockElement.classList.remove('opacity-0');
-            lockElement.classList.remove('animate-shake'); 
-            void lockElement.offsetWidth; 
+            lockElement.classList.remove('animate-shake');
+            void lockElement.offsetWidth;
             lockElement.classList.add('animate-shake');
             setInterval(() => {
                 img.classList.add('brightness-75');
@@ -78,11 +101,12 @@
         });
     }
 
-    document.getElementById("guidebookLock").addEventListener("click", function () {
-        showLockMessage(this, guidebook);
-    });
-
-    document.getElementById("rulesLock").addEventListener("click", function () {
-        showLockMessage(this, rules);
-    });
+    document.getElementById("guidebookLock").addEventListener("click", function(e) {
+            e.preventDefault();
+            handleLockClick(this, guidebook);
+        });
+    document.getElementById("rulesLock").addEventListener("click", function(e) {
+            e.preventDefault();
+            handleLockClick(this, rules);
+        });
 </script>
