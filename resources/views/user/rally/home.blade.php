@@ -699,18 +699,18 @@
             let timeLeft = countdownTime - now;
 
             if (timeLeft <= 60 * 60 * 1000) {
-                // document
-                //     .querySelectorAll("a[onclick*='openTradezoneModal'], button[onclick*='openCluezoneModal']")
-                //     .forEach(el => {
-                //         el.classList.add("opacity-50", "pointer-events-none");
-                //     });
+                document
+                    .querySelectorAll("a[onclick*='openTradezoneModal'], button[onclick*='openCluezoneModal']")
+                    .forEach(el => {
+                        el.classList.add("opacity-50", "pointer-events-none");
+                    });
 
-                // ['cluezone-modal', 'tradezone-modal'].forEach(id => {
-                //     const m = document.getElementById(id);
-                //     if (m && !m.classList.contains('hidden')) {
-                //         m.classList.add('hidden');
-                //     }
-                // });
+                ['cluezone-modal', 'tradezone-modal'].forEach(id => {
+                    const m = document.getElementById(id);
+                    if (m && !m.classList.contains('hidden')) {
+                        m.classList.add('hidden');
+                    }
+                });
             }
             
             if (timeLeft <= 0) {
