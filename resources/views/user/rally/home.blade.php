@@ -276,9 +276,9 @@
                 <span class="text-base md:text-2xl">{{ $team->coin }}</span>
             </button>
         </div>
-        <button class="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--cap-green3)] rounded-full"
+        <button class="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--cap-green3)] bg-opacity-0 rounded-full border border-black"
             onclick="openMapModal(); document.getElementById('nav-toggle').checked = false;">
-            <img class="w-[80%] " src="{{ asset('assets/treasure-map.png') }}" alt="">
+            <img class="w-[75%] " src="{{ asset('assets/treasure-map.png') }}" alt="">
         </button>
 
     </div>

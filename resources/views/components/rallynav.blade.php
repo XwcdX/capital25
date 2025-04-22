@@ -315,11 +315,11 @@
     }
 
     function openMapModal() {
-        var overlay = document.getElementById('overlay-map');
+        var overlay = document.getElementById('mapModal');
         if (overlay) {
             overlay.classList.remove("hidden");
         } else {
-            console.warn("Inventory modal not found.");
+            console.warn("Map modal not found.");
         }
     }
 

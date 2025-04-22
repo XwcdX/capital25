@@ -113,14 +113,12 @@
     }
 </style>
 
-
-<div id="overlay-map" class="hidden w-screen h-screen fixed inset-0 bg-black bg-opacity-50 z-[1001]">
-
-<div id="mapModal" class="relative flex items-center justify-center z-[1002]" onclick="event.stopPropagation()">
-    <div class="bg-white w-[90%] max-w-[850px]  max-h-[700px] rounded-lg shadow-xl md:p-4 text-center relative">
-        <h2 class="text-2xl md:text-3xl font-bold font-['Oxanium'] mb-2 text-cap-green" id="phaseTitle">
-            Fase {{ $currentPhase ? $currentPhase->phase : 'not started yet' }}
-        </h2>
+{{-- <div id="overlay-map" class="hidden w-screen h-screen fixed inset-0 bg-black bg-opacity-50 z-[1001]"> --}}
+    <div id="mapModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[1002]" onclick="closeModal('mapModal')">
+        <div class="bg-white w-[90%] max-w-[850px]  max-h-[700px] rounded-lg shadow-xl md:p-4 text-center relative"  onclick="event.stopPropagation();">
+            <h2 class="text-2xl md:text-3xl font-bold font-['Oxanium'] mt-2 text-cap-green" id="phaseTitle">
+                Fase {{ $currentPhase ? $currentPhase->phase : 'not started yet' }}
+            </h2>
 
             <div id="mapCarousel">
                 @foreach ($phases as $phase)
@@ -131,7 +129,7 @@
                             <!-- Prev Button -->
                             <button
                                 class="carousel-btn prev-btn absolute left-2 top-1/2 transform -translate-y-1/2 bg-[var(--cap-green4)] text-white rounded-full w-[6%] aspect-square flex items-center justify-center hover:bg-[var(--cap-green3)] hover:scale-110 transition-all">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="4">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                                 </svg>
@@ -140,7 +138,8 @@
                             <!-- Map + Icons -->
                             <div class="text-center relative w-full mx-auto">
                                 <img src="{{ asset('assets/Icon pos map/Map/Map.png') }}"
-                                    alt="Map for Phase {{ $currentPhase ? $currentPhase->phase  : 'not started yet' }}" class="w-full h-auto rounded-lg">
+                                    alt="Map for Phase {{ $currentPhase ? $currentPhase->phase : 'not started yet' }}"
+                                    class="w-full h-auto rounded-lg">
 
                                 @php
                                     $rallyPositions = [
@@ -156,7 +155,7 @@
 
                                     $extraIcons = [
                                         'Clue Zone' => ['x' => 56.5, 'y' => 8.2, 'icon' => 'clue zone.png'],
-                                        'Basecamp' => ['x' => 86.5, 'y' => 81.7, 'icon' => 'Basecamp.png'],
+                                        'Basecamp' => ['x' => 86.5, 'y' => 82.3, 'icon' => 'Basecamp.png'],
                                     ];
 
                                     $centralHub = [
@@ -166,7 +165,7 @@
 
                                 @foreach ($extraIcons as $name => $position)
                                     <img src="{{ asset('assets/Icon pos map/' . $position['icon']) }}"
-                                        alt="{{ $name }}" class="absolute w-[5%] h-auto animate-pulse"
+                                        alt="{{ $name }}" class="absolute w-[5%] h-auto animate-pulse rally-icon"
                                         data-name="{{ $name }}"
                                         style="top: {{ $position['y'] }}%; left: {{ $position['x'] }}%;">
                                 @endforeach
@@ -189,7 +188,7 @@
                                 @foreach ($centralHub as $name => $position)
                                     <img src="{{ asset('assets/Icon pos map/' . $position['icon']) }}"
                                         alt="{{ $name }}" data-name="{{ $name }}"
-                                        class="absolute w-[25%] h-auto"
+                                        class="absolute w-[25%] h-auto rally-icon"
                                         style="top: {{ $position['y'] }}%; left: {{ $position['x'] }}%; transform: translate(-50%, -50%);">
                                 @endforeach
                             </div>
@@ -197,7 +196,7 @@
                             <!-- Next Button -->
                             <button
                                 class="carousel-btn next-btn absolute right-2 top-1/2 transform -translate-y-1/2 bg-[var(--cap-green4)] text-white rounded-full w-[6%] aspect-square flex items-center justify-center hover:bg-[var(--cap-green)] hover:scale-110 transition-all">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="4">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                                 </svg>
@@ -208,23 +207,16 @@
             </div>
         </div>
     </div>
-</div>
+{{-- </div> --}}
 
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const overlay = document.getElementById("overlay-map");
         const modal = document.getElementById("mapModal");
-
-        overlay.addEventListener("click", function(event) {
-            console.log("test");
-            if (!modal.contains(event.target)) {
-                closeModalOverlay('overlay-map');
-            }
-        });
-
+      
         let maxActivePhase = @json($currentPhase ? $currentPhase->phase : 'not started yet');
-        let currentPhaseIndex = {{ $phases->search(fn($phase) => $phase->id == ($currentPhase ? $currentPhase->id : 0)) }};
+        let currentPhaseIndex =
+            {{ $phases->search(fn($phase) => $phase->id == ($currentPhase ? $currentPhase->id : 0)) }};
         const totalPhases = {{ count($phases) }};
         const slides = document.querySelectorAll(".carousel-slide");
         const phaseTitle = document.getElementById("phaseTitle");
@@ -283,7 +275,7 @@
                     tooltip.style.whiteSpace = "nowrap";
                     tooltip.style.textAlign = "center";
                     tooltip.style.fontWeight = "bold";
-                    tooltip.style.zIndex = "1000";
+                    tooltip.style.zIndex = "10000";
                     document.body.appendChild(tooltip);
                 }
 
@@ -306,9 +298,7 @@
 
     });
 
-    function closeModalOverlay(id) {
-        console.log('test')
-        document.getElementById(id).classList.add('hidden');
-        // document.getElementById(id).classList.add("hidden");
+    function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
     }
 </script>
