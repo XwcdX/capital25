@@ -248,18 +248,17 @@
         body {
             margin-right: 0;
             overflow: auto;
-            height: calc(100lvh - 70px);
         }
 
         html,
         body {
-            height: 100%;
+            /* height: calc(100vh - 70px); */
             position: relative;
         }
     </style>
 </head>
 
-<body class="flex flex-col w-screen">
+<body class="flex flex-col w-screen h-lvh">
     <img src="{{ asset('assets/lifecycleHPDummy/dummyBG.jpeg') }}"
         class="absolute z-[-1] inset-0 w-full h-full object-cover">
 
