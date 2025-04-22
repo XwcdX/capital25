@@ -280,6 +280,10 @@
             onclick="openMapModal(); document.getElementById('nav-toggle').checked = false;">
             <img class="w-[75%] " src="{{ asset('assets/treasure-map.png') }}" alt="">
         </button>
+        <button class="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--cap-green2)] bg-opacity-0 rounded-full border border-black"
+            onclick="openCluezoneModal(); document.getElementById('nav-toggle').checked = false;">
+            <img class="w-[75%] " src="{{ asset('assets/Icon pos map/clue zone.png') }}" alt="">
+        </button>
 
     </div>
 
@@ -696,7 +700,7 @@
 
             if (timeLeft <= 60 * 60 * 1000) {
                 document
-                    .querySelectorAll("a[onclick*='openTradezoneModal'], a[onclick*='openCluezoneModal']")
+                    .querySelectorAll("a[onclick*='openTradezoneModal'], buttonr[onclick*='openCluezoneModal']")
                     .forEach(el => {
                         el.classList.add("opacity-50", "pointer-events-none");
                     });

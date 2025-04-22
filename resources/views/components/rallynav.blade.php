@@ -269,10 +269,10 @@
                     <a href="javascript:void(0)"
                         onclick="openTradezoneModal(); document.getElementById('nav-toggle').checked = false;">Tradezone</a>
                 </li>
-                <li>
+                {{-- <li>
                     <a href="javascript:void(0)"
                         onclick="openCluezoneModal(); document.getElementById('nav-toggle').checked = false;">Clue Zone</a>
-                </li>
+                </li> --}}
                 <li>
                     <a href="javascript:void(0)"
                         onclick="openInventoryModal(); document.getElementById('nav-toggle').checked = false;">Inventory</a>
