@@ -95,6 +95,8 @@ class RallyController extends BaseController
     {
         $title = 'Rally Post';
         $currentPhase = Cache::get('current_phase');
+
+        dd($currentPhase);
         $rallies = $this->model::with([
             'teams' => function ($query) use ($currentPhase) {
                 $query->wherePivot('phase_id', $currentPhase->id)->withPivot(['qr_expired_at'])->orderBy('qr_expired_at');
