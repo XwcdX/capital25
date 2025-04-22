@@ -234,7 +234,7 @@
 
                     <a href="{{ route('quiz') }}" class="els-wrap el-4">
                     <div class="icon-nav">
-                        <i class="far fa-bell text-white"></i>
+                        <i class="fa-regular fa-clipboard text-white"></i>
                     </div>
                     <p class="nav-label">Final Test</p>
                     </a>
