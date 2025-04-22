@@ -700,7 +700,7 @@
 
             if (timeLeft <= 60 * 60 * 1000) {
                 document
-                    .querySelectorAll("a[onclick*='openTradezoneModal'], buttonr[onclick*='openCluezoneModal']")
+                    .querySelectorAll("a[onclick*='openTradezoneModal'], button[onclick*='openCluezoneModal']")
                     .forEach(el => {
                         el.classList.add("opacity-50", "pointer-events-none");
                     });
