@@ -47,9 +47,8 @@ class AdminSeeder extends Seeder
             // ['email' => 'd11230301   @john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Pricilla Chealsea', 'division_id' => Division::whereSlug('bph')->first()->id],
             // ['email' => 'd11230275@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Jessica Renata', 'division_id' => Division::whereSlug('acara')->first()->id],
             // ['email' => 'd11230197@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Alyssa Channiago', 'division_id' => Division::whereSlug('acara')->first()->id],
-            ['email' => 'd11240074@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Clarissa', 'division_id' => Division::whereSlug('acara')->first()->id],
-            ['email' => 'h14240076@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Chelsey', 'division_id' => Division::whereSlug('acara')->first()->id],
-
+            // ['email' => 'd11240074@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Clarissa', 'division_id' => Division::whereSlug('acara')->first()->id],
+            ['email' => 'c14230088@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Kevin Tanaka', 'division_id' => Division::whereSlug('it')->first()->id],
         ];
         foreach ($admins as $admin) {
             Admin::create($admin);
