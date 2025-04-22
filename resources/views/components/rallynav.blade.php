@@ -224,7 +224,7 @@
                     <p class="nav-label">Scan QR</p>
                     </a>
                     
-                    <a href="h" class="els-wrap el-3 text-white"
+                    <a href="javascript:void(0)" class="els-wrap el-3 text-white"
                     onclick="openInventoryModal(); document.getElementById('nav-toggle').checked = false;">
                     <div class="icon-nav">
                         <i class="far fa-comment-dots text-white"></i>
