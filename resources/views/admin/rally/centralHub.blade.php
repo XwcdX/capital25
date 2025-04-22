@@ -60,7 +60,7 @@
             @if ($teams)
                 @foreach ($teams as $team)
                     <div class="team-container" data-team-name="{{ strtolower($team->name) }}">
-                        <h2>{{ $team->name }}</h2>
+                        <h2 class="font-bold">{{ $team->name }}</h2>
                         <label for="commodity-select-{{ $team->id }}">Select Commodity:</label>
                         <select id="commodity-select-{{ $team->id }}" class="commodity-select"
                             data-team-id="{{ $team->id }}">
@@ -73,7 +73,7 @@
                                 @endforeach
                             @endif
                         </select>
-                        <button class="buy-commodity-button" data-team-id="{{ $team->id }}">Buy Commodity</button>
+                        <button class="buy-commodity-button bg-sky-600 text-white font-semibold px-4 py-2 rounded-lg" data-team-id="{{ $team->id }}">Buy Commodity</button>
                     </div>
                 @endforeach
             @else
