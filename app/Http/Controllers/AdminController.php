@@ -406,7 +406,7 @@ class AdminController extends BaseController
         $question = Question::findOrFail($id);
 
         $validator = Validator::make($r->all(), [
-            'question' => 'required|string|max:255',
+            'question' => 'required|string',
         ]);
 
         if ($validator->fails()) {
