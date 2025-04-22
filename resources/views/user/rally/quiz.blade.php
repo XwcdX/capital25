@@ -30,7 +30,7 @@
             display: flex;
             /* flex-wrap: wrap; */
             flex-direction: row;
-            width: 100%;
+            width: 90%;
             min-height: 500px;
             max-width: 1180px;
             justify-content: space-between;
@@ -44,7 +44,7 @@
         }
 
         .question-box {
-            flex: 2;
+            /* flex: 2; */
             background: var(--cap-green4);
             border-radius: 10px;
             padding: 20px;
@@ -165,7 +165,7 @@
         @media (max-width: 1200px) {
             .quiz-container {
                 /* align-items: center; */
-                min-width: 800px;
+                /* width: 800px; */
             }
 
             .question-box {
@@ -192,7 +192,7 @@
         @media (max-width: 900px) {
             .quiz-container {
                 /* align-items: center; */
-                min-width: 600px;
+                /* min-width: 600px; */
             }
 
             .question-box {
@@ -226,7 +226,7 @@
                 align-items: center;
                 padding: 15px;
                 flex-direction: column;
-                min-width: 450px;
+                /* min-width: 450px; */
             }
 
             .options p {
@@ -261,7 +261,7 @@
             .quiz-container {
                 padding: 15px;
                 flex-direction: column;
-                min-width: 250px;
+                /* min-width: 250px; */
             }
 
             .options p {
@@ -490,7 +490,7 @@
                         confirmButtonText: "OK",
                         confirmButtonColor: "3085d6",
                     }).then(() => {
-                        window.location.href = "{{ route('home') }}";
+                        window.location.href = "{{ route('rally.home') }}";
                     });
                 })
                 .catch(error => console.error("Error submitting quiz:", error));

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->longText('question');
             // $table->string('question_hash', 64)->unique(); // Store the hash for uniqueness
-            $table->integer('points')->default(1);
+            $table->integer('points')->default(2500);
             $table->timestamps();
         });
     }
