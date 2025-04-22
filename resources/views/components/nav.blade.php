@@ -158,7 +158,7 @@
         /* padding-top: 120px; */
         background: #25362d;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        height: 100lvh;
+        height: 100svh;
         width: 100%;
         /* Default full-width for smaller devices */
         transform: translate3d(-150%, 0, 0);
