@@ -227,7 +227,7 @@
                     <a href="javascript:void(0)" class="els-wrap el-3 text-white"
                     onclick="openInventoryModal(); document.getElementById('nav-toggle').checked = false;">
                     <div class="icon-nav">
-                        <i class="far fa-comment-dots text-white"></i>
+                        <i class="fa-regular fa-folder-open text-white"></i>
                     </div>
                     <p class="nav-label">Inventory</p>
                     </a>
@@ -272,6 +272,9 @@
                 </li>
                 <li>
                     <a href="{{ route('quiz') }}">Final Test</a>
+                </li>
+                <li>
+                    <a href="https://capital.petra.ac.id/scanQR">Scan QR</a>
                 </li>
             </ul>
         </div>
@@ -319,7 +322,7 @@
         if (overlay) {
             overlay.classList.remove("hidden");
         } else {
-            console.warn("Map modal not found.");
+            console.warn(" modal not found.");
         }
     }
 
