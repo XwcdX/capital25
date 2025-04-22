@@ -40,13 +40,16 @@ class AdminSeeder extends Seeder
             // ['email' => 'd12240084@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Christy Devina', 'division_id' => Division::whereSlug('transkapman')->first()->id],
             // ['email' => 'd11240343@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Nadine Wijaya', 'division_id' => Division::whereSlug('sekkonkes')->first()->id],
             // ['email' => 'c11240009@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Marcell Nathaniel', 'division_id' => Division::whereSlug('acara')->first()->id],
-            ['email' => 'c14240039@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Jericho Sundjaja', 'division_id' => Division::whereSlug('acara')->first()->id],
-            ['email' => 'c14240052@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Gretchen Isviandhy', 'division_id' => Division::whereSlug('acara')->first()->id],
+            // ['email' => 'c14240039@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Jericho Sundjaja', 'division_id' => Division::whereSlug('acara')->first()->id],
+            // ['email' => 'c14240052@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Gretchen Isviandhy', 'division_id' => Division::whereSlug('acara')->first()->id],
             // ['email' => 'd11240260@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Kayleen Hartono', 'division_id' => Division::whereSlug('acara')->first()->id],
-            ['email' => 'h14240076@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Chelsey Nathania', 'division_id' => Division::whereSlug('sponsor')->first()->id],
+            // ['email' => 'h14240076@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Chelsey Nathania', 'division_id' => Division::whereSlug('sponsor')->first()->id],
             // ['email' => 'd11230301   @john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Pricilla Chealsea', 'division_id' => Division::whereSlug('bph')->first()->id],
             // ['email' => 'd11230275@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Jessica Renata', 'division_id' => Division::whereSlug('acara')->first()->id],
-            ['email' => 'd11230197@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Alyssa Channiago', 'division_id' => Division::whereSlug('acara')->first()->id],
+            // ['email' => 'd11230197@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Alyssa Channiago', 'division_id' => Division::whereSlug('acara')->first()->id],
+            ['email' => 'd11240074@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Clarissa', 'division_id' => Division::whereSlug('acara')->first()->id],
+            ['email' => 'h14240076@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Chelsey', 'division_id' => Division::whereSlug('acara')->first()->id],
+
         ];
         foreach ($admins as $admin) {
             Admin::create($admin);
