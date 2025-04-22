@@ -179,10 +179,13 @@
         });
 
         function showTeamAnswers(choices, team) {
-            let choicesHtml = choices.map(choice => `
-                <p><strong>Q:</strong> ${choice.question['question_text']} <br> 
-                <strong>A:</strong> ${choice.answer_text} 
-                (${choice.is_correct ? '<span style="color: green;">Correct</span>' : '<span style="color: red;">Incorrect</span>'})</p>
+            let choicesHtml = choices.map((choice, index) => `
+                <p style="margin-bottom: 16px;">
+                    <strong>Question ${index + 1}</strong> <br>
+                    <strong>Q:</strong> ${choice.question['question_text']} <br> 
+                    <strong>A:</strong> ${choice.answer_text} 
+                    (${choice.is_correct ? '<span style="color: green;">Correct</span>' : '<span style="color: red;">Incorrect</span>'})
+                </p>
             `).join('');
 
             Swal.fire({
