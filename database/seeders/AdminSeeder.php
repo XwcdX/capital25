@@ -16,16 +16,22 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         $admins = [
-            [
-                'email' => 'c14230074@john.petra.ac.id',
+            // [
+            //     'email' => 'c14230074@john.petra.ac.id',
+            //     'password' => Hash::make('password'),
+            //     'name' => 'Terry Clement',
+            //     'division_id' => Division::whereSlug('it')->first()->id,
+            // ],        
+            // [
+            //     'email' => 'c14230257@john.petra.ac.id',
+            //     'password' => Hash::make('password'),
+            //     'name' => 'Shelly Oei',
+            //     'division_id' => Division::whereSlug('it')->first()->id,
+            // ]
+        [
+                'email' => 'c14230191@john.petra.ac.id',
                 'password' => Hash::make('password'),
-                'name' => 'Terry Clement',
-                'division_id' => Division::whereSlug('it')->first()->id,
-            ],        
-            [
-                'email' => 'c14230257@john.petra.ac.id',
-                'password' => Hash::make('password'),
-                'name' => 'Shelly Oei',
+                'name' => 'Aloysia Jennifer',
                 'division_id' => Division::whereSlug('it')->first()->id,
             ]
         ];
