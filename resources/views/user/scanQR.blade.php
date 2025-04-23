@@ -167,10 +167,19 @@
             const boxSize = window.innerWidth < 500 ? 300 : 500;
 
             const config = {
-                fps: 10,
+                fps: 15,
                 qrbox: {
                     width: boxSize,
                     height: boxSize
+                },
+                aspectRatio: 1.7777778,
+                experimentalFeatures: {
+                    useBarCodeDetectorIfSupported: true
+                },
+                videoConstraints: {
+                    facingMode: "environment",
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
                 }
             };
             html5QrCode.start(selectedCameraId, config, onScanSuccess, onScanFailure);
