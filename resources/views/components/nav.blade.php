@@ -265,7 +265,7 @@
                 <li><a href="#faq" class=" drop-shadow-lg hover:scale-110 font-extrabold">FAQ</a></li>
                 {{-- ganti route ke regist --}}
                 @if (Auth::user())
-                    <li><a href="{{ route('rally.home')}}" class=" drop-shadow-lg hover:scale-110 font-extrabold">Rally</a></li>
+                    {{-- <li><a href="{{ route('rally.home')}}" class=" drop-shadow-lg hover:scale-110 font-extrabold">Rally</a></li> --}}
                     <li class="absolute bottom-2 left-12 flex items-center gap-3 cursor-pointer"
                         id="mobileProfileToggle">
                         <img class="rounded-full h-[50px] w-[50px]"
@@ -327,7 +327,7 @@
                     <li><a href="#faq" class=" drop-shadow-lg hover:scale-110 font-extrabold">FAQ</a></li>
                     {{-- ganti route ke regist --}}
                     @if (Auth::user())
-                        <li><a href="{{ route('rally.home')}}" class=" drop-shadow-lg hover:scale-110 font-extrabold">RALLY</a></li>
+                        {{-- <li><a href="{{ route('rally.home')}}" class=" drop-shadow-lg hover:scale-110 font-extrabold">RALLY</a></li> --}}
                         <li class="relative">
                             <a id="profileDropdownToggle"
                                 class="drop-shadow-lg hover:scale-110 font-extrabold cursor-pointer">
