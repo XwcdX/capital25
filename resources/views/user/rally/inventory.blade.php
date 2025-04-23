@@ -439,11 +439,17 @@
                 Inventory
             </div>
             <div id="container-utama"
-                class="bg-[#ece7e3] flex flex-col justify-center items-center gap-4 rounded-3xl p-6 md:p-10 w-full shadow-2xl mt-4"
+                class="bg-[#ece7e3] font-oxanium relative flex flex-col justify-center items-center gap-4 rounded-3xl p-6 md:p-10 w-full shadow-2xl mt-4"
                 onclick="event.stopPropagation()">
                 <h1 class="text-2xl md:text-4xl font-bold text-[#415943] -translate-y-6">
                     Komoditas
                 </h1>
+                <h1 id="ticket-quantity" class="absolute top-5 right-7 font-bold z-[1111] flex items-center 
+                text-white pl-1 pr-2 bg-[var(--cap-green5)] rounded-2xl border-2 border-[var(--cap-green4)]">
+                    <img class="w-[35px] mr-1" src="{{ asset('assets/ClueZoneTicket.png')}}" alt="">
+                    {{ $clueZoneTicket[0]->quantity}}
+                </h1>
+                
                 <div id="scrollable-content"
                     class="h-[430px] overflow-y-scroll overflow-x-hidden w-full max-w-[1400px] px-4 relative">
                     <div id="inventory-container"
