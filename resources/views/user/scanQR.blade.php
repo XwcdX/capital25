@@ -75,7 +75,7 @@
         video {
             width: 100vw;
             height: 100vh;
-            object-fit: cover;
+            /*object-fit: cover;*/
             position: fixed;
             top: 0;
             left: 0;
@@ -99,8 +99,10 @@
 
     <h1>Scan Rally QR Code</h1>
     <div id="reader"></div>
+    {{-- <button onclick="initScanner()">Start Scanner</button> --}}
     {{-- <p id="scanned-result" class="d-done"></p> --}}
     <script>
+        
         function startScanning(selectedCameraId) {
             let phaseId = {!! json_encode(optional($currentPhase)->id) !!};
             let scanUrl = document.querySelector('meta[name="scan-url"]').getAttribute('content');
