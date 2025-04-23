@@ -165,7 +165,7 @@
             const boxSize = window.innerWidth < 500 ? 300 : 500;
 
             const config = {
-                fps: 30,
+                fps: 10,
                 qrbox: {
                     width: boxSize,
                     height: boxSize
