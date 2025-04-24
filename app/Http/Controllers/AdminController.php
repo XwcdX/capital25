@@ -557,4 +557,19 @@ class AdminController extends BaseController
 
         return response()->json(['status' => 'success' ,'message' => 'Ticket claimed successfully'], 200);
     }
+
+    function updateCommodityQuantity($id, Request $r)
+    {
+        $newQuantity = $r->quantity;
+        if ($newQuantity > 0) {
+            // Update the quantity in the commodity_history table
+            DB::table('commodity_history')
+                ->where('commodity_id', $id)  // Adjust this condition as necessary
+                ->update(['quantity' => $newQuantity]);
+        } else {
+            // Do nothing if quantity is 0, leave the record intact
+            // Optionally log or handle it differently if needed
+            // No need for a delete or update here
+        } // Save the changes
+    }
 }

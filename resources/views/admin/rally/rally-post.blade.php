@@ -95,25 +95,7 @@
 
             let updatedTeamsGlobal = [];
 
-            Echo.channel("phase-updates")
-                .listen(".PhaseUpdated", (event) => {
-                    Swal.fire({
-                        title: 'New Phase Started!',
-                        text: `Phase ${event.phase} is now started!`,
-                        icon: 'info',
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            phaseId = event.phase_id;
-                            phase = event.phase;
-                            const selectedRallyId = rallyDropdown.value;
-                            renderTeams();
-                            if (selectedRallyId) {
-                                subscribeToRallyChannel(selectedRallyId);
-                            }
-                        }
-                    });
-                });
+            
 
             function subscribeToRallyChannel(rallyId) {
                 if (rallyChannel) {
@@ -221,9 +203,9 @@
                     const rankSelect = document.createElement("select");
                     rankSelect.dataset.teamId = team.teamId;
                     rankSelect.className = "rank-select border ml-2";
-                    if (team.locked) {
-                        rankSelect.disabled = true;
-                    }
+                    // if (team.locked) {
+                    //     rankSelect.disabled = true;
+                    // }
 
                     const defaultOption = document.createElement("option");
                     defaultOption.value = "";
@@ -235,9 +217,9 @@
                         .map(t => t.selectedRank);
 
                     for (let i = 1; i <= totalScanned; i++) {
-                        if (ranksSelectedByOthers.includes(i) && team.selectedRank != i) {
-                            continue;
-                        }
+                        // if (ranksSelectedByOthers.includes(i) && team.selectedRank != i) {
+                        //     continue;
+                        // }
                         const option = document.createElement("option");
                         option.value = i;
                         option.textContent = i;
@@ -327,14 +309,17 @@
                             <div style="margin-top:1em">
                                 <label for="commoditySelect"><strong>Pick one commodity:</strong></label><br>
                                 <select id="commoditySelect" class="swal2-input" style="text-align:left">
-                                ${optionsHtml}
+                                    ${optionsHtml}
                                 </select>
+                            </div>
+                            <div style="margin-top:1em">
+                                <label for="quantityInput"><strong>Enter quantity to allocate:</strong></label><br>
+                                <input id="quantityInput" type="number" min="1" max="${rewardValue}" class="swal2-input w-24" placeholder="e.g., 1 - ${rewardValue}">
                             </div>
                             <hr>
                             <div style="margin-top:1em">
                                 ${detailsHtml}
-                            </div>
-                            `;
+                            </div>`;
 
                     Swal.fire({
                         title: 'Allocate Entire Reward to One Commodity',
@@ -342,38 +327,100 @@
                         focusConfirm: false,
                         showCancelButton: true,
                         confirmButtonText: 'Save',
+                        didOpen: () => {
+                            const sel = Swal.getPopup().querySelector('#commoditySelect');
+                            const qtyInput = Swal.getPopup().querySelector('#quantityInput');
+
+                            const updateMaxQty = () => {
+                                const selectedGroup = groups[sel.value];
+                                if (selectedGroup) {
+                                    const totalQty = selectedGroup.records.reduce((sum, r) => sum + r.quantity, 0);
+                                    qtyInput.max = totalQty;
+                                    qtyInput.placeholder = `1 - ${totalQty}`;
+                                }
+                            };
+
+                            sel.addEventListener('change', updateMaxQty);
+                            updateMaxQty(); 
+                        },
                         preConfirm: () => {
                             const sel = Swal.getPopup().querySelector('#commoditySelect');
+                            const qtyInput = Swal.getPopup().querySelector('#quantityInput');
+                            const quantity = parseInt(qtyInput.value);
+
                             if (!sel.value) {
                                 Swal.showValidationMessage('Please select a commodity');
                             }
-                            return sel.value;
+                            if (!qtyInput.value || quantity <= 0 || quantity > parseInt(qtyInput.max)) {
+                                Swal.showValidationMessage(`Quantity must be between 1 and ${qtyInput.max}`);
+                            }
+
+                            return { chosenId: sel.value, quantity };
                         }
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            const chosenId = result.value;
+                            const { chosenId, quantity } = result.value;
+                            // // const chosenId = result.value;
                             const group = groups[chosenId];
                             const price = group.price;
                             const rallyName = rallyContainer.dataset.rallyName || 'Current Rally';
 
-                            const updatePromises = group.records.map(r => {
-                                const computedReward = rewardValue * (price * r
-                                    .return_rate) * r.quantity;
+                            // const updatePromises = group.records.map(r => {
+                            //     const computedReward = rewardValue * (price * r
+                            //         .return_rate) * r.quantity;
 
-                                const description =
-                                    `Rally "${rallyName}", Rank ${selectedRank}: ` +
-                                    `${rewardValue} reward(s) → ${group.name} @ ${ (r.return_rate*100).toFixed(2) }% (qty ${r.quantity}).`;
+                            //     const description =
+                            //         `Rally "${rallyName}", Rank ${selectedRank}: ` +
+                            //         `${rewardValue} reward(s) → ${group.name} @ ${ (r.return_rate*100).toFixed(2) }% (qty ${r.quantity}).`;
 
-                                return updateBalanceForTeam({
+                            //     return updateBalanceForTeam({
+                            //         team_id: teamId,
+                            //         transaction_type: 'coin',
+                            //         action: 'credit',
+                            //         amount: computedReward,
+                            //         commodity_id: chosenId,
+                            //         quantity: rewardValue,
+                            //         description
+                            //     });
+                            // });
+
+                            let remainingQty = quantity;
+                            const sortedRecords = [...group.records].sort((a, b) => b.return_rate - a.return_rate);
+                            const updatePromises = [];
+
+                            for (const r of sortedRecords) {
+                                if (remainingQty <= 0) break;
+
+                                const usableQty = Math.min(remainingQty, r.quantity);
+                                const computedReward = usableQty * price * r.return_rate;
+
+                                const description = `Rally "${rallyName}", Rank ${selectedRank}: ` +
+                                    `${usableQty} reward(s) → ${group.name} @ ${(r.return_rate * 100).toFixed(2)}%`;
+
+                                updatePromises.push(updateBalanceForTeam({
                                     team_id: teamId,
                                     transaction_type: 'coin',
                                     action: 'credit',
                                     amount: computedReward,
                                     commodity_id: chosenId,
-                                    quantity: rewardValue,
+                                    quantity: usableQty,
                                     description
+                                }));
+
+                                remainingQty -= usableQty;
+                            }
+
+                            if (updatePromises.length === 0) {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: 'Not enough available quantity for this commodity.',
+                                    icon: 'error'
                                 });
-                            });
+                                return;
+                            }
+
+                            const newQty = r.quantity - usedQty;
+                            updatePromises.push(updateCommodityQuantity(r.id, newQty));
 
                             Promise.all(updatePromises)
                                 .then(() => {
@@ -404,6 +451,34 @@
                         text: 'Failed to fetch commodity data.',
                         icon: 'error'
                     });
+                });
+            }
+
+            function updateCommodityQuantity(recordId, newQty) {
+                const updateUrl = "{{ route('admin.updateQuantity', ['id' => '__ID__']) }}";
+                const url = updateUrl.replace('__ID__', recordId);
+                
+                fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    },
+                    body: JSON.stringify({
+                        quantity: newQuantity
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // re
+                    } else {
+                        alert('Failed to update commodity.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Something went wrong!');
                 });
             }
 
