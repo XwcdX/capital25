@@ -143,17 +143,17 @@
                         return swal.fire("Error", "No cameras found.", "error");
                     }
 
+                    const back = devices.find(d =>
+                        d.label.toLowerCase().includes("back") ||
+                        d.label.toLowerCase().includes("environment")
+                    );
                     const front = devices.find(d =>
                         d.label.toLowerCase().includes("front") ||
                         d.label.toLowerCase().includes("user") ||
                         d.label.toLowerCase().includes("integrated")
                     );
-                    const back = devices.find(d =>
-                        d.label.toLowerCase().includes("back") ||
-                        d.label.toLowerCase().includes("environment")
-                    );
 
-                    const chosen = front?.id || back?.id || devices[0].id;
+                    const chosen = back?.id || front?.id || devices[0].id;
                     startScanning(chosen);
                 })
                 .catch(err => {
