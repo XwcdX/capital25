@@ -112,6 +112,7 @@
                         useBarCodeDetectorIfSupported: true
                     },
                     videoConstraints: {
+                        facingMode: { exact: "environment" },
                         width: {
                             ideal: 1280
                         },
@@ -123,7 +124,7 @@
 
                 html5QrCode.start({
                         deviceId: {
-                            exact: deviceId
+                            exact: "environtment"
                         }
                     },
                     config,
