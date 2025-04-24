@@ -392,10 +392,10 @@
                                 if (remainingQty <= 0) break;
 
                                 const usableQty = Math.min(remainingQty, r.quantity);
-                                const computedReward = usableQty * price * r.return_rate;
+                                const computedReward = rewardValue * (price * r.return_rate) * usableQty;
 
                                 const description = `Rally "${rallyName}", Rank ${selectedRank}: ` +
-                                    `${usableQty} reward(s) → ${group.name} @ ${(r.return_rate * 100).toFixed(2)}%`;
+                                    `${rewardValue} reward(s) → ${group.name} @ ${(r.return_rate * 100).toFixed(2)}%`;
 
                                 updatePromises.push(updateBalanceForTeam({
                                     team_id: teamId,
@@ -403,7 +403,7 @@
                                     action: 'credit',
                                     amount: computedReward,
                                     commodity_id: chosenId,
-                                    quantity: usableQty,
+                                    quantity: rewardValue,
                                     description
                                 }));
 
