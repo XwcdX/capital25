@@ -28,12 +28,13 @@ Route::middleware(['isLogin'])->group(function () {
 
     Route::patch('/updateProfile', [TeamController::class, 'updateProfile'])->middleware(['isValidated'])->name('team.updateProfile');
 
-    Route::get('/scanQR', [RallyController::class, 'viewScanner']);
-    Route::post('/scanQR', [RallyController::class, 'scanQRCode'])->name('scanQR');
+    Route::get('/scanQR', [RallyController::class, 'viewScanner'])->name('viewScanQR');
+    Route::get('/scanQR/{qrData}', [RallyController::class, 'scanQrCode'])->name('scanQR');
 
     Route::get('/rally', [RallyController::class, 'rallyHome'])->name('rally.home');
     Route::post('/buyMultipleCommodities', [CommodityController::class, 'buyMultipleCommodities'])->name('buy.multiple.commodities');
     Route::post('/commodities/{phase}/reduce‑return‑rates', [CommodityController::class, 'reduceAllCommodityReturnRates'])->name('commodities.reduceReturnRates');
+    Route::get('/convertAllCoinIntoGreenPointLastPhase', [TeamController::class, 'convertAllCoins'])->name('convertAllCoins');
     Route::post('/buyClueZoneTicket', [ClueZoneController::class, 'buyTicket'])->name('cluezone.buy');
 
     Route::post('/quiz/start', [QuizController::class, 'startQuiz'])->name('quiz.start');

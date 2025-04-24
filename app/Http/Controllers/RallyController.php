@@ -88,7 +88,7 @@ class RallyController extends BaseController
 
     public function viewScanner()
     {
-        return view('user.scanQR', ['title' => 'QR Scanner', 'currentPhase' => Cache::get('current_phase')]);
+        return view('user.scanQR', ['title' => 'QR Scanner']);
     }
 
     public function viewRallyPost()
@@ -157,33 +157,14 @@ class RallyController extends BaseController
         $data = "$rallyId|$qrExpireAt";
         $signature = hash_hmac('sha256', $data, env('QR_SECRET_KEY'));
         $qrData = base64_encode("$data|$signature");
-        return QrCode::size(200)->generate($qrData);
+        $link = route('scanQR', [$qrData]);
+        return QrCode::size(200)->generate($link);
     }
 
-    public function scanQrCode(Request $request)
+    public function scanQrCode($qrData)
     {
-        $validator = Validator::make($request->all(), [
-            'team_id' => 'required|uuid|exists:teams,id',
-            'qr_data' => 'required|string',
-            'phase_id' => 'required|uuid|exists:phases,id'
-        ], [
-            'team_id.required' => 'Team ID is required',
-            'team_id.uuid' => 'Team ID must be a valid UUID',
-            'team_id.exists' => 'Team ID not found',
-            'qr_data.required' => 'QR data is required',
-            'qr_data.string' => 'QR data must be a string',
-            'phase_id.required' => "Please wait, the phase hasn't started yet.",
-            'phase_id.uuid' => 'Phase ID must be a valid UUID',
-            'phase_id.exists' => 'Phase ID not found',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->error($validator->errors()->first(), HttpResponseCode::HTTP_BAD_REQUEST);
-        }
-
-        $teamId = $request->input('team_id');
-        $qrData = $request->input('qr_data');
-        $phaseId = $request->input('phase_id');
+        $teamId = Auth::user()->id;
+        $phaseId = Cache::get('current_phase')->id;
 
         try {
             $decodedData = base64_decode($qrData);
@@ -198,7 +179,8 @@ class RallyController extends BaseController
             }
 
             if (now()->timestamp > $qrExpireAt) {
-                return $this->error('QR code has expired.', HttpResponseCode::HTTP_BAD_REQUEST);
+                // return $this->error('QR code has expired.', HttpResponseCode::HTTP_BAD_REQUEST);
+                return redirect()->route('rally.home')->with('error', 'QR code has expired.');
             }
 
             $rally = $this->model::findOrFail($rallyId);
@@ -210,7 +192,8 @@ class RallyController extends BaseController
                 ->exists();
 
             if ($alreadyScanned) {
-                return $this->error('QR code already scanned.', HttpResponseCode::HTTP_BAD_REQUEST);
+                // return $this->error('QR code already scanned.', HttpResponseCode::HTTP_BAD_REQUEST);
+                return redirect()->route('rally.home')->with('error', 'QR code already scanned.');
             }
 
             $alreadyPlayedInPhase = $rally->teams()
@@ -219,10 +202,11 @@ class RallyController extends BaseController
                 ->exists();
 
             if ($alreadyPlayedInPhase) {
-                return $this->error(
-                    'Your team has already participated in this rally during this phase. Please try another rally.',
-                    HttpResponseCode::HTTP_BAD_REQUEST
-                );
+                // return $this->error(
+                //     'Your team has already participated in this rally during this phase. Please try another rally.',
+                //     HttpResponseCode::HTTP_BAD_REQUEST
+                // );
+                return redirect()->route('rally.home')->with('error', 'Your team has already participated in this rally during this phase. Please try another rally.');
             }
 
             $allowedRanges = [
@@ -244,10 +228,11 @@ class RallyController extends BaseController
                 ->count();
 
             if ($currentCount >= $allowed[1]) {
-                return $this->error(
-                    "The number of scanned teams for rally post {$post} has reached the maximum allowed ({$allowed[1]}).",
-                    HttpResponseCode::HTTP_BAD_REQUEST
-                );
+                // return $this->error(
+                //     "The number of scanned teams for rally post {$post} has reached the maximum allowed ({$allowed[1]}).",
+                //     HttpResponseCode::HTTP_BAD_REQUEST
+                // );
+                return redirect()->route('rally.home')->with('error', "The number of scanned teams for rally post {$post} has reached the maximum allowed ({$allowed[1]}).");
             }
 
             if ($rally->teams()->wherePivot('team_id', $teamId)->exists()) {
@@ -273,13 +258,14 @@ class RallyController extends BaseController
 
             event(new RallyParticipant($rallyHistory));
 
-            return $this->success('QR code scanned successfully.', ['rally_id' => $rally->id]);
+            // return $this->success('QR code scanned successfully.', ['rally_id' => $rally->id]);
+            return redirect()->route('rally.home')->with('success', 'QR code scanned successfully.');
         } catch (\Exception $e) {
             Log::error('Error during QR code scan', [
-                'error' => $e->getMessage(),
-                'input' => $request->all(),
+                'error' => $e->getMessage()
             ]);
-            return $this->error('Invalid QR code.', HttpResponseCode::HTTP_BAD_REQUEST);
+            // return $this->error('Invalid QR code.', HttpResponseCode::HTTP_BAD_REQUEST);
+            return redirect()->route('rally.home')->with('error', 'Invalid QR code.');
         }
     }
 }
