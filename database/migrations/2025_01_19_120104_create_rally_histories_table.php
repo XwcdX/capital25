@@ -17,13 +17,13 @@ return new class extends Migration
             $table->uuid('team_id');
             $table->uuid('phase_id');
             $table->timestamp('qr_expired_at');
+            $table->text('qr');
             $table->timestamp('scanned_at')->nullable();
             $table->timestamps();
 
             $table->foreign('rally_id')->references('id')->on('rallies')->onDelete('cascade');
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
             $table->foreign('phase_id')->references('id')->on('phases')->onDelete('cascade');
-            $table->unique(['rally_id', 'team_id', 'phase_id']);
         });
     } 
 

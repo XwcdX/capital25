@@ -1,8 +1,5 @@
 @extends('admin.layout')
 
-@section('style')
-@endsection
-
 @section('content')
     <div class="container mx-auto mt-5">
         <div class="mb-4">
@@ -16,9 +13,24 @@
             </select>
         </div>
 
-        <button id="openQrModal" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-            Generate Rally QR Code
-        </button>
+        <div class="flex space-x-2 mb-4">
+            <button id="openQrModal" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                Generate Rally QR Code
+            </button>
+            <button id="showCurrentQr" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                Show Current QR
+            </button>
+        </div>
+
+        @foreach ($rallies as $rally)
+            <div id="current-qr-{{ $rally->id }}" class="hidden mb-4">
+                @if ($rally->current_qr_link)
+                    {!! SimpleSoftwareIO\QrCode\Facades\QrCode::size(300)->generate($rally->current_qr_link) !!}
+                @else
+                    <p class="text-sm text-gray-500">No QR code available for this rally.</p>
+                @endif
+            </div>
+        @endforeach
 
         <div id="teamsContainer">
             @foreach ($rallies as $rally)
@@ -43,7 +55,7 @@
             <div class="p-4 text-center">
                 <div id="loadingSpinner"
                     class="loader mx-auto my-4 border-t-4 border-blue-500 w-12 h-12 rounded-full animate-spin"></div>
-                <div id="qrCodeContainer" class="hidden">
+                <div id="qrCodeContainer" class="hidden flex justify-center items-center">
                     <img id="qrCodeImage" src="" alt="QR Code" class="mx-auto">
                 </div>
             </div>
@@ -83,6 +95,7 @@
             let rallyChannel = null;
             const rallyDropdown = document.getElementById("rallyDropdown");
             const openQrModalButton = document.getElementById("openQrModal");
+            const showCurrentQrButton = document.getElementById("showCurrentQr");
             const qrCodeModal = document.getElementById("qrCodeModal");
             const qrCodeContainer = document.getElementById("qrCodeContainer");
             const qrCodeImage = document.getElementById("qrCodeImage");
@@ -95,7 +108,7 @@
 
             let updatedTeamsGlobal = [];
 
-            
+
 
             function subscribeToRallyChannel(rallyId) {
                 if (rallyChannel) {
@@ -151,15 +164,17 @@
                 if (rallyPost === '9') {
                     updatedTeamsGlobal.forEach(team => {
                         const li = document.createElement('li');
+                        li.className =
+                            'mb-2 p-3 bg-white shadow rounded-lg flex justify-between items-center';
                         li.textContent = team.teamName;
                         ul.appendChild(li);
                     });
 
                     const btnLi = document.createElement('li');
-                    btnLi.classList.add('list-none');
+                    btnLi.className = 'list-none mt-4';
                     const btn = document.createElement('button');
                     btn.textContent = `Distribute ${amt} Coins to Each Team`;
-                    btn.className = 'bg-green-500 text-white px-4 py-2 rounded mt-2';
+                    btn.className = 'bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded shadow';
                     btn.addEventListener('click', () => {
                         if (!updatedTeamsGlobal.length) {
                             return Swal.fire('No teams to reward', '', 'info');
@@ -195,17 +210,17 @@
                 updatedTeamsGlobal.forEach(team => {
                     const li = document.createElement("li");
                     li.id = `team-${team.teamId}`;
+                    li.className = 'mb-4 p-4 bg-white shadow rounded-lg';
 
                     const teamLabel = document.createElement("span");
                     teamLabel.textContent = team.teamName + " - Rank: ";
+                    teamLabel.className = 'font-medium text-gray-800';
                     li.appendChild(teamLabel);
 
                     const rankSelect = document.createElement("select");
                     rankSelect.dataset.teamId = team.teamId;
-                    rankSelect.className = "rank-select border ml-2";
-                    // if (team.locked) {
-                    //     rankSelect.disabled = true;
-                    // }
+                    rankSelect.className =
+                        'rank-select border border-gray-300 rounded px-2 py-1 ml-2 focus:outline-none focus:ring focus:ring-blue-200';
 
                     const defaultOption = document.createElement("option");
                     defaultOption.value = "";
@@ -217,15 +232,10 @@
                         .map(t => t.selectedRank);
 
                     for (let i = 1; i <= totalScanned; i++) {
-                        // if (ranksSelectedByOthers.includes(i) && team.selectedRank != i) {
-                        //     continue;
-                        // }
                         const option = document.createElement("option");
                         option.value = i;
                         option.textContent = i;
-                        if (team.selectedRank == i) {
-                            option.selected = true;
-                        }
+                        if (team.selectedRank == i) option.selected = true;
                         rankSelect.appendChild(option);
                     }
                     li.appendChild(rankSelect);
@@ -236,15 +246,15 @@
                             const selectedValue = parseInt(this.value) || null;
                             const teamIndex = updatedTeamsGlobal.findIndex(t => t.teamId === team
                                 .teamId);
-                            if (teamIndex > -1) {
-                                updatedTeamsGlobal[teamIndex].selectedRank = selectedValue;
-                            }
+                            if (teamIndex > -1) updatedTeamsGlobal[teamIndex].selectedRank =
+                                selectedValue;
                             renderTeams();
                             handleRankChange(team.teamId, selectedValue);
                         });
                     }
                 });
             }
+
 
             function getTeamCommodity(teamId) {
                 return fetch("{{ route('admin.getTeamCommodity') }}?team_id=" + teamId + "&phase_id=" + phaseId)
@@ -334,14 +344,15 @@
                             const updateMaxQty = () => {
                                 const selectedGroup = groups[sel.value];
                                 if (selectedGroup) {
-                                    const totalQty = selectedGroup.records.reduce((sum, r) => sum + r.quantity, 0);
+                                    const totalQty = selectedGroup.records.reduce((sum,
+                                        r) => sum + r.quantity, 0);
                                     qtyInput.max = totalQty;
                                     qtyInput.placeholder = `1 - ${totalQty}`;
                                 }
                             };
 
                             sel.addEventListener('change', updateMaxQty);
-                            updateMaxQty(); 
+                            updateMaxQty();
                         },
                         preConfirm: () => {
                             const sel = Swal.getPopup().querySelector('#commoditySelect');
@@ -351,15 +362,23 @@
                             if (!sel.value) {
                                 Swal.showValidationMessage('Please select a commodity');
                             }
-                            if (!qtyInput.value || quantity <= 0 || quantity > parseInt(qtyInput.max)) {
-                                Swal.showValidationMessage(`Quantity must be between 1 and ${qtyInput.max}`);
+                            if (!qtyInput.value || quantity <= 0 || quantity > parseInt(qtyInput
+                                    .max)) {
+                                Swal.showValidationMessage(
+                                    `Quantity must be between 1 and ${qtyInput.max}`);
                             }
 
-                            return { chosenId: sel.value, quantity };
+                            return {
+                                chosenId: sel.value,
+                                quantity
+                            };
                         }
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            const { chosenId, quantity } = result.value;
+                            const {
+                                chosenId,
+                                quantity
+                            } = result.value;
                             // // const chosenId = result.value;
                             const group = groups[chosenId];
                             const price = group.price;
@@ -385,14 +404,16 @@
                             // });
 
                             let remainingQty = quantity;
-                            const sortedRecords = [...group.records].sort((a, b) => b.return_rate - a.return_rate);
+                            const sortedRecords = [...group.records].sort((a, b) => b.return_rate -
+                                a.return_rate);
                             const updatePromises = [];
 
                             for (const r of sortedRecords) {
                                 if (remainingQty <= 0) break;
 
                                 const usableQty = Math.min(remainingQty, r.quantity);
-                                const computedReward = rewardValue * (price * r.return_rate) * usableQty;
+                                const computedReward = rewardValue * (price * r.return_rate) *
+                                    usableQty;
 
                                 const description = `Rally "${rallyName}", Rank ${selectedRank}: ` +
                                     `${rewardValue} reward(s) → ${group.name} @ ${(r.return_rate * 100).toFixed(2)}%`;
@@ -408,7 +429,8 @@
                                 }));
 
                                 const newQty = r.quantity - usableQty;
-                                updatePromises.push(updateCommodityQuantity(r.return_rate, teamId, chosenId, newQty));
+                                updatePromises.push(updateCommodityQuantity(r.return_rate, teamId,
+                                    chosenId, newQty));
 
                                 remainingQty -= usableQty;
                             }
@@ -422,7 +444,7 @@
                                 return;
                             }
 
-                           
+
 
                             Promise.all(updatePromises)
                                 .then(() => {
@@ -459,43 +481,43 @@
             function updateCommodityQuantity(return_rate, teamId, commodityId, newQty) {
                 const updateUrl = "{{ route('admin.updateQuantity') }}";
                 const url = updateUrl.replace('__ID__', commodityId);
-                
-                fetch(url, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    },
-                    body: JSON.stringify({
-                        return_rate: return_rate,
-                        teamId: teamId,
-                        commodityId: commodityId,
-                        quantity: newQty,
 
+                fetch(url, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        },
+                        body: JSON.stringify({
+                            return_rate: return_rate,
+                            teamId: teamId,
+                            commodityId: commodityId,
+                            quantity: newQty,
+
+                        })
                     })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        Swal.fire({
-                            title: "Success!",
-                            text: "Quantity Updated",
-                            icon: "success",
-                            confirmButtonText: "Continue"
-                        });
-                    } else {
-                        Swal.fire({
-                            title: "Error!",
-                            text: "Error in updating quantity",
-                            icon: "error",
-                            confirmButtonText: "Continue"
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Something went wrong!');
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: "Success!",
+                                text: "Quantity Updated",
+                                icon: "success",
+                                confirmButtonText: "Continue"
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "Error!",
+                                text: "Error in updating quantity",
+                                icon: "error",
+                                confirmButtonText: "Continue"
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Something went wrong!');
+                    });
             }
 
             function updateBalanceForTeam(data) {
@@ -565,6 +587,32 @@
                         });
                         qrCodeModal.classList.add("hidden");
                     });
+            });
+
+            showCurrentQrButton.addEventListener("click", () => {
+                const rallyId = rallyDropdown.value;
+                if (!rallyId) {
+                    return Swal.fire({
+                        title: "No Rally Selected",
+                        text: "Please choose a rally first.",
+                        icon: "warning",
+                        confirmButtonText: "OK"
+                    });
+                }
+
+                const qrDiv = document.getElementById(`current-qr-${rallyId}`);
+                if (!qrDiv) {
+                    return Swal.fire({
+                        title: "No QR Code",
+                        text: "There is no current QR code for this rally.",
+                        icon: "info",
+                        confirmButtonText: "OK"
+                    });
+                }
+                qrCodeModal.classList.remove("hidden");
+                loadingSpinner.classList.add("hidden");
+                qrCodeContainer.classList.remove("hidden");
+                qrCodeContainer.innerHTML = qrDiv.innerHTML;
             });
 
             const closeModal = () => qrCodeModal.classList.add("hidden");

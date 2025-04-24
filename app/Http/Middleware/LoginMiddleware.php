@@ -18,7 +18,7 @@ class LoginMiddleware
     {
         if (!Auth::user()) {
             session()->flush();
-            $allowedIntent = ['*'];
+            $allowedIntent = ['scanQR', 'scanQR/*', 'rally'];
             foreach ($allowedIntent as $intent) {
                 if ($request->is($intent)) {
                     session()->put('url.intended', $request->url());
