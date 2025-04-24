@@ -40,6 +40,10 @@
         .swal2-confirm {
             background-color: #3085d6;
         }
+
+        .swal2-cancel {
+            background-color: #da0707;
+        }
     </style>
     @yield('style')
 </head>
