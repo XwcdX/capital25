@@ -407,6 +407,9 @@
                                     description
                                 }));
 
+                                const newQty = r.quantity - usableQty;
+                                updatePromises.push(updateCommodityQuantity(r.return_rate, teamId, chosenId, newQty));
+
                                 remainingQty -= usableQty;
                             }
 
@@ -419,8 +422,7 @@
                                 return;
                             }
 
-                            const newQty = r.quantity - usedQty;
-                            updatePromises.push(updateCommodityQuantity(r.id, newQty));
+                           
 
                             Promise.all(updatePromises)
                                 .then(() => {
@@ -454,9 +456,9 @@
                 });
             }
 
-            function updateCommodityQuantity(recordId, newQty) {
-                const updateUrl = "{{ route('admin.updateQuantity', ['id' => '__ID__']) }}";
-                const url = updateUrl.replace('__ID__', recordId);
+            function updateCommodityQuantity(return_rate, teamId, commodityId, newQty) {
+                const updateUrl = "{{ route('admin.updateQuantity') }}";
+                const url = updateUrl.replace('__ID__', commodityId);
                 
                 fetch(url, {
                     method: 'PUT',
@@ -465,15 +467,29 @@
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
                     },
                     body: JSON.stringify({
-                        quantity: newQuantity
+                        return_rate: return_rate,
+                        teamId: teamId,
+                        commodityId: commodityId,
+                        quantity: newQty,
+
                     })
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // re
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Quantity Updated",
+                            icon: "success",
+                            confirmButtonText: "Continue"
+                        });
                     } else {
-                        alert('Failed to update commodity.');
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Error in updating quantity",
+                            icon: "error",
+                            confirmButtonText: "Continue"
+                        });
                     }
                 })
                 .catch(error => {

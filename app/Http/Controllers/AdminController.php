@@ -558,18 +558,38 @@ class AdminController extends BaseController
         return response()->json(['status' => 'success' ,'message' => 'Ticket claimed successfully'], 200);
     }
 
-    function updateCommodityQuantity($id, Request $r)
+    function updateCommodityQuantity(Request $r)
     {
         $newQuantity = $r->quantity;
-        if ($newQuantity > 0) {
-            // Update the quantity in the commodity_history table
-            DB::table('commodity_history')
-                ->where('commodity_id', $id)  // Adjust this condition as necessary
-                ->update(['quantity' => $newQuantity]);
-        } else {
-            // Do nothing if quantity is 0, leave the record intact
-            // Optionally log or handle it differently if needed
-            // No need for a delete or update here
-        } // Save the changes
+        $commodityId = $r->commodityId;
+        $teamId = $r->teamId;
+        $return_rate = $r->return_rate;
+
+        try {
+            if ($newQuantity >= 0) {
+                DB::table('commodity_histories')
+                    ->where('commodity_id', $commodityId)
+                    ->where('team_id', $teamId)
+                    ->where('return_rate', $return_rate)
+                    ->update(['quantity' => $newQuantity]);
+
+                return $this->success('Quantity updated successfully.', $newQuantity);
+                
+            } else {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Quantity is zero, no update made.',
+                    'data' => ['quantity' => $newQuantity]
+                ]);
+            }
+        } catch (\Exception $e) {
+            // Catch any errors during the update
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to update quantity.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+        
     }
 }

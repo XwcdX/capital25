@@ -75,7 +75,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         
         Route::get('/phase-control', [AdminController::class, 'viewPhaseControl'])->name('phaseControl');
         Route::post('/update-phase', [AdminController::class, 'updatePhase'])->name('updatePhase');
-        Route::get('/commodity/{id}/update', [AdminController::class, 'updateCommodityQuantity'])->name('updateQuantity');
+        Route::put('/commodity/{id}/update', [AdminController::class, 'updateCommodityQuantity'])->name('updateQuantity');
 
         Route::post('/cluezone', [AdminController::class, 'claimClueZoneTicket'])->name('clueZoneClaim');
         Route::get('/cluezone', [AdminController::class, 'viewClueZone'])->name('viewClueZone');
