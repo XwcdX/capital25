@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(TeamSeeder::class);
+        // $this->call(TeamSeeder::class);
         $this->call(RallySeeder::class);
         // $this->call(DivisionSeeder::class);
         // $this->call(AdminSeeder::class);
