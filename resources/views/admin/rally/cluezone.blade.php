@@ -44,7 +44,7 @@
 
 @section('content')
     <div class="flex flex-col w-full py-8 rounded-lg shadow-xl items-center justify-center mb-10">
-        <h1 class="text-center text-4xl uppercase font-bold mb-2">Service Hub</h1>
+        <h1 class="text-center text-4xl uppercase font-bold mb-2">Clue Zone</h1>
     </div>
     <div class="flex flex-col w-full py-8 rounded-lg shadow-xl items-center justify-center mb-10">
         <div class="container px-8 py-8">
@@ -55,20 +55,27 @@
 
             @if ($teams)
                 @foreach ($teams as $team)
-                    <div class="team-container" data-team-name="{{ strtolower($team->name) }}">
+                    <div class="team-container relative" data-team-name="{{ strtolower($team->name) }}">
                         <h2 class="text-lg font-bold">{{ $team->name }}</h2>
                         <h2>Current ticket quantity: {{$team->cluezone[0]->quantity - $team->cluezone[0]->claimed_tickets}}</h2>
                         
-                        <form id="claim-form-{{ $team->id }}" class="claim-ticket-form">
-                            @csrf
-                            <input type="hidden" name="team_id" value="{{ $team->id }}">
-                            <select name="claimed_tickets">
-                                @for ($i = 1; $i <= $team->cluezone[0]->quantity - $team->cluezone[0]->claimed_tickets ; $i++)
-                                    <option value="{{ $i }}">{{ $i }}</option>
-                                @endfor
-                            </select>
-                            <button type="submit" class="bg-sky-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-sky-800 transition duration-200">Claim</button>
-                        </form>
+                        @if ($team->cluezone[0]->quantity - $team->cluezone[0]->claimed_tickets != 0)
+                            <form id="claim-form-{{ $team->id }}" class="claim-ticket-form">
+                                @csrf
+                                <input type="hidden" name="team_id" value="{{ $team->id }}">
+                                <select name="claimed_tickets">
+                                    @for ($i = 1; $i <= $team->cluezone[0]->quantity - $team->cluezone[0]->claimed_tickets ; $i++)
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
+                                </select>
+                                <button type="submit" class="bg-sky-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-sky-800 transition duration-200">Claim</button>
+                            </form>
+                        @endif
+
+                        @if ($team->cluezone[0]->quantity == 4)
+                            <h1 class="absolute top-2 right-2 z-[100] font-semibold bg-primary px-2 rounded-full bg-[#f7b2b2] text-[#ed0000]">Max Ticket Reached</h1>
+                        @endif
+
                     </div>
                     
                 @endforeach
@@ -126,18 +133,34 @@
                             })
                             .then(response => response.json())
                             .then(data => {
+                                if (data.status === 'success') {
+                                    Swal.fire({
+                                        title: 'Success!',
+                                        text: data.message,
+                                        icon: 'success',
+                                        confirmButtonText: 'OK'
+                                    }).then(() => {
+                                        window.location.reload(); 
+                                    });
+                                } else if (data.status === 'error') {
+                                    Swal.fire({
+                                        title: 'Error',
+                                        text: data.message,
+                                        icon: 'error',
+                                        confirmButtonText: 'OK'
+                                    });
+                            } else {
                                 Swal.fire({
-                                    title: 'Success!',
-                                    text: data.message || 'Ticket successfully claimed!',
-                                    icon: 'success',
+                                    title: 'Unexpected Response',
+                                    text: 'Something went wrong, please try again.',
+                                    icon: 'warning',
                                     confirmButtonText: 'OK'
-                                }).then(() => {
-                                    window.location.reload();
                                 });
+                            }
                             })
                             .catch(error => {
                                 console.error(error);
-                                Swal.fire('Error', error.message, 'error');
+                                Swal.fire('Error', 'Something Wrong...', 'error');
                             });
                         }
                     });
