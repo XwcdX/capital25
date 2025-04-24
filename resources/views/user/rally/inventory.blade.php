@@ -446,7 +446,7 @@
                 </h1>
 
                 @php
-                    $currentPhase = Cache::get('current_phase');
+                    $currentPhase = Cache::get('current_phase', 'No phase set');
                     $clueZone = collect($team->cluezone)->firstWhere('phase_id', $currentPhase->id);
                     $availableTickets = $clueZone ? ($clueZone->quantity - $clueZone->claimed_tickets) : 0;
                 @endphp
