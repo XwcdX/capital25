@@ -216,7 +216,7 @@
                     </a>
 
                     
-                    <a href="https://capital.petra.ac.id/scanQR" class="els-wrap el-2"
+                    <a href="{{ route('viewScanQR') }}" class="els-wrap el-2"
                     onclick=" document.getElementById('nav-toggle').checked = false;">
                     <div class="icon-nav">
                         <i class="fa-regular fa-object-group text-white"></i>
@@ -282,7 +282,7 @@
                     <a href="javascript:void(0)" class="opacity-50">Final Test</a>
                 </li>
                 <li>
-                    <a href="https://capital.petra.ac.id/scanQR">Scan QR</a>
+                    <a href="{{ route('viewScanQR') }}">Scan QR</a>
                 </li>
             </ul>
         </div>

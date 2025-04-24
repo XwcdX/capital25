@@ -28,8 +28,8 @@ Route::middleware(['isLogin'])->group(function () {
 
     Route::patch('/updateProfile', [TeamController::class, 'updateProfile'])->middleware(['isValidated'])->name('team.updateProfile');
 
-    Route::get('/scanQR', [RallyController::class, 'viewScanner']);
-    Route::post('/scanQR', [RallyController::class, 'scanQRCode'])->name('scanQR');
+    Route::get('/scanQR', [RallyController::class, 'viewScanner'])->name('viewScanQR');
+    Route::get('/scanQR/{qrData}', [RallyController::class, 'scanQrCode'])->name('scanQR');
 
     Route::get('/rally', [RallyController::class, 'rallyHome'])->name('rally.home');
     Route::post('/buyMultipleCommodities', [CommodityController::class, 'buyMultipleCommodities'])->name('buy.multiple.commodities');

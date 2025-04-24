@@ -7,9 +7,6 @@
     <title>QR Code Scanner</title>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="user-id" content="{{ Auth::user()->id }}">
-    <meta name="scan-url" content="{{ route('scanQR') }}">
     @vite(['resources/js/app.js'])
     <style>
         body,
@@ -96,114 +93,74 @@
 </head>
 
 <body>
-
     <h1>Scan Rally QR Code</h1>
     <div id="reader"></div>
-    {{-- <button onclick="initScanner()">Start Scanner</button> --}}
-    {{-- <p id="scanned-result" class="d-done"></p> --}}
     <script>
-        
-        function startScanning(selectedCameraId) {
-            let phaseId = {!! json_encode(optional($currentPhase)->id) !!};
-            let scanUrl = document.querySelector('meta[name="scan-url"]').getAttribute('content');
+        document.addEventListener("DOMContentLoaded", () => {
             const html5QrCode = new Html5Qrcode("reader");
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            const teamId = document.querySelector('meta[name="user-id"]').getAttribute('content');
-
-            const onScanSuccess = (decodedText, decodedResult) => {
-                // const result = document.getElementById("scanned-result");
-                // result.innerHTML = `Scanned: <strong>${decodedText}</strong>`;
-                // result.classList.remove("d-none");
-                if (html5QrCode.isScanning) {
-                    html5QrCode.stop().then(() => {
-                        fetch(scanUrl, {
-                                method: "POST",
-                                headers: {
-                                    "X-CSRF-TOKEN": csrfToken,
-                                    "Content-Type": "application/json"
-                                },
-                                body: JSON.stringify({
-                                    team_id: teamId,
-                                    qr_data: decodedText,
-                                    phase_id: phaseId,
-                                })
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    swal.fire({
-                                        title: "Success",
-                                        text: "Scanned Successfully!",
-                                        icon: "success",
-                                        didOpen: () => {
-                                            window.dispatchEvent(new CustomEvent(
-                                            "rallyScanned", {
-                                                detail: {
-                                                    rallyId: data.data.rally_id
-                                                }
-                                            }));
-                                        }
-                                    }).then((res) => {
-                                        if (res.isConfirmed) {
-                                            window.location.href = '{{ route('rally.home') }}';
-                                        }
-                                    });
-                                } else {
-                                    swal.fire("Error", data.message || "An unexpected error occurred.",
-                                        "error");
-                                }
-                            }).catch(err => {
-                                console.error("Fetch error:", err);
-                                swal.fire("Error", "An unexpected error occurred.", "error");
-                            });
-                    }).catch(err => console.error("Stop failed", err));
-                }
-            };
-
-
-            const onScanFailure = (error) => {
-                console.log("Scan failed:", error);
-            };
             const boxSize = window.innerWidth < 500 ? 300 : 500;
 
-            const config = {
-                fps: 15,
-                qrbox: {
-                    width: boxSize,
-                    height: boxSize
-                },
-                aspectRatio: 1.7777778,
-                experimentalFeatures: {
-                    useBarCodeDetectorIfSupported: true
-                },
-                videoConstraints: {
-                    facingMode: "environment",
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 }
-                }
-            };
-            html5QrCode.start(selectedCameraId, config, onScanSuccess, onScanFailure);
-        }
+            function startScanning(deviceId) {
+                const config = {
+                    fps: 15,
+                    qrbox: {
+                        width: boxSize,
+                        height: boxSize
+                    },
+                    aspectRatio: 1.7777778,
+                    experimentalFeatures: {
+                        useBarCodeDetectorIfSupported: true
+                    },
+                    videoConstraints: {
+                        width: {
+                            ideal: 1280
+                        },
+                        height: {
+                            ideal: 720
+                        }
+                    }
+                };
 
-        Html5Qrcode.getCameras().then(devices => {
-            if (devices.length > 0) {
-                let backCamera = devices.find(device => device.label.toLowerCase().includes("back"));
-                let selectedCameraId = backCamera ? backCamera.id : devices[0].id;
-                startScanning(selectedCameraId);
-            } else {
-                console.error("No cameras found.");
-                swal.fire("Error", "No available cameras detected.", "error");
+                html5QrCode.start({
+                        deviceId: {
+                            exact: deviceId
+                        }
+                    },
+                    config,
+                    decodedText => {
+                        html5QrCode.stop()
+                            .then(() => window.location.href = decodedText)
+                            .catch(err => console.error("Failed to stop scanner:", err));
+                    },
+                    err => console.warn("QR scan error:", err)
+                );
             }
-        }).catch(err => {
-            console.error("Camera access error:", err);
-            swal.fire("Error", "Failed to access camera.", "error");
-        });
-        document.addEventListener("DOMContentLoaded", function() {
-            Echo.channel("phase-updates")
-                .listen(".PhaseUpdated", (event) => {
-                    phaseId = event.phase_id;
+
+            Html5Qrcode.getCameras()
+                .then(devices => {
+                    console.log("Available cameras:", devices);
+                    if (!devices.length) {
+                        return swal.fire("Error", "No cameras found.", "error");
+                    }
+
+                    const front = devices.find(d =>
+                        d.label.toLowerCase().includes("front") ||
+                        d.label.toLowerCase().includes("user") ||
+                        d.label.toLowerCase().includes("integrated")
+                    );
+                    const back = devices.find(d =>
+                        d.label.toLowerCase().includes("back") ||
+                        d.label.toLowerCase().includes("environment")
+                    );
+
+                    const chosen = front?.id || back?.id || devices[0].id;
+                    startScanning(chosen);
+                })
+                .catch(err => {
+                    console.error("Camera access error:", err);
+                    swal.fire("Error", "Failed to access camera.", "error");
                 });
-        })
+        });
     </script>
 </body>
 

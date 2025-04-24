@@ -301,7 +301,7 @@ class TeamController extends BaseController
                 if ($team->valid != 1) {
                     return redirect()->route('user.regist');
                 }
-                return redirect()->route('home')
+                return redirect()->intended(route('home'))
                     ->with('success', 'Login Successful');
             } else {
                 return redirect()->to(route('login'))->with('error', 'You are not authenticated please contact admin');
