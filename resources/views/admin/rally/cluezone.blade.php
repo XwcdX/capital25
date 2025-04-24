@@ -72,8 +72,8 @@
                             </form>
                         @endif
 
-                        @if ($team->cluezone[0]->quantity == 4 && $team->cluezone[0]->quantity - $team->cluezone[0]->claimed_tickets == 0)
-                            <h1 class="absolute top-2 right-5 z-[100] font-semibold bg-primary px-2 rounded-full bg-[#f7b2b2] text-[#ed0000]">Max Ticket Reached</h1>
+                        @if ($team->cluezone[0]->quantity == 4)
+                            <h1 class="absolute top-2 right-2 z-[100] font-semibold bg-primary px-2 rounded-full bg-[#f7b2b2] text-[#ed0000]">Max Ticket Reached</h1>
                         @endif
 
                     </div>
