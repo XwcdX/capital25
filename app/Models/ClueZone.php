@@ -14,6 +14,7 @@ class ClueZone extends Model
         'phase_id',
         'quantity',
         'price',
+        'claimed_tickets'
     ];
 
     public function team()

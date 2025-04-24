@@ -12,6 +12,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -503,5 +504,17 @@ class TeamController extends BaseController
             ->where('transaction_type', 'coin')
             ->orderBy('created_at', 'desc')
             ->get();
+    }
+
+    public function getClueZoneTickets($phase_id)
+    {
+        $teams = Team::whereHas('cluezone', function ($query) use ($phase_id) {
+            $query->where('phase_id', $phase_id);
+        })
+        ->with(['cluezone' => function ($query) use ($phase_id) {
+            $query->where('phase_id', $phase_id);
+        }])
+        ->get();
+        return $teams; 
     }
 }

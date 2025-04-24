@@ -444,10 +444,16 @@
                 <h1 class="text-2xl md:text-4xl font-bold text-[#415943] -translate-y-6">
                     Komoditas
                 </h1>
+
+                @php
+                    $currentPhase = Cache::get('current_phase');
+                    $clueZone = collect($team->cluezone)->firstWhere('phase_id', $currentPhase->id);
+                    $availableTickets = $clueZone ? ($clueZone->quantity - $clueZone->claimed_tickets) : 0;
+                @endphp
                 <h1 id="ticket-quantity" class="absolute top-5 right-7 font-bold z-[1111] flex items-center 
                 text-white pl-1 pr-2 bg-[var(--cap-green5)] rounded-2xl border-2 border-[var(--cap-green4)]">
                     <img class="w-[35px] mr-1" src="{{ asset('assets/ClueZoneTicket.png')}}" alt="">
-                    {{ $clueZoneTicket[0]->quantity}}
+                    {{ $availableTickets }}
                 </h1>
                 
                 <div id="scrollable-content"

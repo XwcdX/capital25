@@ -21,6 +21,7 @@ use Illuminate\Auth\Events\Registered;
 use App\Http\Controllers\BaseController;
 use App\Models\Phase;
 use App\Models\Answer;
+use App\Models\ClueZone;
 use App\Models\Question;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
@@ -33,12 +34,13 @@ class AdminController extends BaseController
 {
     use HttpResponse;
 
-    protected $teamController, $commodityController;
+    protected $teamController, $commodityController, $cluezoneController;
     public function __construct(Admin $model)
     {
         parent::__construct($model);
         $this->teamController = new TeamController(new Team());
         $this->commodityController = new CommodityController(new Commodity());
+        $this->cluezoneController = new ClueZoneController(new ClueZone());
     }
 
     public function dashboard(Request $request)
@@ -517,5 +519,42 @@ class AdminController extends BaseController
         $title = "Quiz Results";
 
         return view('admin.quiz.results', compact('results', 'title'));
+    }
+
+    // cluezone
+    function viewClueZone()
+    {
+        $currentPhase = Cache::get("current_phase");
+        $teams = $this->teamController->getClueZoneTickets($currentPhase->id);
+        $title = 'Clue Zone';
+
+        return view('admin.rally.cluezone', compact('teams', 'title'));
+    }
+
+    function claimClueZoneTicket(Request $r)
+    {
+        $currentPhase = Cache::get("current_phase", "No Phase Set");
+        
+        $validated = $r->validate([
+            'team_id' => 'required|uuid',
+            'claimed_tickets' => 'required|integer|min:1',
+        ]);
+
+        $clueZone = ClueZone::where('team_id', $validated['team_id'])
+        ->where('phase_id', $currentPhase->id)
+        ->first();
+
+        if (!$clueZone) {
+            return response()->json(['error' => 'Clue zone not found for the specified team and phase.'], 404);
+        }
+        
+        $availableTickets = $clueZone->quantity - $clueZone->claimed_tickets;
+        if ($validated['claimed_tickets'] > $availableTickets) {
+            return response()->json(['error' => 'Clue zone ticket not found for the specified team and phase.'], 404);
+        }
+        $clueZone->claimed_tickets += $validated['claimed_tickets'];
+        $clueZone->save();
+
+        return response()->json(['message' => 'Ticket claimed successfully'], 200);
     }
 }
