@@ -525,7 +525,7 @@ class AdminController extends BaseController
     function viewClueZone()
     {
         $currentPhase = Cache::get("current_phase");
-        $teams = $this->teamController->getClueZoneTickets($currentPhase->id);
+        $teams = $currentPhase ? $this->teamController->getClueZoneTickets($currentPhase->id) : collect();
         $title = 'Clue Zone';
 
         return view('admin.rally.cluezone', compact('teams', 'title'));
