@@ -276,11 +276,13 @@
                 <span class="text-base md:text-2xl">{{ $team->coin }}</span>
             </button>
         </div>
-        <button class="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--cap-green3)] bg-opacity-0 rounded-full border border-black"
+        <button
+            class="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--cap-green3)] bg-opacity-0 rounded-full border border-black"
             onclick="openMapModal(); document.getElementById('nav-toggle').checked = false;">
             <img class="w-[75%] " src="{{ asset('assets/treasure-map.png') }}" alt="">
         </button>
-        <button class="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--cap-green2)] bg-opacity-0 rounded-full border border-black"
+        <button
+            class="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--cap-green2)] bg-opacity-0 rounded-full border border-black"
             onclick="openCluezoneModal(); document.getElementById('nav-toggle').checked = false;">
             <img class="w-[75%] " src="{{ asset('assets/Icon pos map/clue zone.png') }}" alt="">
         </button>
@@ -651,6 +653,9 @@
             if (!localStorage.getItem("currentPhaseId")) {
                 localStorage.setItem("currentPhaseId", "{{ $currentPhase ? $currentPhase->id : 0 }}");
             }
+            if (!localStorage.getItem("currentPhase")) {
+                localStorage.setItem("currentPhase", "{{ $currentPhase ? $currentPhase->phase : 0 }}");
+            }
             if (!localStorage.getItem("hasReducedReturnRates")) {
                 localStorage.setItem("hasReducedReturnRates", "false");
             }
@@ -668,6 +673,7 @@
                         }
                     });
                     localStorage.setItem("currentPhaseId", event.phase_id);
+                    localStorage.setItem("currentPhase", event.phase);
                     localStorage.setItem("hasReducedReturnRates", "false");
                 });
         });
@@ -712,7 +718,14 @@
                     }
                 });
             }
-            
+
+            if (timeLeft <= 0 && localStorage.getItem('currentPhase') === "4") {
+                if (!localStorage.getItem('coinsConverted')) {
+                    localStorage.setItem('coinsConverted', 'true');
+                    window.location.href = '{{ route('convertAllCoins') }}';
+                }
+            }
+
             if (timeLeft <= 0) {
                 document.getElementById("timer").textContent = "Time's up!";
                 return;

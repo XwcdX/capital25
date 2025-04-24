@@ -488,6 +488,28 @@ class TeamController extends BaseController
         return $this->success("Converted {$amt} coin(s) to green points for Team {$team->name}");
     }
 
+    public function convertAllCoins(Request $request)
+    {
+        try {
+            DB::transaction(function () {
+                DB::statement("
+                UPDATE teams
+                SET
+                  green_points = green_points + coin,
+                  coin       = 0,
+                  updated_at  = NOW()
+                WHERE coin > 0
+            ");
+            });
+
+            return redirect()->route('rally.home')->with('success', 'All team coins have been converted into greenpoints.');
+        } catch (\Exception $e) {
+            Log::error('Error converting coins', ['error' => $e->getMessage()]);
+            return redirect()->route('rally.home')->with('error', 'Failed to convert coins: ' . $e->getMessage());
+        }
+    }
+
+
     public function getGreenpointTransactions()
     {
         $team = Auth::user();
@@ -511,10 +533,12 @@ class TeamController extends BaseController
         $teams = Team::whereHas('cluezone', function ($query) use ($phase_id) {
             $query->where('phase_id', $phase_id);
         })
-        ->with(['cluezone' => function ($query) use ($phase_id) {
-            $query->where('phase_id', $phase_id);
-        }])
-        ->get();
-        return $teams; 
+            ->with([
+                'cluezone' => function ($query) use ($phase_id) {
+                    $query->where('phase_id', $phase_id);
+                }
+            ])
+            ->get();
+        return $teams;
     }
 }
