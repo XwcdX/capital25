@@ -545,16 +545,16 @@ class AdminController extends BaseController
         ->first();
 
         if (!$clueZone) {
-            return response()->json(['error' => 'Clue zone not found for the specified team and phase.'], 404);
+            return response()->json(['status' => 'error' ,'message' => 'Clue zone not found for the specified team and phase.'], 404);
         }
         
         $availableTickets = $clueZone->quantity - $clueZone->claimed_tickets;
         if ($validated['claimed_tickets'] > $availableTickets) {
-            return response()->json(['error' => 'Clue zone ticket not found for the specified team and phase.'], 404);
+            return response()->json(['status' => 'error', 'message' => 'Clue zone ticket not found for the specified team and phase.'], 404);
         }
         $clueZone->claimed_tickets += $validated['claimed_tickets'];
         $clueZone->save();
 
-        return response()->json(['message' => 'Ticket claimed successfully'], 200);
+        return response()->json(['status' => 'success' ,'message' => 'Ticket claimed successfully'], 200);
     }
 }
