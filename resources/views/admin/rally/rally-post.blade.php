@@ -576,6 +576,11 @@
                         qrCodeImage.src = `data:image/svg+xml;base64,${btoa(data)}`;
                         qrCodeContainer.classList.remove("hidden");
                         loadingSpinner.classList.add("hidden");
+
+                        let currentDiv = document.getElementById(`current-qr-${rallyId}`);
+                        if (currentDiv) {
+                            currentDiv.innerHTML = data;
+                        }
                     })
                     .catch(error => {
                         console.error("Error fetching QR code:", error);
@@ -599,7 +604,6 @@
                         confirmButtonText: "OK"
                     });
                 }
-
                 const qrDiv = document.getElementById(`current-qr-${rallyId}`);
                 if (!qrDiv) {
                     return Swal.fire({
@@ -609,10 +613,21 @@
                         confirmButtonText: "OK"
                     });
                 }
+
+                const svgElem = qrDiv.querySelector('svg');
+                if (!svgElem) {
+                    return Swal.fire({
+                        title: "No QR Code",
+                        text: "There is no current QR code for this rally.",
+                        icon: "info",
+                        confirmButtonText: "OK"
+                    });
+                }
+                const svgMarkup = new XMLSerializer().serializeToString(svgElem);
                 qrCodeModal.classList.remove("hidden");
                 loadingSpinner.classList.add("hidden");
                 qrCodeContainer.classList.remove("hidden");
-                qrCodeContainer.innerHTML = qrDiv.innerHTML;
+                qrCodeImage.src = `data:image/svg+xml;base64,${btoa(svgMarkup)}`;
             });
 
             const closeModal = () => qrCodeModal.classList.add("hidden");
