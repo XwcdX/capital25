@@ -117,7 +117,7 @@
     <div id="mapModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-[1002]" onclick="closeModal('mapModal')">
         <div class="bg-white w-[90%] max-w-[850px]  max-h-[700px] rounded-lg shadow-xl md:p-4 text-center relative"  onclick="event.stopPropagation();">
             <h2 class="text-2xl md:text-3xl font-bold font-['Oxanium'] mt-2 text-cap-green" id="phaseTitle">
-                Fase {{ $currentPhase ? $currentPhase->phase : 'not started yet' }}
+                Phase {{ $currentPhase ? $currentPhase->phase : 'not started yet' }}
             </h2>
 
             <div id="mapCarousel">
@@ -230,7 +230,7 @@
             slides[currentPhaseIndex].classList.remove("hidden");
             slides[currentPhaseIndex].classList.add("block");
 
-            phaseTitle.innerText = "Fase " + (currentPhaseIndex + 1);
+            phaseTitle.innerText = "Phase " + (currentPhaseIndex + 1);
 
             updateButtons();
         }
