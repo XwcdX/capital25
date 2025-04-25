@@ -11,6 +11,7 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RallyController;
 use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminCommodityViewController;
 
 Route::get('/', [TeamController::class, 'home'])->name('home');
 Route::get('/login', [TeamController::class, 'login'])->name('login');
@@ -106,3 +107,6 @@ Route::get('/reset-password/{role}/{token}', [PasswordResetTokenController::clas
 Route::post('/reset-password', [PasswordResetTokenController::class, 'resetPasswordPost'])->name('reset.password.post');
 
 Route::get('/storage/{path?}', [StorageController::class, 'getImage'])->where('path', '.*');
+
+//buat komoditas admin, belum pindah ke admin onlu
+Route::get('/adminCommodities', [AdminCommodityViewController::class, 'index'])->name('admin.AdminCommodity.adminCommodityView');
