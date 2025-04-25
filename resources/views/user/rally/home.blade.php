@@ -739,7 +739,6 @@
 
             if (timeLeft <= 60 * 60 * 1000 && hasReduced == 0) {
                 // localStorage.setItem("hasReducedReturnRates", "true");
-                console.log('test');
                 let urlTemplate = "{{ route('commodities.reduceReturnRates', ['phase' => ':phase']) }}";
                 let url = urlTemplate.replace(':phase', localStorage.getItem('currentPhaseId'));
 

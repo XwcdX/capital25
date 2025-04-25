@@ -30,7 +30,7 @@
             display: flex;
             /* flex-wrap: wrap; */
             flex-direction: row;
-            width: 90%;
+            width: 100%;
             min-height: 500px;
             max-width: 1180px;
             justify-content: space-between;
@@ -51,7 +51,7 @@
             /* width: 65%; */
             min-height: 350px;
             color: white;
-            font-size: 18px;
+            font-size: 16px;
             /* margin-bottom: 1rem; */
         }
 
@@ -265,7 +265,7 @@
             }
 
             .options p {
-                font-size: 14px;
+                font-size: 12px;
                 padding: 6px;
             }
 
@@ -366,6 +366,21 @@
     </script>
 
     <script>
+        document.addEventListener('visibilitychange', function () {
+            if (document.visibilityState === 'hidden') {
+                navigator.sendBeacon('/log', analyticsData);
+            }
+
+            if (document.visibilityState === 'visible') {
+                Swal.fire({
+                    title: 'Warning!',
+                    text: 'Are you trying to cheat by switching tabs?',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+
         let currentQuestion = 0;
         let questions = @json($questions);
         let answers = @json($answers);

@@ -248,6 +248,10 @@ class AdminController extends BaseController
     public function viewPhaseControl()
     {
         $currentPhase = Cache::get("current_phase", "No Phase Set");
+        if (!Cache::has('phase_resumed')) {
+            Cache::forever('phase_resumed', false);
+        }
+        
         $allPhases = Phase::all();
         $title = 'Phase Control';
         return view('admin.rally.phase', compact('currentPhase', 'allPhases', 'title'));
@@ -325,6 +329,10 @@ class AdminController extends BaseController
         $validated = $request->validate([
             'end_time' => 'required|date_format:H:i:s',
         ]);
+
+        if ($request->minutes < 0) {
+            Cache::put('phase_resumed', true);
+        }
 
         $currentPhase = Cache::get('current_phase', 'No Phase Set');
 
