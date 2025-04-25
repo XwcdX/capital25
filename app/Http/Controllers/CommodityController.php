@@ -237,6 +237,11 @@ class CommodityController extends BaseController
                         WHERE phase_id = :phaseId
                         AND return_rate IN (0.10, 0.075, 0.05)
                     ", ['phaseId' => $phaseId]);
+
+                    $currentPhase->hasReduced = 1;
+                    $currentPhase->save();
+
+                    Cache::forever('current_phase', $currentPhase);
         
                     DB::commit();
                     return response()->json(['success' => true, 'message' => 'Return rates are changing!']);
