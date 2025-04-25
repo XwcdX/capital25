@@ -1,47 +1,56 @@
 @extends('user.layout')
 
+@section('style')
+<style>
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        font-family: 'oxanium'
+    }
+
+    .gambar {
+        height: 10rem;
+        width: 10rem;
+    }
+
+    .containerMain {
+        max-width: 75rem;
+        padding-left: 4rem;
+        padding-right: 4rem;
+        padding-bottom: 2rem;
+        z-index: 1;
+    }
+
+    .bgfullScreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        object-fit: cover;
+        z-index: -1;
+    }
+    .text-outline {
+        color: #ffffff; 
+        font-weight: bold;
+        text-shadow: 2px 2px 4px #000000, -2px -2px 4px #000000, 2px -2px 4px #000000, -2px 2px 4px #000000; 
+    }
+</style>
+@endsection
+
 @section('content')
-
-    <style>
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            font-family: 'oxanium'
-        }
-
-        .gambar {
-            height: 10rem;
-            width: 10rem;
-        }
-
-        .containerMain {
-            max-width: 75rem;
-            padding-left: 4rem;
-            padding-right: 4rem;
-            padding-bottom: 2rem;
-            z-index: 1;
-        }
-
-        .bgfullScreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            object-fit: cover;
-            z-index: -1;
-        }
-    </style>
-
-    <body class="relative">
-        <!-- Background image (covers entire screen) -->
+    <div class="w-screen h-screen flex flex-col items-center justify-center">
         <img class="bgfullScreen" src="{{ asset('assets/login.png') }}" alt="Background">
+
+        {{-- TIMERRR --}}
+        <div id="timer" class="text-white font-semibold text-5xl justify-center items-center text-center text-outline"></div>
 
         <!-- Main content -->
         <div
-            class="containerMain bg-blue-950 bg-opacity-70 text-white rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-auto  mt-10">
+            class="containerMain bg-blue-950 bg-opacity-70 text-white rounded-xl w-full h-auto font-quicksand">
+             <!-- Background image (covers entire screen) -->
             @if ($currentPhase)
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
                     @foreach ($commodities as $commodity)
@@ -85,13 +94,7 @@
                 <p>Tidak ada fase yang aktif saat ini.</p>
             @endif
         </div>
-
-        {{-- TIMERRR --}}
-        <div id="timer"
-            class="text-white font-semibold text-5xl justify-center items-center mx-[40rem] mt-[5.5rem] mr-10">
-
-        </div>
-    </body>
+    </div>
 
 @endsection
 
