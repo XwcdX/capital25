@@ -26,7 +26,7 @@ class Rally extends Model
     public function teams()
     {
         return $this->belongsToMany(Team::class, 'rally_histories')
-                    ->withPivot('phase_id', 'qr_expired_at', 'scanned_at')
+                    ->withPivot('phase_id', 'qr_expired_at', 'scanned_at', 'qr')
                     ->withTimestamps();
     }
 }
