@@ -267,12 +267,12 @@
         <div class="flex space-x-2">
             <button onclick="openModal('greenpointModal');"
                 class="hover:bg-slate-400 hover:cursor-pointer bg-white text-[#3e5c49] rounded-full w-[7rem] md:w-[10rem] space-x-1 flex items-center justify-center py-1.5">
-                <span class="text-lg md:text-xl">🍃</span>
+                <img class="w-6 h-6 lg:w-7 lg:h-7 mr-1  object-contain" src="{{ asset('assets/lifecycleHPDummy/green-point.png') }}" />
                 <span class="text-base md:text-2xl">{{ $team->green_points }}</span>
             </button>
             <button onclick="openModal('coinModal');"
                 class="hover:bg-slate-400 hover:cursor-pointer bg-white text-[#3e5c49] rounded-full w-[7rem] md:w-[10rem] space-x-1 flex items-center justify-center py-1.5">
-                <span class="text-lg md:text-xl">💰</span>
+                <img class="w-6 h-6 lg:w-7 lg:h-7 mr-1 mb-[1.5%] object-contain" src="{{ asset('assets/lifecycleHPDummy/coin.png') }}" />
                 <span class="text-base md:text-2xl">{{ $team->coin }}</span>
             </button>
         </div>
@@ -308,22 +308,22 @@
         onclick="closeModalOnOverlay(event, 'greenpointModal')">
         <div class="modal-content bg-white rounded-[2.5vw] w-[90%] sm:w-[55rem] h-[40%] sm:h-[27rem] max-h-[90vh] flex flex-col items-center pt-[2.3rem] px-[5rem] pb-[3.5rem]"
             onclick="event.stopPropagation();">
-            <div class="flex flex-row mb-3.5">
-                <span class="text-xl mr-2">🍃</span>
+            <div class="flex flex-row items-center mb-3.5">
+                <img class="w-10 h-10 mr-2  object-contain" src="{{ asset('assets/lifecycleHPDummy/green-point.png') }}" />
                 <span class="text-3xl text-[#3e5c49] font-oxanium">{{ $team->green_points }}</span>
             </div>
 
             {{-- <button id="mascotTest" onclick = "showMascotError('TransactionPeriod_over')">Test</button> --}} {{-- buat tes swal --}}
 
             <div
-                class="h-[90%] sm:h[20rem] w-full sm:w-[48rem] rounded-l-[2vw] rounded-r-[1.5vw] bg-[#3e5c49] font-quicksand pr-[10px] mx-[10rem] flex flex-col">
+                class="h-[90%] sm:h[20rem] w-full sm:w-[48rem] rounded-l-[2vw] rounded-r-[1.5vw] bg-[#3e5c49] font-quicksand pr-[10px] mx-[10rem] flex flex-col mb-5">
                 <div class="custom-scrollbar overflow-y-scroll pr-3 mt-5 sm:mt-1 flex-1">
                     <div class="sm:mt-0">
                         <h1
                             class="text-white font-bold justify-center text-center mt-0 sm:mt-[1rem] pl-9 ml-9 mr-auto pr-auto text-lg sm:text-2xl font-oxanium ">
                             Riwayat
                             Transaksi</h1>
-                        <div class="mt-4 pb-10 overflow-x-hidden w-full">
+                        <div class="mt-4 pb-10 overflow-x-hidden w-full lg:ml-[3%] ml-[10%]">
 
                             {{-- TEST SCROLL  --}}
                             {{-- <div class="flex justify-between items-center text-white font-semibold text-2xl ml-5 mr-5 mb-5 w-full">
@@ -441,19 +441,18 @@
                                             ? '-' . $transaction->amount
                                             : '+' . $transaction->amount;
                                 @endphp
-                                <div
-                                    class="flex justify-between items-center text-white font-semibold text-2xl ml-5 mr-5 mb-5 w-full">
-                                    <div class="flex flex-row w-[95%] text-lg">
-                                        <div class="flex flex-col items-center justify-center text-center">
-                                            <span>{{ $date }}</span>
-                                            <span>{{ $time }}</span>
+
+                                <div class="bg-[#4d6e5a] rounded-xl p-3 text-white text-sm sm:text-base">
+                                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                                        <div class="text-center sm:text-left lg:max-w-[25%] lg:max-h-[35%]  ">
+                                            <div>{{ $date }}</div>
+                                            <div class="text-xs">{{ $time }}</div>
                                         </div>
-                                        <div
-                                            class="flex-1 flex items-center justify-center text-center text-xl {{ $transaction->action === 'debit' ? 'text-[#e80909]' : 'text-green-500' }}">
-                                            <span>{{ $amountDisplay }}</span>
+                                        <div class="flex-1 flex items-center lg:ml-[30%] justify-center text-center text-xl lg:max-w-[25%] lg:max-h-[35%] {{ $transaction->action === 'debit' ? 'text-[#e80909]' : 'text-green-500' }}">
+                                            {{ $amountDisplay }}
                                         </div>
-                                        <div class="flex-1 text-center ">
-                                            <span>{{ $transaction->description }}</span>
+                                        <div class="text-center sm:text-left text-xs sm:text-sm lg:max-w-[15%] lg:max-h-[35%] max-w-[40%] ml-[30%]">
+                                            {{ $transaction->description }}
                                         </div>
                                     </div>
                                 </div>
@@ -472,8 +471,8 @@
         onclick="closeModalOnOverlay(event, 'coinModal')">
         <div class="modal-content bg-white rounded-[2.5vw] w-[90%] sm:w-[55rem] h-[40%] sm:h-[27rem] max-h-[90vh] flex flex-col items-center pt-[2.3rem] px-[5rem] pb-[3.5rem]"
             onclick="event.stopPropagation();">
-            <div class="flex flex-row mb-3.5">
-                <span class="text-xl mr-2">💰</span>
+            <div class="flex flex-row items-center mb-3.5">
+                <img class="w-10 h-10 mr-2  object-contain" src="{{ asset('assets/lifecycleHPDummy/coin.png') }}" />
                 <span class="text-3xl text-[#3e5c49] font-oxanium">{{ $team->coin }}</span>
             </div>
 
@@ -488,7 +487,7 @@
                         {{-- <div class="wrapper w-full">    --}}
                         {{-- kalau konten panjang jadi double scrollbar ^ --}}
 
-                        <div class="mt-4 pb-10 pr-3 w-full">
+                        <div class="mt-4 pb-10 pr-3 w-full lg:ml-[3%] ml-[10%]">
                             @foreach ($transactionsCoin as $transaction)
                                 @php
                                     $date = \Carbon\Carbon::parse($transaction->created_at)->format('d/m/Y');
@@ -498,22 +497,25 @@
                                             ? '-' . $transaction->amount
                                             : '+' . $transaction->amount;
                                 @endphp
-                                <div
-                                    class="flex justify-between items-center text-white font-semibold text-2xl ml-5 mr-5 mb-5 w-full">
-                                    <div class="flex flex-row w-[95%] text-lg">
-                                        <div class="flex flex-col items-center justify-center text-center">
-                                            <span>{{ $date }}</span>
-                                            <span>{{ $time }}</span>
+
+                           
+
+                                <div class="bg-[#4d6e5a] rounded-xl p-3 text-white text-sm sm:text-base">
+                                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                                        <div class="text-center sm:text-left lg:max-w-[25%] lg:max-h-[35%]  ">
+                                            <div>{{ $date }}</div>
+                                            <div class="text-xs">{{ $time }}</div>
                                         </div>
-                                        <div
-                                            class="flex-1 flex items-center justify-center font-oxanium text-center text-xl {{ $transaction->action === 'debit' ? 'text-[#e80909]' : 'text-green-500' }}">
-                                            <span>{{ $amountDisplay }}</span>
+                                        <div class="flex-1 flex items-center lg:ml-[30%] justify-center text-center text-xl lg:max-w-[25%] lg:max-h-[35%] {{ $transaction->action === 'debit' ? 'text-[#e80909]' : 'text-green-500' }}">
+                                            {{ $amountDisplay }}
                                         </div>
-                                        <div class="flex-1 text-center">
-                                            <span>{{ $transaction->description }}</span>
+                                        <div class="text-center sm:text-left text-xs sm:text-sm lg:max-w-[15%] lg:max-h-[35%] max-w-[40%] ml-[30%]">
+                                            {{ $transaction->description }}
                                         </div>
                                     </div>
                                 </div>
+
+                                
                                 <hr class="border-t border-gray-400 my-2 w-full">
                             @endforeach
                         </div>

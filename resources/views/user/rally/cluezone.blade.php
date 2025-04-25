@@ -118,6 +118,8 @@
                             </div>
                         </div>
 
+                        
+
                     
                     @endforeach
 
@@ -162,4 +164,6 @@
             document.getElementById(id).classList.add('hidden');
         }
     })();
+
+    
 </script>
