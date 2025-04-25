@@ -169,10 +169,10 @@ class QnASeeder extends Seeder
                 ],
             ],
             [
-                'question' => `<i>Green manufacturing</i> adalah penciptaan produk dengan cara yang mengurangi jejak karbon keseluruhan dari proses manufaktur. Manufaktur hijau meminimalkan dampak negatif terhadap lingkungan sekaligus menghemat energi dan sumber daya alam. Berdasarkan pilihan di bawah ini, manakah yang tidak mencerminkan prinsip <i>green manufacturing</i>?<br>1) Tesla mengembangkan kendaraan listrik dan mengoperasikan Gigafactory yang didukung oleh energi matahari.<br>
+                'question' => '<i>Green manufacturing</i> adalah penciptaan produk dengan cara yang mengurangi jejak karbon keseluruhan dari proses manufaktur. Manufaktur hijau meminimalkan dampak negatif terhadap lingkungan sekaligus menghemat energi dan sumber daya alam. Berdasarkan pilihan di bawah ini, manakah yang tidak mencerminkan prinsip <i>green manufacturing</i>?<br>1) Tesla mengembangkan kendaraan listrik dan mengoperasikan Gigafactory yang didukung oleh energi matahari.<br>
                 Amazon memiliki pusat data Amazon Web Services (AWS) yang mengonsumsi energi dalam jumlah besar.<br>
                 Samsung berkomitmen mengalihkan semua limbah yang dihasilkan oleh fasilitas manufaktur dari tempat pembuangan sampah.<br>
-                Nestlé menargetkan kemasannya 100% <i>recyclable</i> atau <i>reusable</i> pada tahun 2025.<br>`,
+                Nestlé menargetkan kemasannya 100% <i>recyclable</i> atau <i>reusable</i> pada tahun 2025.<br>',
                 'answers' => [
                     'Hanya 1',
                     'Hanya 2',
