@@ -100,7 +100,22 @@
 
 @section('script')
     <script>
-        document.addEventListener('DOMContentLoaded', updateCountdown);
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCountdown()
+            Echo.channel("phase-updates")
+                .listen(".PhaseUpdated", (event) => {
+                    Swal.fire({
+                        title: 'New Phase Started!',
+                        text: `Phase ${event.phase} is now started!`,
+                        icon: 'info',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
+                });
+        });
 
         // Directly use the time string from your DB
         const endTimeString = "{{ $currentPhase ? $currentPhase->end_time : '17:00:00' }}";
