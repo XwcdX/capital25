@@ -236,7 +236,7 @@ class CommodityController extends BaseController
                         END
                         WHERE phase_id = :phaseId
                         AND return_rate IN (0.10, 0.075, 0.05)
-                    ", ['phaseId' => $phaseId]);
+                    ", ['phaseId' => $currentPhase->id]);
 
                     $currentPhase->hasReduced = 1;
                     $currentPhase->save();

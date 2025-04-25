@@ -676,6 +676,9 @@
                     localStorage.setItem("currentPhase", event.phase);
                     localStorage.setItem("hasReducedReturnRates", "false");
                 });
+
+        updateCountdown();
+
         });
 
         function openModal(id) {
@@ -734,6 +737,7 @@
 
             if (timeLeft <= 60 * 60 * 1000 && hasReduced == 0) {
                 // localStorage.setItem("hasReducedReturnRates", "true");
+                console.log('test');
                 let urlTemplate = "{{ route('commodities.reduceReturnRates', ['phase' => ':phase']) }}";
                 let url = urlTemplate.replace(':phase', localStorage.getItem('currentPhaseId'));
 
@@ -756,6 +760,8 @@
                                 text: json.message,
                                 icon: 'info',
                                 confirmButtonText: 'OK'
+                            }).then(() => {
+                                window.location.reload();
                             });
                         }
                     })
