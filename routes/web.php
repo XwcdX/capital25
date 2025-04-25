@@ -71,7 +71,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('export-teams', [TeamController::class, 'exportValidatedTeam'])->name('export.validated.team');
 
         //Rally
-        Route::get('/adminCommodities', [AdminController::class, 'viewCountdown'])->name('admin.AdminCommodity.adminCommodityView');
+        Route::get('/adminCommodities', [AdminController::class, 'viewCountdown'])->name('AdminCommodity.adminCommodityView');
         Route::get('/rallyPost', [RallyController::class, 'viewRallyPost'])->name('viewRallyPost');
         Route::get('/generateQR/{rallyId}', [RallyController::class, 'generateRallyQRCode'])->name('generateQR');
         Route::delete('/rallyPost/{teamId}/{rallyId}', [RallyController::class, 'deleteTeamRally'])->name('deleteTeamRally');
