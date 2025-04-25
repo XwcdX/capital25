@@ -115,7 +115,7 @@
         });
 
         // Directly use the time string from your DB
-        const endTimeString = "{{ $currentPhase ? $currentPhase->end_time : '17:00:00' }}";
+        const endTimeString = "{{ $currentPhase ? $currentPhase->end_time : '00:00:00' }}";
 
         // Parse "HH:mm:ss"
         const [endHours, endMinutes, endSeconds] = endTimeString
@@ -149,6 +149,11 @@
             const returnRateEls = document.querySelectorAll(".returnrate");
             const priceItemEls = document.querySelectorAll(".priceItem");
 
+            if (!endTimeString || endTimeString === '00:00:00') {
+                timerEl.textContent = "Phase not started yet";
+                return;
+            }
+
             if (timeLeft <= 0) {
                 timerEl.textContent = "Time's up!";
                 return;
@@ -159,7 +164,7 @@
                 const totalMinutes = Math.floor(timeLeft / (1000 * 60));
                 const displayMinutes = totalMinutes - 60;
                 const seconds = Math.floor((timeLeft / 1000) % 60);
-                timerEl.textContent = `${displayMinutes}m ${seconds}s`;
+                timerEl.textContent = `${displayMinutes}:${seconds}`;
 
                 returnRateEls.forEach(el => el.classList.add('hidden'));
                 priceItemEls.forEach(el => el.classList.remove('hidden'));
@@ -167,7 +172,7 @@
                 // 60 minutes or less
                 const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
                 const seconds = Math.floor((timeLeft / 1000) % 60);
-                timerEl.textContent = `${minutes}m ${seconds}s`;
+                timerEl.textContent = `${minutes}:${seconds}`;
 
                 returnRateEls.forEach(el => el.classList.remove('hidden'));
                 priceItemEls.forEach(el => el.classList.add('hidden'));
@@ -178,3 +183,4 @@
 
         updateCountdown();
     </script>
+@endsection
