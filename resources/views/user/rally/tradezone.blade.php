@@ -742,133 +742,29 @@
         });
 
       // EDIT "checkoutCartButton"
-      document.getElementById("checkoutCartButton").addEventListener("click", function() {
-            let cart = JSON.parse(localStorage.getItem("commodityCart") || "[]");
-            if (cart.length === 0) {
-                    Swal.fire({
-                    title: 'Cart Empty',
-                    html: ' <div class="custom-swal-message"> Your cart is empty. Please add some items before checking out. </div>',
-                    imageUrl: '/assets/swalMascots/sadMascot.png',
-                    imageHeight: 75,
-                    imageWidth: 75,
-                    confirmButtonText: 'OKAY',
-                    customClass: {
-                        title: 'custom-swal-title',
-                        confirmButton: 'custom-swal-confirmBtn',
-                        popup: 'custom-swal-popup1',
-                        text: 'custom-swal-message'
-                    }
-                });
-                return;
-            }
-
-
-            let payloadItems = cart.map(item => ({
-                commodity_id: item.id,
-                quantity: item.quantity
-            }));
-
-            showMascotConfirmation().then((result) => {
-                if (result.isConfirmed) {
-                    let payloadItems = cart.map(item => ({
-                        commodity_id: item.id,
-                        quantity: item.quantity
-                    }));
-
-
-                    fetch("{{ route('buy.multiple.commodities') }}", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                            },
-                            body: JSON.stringify({
-                                items: payloadItems
-                            })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                showMascotSuccess().then(() => {
-                                    localStorage.removeItem("commodityCart");
-                                    window.location.reload();
-                                });
-                            } else {
-                                Swal.fire({
-                                    title: 'Error',
-                                    html: `<div class="custom-swal-message">${data.message}</div>`,
-                                    imageUrl: '/assets/swalMascots/sadMascot.png',
-                                    imageHeight: 75,
-                                    imageWidth: 75,
-                                    confirmButtonText: 'BACK',
-                                    customClass:{
-                                    title: 'custom-swal-title',
-                                    popup: 'custom-swal-popup1',
-                                    confirmButton: 'custom-swal-cancelBtn'
-                                    }
-                            });
-                            }
-                        })
-                        .catch(error => {
-                            Swal.fire({
-                                    title: 'Error',
-                                    html: '<div class="custom-swal-message"> An error occured during checkout. </div>',
-                                    imageUrl: '/assets/swalMascots/sadMascot.png',
-                                    imageHeight: 75,
-                                    imageWidth: 75,
-                                    confirmButtonText: 'BACK',
-                                    customClass:{
-                                    title: 'custom-swal-title',
-                                    popup: 'custom-swal-popup1',
-                                    confirmButton: 'custom-swal-cancelBtn'
-                                    }
-                            });
-
-                        });
-                }
-            });
-
-
-        });
-
-
-	// error ganti ke error mascot? Sad mascot.
-
-
-    // OG CODE
-    // document.getElementById("checkoutCartButton").addEventListener("click", function() {
+    //   document.getElementById("checkoutCartButton").addEventListener("click", function() {
     //         let cart = JSON.parse(localStorage.getItem("commodityCart") || "[]");
     //         if (cart.length === 0) {
-    //             Swal.fire("Cart Empty", "Your cart is empty. Please add some items before checking out.",
-    //                 "info");
+    //                 Swal.fire({
+    //                 title: 'Cart Empty',
+    //                 html: ' <div class="custom-swal-message"> Your cart is empty. Please add some items before checking out. </div>',
+    //                 imageUrl: '/assets/swalMascots/sadMascot.png',
+    //                 imageHeight: 75,
+    //                 imageWidth: 75,
+    //                 confirmButtonText: 'OKAY',
+    //                 customClass: {
+    //                     title: 'custom-swal-title',
+    //                     confirmButton: 'custom-swal-confirmBtn',
+    //                     popup: 'custom-swal-popup1',
+    //                     text: 'custom-swal-message'
+    //                 }
+    //             });
     //             return;
     //         }
 
 
-    //         let payloadItems = cart.map(item => ({
-    //             commodity_id: item.id,
-    //             quantity: item.quantity
-    //         }));
 
-
-    //         Swal.fire({
-    //             title: '',
-    //             html: `
-    //                 <div class="text-lg md:text-xl font-bold text-[#415943]">Are you sure you want to make the purchase?</div>
-    //                 <div class="text-lg md:text-xl font-bold text-[#415943]">Make sure to double-check before proceeding!</div>
-    //             `,
-    //             showCancelButton: true,
-    //             confirmButtonText: "YES",
-    //             cancelButtonText: "NO",
-    //             customClass: {
-    //                 popup: 'custom-swal-popup',
-    //                 confirmButton: 'custom-swal-confirm',
-    //                 cancelButton: 'custom-swal-cancel'
-    //             },
-    //             buttonsStyling: false
-
-
-    //         }).then((result) => {
+    //         showMascotConfirmation().then((result) => {
     //             if (result.isConfirmed) {
     //                 let payloadItems = cart.map(item => ({
     //                     commodity_id: item.id,
@@ -889,36 +785,159 @@
     //                     .then(response => response.json())
     //                     .then(data => {
     //                         if (data.success) {
-    //                             Swal.fire({
-    //                                 title: '',
-    //                                 html: `
-    //                                     <div class="text-lg md:text-xl font-bold text-[#415943]">Great choice!</div>
-    //                                     <div class="text-lg md:text-xl font-bold text-[#415943]">The item has been added to your cart!</div>
-    //                                 `,
-    //                                 showConfirmButton: true,
-    //                                 confirmButtonText: "OKAY",
-    //                                 customClass: {
-    //                                     popup: 'custom-success-popup',
-    //                                     confirmButton: 'custom-success-confirm'
-    //                                 },
-    //                                 buttonsStyling: false
-    //                             }).then(() => {
+    //                             showMascotSuccess().then(() => {
     //                                 localStorage.removeItem("commodityCart");
     //                                 window.location.reload();
     //                             });
     //                         } else {
-    //                             Swal.fire("Error", data.message, "error");
+    //                             Swal.fire({
+    //                                 title: 'Error',
+    //                                 html: `<div class="custom-swal-message">${data.message}</div>`,
+    //                                 imageUrl: '/assets/swalMascots/sadMascot.png',
+    //                                 imageHeight: 75,
+    //                                 imageWidth: 75,
+    //                                 confirmButtonText: 'BACK',
+    //                                 customClass:{
+    //                                 title: 'custom-swal-title',
+    //                                 popup: 'custom-swal-popup1',
+    //                                 confirmButton: 'custom-swal-cancelBtn'
+    //                                 }
+    //                         });
     //                         }
     //                     })
     //                     .catch(error => {
-    //                         Swal.fire("Error", "An error occurred during checkout.",
-    //                             "error");
+    //                         Swal.fire({
+    //                                 title: 'Error',
+    //                                 html: '<div class="custom-swal-message"> An error occured during checkout. </div>',
+    //                                 imageUrl: '/assets/swalMascots/sadMascot.png',
+    //                                 imageHeight: 75,
+    //                                 imageWidth: 75,
+    //                                 confirmButtonText: 'BACK',
+    //                                 customClass:{
+    //                                 title: 'custom-swal-title',
+    //                                 popup: 'custom-swal-popup1',
+    //                                 confirmButton: 'custom-swal-cancelBtn'
+    //                                 }
+    //                         });
+
     //                     });
     //             }
     //         });
 
 
     //     });
+
+
+	// error ganti ke error mascot? Sad mascot.
+
+
+
+    // OG CODE
+    document.getElementById("checkoutCartButton").addEventListener("click", function () {
+    let cart = JSON.parse(localStorage.getItem("commodityCart") || "[]");
+    
+    if (cart.length === 0) {
+        Swal.fire({
+            title: 'Cart Empty',
+            html: '<div class="custom-swal-message">Your cart is empty. Please add some items before checking out.</div>',
+            imageUrl: '/assets/swalMascots/sadMascot.png',
+            imageHeight: 75,
+            imageWidth: 75,
+            confirmButtonText: 'OKAY',
+            customClass: {
+                title: 'custom-swal-title',
+                confirmButton: 'custom-swal-confirmBtn',
+                popup: 'custom-swal-popup1',
+                text: 'custom-swal-message'
+            }
+        });
+        return;
+    }
+
+    Swal.fire({
+        html: '<p class="custom-swal-message">Are you sure you want to make the purchase? Make sure to double-check before proceeding!</p>',
+        imageUrl: 'assets/swalMascots/thinkingMascot.png',
+        imageHeight: 75,
+        imageWidth: 75,
+        showCancelButton: true,
+        confirmButtonText: 'YES',
+        cancelButtonText: 'NO',
+        customClass: {
+            popup: 'custom-swal-popup1',
+            cancelButton: 'custom-swal-cancelBtn',
+            confirmButton: 'custom-swal-confirmBtn'
+        }
+    }).then(result => {
+        if (result.isConfirmed) {
+            let payloadItems = cart.map(item => ({
+                commodity_id: item.id,
+                quantity: item.quantity
+            }));
+
+            fetch("{{ route('buy.multiple.commodities') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({
+                    items: payloadItems
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Great choice!',
+                        html: '<p class="custom-swal-message">The item has been added to your cart!</p>',
+                        imageUrl: 'assets/swalMascots/happyMascot.png',
+                        imageHeight: 75,
+                        imageWidth: 75,
+                        confirmButtonText: 'OKAY',
+                        customClass: {
+                            popup: 'custom-swal-popup1',
+                            confirmButton: 'custom-swal-confirmBtn',
+                            title: 'custom-swal-title'
+                        }
+                    }).then(() => {
+                        localStorage.removeItem("commodityCart");
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        html: `<div class="custom-swal-message">${data.message}</div>`,
+                        imageUrl: '/assets/swalMascots/sadMascot.png',
+                        imageHeight: 75,
+                        imageWidth: 75,
+                        confirmButtonText: 'BACK',
+                        customClass: {
+                            title: 'custom-swal-title',
+                            popup: 'custom-swal-popup1',
+                            confirmButton: 'custom-swal-cancelBtn'
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                Swal.fire({
+                    title: 'Error',
+                    html: '<div class="custom-swal-message">An error occurred during checkout.</div>',
+                    imageUrl: '/assets/swalMascots/sadMascot.png',
+                    imageHeight: 75,
+                    imageWidth: 75,
+                    confirmButtonText: 'BACK',
+                    customClass: {
+                        title: 'custom-swal-title',
+                        popup: 'custom-swal-popup1',
+                        confirmButton: 'custom-swal-cancelBtn'
+                    }
+                });
+            });
+        }
+    });
+});
+
 
 
 
@@ -962,6 +981,7 @@
                     fetch("{{ route('buy.multiple.commodities') }}", {
                             method: "POST",
                             headers: {
+                         
                                 "Content-Type": "application/json",
                                 "X-CSRF-TOKEN": "{{ csrf_token() }}"
                             },
