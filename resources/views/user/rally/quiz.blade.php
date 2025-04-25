@@ -312,7 +312,8 @@
                         <h3 id="question-text">Loading...</h3>
                         <div class="options mt-2 space-y-2" id="options-container"></div>
                         <div class="navigation-buttons">
-                            <button class="finish-btn" id="submit-btn" onclick="finishQuiz()" style="display: none;"></button>
+                            <button class="finish-btn" id="submit-btn" onclick="finishQuiz()"
+                                style="display: none;"></button>
                         </div>
                     </div>
                     <div class="flex justify-between">
@@ -483,7 +484,7 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                     Swal.fire({
+                    Swal.fire({
                         title: "Quiz Submitted!",
                         text: "Your answers have been recorded.",
                         icon: "success",
@@ -517,32 +518,48 @@
 
         function startCountdown(endTime) {
             let timerDisplay = document.getElementById("timer");
+            let timerInterval;
+
+            function disableQuizInteraction() {
+                document.querySelectorAll('input[name="answer"]').forEach(i => i.disabled = true);
+
+                ['next-btn', 'prev-btn', 'submit-btn'].forEach(id => {
+                    const btn = document.getElementById(id);
+                    if (btn) btn.disabled = true;
+                });
+
+                document.querySelectorAll('#question-grid .question-number').forEach(q => {
+                    q.style.pointerEvents = 'none';
+                    q.classList.add('disabled');
+                });
+            }
 
             function updateTimer() {
                 let now = new Date();
                 let remainingTime = Math.max(0, endTime - now); // Ensure non-negative value
-
+                
                 let minutes = Math.floor(remainingTime / (1000 * 60));
                 let seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
-
+                const pad = n => String(n).padStart(2, '0');
                 // Display time
-                timerDisplay.innerHTML = `00:${minutes}:${seconds}`;
+                timerDisplay.innerHTML = `00:${pad(minutes)}:${pad(seconds)}`;
 
                 if (remainingTime <= 0) {
                     clearInterval(timerInterval);
                     timerDisplay.innerHTML = "Time's up!";
+                    disableQuizInteraction();
                     Swal.fire({
-                        text: "Time is up! Submitting quiz...",
+                        text: "Time is up! Submitting quiz…",
                         icon: "warning",
                         confirmButtonText: "OK!"
-                    })
-                    // Auto-submit logic can be added here
-                    finishQuiz(true);
+                    }).then(() => {
+                        finishQuiz(true);
+                    });
                 }
             }
 
             updateTimer(); // Run immediately to prevent 1-second delay
-            let timerInterval = setInterval(updateTimer, 1000);
+            timerInterval = setInterval(updateTimer, 1000);
         }
         window.onload = () => {
             loadQuestion();
@@ -552,6 +569,11 @@
 
         // langsung ke hlm quiz tanpa melalui quizRules jika sudah pernah klik start sebelumnya 
         document.addEventListener("DOMContentLoaded", function() {
+            const saved = localStorage.getItem('quizEndTime');
+            if (saved) {
+                document.getElementById('quiz-rules').classList.add('hidden');
+                startCountdown(new Date(saved));
+            }
             // if (localStorage.getItem("quizStarted")) {
             //     document.getElementById('quiz-rules').classList.add('hidden');
             // } else {
@@ -570,7 +592,7 @@
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('quiz-rules').classList.add('hidden');
-
+                    localStorage.setItem('quizEndTime', data.quiz_end_time);
                     let quizEndTime = new Date(data.quiz_end_time);
                     startCountdown(quizEndTime);
                 })
