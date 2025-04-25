@@ -23,6 +23,7 @@ use App\Models\Phase;
 use App\Models\Answer;
 use App\Models\ClueZone;
 use App\Models\Question;
+use GrahamCampbell\ResultType\Success;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -317,6 +318,26 @@ class AdminController extends BaseController
         } catch (Exception $e) {
             return back()->with('error', 'Failed to update phase: ' . $e->getMessage());
         }
+    }
+
+    public function spedUpPhase(Request $request)
+    {
+        $validated = $request->validate([
+            'end_time' => 'required|date_format:H:i:s',
+        ]);
+
+        $currentPhase = Cache::get('current_phase', 'No Phase Set');
+        
+        if ($currentPhase === "No Phase Set"){
+            return $this->error('No Phase has been set yet.');
+        }
+
+        $currentPhase->end_time = $validated['end_time'];
+        $currentPhase->save();
+
+        Cache::forever("current_phase", $currentPhase);
+
+        return $this->success('Phase time updated!');
     }
 
     // quiz
