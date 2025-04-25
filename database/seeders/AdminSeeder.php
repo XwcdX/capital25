@@ -48,7 +48,8 @@ class AdminSeeder extends Seeder
             // ['email' => 'd11230275@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Jessica Renata', 'division_id' => Division::whereSlug('acara')->first()->id],
             // ['email' => 'd11230197@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Alyssa Channiago', 'division_id' => Division::whereSlug('acara')->first()->id],
             // ['email' => 'd11240074@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Clarissa', 'division_id' => Division::whereSlug('acara')->first()->id],
-            ['email' => 'c14230088@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Kevin Tanaka', 'division_id' => Division::whereSlug('it')->first()->id],
+            // ['email' => 'c14230088@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Kevin Tanaka', 'division_id' => Division::whereSlug('it')->first()->id],
+            ['email' => 'd14240009@john.petra.ac.id', 'password' => Hash::make('password'), 'name' => 'Jason', 'division_id' => Division::whereSlug('transkapman')->first()->id],
         ];
         foreach ($admins as $admin) {
             Admin::create($admin);
