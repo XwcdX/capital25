@@ -22,7 +22,7 @@
     <h2 class="text-6xl font-bold text-white text-center">
         Clue Zone
     </h2>
-    <div id="cluezone-content" class="relative bg-[#ece7e3] rounded-2xl p-6 pt-14 max-w-3xl w-full shadow-lg mt-4"
+    <div id="cluezone-content" class="relative bg-[#ece7e3] rounded-2xl p-6 md:w-[60%] pt-14  shadow-lg mt-4 "
         onclick="event.stopPropagation()">
 
         <button id="cluezone-history-btn"
@@ -32,10 +32,10 @@
         </button>
 
         <div class="flex flex-col md:flex-row items-center gap-6">
-            <div class="text-center">
+            <div class="text-center mx-auto">
                 <img src="{{ asset('assets/ClueZoneTicket.png') }}" alt="Ticket Clue Zone"
-                    class="w-64 h-auto object-cover rounded-lg shadow-md mx-auto" />
-                <p class="font-bold text-2xl text-[#415943] mt-3">
+                    class="w-64 lg:ml-[40%] h-auto object-cover rounded-lg shadow-md mx-auto" />
+                <p class="font-bold text-2xl text-[#415943] mt-3 lg:ml-[75%] ">
                     ${{ number_format($ticketPrice, 0, ',', '.') }}
                 </p>
             </div>
@@ -69,32 +69,32 @@
 </div>
 
 <div id="cluezone-history-modal"
-    class="hidden z-[1002] fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+    class="hidden z-[1002] fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center px-2"
     onclick="closeModalOnOverlay(event,'cluezone-history-modal')">
 
     <div class="modal-content
               bg-white rounded-[2.5vw]
-              w-[90%] sm:w-[55rem]
+              w-[95%] lg:w-[55rem]
               h-auto max-h-[90vh]
               flex flex-col items-center
-              pt-[2.3rem] pb-[2rem]"
+              pt-6 pb-6 sm:pt-[2.3rem] sm:pb-[2rem]"
         onclick="event.stopPropagation();">
 
         <div
-            class="h-[50vh] sm:h-[18rem]
+            class="h-[60vh] sm:h-[18rem]
                 w-full sm:w-[40rem]
                 overflow-y-auto
                 rounded-l-[2vw] rounded-r-[1.5vw]
                 bg-[#3e5c49]
                 custom-scrollbar
-                font-quicksand">
+                font-quicksand p-4">
 
             <h1 class="text-white font-bold text-center mt-3 pl-5 text-lg sm:text-2xl font-oxanium">
                 Riwayat Pembelian Tiket
             </h1>
 
             <div class="wrapper w-full">
-                <div class="custom-scrollbar mt-4 pb-10 overflow-x-hidden pr-3 pl-3 w-full">
+                <div class=" pb-10 overflow-x-hidden space-y-4 lg:ml-[10%] ml-[20%]">
                     
                     @foreach ($clueZoneTicket as $tx)
                         @php
@@ -103,24 +103,22 @@
                             $desc = "Buying {$tx->quantity} ticket(s) on phase {$tx->phase->phase}";
                         @endphp
 
-                        <div
-                            class="flex justify-between items-center text-white font-semibold text-2xl ml-5 mr-5 mb-5 w-full">
-                            <div class="flex flex-row w-[95%] text-lg">
-                                <div class="flex flex-col items-center justify-center text-center">
-                                    <span>{{ $date }}</span>
-                                    <span>{{ $time }}</span>
+                        <div class="bg-[#4d6e5a] rounded-xl p-3 text-white text-sm sm:text-base">
+                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                                <div class="text-center sm:text-left">
+                                    <div>{{ $date }}</div>
+                                    <div class="text-xs">{{ $time }}</div>
                                 </div>
-                                <div
-                                    class="flex-1 flex items-center justify-center font-oxanium text-center text-xl text-red-500">
-                                    <span>-${{ number_format($tx->price, 0, ',', '.') }}</span>
+                                <div class="text-center text-red-300 font-bold sm:text-xl">
+                                    -${{ number_format($tx->price, 0, ',', '.') }}
                                 </div>
-                                <div class="flex-1 text-center">
-                                    <span>{{ $desc }}</span>
+                                <div class="text-center sm:text-left text-xs sm:text-sm">
+                                    {{ $desc }}
                                 </div>
                             </div>
                         </div>
 
-                        <hr class="border-t border-gray-400 my-2 w-full">
+                    
                     @endforeach
 
                     @if ($clueZoneTicket->isEmpty())
