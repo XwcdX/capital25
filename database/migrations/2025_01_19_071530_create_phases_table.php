@@ -15,6 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->tinyInteger('phase')->unique();
             $table->time('end_time')->nullable();
+            $table->boolean('hasReduced')->default(0);
             $table->timestamps();
         });
     }
