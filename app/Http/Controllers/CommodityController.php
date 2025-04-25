@@ -223,20 +223,32 @@ class CommodityController extends BaseController
     {
         DB::beginTransaction();
         try {
-            DB::statement("
-                UPDATE commodities
-                SET return_rate = CASE 
-                    WHEN return_rate = 0.10 THEN 0.075 
-                    WHEN return_rate = 0.075 THEN 0.05 
-                    WHEN return_rate = 0.05 THEN 0.0375 
-                    ELSE return_rate 
-                END
-                WHERE phase_id = :phaseId
-                AND return_rate IN (0.10, 0.075, 0.05)
-            ", ['phaseId' => $phaseId]);
+            $currentPhase = Cache::get('current_phase');
+            if($currentPhase){
+                if($currentPhase->hasReduced == 0){
+                    DB::statement("
+                        UPDATE commodities
+                        SET return_rate = CASE 
+                            WHEN return_rate = 0.10 THEN 0.075 
+                            WHEN return_rate = 0.075 THEN 0.05 
+                            WHEN return_rate = 0.05 THEN 0.0375 
+                            ELSE return_rate 
+                        END
+                        WHERE phase_id = :phaseId
+                        AND return_rate IN (0.10, 0.075, 0.05)
+                    ", ['phaseId' => $currentPhase->id]);
 
-            DB::commit();
-            return response()->json(['success' => true]);
+                    $currentPhase->hasReduced = 1;
+                    $currentPhase->save();
+
+                    Cache::forever('current_phase', $currentPhase);
+        
+                    DB::commit();
+                    return response()->json(['success' => true, 'message' => 'Return rates are changing!']);
+                } else {
+                    return response()->json(['success' => true, 'message' => 'Return rates have already been reduced.']);
+                }
+            }
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([

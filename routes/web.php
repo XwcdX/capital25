@@ -11,6 +11,7 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\RallyController;
 use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminCommodityViewController;
 
 Route::get('/', [TeamController::class, 'home'])->name('home');
 Route::get('/login', [TeamController::class, 'login'])->name('login');
@@ -70,9 +71,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('export-teams', [TeamController::class, 'exportValidatedTeam'])->name('export.validated.team');
 
         //Rally
+        Route::get('/adminCommodities', [AdminController::class, 'viewCountdown'])->name('AdminCommodity.adminCommodityView');
         Route::get('/rallyPost', [RallyController::class, 'viewRallyPost'])->name('viewRallyPost');
         Route::get('/generateQR/{rallyId}', [RallyController::class, 'generateRallyQRCode'])->name('generateQR');
+        Route::delete('/rallyPost/{teamId}/{rallyId}', [RallyController::class, 'deleteTeamRally'])->name('deleteTeamRally');
         
+        Route::put('/spedup-phase', [AdminController::class, 'spedUpPhase'])->name('spedUpPhase');
         Route::get('/phase-control', [AdminController::class, 'viewPhaseControl'])->name('phaseControl');
         Route::post('/update-phase', [AdminController::class, 'updatePhase'])->name('updatePhase');
         Route::put('/commodity/update', [AdminController::class, 'updateCommodityQuantity'])->name('updateQuantity');

@@ -678,6 +678,9 @@
                     localStorage.setItem("currentPhase", event.phase);
                     localStorage.setItem("hasReducedReturnRates", "false");
                 });
+
+        updateCountdown();
+
         });
 
         function openModal(id) {
@@ -695,6 +698,7 @@
         const dd = String(nowDate.getDate()).padStart(2, '0');
         const [h, m, s] = countdownString.split(':').map(Number);
 
+        const hasReduced = "{{ $currentPhase ? $currentPhase->hasReduced : 0 }}";
         const countdownTime = new Date(
             yyyy,
             nowDate.getMonth(),
@@ -733,8 +737,9 @@
                 return;
             }
 
-            if (timeLeft <= 60 * 60 * 1000 && localStorage.getItem("hasReducedReturnRates") === "false") {
-                localStorage.setItem("hasReducedReturnRates", "true");
+            if (timeLeft <= 60 * 60 * 1000 && hasReduced == 0) {
+                // localStorage.setItem("hasReducedReturnRates", "true");
+                console.log('test');
                 let urlTemplate = "{{ route('commodities.reduceReturnRates', ['phase' => ':phase']) }}";
                 let url = urlTemplate.replace(':phase', localStorage.getItem('currentPhaseId'));
 
@@ -751,6 +756,15 @@
                     .then(json => {
                         if (!json.success) {
                             console.error("Failed to reduce rates:", json.message);
+                        } else {
+                            Swal.fire({
+                                title: 'Success',
+                                text: json.message,
+                                icon: 'info',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                window.location.reload();
+                            });
                         }
                     })
                     .catch(err => console.error("AJAX error:", err));
