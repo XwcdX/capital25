@@ -163,6 +163,24 @@ class RallyController extends BaseController
         return QrCode::size(500)->generate($link);
     }
 
+    public function deleteTeamRally($teamId, $rallyId) 
+    {
+        $team = Team::findOrFail($teamId);
+        $currentPhase = Cache::get('current_phase');
+    
+        $rallyHistory = $team->rallies()
+            ->where('phase_id', $currentPhase->id)
+            ->where('rally_id', $rallyId)
+            ->first();
+
+        if ($rallyHistory) {
+            $team->rallies()->detach($rallyId);
+            return response()->json(['success' => true, 'message' => 'Team successfully deleted.']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Team not found in this rally and phase.'],);
+        }
+    }
+
     public function scanQrCode($qrData)
     {
         $teamId = Auth::user()->id;

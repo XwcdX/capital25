@@ -72,6 +72,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         //Rally
         Route::get('/rallyPost', [RallyController::class, 'viewRallyPost'])->name('viewRallyPost');
         Route::get('/generateQR/{rallyId}', [RallyController::class, 'generateRallyQRCode'])->name('generateQR');
+        Route::delete('/rallyPost/{teamId}/{rallyId}', [RallyController::class, 'deleteTeamRally'])->name('deleteTeamRally');
         
         Route::put('/spedup-phase', [AdminController::class, 'spedUpPhase'])->name('spedUpPhase');
         Route::get('/phase-control', [AdminController::class, 'viewPhaseControl'])->name('phaseControl');

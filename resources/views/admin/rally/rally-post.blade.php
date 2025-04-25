@@ -239,6 +239,27 @@
                         rankSelect.appendChild(option);
                     }
                     li.appendChild(rankSelect);
+                    const deleteButton = document.createElement("button");
+                    deleteButton.textContent = "Delete";
+                    deleteButton.className = 'delete-btn ml-4 bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-200';
+                    
+                    deleteButton.addEventListener("click", function() {
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: `You are about to delete team ${team.teamName}. This action cannot be undone.`,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Yes, delete it!',
+                            cancelButtonText: 'Cancel'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                deleteItem(team.teamId, rallyId);
+                                renderTeams();  
+                            }
+                        });
+                    });
+
+                    li.appendChild(deleteButton);
                     ul.appendChild(li);
 
                     if (!team.locked) {
@@ -255,6 +276,48 @@
                 });
             }
 
+            function deleteItem(teamId, rallyId) {
+                const url = `{{ route('admin.deleteTeamRally', ['teamId' => ':teamId', 'rallyId' => ':rallyId']) }}`.replace(':teamId', teamId).replace(':rallyId', rallyId);
+                
+                fetch(url, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        teamId: teamId,
+                        rallyId: rallyId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Deleted!',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: data.message,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                })
+                .catch(error => {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: error.message,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                });
+            }
 
             function getTeamCommodity(teamId) {
                 return fetch("{{ route('admin.getTeamCommodity') }}?team_id=" + teamId + "&phase_id=" + phaseId)
