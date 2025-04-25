@@ -14,7 +14,7 @@
         <div class="buttons flex space-x-5 font-quicksand">
             <button id="start-quiz-btn"
                 class="uppercase font-bold text-white py-2 px-8 bg-[var(--cap-green5)] rounded-full border border-[var(--cap-green5)] transition duration-300 hover:-translate-y-1">START</button>
-            <button onclick="window.location.href='{{ route('home') }}'"
+            <button onclick="window.location.href='{{ route('rally.home') }}'"
                 class="uppercase font-bold text-[var(--cap-green5)] py-2 px-8 border-2 border-[var(--cap-green5)] rounded-full transition duration-300 hover:-translate-y-1">
                 BACK
             </button>
