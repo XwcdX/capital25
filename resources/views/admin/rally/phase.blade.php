@@ -14,7 +14,10 @@
                     {{ is_object($currentPhase) ? $currentPhase->phase : $currentPhase }}
                 </span>
                 </p>
-                <div class="text-xl font-bold" id="timer"></div>
+                <div class="flex items-center space-x-2">
+                    <div class="text-xl font-bold" id="timer"></div>
+                </div>
+                
             </div>
             <div class="flex justify-between">
                 <form action="{{ route('admin.updatePhase') }}" method="POST">
@@ -59,6 +62,8 @@
 @section('script')
 <script>
     const currentPhase = @json($currentPhase);
+    const phaseResumed = @json(Cache::get('phase_resumed'));
+    let pauseDuration = null;
     document.addEventListener("DOMContentLoaded", function() {
         Echo.channel("phase-updates")
                 .listen(".PhaseUpdated", (event) => {
@@ -96,9 +101,15 @@
     function updateCountdown() {
         let now = new Date().getTime();
         let timeLeft = countdownTime - now;
-
+        
         if (timeLeft <= 0) {
             document.getElementById("timer").textContent = "Time's up!";
+            return;
+        }
+
+        if (!phaseResumed && timeLeft <= 60 * 60 * 1000) {
+            pauseDuration = (60 * 60 * 1000)-timeLeft;
+            document.getElementById("timer").textContent = "01:00:00";
             return;
         }
 
@@ -113,16 +124,21 @@
 
     document.getElementById('set-phase-time').addEventListener("submit", function(e){
         e.preventDefault(); 
-
-        const minutesToSubstract = parseInt(document.getElementById('minutes').value);  
         
-        const countdownString = currentPhase === "No Phase Set" ? "00:00:00" : @json(is_object($currentPhase) ? $currentPhase->end_time : "00:00:00");
-        const [h, m, s] = countdownString.split(':').map(Number);
+        const minutes = parseInt(document.getElementById('minutes').value);
+        const countdown = currentPhase === "No Phase Set"
+            ? "00:00:00"
+            : @json(is_object($currentPhase) ? $currentPhase->end_time : "00:00:00");
 
+        const [h, m, s] = countdown.split(':').map(Number);
         const now = new Date();
         const endTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, s);
-        
-        endTime.setMinutes(endTime.getMinutes() - minutesToSubstract);
+
+        if (minutes < 0) {
+            endTime.setTime(endTime.getTime() + pauseDuration);
+        } else {
+            endTime.setMinutes(endTime.getMinutes() - minutes);
+        }
 
         const newH = String(endTime.getHours()).padStart(2, '0');
         const newM = String(endTime.getMinutes()).padStart(2, '0');
@@ -131,7 +147,7 @@
 
         Swal.fire({
             title: 'Change phase time?',
-            text: `The phase time will be sped up to ${minutesToSubstract} minute${minutesToSubstract > 1 ? 's' : ''}.`,
+            text: `The phase time will be sped up to ${minutes} minute${minutes > 1 ? 's' : ''}.`,
             icon: 'question',
             confirmButtonText: 'OK'
         }).then((result) => {
@@ -170,10 +186,9 @@
                     }
                 })
                 .catch(error => {
-                    console.error('Fetch error:', error);  
                     Swal.fire({
                         title: 'Error!',
-                        text: 'Something went wrong while updating the phase.',
+                        text: error,
                         icon: 'error',
                         confirmButtonText: 'OK'
                     });
