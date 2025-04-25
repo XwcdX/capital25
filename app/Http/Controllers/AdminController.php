@@ -302,13 +302,13 @@ class AdminController extends BaseController
         $phase = Phase::findOrFail($phaseId);
 
         try {
-            DB::transaction(function() use ($phase){
+            DB::transaction(function () use ($phase) {
                 $phase->end_time = now()->addMinutes(75)->format('H:i:s');
                 $phase->save();
 
                 $this->teamController->updateGreenPoint();
             });
-            
+
             Cache::forever("current_phase", $phase);
             event(new PhaseUpdated($phase));
             return back()->with('success', 'Phase and green points updated successfully.');
@@ -322,14 +322,14 @@ class AdminController extends BaseController
     // quiz
     public function viewQuizQuestions()
     {
-        $questions = Question::with(['answers' => function($query) {
-            $query->orderBy('sort_order'); 
+        $questions = Question::with(['answers' => function ($query) {
+            $query->orderBy('sort_order');
         }])->get();
 
         $groupedQuestions = $questions->map(function ($question) {
             return [
                 'id' => $question->id,
-                'question' => $question->question,  
+                'question' => $question->question,
                 'choices' => $question->answers->map(function ($answer) {
                     return [
                         'id' => $answer->id,
@@ -337,7 +337,7 @@ class AdminController extends BaseController
                         'correct' => $answer->is_correct,
                     ];
                 })->toArray(),
-                'correct'  => $question->answers->where('is_correct', 1)->pluck('answer_text')->first() 
+                'correct'  => $question->answers->where('is_correct', 1)->pluck('answer_text')->first()
             ];
         });
         $title = 'Quiz Questions';
@@ -376,7 +376,7 @@ class AdminController extends BaseController
                     'question_id' => $question->id,
                     'answer_text' => $choice,
                     'is_correct' => ($index) == $r->correct_answer,
-                    'sort_order' => $index + 1, 
+                    'sort_order' => $index + 1,
                     'created_at' => now(),
                     'updated_at' => now()
                 ];
@@ -392,7 +392,6 @@ class AdminController extends BaseController
                 'message' => 'Question added successfully',
                 'question_id' => $question->id
             ]);
-
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json([
@@ -434,7 +433,7 @@ class AdminController extends BaseController
 
             Mail::to($team->email)->queue(new ReminderEmail($data));
         }
-        return back()->with('success','Email sent to teams without users.');
+        return back()->with('success', 'Email sent to teams without users.');
     }
 
     public function sendEmailToTeamWithoutUser()
@@ -446,7 +445,7 @@ class AdminController extends BaseController
 
             Mail::to($team->email)->queue(new ReminderEmail($data));
         }
-        return back()->with('success','Email sent to teams without users.'); 
+        return back()->with('success', 'Email sent to teams without users.');
     }
 
     public function deleteQuestion($id)
@@ -456,12 +455,11 @@ class AdminController extends BaseController
                 $question = Question::findOrFail($id);
                 $question->delete();
             });
-    
+
             return response()->json([
                 'success' => true,
                 'message' => 'Question deleted successfully'
             ]);
-    
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
@@ -475,19 +473,19 @@ class AdminController extends BaseController
     {
         foreach ($r->choices as $choice) {
             $answer = Answer::find($choice['id']);
-            
+
             if ($answer) {
                 // same answer (no changes)
                 if ($answer->answer_text === $choice['answer_text'] && $answer->is_correct == ($choice['id'] == $r->correct_answer_id ? 1 : 0)) {
-                    continue; 
+                    continue;
                 }
-                
+
                 $answer->answer_text = $choice['answer_text'];
                 $answer->is_correct = $choice['id'] == $r->correct_answer_id ? 1 : 0;
                 $answer->save();
             }
         }
-        
+
         return response()->json(['message' => 'Choices updated successfully']);
     }
 
@@ -534,20 +532,20 @@ class AdminController extends BaseController
     function claimClueZoneTicket(Request $r)
     {
         $currentPhase = Cache::get("current_phase", "No Phase Set");
-        
+
         $validated = $r->validate([
             'team_id' => 'required|uuid',
             'claimed_tickets' => 'required|integer|min:1',
         ]);
 
         $clueZone = ClueZone::where('team_id', $validated['team_id'])
-        ->where('phase_id', $currentPhase->id)
-        ->first();
+            ->where('phase_id', $currentPhase->id)
+            ->first();
 
         if (!$clueZone) {
-            return response()->json(['status' => 'error' ,'message' => 'Clue zone not found for the specified team and phase.'], 404);
+            return response()->json(['status' => 'error', 'message' => 'Clue zone not found for the specified team and phase.'], 404);
         }
-        
+
         $availableTickets = $clueZone->quantity - $clueZone->claimed_tickets;
         if ($validated['claimed_tickets'] > $availableTickets) {
             return response()->json(['status' => 'error', 'message' => 'Clue zone ticket not found for the specified team and phase.'], 404);
@@ -555,7 +553,7 @@ class AdminController extends BaseController
         $clueZone->claimed_tickets += $validated['claimed_tickets'];
         $clueZone->save();
 
-        return response()->json(['status' => 'success' ,'message' => 'Ticket claimed successfully'], 200);
+        return response()->json(['status' => 'success', 'message' => 'Ticket claimed successfully'], 200);
     }
 
     function updateCommodityQuantity(Request $r)
@@ -573,8 +571,15 @@ class AdminController extends BaseController
                     ->where('return_rate', $return_rate)
                     ->update(['quantity' => $newQuantity]);
 
+                // Hapus commodity jika quantitynya 0
+                if ($newQuantity == 0) {
+                    DB::table('commodity_histories')
+                        ->where('commodity_id', $commodityId)
+                        ->where('team_id', $teamId)
+                        ->delete();
+                }
+
                 return $this->success('Quantity updated successfully.', $newQuantity);
-                
             } else {
                 return response()->json([
                     'status' => 'success',
@@ -590,6 +595,5 @@ class AdminController extends BaseController
                 'error' => $e->getMessage()
             ], 500);
         }
-        
     }
 }

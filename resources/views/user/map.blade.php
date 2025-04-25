@@ -55,7 +55,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 15px;
+            margin-top: 10px;
             width: 100%;
         }
 
@@ -71,6 +71,7 @@
             cursor: pointer;
             width: 6%;
             aspect-ratio: 1;
+            height: auto;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -94,13 +95,16 @@
             0% {
                 filter: drop-shadow(0 0 5px white);
             }
+
             50% {
                 filter: drop-shadow(0 0 15px white);
             }
+
             /* Dimmer Glow */
             100% {
                 filter: drop-shadow(0 0 5px white);
             }
+
             /* Back to Glow */
         }
 
@@ -194,14 +198,14 @@
                                         '2' => ['x' => 14, 'y' => 8, 'name' => 'Raw Material Extraction'],
                                         '3' => ['x' => 20, 'y' => 8, 'name' => 'Production'],
                                         '4' => ['x' => 26, 'y' => 8, 'name' => 'Packing and Distribution'],
-                                        '5' => ['x' => 62.5, 'y' => 8, 'name' => 'Use and Maintenance '],
+                                        '5' => ['x' => 62.3, 'y' => 8, 'name' => 'Use and Maintenance '],
                                         '6' => ['x' => 62.3, 'y' => 82, 'name' => 'Disposal'],
                                         '8' => ['x' => 68.3, 'y' => 82, 'name' => 'Waste Management'],
                                     ];
 
                                     $extraIcons = [
-                                        'Clue Zone' => ['x' => 56.5, 'y' => 8.2, 'icon' => 'clue zone.png'],
-                                        'Basecamp' => ['x' => 86.5, 'y' => 81.7, 'icon' => 'Basecamp.png'],
+                                        'Clue Zone' => ['x' => 56.5, 'y' => 9, 'icon' => 'clue zone.png'],
+                                        'Basecamp' => ['x' => 86.5, 'y' => 83, 'icon' => 'Basecamp.png'],
                                     ];
 
                                     $centralHub = [
@@ -219,14 +223,17 @@
 
                                 <!-- Rally Position Icons -->
                                 @foreach ($rallies as $rally)
-                                    @php
-                                        $isVisited = in_array($rally->id, $visitedRalliesByPhase[$phase->id] ?? []);
-                                        $iconName =  'Pos ' . $rally->post . ($isVisited ? '' : ' (2)') . '.png';
-                                    @endphp
-                                    <img src="{{ asset('assets/Icon pos map/' . $iconName) }}" alt="{{ $rally->name }}"
-                                        data-name="Post {{ $rally->post }}&#10; {{ $rallyPositions[$rally->post]['name'] }}"
-                                        class="absolute rally-icon"
-                                        style="width:6%; height:auto; top: {{ $rallyPositions[$rally->post]['y'] ?? 50 }}%; left: {{ $rallyPositions[$rally->post]['x'] ?? 50 }}%;">
+                                    @if ($rally->post >= 1 && $rally->post <= 8)
+                                        @php
+                                            $isVisited = in_array($rally->id, $visitedRalliesByPhase[$phase->id] ?? []);
+                                            $iconName = 'Pos ' . $rally->post . ($isVisited ? '' : ' (2)') . '.png';
+                                        @endphp
+                                        <img src="{{ asset('assets/Icon pos map/' . $iconName) }}"
+                                            alt="{{ $rally->name }}"
+                                            data-name="Post {{ $rally->post }}&#10; {{ $rallyPositions[$rally->post]['name'] }}"
+                                            class="absolute rally-icon"
+                                            style="width:6%; height:auto; top: {{ $rallyPositions[$rally->post]['y'] ?? 50 }}%; left: {{ $rallyPositions[$rally->post]['x'] ?? 50 }}%;">
+                                    @endif
                                 @endforeach
 
                                 {{-- Central Hub --}}
@@ -255,7 +262,7 @@
 @section('script')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            let maxActivePhase = @json($currentPhase->phase);            
+            let maxActivePhase = @json($currentPhase->phase);
             let currentPhaseIndex = {{ $phases->search(fn($phase) => $phase->id == $currentPhase->id) }};
             const totalPhases = {{ count($phases) }};
             const slides = document.querySelectorAll(".carousel-slide");
@@ -279,7 +286,8 @@
                 document.querySelectorAll(".next-btn").forEach(btn => btn.style.visibility = "hidden");
 
                 if (currentPhaseIndex > 0) prevBtn.style.visibility = "visible";
-                if (currentPhaseIndex < totalPhases - 1 && currentPhaseIndex < maxActivePhase - 1) nextBtn.style.visibility = "visible";
+                if (currentPhaseIndex < totalPhases - 1 && currentPhaseIndex < maxActivePhase - 1) nextBtn.style
+                    .visibility = "visible";
 
 
                 prevBtn.onclick = () => updatePhase(-1);

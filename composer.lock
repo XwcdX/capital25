@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "ably/ably-php",
-            "version": "1.1.10",
+            "version": "1.1.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ably/ably-php.git",
-                "reference": "2a54c9e3395d5b8a480f02d670f6f3c3f5464411"
+                "reference": "ddd9355ab25f76e0db1672fb5dd943fa5d9713bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ably/ably-php/zipball/2a54c9e3395d5b8a480f02d670f6f3c3f5464411",
-                "reference": "2a54c9e3395d5b8a480f02d670f6f3c3f5464411",
+                "url": "https://api.github.com/repos/ably/ably-php/zipball/ddd9355ab25f76e0db1672fb5dd943fa5d9713bc",
+                "reference": "ddd9355ab25f76e0db1672fb5dd943fa5d9713bc",
                 "shasum": ""
             },
             "require": {
@@ -55,9 +55,9 @@
             ],
             "support": {
                 "issues": "https://github.com/ably/ably-php/issues",
-                "source": "https://github.com/ably/ably-php/tree/1.1.10"
+                "source": "https://github.com/ably/ably-php/tree/1.1.11"
             },
-            "time": "2024-03-22T09:17:09+00:00"
+            "time": "2025-03-07T13:02:01+00:00"
         },
         {
             "name": "ably/laravel-broadcaster",

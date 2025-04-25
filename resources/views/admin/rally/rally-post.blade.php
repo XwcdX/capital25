@@ -292,6 +292,21 @@
                         });
                     });
 
+                    //cm nampilin komoditas yang quantitynya lebih dari 0
+                    const availableGroups = Object.values(groups).filter(g => {
+                        const totalQty = g.records.reduce((sum, r) => sum + r.quantity, 0);
+                        return totalQty > 0;
+                    });
+
+                    if (availableGroups.length === 0) {
+                        Swal.fire({
+                            title: 'No Available Commodities',
+                            text: 'This team has no remaining quantity for any commodities.',
+                            icon: 'info'
+                        });
+                        return;
+                    }
+
                     const optionsHtml = Object.values(groups)
                         .map(g => `<option value="${g.id}">${g.name}</option>`)
                         .join("");
@@ -384,6 +399,16 @@
                             const price = group.price;
                             const rallyName = rallyContainer.dataset.rallyName || 'Current Rally';
 
+                            Swal.fire({
+                                title: 'Saving...',
+                                text: 'Allocating rewards, please wait...',
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
+                            });
+
                             // const updatePromises = group.records.map(r => {
                             //     const computedReward = rewardValue * (price * r
                             //         .return_rate) * r.quantity;
@@ -448,6 +473,7 @@
 
                             Promise.all(updatePromises)
                                 .then(() => {
+                                    Swal.close();
                                     const idx = updatedTeamsGlobal.findIndex(t => t.teamId ===
                                         teamId);
                                     if (idx > -1) updatedTeamsGlobal[idx].locked = true;
@@ -460,6 +486,7 @@
                                     });
                                 })
                                 .catch(() => {
+                                    Swal.close();
                                     Swal.fire({
                                         title: 'Error',
                                         text: 'Failed to update balances.',
@@ -497,23 +524,23 @@
                         })
                     })
                     .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            Swal.fire({
-                                title: "Success!",
-                                text: "Quantity Updated",
-                                icon: "success",
-                                confirmButtonText: "Continue"
-                            });
-                        } else {
-                            Swal.fire({
-                                title: "Error!",
-                                text: "Error in updating quantity",
-                                icon: "error",
-                                confirmButtonText: "Continue"
-                            });
-                        }
-                    })
+                    // .then(data => {
+                    //     if (data.success) {
+                    //         Swal.fire({
+                    //             title: "Success!",
+                    //             text: "Quantity Updated",
+                    //             icon: "success",
+                    //             confirmButtonText: "Continue"
+                    //         });
+                    //     } else {
+                    //         Swal.fire({
+                    //             title: "Error!",
+                    //             text: "Error in updating quantity",
+                    //             icon: "error",
+                    //             confirmButtonText: "Continue"
+                    //         });
+                    //     }
+                    // })
                     .catch(error => {
                         console.error('Error:', error);
                         alert('Something went wrong!');
