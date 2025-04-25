@@ -1,43 +1,44 @@
 @extends('user.layout')
 
 @section('style')
-<style>
-    html,
-    body {
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        font-family: 'oxanium'
-    }
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'oxanium'
+        }
 
-    .gambar {
-        height: 10rem;
-        width: 10rem;
-    }
+        .gambar {
+            height: 10rem;
+            width: 10rem;
+        }
 
-    .containerMain {
-        max-width: 75rem;
-        padding-left: 4rem;
-        padding-right: 4rem;
-        padding-bottom: 2rem;
-        z-index: 1;
-    }
+        .containerMain {
+            max-width: 75rem;
+            padding-left: 4rem;
+            padding-right: 4rem;
+            padding-bottom: 2rem;
+            z-index: 1;
+        }
 
-    .bgfullScreen {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        object-fit: cover;
-        z-index: -1;
-    }
-    .text-outline {
-        color: #ffffff; 
-        font-weight: bold;
-        text-shadow: 2px 2px 4px #000000, -2px -2px 4px #000000, 2px -2px 4px #000000, -2px 2px 4px #000000; 
-    }
-</style>
+        .bgfullScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .text-outline {
+            color: #ffffff;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px #000000, -2px -2px 4px #000000, 2px -2px 4px #000000, -2px 2px 4px #000000;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -45,12 +46,12 @@
         <img class="bgfullScreen" src="{{ asset('assets/login.png') }}" alt="Background">
 
         {{-- TIMERRR --}}
-        <div id="timer" class="text-white font-semibold text-6xl justify-center items-center text-center text-outline"></div>
+        <div id="timer" class="text-white font-semibold text-6xl justify-center items-center text-center text-outline">
+        </div>
 
         <!-- Main content -->
-        <div
-            class="containerMain bg-blue-950 bg-opacity-70 text-white rounded-xl w-full h-auto font-quicksand">
-             <!-- Background image (covers entire screen) -->
+        <div class="containerMain bg-blue-950 bg-opacity-70 text-white rounded-xl w-full h-auto font-quicksand">
+            <!-- Background image (covers entire screen) -->
             @if ($currentPhase)
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
                     @foreach ($commodities as $commodity)
@@ -161,7 +162,7 @@
                 timerEl.textContent = "Time's up!";
                 return;
             }
-
+            const pad = n => String(n).padStart(2, '0');
             if (timeLeft > 60 * 60 * 1000) {
                 // More than 60 minutes
                 const totalMinutes = Math.floor(timeLeft / (1000 * 60));
