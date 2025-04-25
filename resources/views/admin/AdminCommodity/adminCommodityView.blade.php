@@ -167,8 +167,7 @@
                 const totalMinutes = Math.floor(timeLeft / (1000 * 60));
                 const displayMinutes = totalMinutes - 60;
                 const seconds = Math.floor((timeLeft / 1000) % 60);
-                timerEl.textContent = `${displayMinutes}:${seconds}`;
-
+                timerEl.textContent = `${pad(displayMinutes)}:${pad(seconds)}`;
                 returnRateEls.forEach(el => el.classList.add('hidden'));
                 priceItemEls.forEach(el => el.classList.remove('hidden'));
             } else {
