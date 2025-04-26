@@ -725,12 +725,12 @@
                 });
             }
 
-            if (timeLeft <= 0 && localStorage.getItem('currentPhase') === "4") {
-                if (!localStorage.getItem('coinsConverted')) {
-                    localStorage.setItem('coinsConverted', 'true');
-                    window.location.href = '{{ route('convertAllCoins') }}';
-                }
-            }
+            // if (timeLeft <= 0 && localStorage.getItem('currentPhase') === "4") {
+            //     if (!localStorage.getItem('coinsConverted')) {
+            //         localStorage.setItem('coinsConverted', 'true');
+            //         window.location.href = '{{ route('convertAllCoins') }}';
+            //     }
+            // }
 
             if (timeLeft <= 0) {
                 document.getElementById("timer").textContent = "Time's up!";
