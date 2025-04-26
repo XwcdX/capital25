@@ -304,7 +304,7 @@
         @endif
 
         <div class="quiz-wrapper flex-col">
-            <h2 class="quiz-title font-orbitron">Final Test Capital 2025</h2>
+            <h2 class="quiz-title font-orbitron">Final Green Evaluation</h2>
             <div class="quiz-container flex font-quicksand">
                 <!-- Soal & Jawaban -->
                 <div>
@@ -336,6 +336,18 @@
 
 @section('script')
     <script>
+          document.addEventListener("DOMContentLoaded", function() {
+            const saved = localStorage.getItem('quizEndTime');
+            if (saved) {
+                document.getElementById('quiz-rules').classList.add('hidden');
+                startCountdown(new Date(saved));
+            }
+            // if (localStorage.getItem("quizStarted")) {
+            //     document.getElementById('quiz-rules').classList.add('hidden');
+            // } else {
+            //     document.getElementById('quiz-rules').classList.remove('hidden');
+            // }
+        });
         const quizRules = document.getElementById('quiz-rules');
         document.getElementById('start-quiz-btn').addEventListener('click', function() {
             fetch("{{ route('quiz.start') }}", {
@@ -556,6 +568,7 @@
                 let minutes = Math.floor(remainingTime / (1000 * 60));
                 let seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
                 const pad = n => String(n).padStart(2, '0');
+                
                 // Display time
                 timerDisplay.innerHTML = `00:${pad(minutes)}:${pad(seconds)}`;
 
@@ -583,18 +596,7 @@
         };
 
         // langsung ke hlm quiz tanpa melalui quizRules jika sudah pernah klik start sebelumnya 
-        document.addEventListener("DOMContentLoaded", function() {
-            const saved = localStorage.getItem('quizEndTime');
-            if (saved) {
-                document.getElementById('quiz-rules').classList.add('hidden');
-                startCountdown(new Date(saved));
-            }
-            // if (localStorage.getItem("quizStarted")) {
-            //     document.getElementById('quiz-rules').classList.add('hidden');
-            // } else {
-            //     document.getElementById('quiz-rules').classList.remove('hidden');
-            // }
-        });
+      
 
         document.getElementById('start-quiz-btn').addEventListener('click', function() {
             fetch("{{ route('quiz.start') }}", {

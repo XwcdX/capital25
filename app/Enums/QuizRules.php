@@ -14,7 +14,7 @@ enum QuizRules : String
     case RANDOM_ANSWER = 'Peserta dapat mengakses soal secara acak (tidak harus berurutan) dan mengganti jawaban selama waktu masih ada.';
     case STORE_ANSWER = 'Setelah waktu habis, jika peserta belum menekan tombol "<i>Submit</i>", sistem akan menyimpan jawaban tes secara otomatis.';
     case TECHNICAL_PROBLEM = 'Jika peserta mengalami masalah teknis, segera hubungi pengawas tes untuk bantuan.';
-    case GREEN_POINTS = 'Setiap jawaban benar dalam tes akan menambahkan … <i>Green Points</i> yang akan berpengaruh pada akumulasi koin akhir dalam penentuan pemenang.';
+    case GREEN_POINTS = 'Setiap jawaban benar dalam tes akan menambahkan 2500 <i>Green Points</i> yang akan berpengaruh pada akumulasi koin akhir dalam penentuan pemenang.';
 }
 
 
