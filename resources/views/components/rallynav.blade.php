@@ -232,19 +232,19 @@
                     <p class="nav-label">Inventory</p>
                     </a>
 
-                    <a href="{{ route('quiz') }}" class="els-wrap el-4">
+                    {{-- <a href="{{ route('quiz') }}" class="els-wrap el-4">
                     <div class="icon-nav">
                         <i class="fa-regular fa-clipboard text-white"></i>
                     </div>
                     <p class="nav-label">Final Test</p>
-                    </a>
+                    </a> --}}
 
-                    {{-- <a href="javascript:void(0)" class="els-wrap el-4">
+                    <a href="javascript:void(0)" class="els-wrap el-4">
                     <div class="icon-nav">
                         <i class="fa-regular fa-clipboard text-white opacity-50"></i>
                     </div>
                     <p class="nav-label">Final Test</p>
-                    </a> --}}
+                    </a>
           
                 </div>
         
@@ -278,8 +278,8 @@
                         onclick="openInventoryModal(); document.getElementById('nav-toggle').checked = false;">Inventory</a>
                 </li>
                 <li>
-                    <a href="{{ route('quiz') }}">Final Test</a>
-                    {{-- <a href="javascript:void(0)" class="opacity-50">Final Test</a> --}}
+                    {{-- <a href="{{ route('quiz') }}">Final Test</a> --}}
+                    <a href="javascript:void(0)" class="opacity-50">Final Test</a>
                 </li>
                 <li>
                     <a href="{{ route('viewScanQR') }}">Scan QR</a>

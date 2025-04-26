@@ -315,6 +315,8 @@ class AdminController extends BaseController
             });
 
             Cache::forever("current_phase", $phase);
+            
+            Cache::forever("phase_resumed", false);
             event(new PhaseUpdated($phase));
             return back()->with('success', 'Phase and green points updated successfully.');
         } catch (ModelNotFoundException $e) {

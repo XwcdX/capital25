@@ -219,7 +219,7 @@ class CommodityController extends BaseController
 
 
 
-    public function reduceAllCommodityReturnRates(string $phaseId)
+    public function reduceAllCommodityReturnRates()
     {
         DB::beginTransaction();
         try {
@@ -257,5 +257,59 @@ class CommodityController extends BaseController
                 'error' => $e->getMessage()
             ], 500);
         }
+
+    //     DB::beginTransaction();
+    //     try {
+    //         $currentPhase = Cache::get('current_phase');
+
+    //         // Lock all related commodities to prevent concurrent updates
+    //         $commodities = DB::table('commodities')
+    //             ->where('phase_id', $currentPhase->id)
+    //             ->whereIn('return_rate', [0.10, 0.075, 0.05])
+    //             ->lockForUpdate()
+    //             ->get();
+    //         Log::info('yyes quin');
+    //         // Optional: early return if nothing to update
+    //         if ($commodities->isEmpty()) {
+    //             DB::rollBack();
+    //             return response()->json(['success' => false, 'message' => 'No commodities to update.']);
+    //         }
+    
+    //         if ($currentPhase && $currentPhase->hasReduced == 0) {
+    //             // Update the return rates
+    //             DB::statement("
+    //                 UPDATE commodities
+    //                 SET return_rate = CASE 
+    //                     WHEN return_rate = 0.10 THEN 0.075 
+    //                     WHEN return_rate = 0.075 THEN 0.05 
+    //                     WHEN return_rate = 0.05 THEN 0.0375 
+    //                     ELSE return_rate 
+    //                 END
+    //                 WHERE phase_id = :phaseId
+    //                 AND return_rate IN (0.10, 0.075, 0.05)
+    //             ", ['phaseId' => $currentPhase->id]);
+    
+    //             // Update phase flag and cache
+    //             DB::table('phases')
+    //                 ->where('id', $currentPhase->id)
+    //                 ->update(['hasReduced' => 1]);
+    
+    //             $currentPhase->hasReduced = 1;
+    //             Cache::forever('current_phase', $currentPhase);
+    
+    //             DB::commit();
+    //             return response()->json(['success' => true, 'message' => 'Return rates are changing!']);
+    //         } else {
+    //             DB::rollBack();
+    //             return response()->json(['success' => true, 'message' => 'Return rates have already been reduced.']);
+    //         }
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Error reducing rates',
+    //             'error' => $e->getMessage()
+    //         ], 500);
+    //     }
     }
 }
