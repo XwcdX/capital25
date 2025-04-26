@@ -32,7 +32,7 @@ Route::middleware(['isLogin'])->group(function () {
     Route::get('/scanQR', [RallyController::class, 'viewScanner'])->name('viewScanQR');
     Route::get('/scanQR/{qrData}', [RallyController::class, 'scanQrCode'])->name('scanQR');
 
-    Route::get('/rally', [RallyController::class, 'rallyHome'])->name('rally.home');
+    // Route::get('/rally', [RallyController::class, 'rallyHome'])->name('rally.home');
     Route::post('/buyMultipleCommodities', [CommodityController::class, 'buyMultipleCommodities'])->name('buy.multiple.commodities');
     Route::get('/commodities/reduce', [CommodityController::class, 'reduceAllCommodityReturnRates'])->name('commodities.reduceReturnRates');
     Route::get('/convertAllCoinIntoGreenPointLastPhase', [TeamController::class, 'convertAllCoins'])->name('convertAllCoins');
