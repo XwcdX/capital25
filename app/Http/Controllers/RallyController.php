@@ -80,7 +80,7 @@ class RallyController extends BaseController
         $clueZoneTicket = $currentPhase ? $this->clueZoneController->getCurrentTeamTicket($team->id, $currentPhase->id) : collect();
         $transactionsGreenPoint = $this->teamController->getGreenpointTransactions();
         $transactionsCoin = $this->teamController->getCoinTransactions();
-        $inventories = $team->commodities()->get();
+        $inventories = $currentPhase ? $team->commodities()->where('phase_id', $currentPhase->id)->get() : collect();
         $commodities = $currentPhase ? $this->commodityController->getCurrentCommodities($currentPhase->id) : '';
         return view('user.rally.home', compact('title', 'team', 'clueZoneTicket', 'transactionsGreenPoint', 'transactionsCoin', 'currentPhase', 'storylines', 'inventories', 'commodities', 'rallies', 'phases', 'activePhases', 'visitedRalliesByPhase'));
     }
