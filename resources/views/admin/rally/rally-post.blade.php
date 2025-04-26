@@ -479,7 +479,7 @@
                                     usableQty;
 
                                 const description = `Rally "${rallyName}", Rank ${selectedRank}: ` +
-                                    `${rewardValue} reward(s) → ${group.name} @ ${(r.return_rate * 100).toFixed(2)}%`;
+                                    `${rewardValue} reward(s) → (${r.quantity})*${group.name}@ ${(r.return_rate * 100).toFixed(2)}%`;
 
                                 updatePromises.push(updateBalanceForTeam({
                                     team_id: teamId,
