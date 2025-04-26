@@ -34,7 +34,7 @@ Route::middleware(['isLogin'])->group(function () {
 
     Route::get('/rally', [RallyController::class, 'rallyHome'])->name('rally.home');
     Route::post('/buyMultipleCommodities', [CommodityController::class, 'buyMultipleCommodities'])->name('buy.multiple.commodities');
-    Route::post('/commodities/{phase}/reduce‑return‑rates', [CommodityController::class, 'reduceAllCommodityReturnRates'])->name('commodities.reduceReturnRates');
+    Route::get('/commodities/reduce', [CommodityController::class, 'reduceAllCommodityReturnRates'])->name('commodities.reduceReturnRates');
     Route::get('/convertAllCoinIntoGreenPointLastPhase', [TeamController::class, 'convertAllCoins'])->name('convertAllCoins');
     Route::post('/buyClueZoneTicket', [ClueZoneController::class, 'buyTicket'])->name('cluezone.buy');
 

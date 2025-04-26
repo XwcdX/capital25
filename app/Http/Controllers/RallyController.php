@@ -82,7 +82,8 @@ class RallyController extends BaseController
         $transactionsCoin = $this->teamController->getCoinTransactions();
         $inventories = $currentPhase ? $team->commodities()->where('commodity_histories.phase_id', $currentPhase->id)->get() : collect();
         $commodities = $currentPhase ? $this->commodityController->getCurrentCommodities($currentPhase->id) : '';
-        return view('user.rally.home', compact('title', 'team', 'clueZoneTicket', 'transactionsGreenPoint', 'transactionsCoin', 'currentPhase', 'storylines', 'inventories', 'commodities', 'rallies', 'phases', 'activePhases', 'visitedRalliesByPhase'));
+        $hasReduced = $currentPhase ? Phase::where('id', $currentPhase->id)->first()->hasReduced : 0;
+        return view('user.rally.home', compact('hasReduced', 'title', 'team', 'clueZoneTicket', 'transactionsGreenPoint', 'transactionsCoin', 'currentPhase', 'storylines', 'inventories', 'commodities', 'rallies', 'phases', 'activePhases', 'visitedRalliesByPhase'));
     }
 
 

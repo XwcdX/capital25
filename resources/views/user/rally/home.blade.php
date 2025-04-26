@@ -698,7 +698,7 @@
         const dd = String(nowDate.getDate()).padStart(2, '0');
         const [h, m, s] = countdownString.split(':').map(Number);
 
-        const hasReduced = "{{ $currentPhase ? $currentPhase->hasReduced : 0 }}";
+        const hasReduced = "{{ $hasReduced }}";
         const countdownTime = new Date(
             yyyy,
             nowDate.getMonth(),
@@ -737,37 +737,37 @@
                 return;
             }
 
-            if (timeLeft <= 60 * 60 * 1000 && hasReduced == 0) {
-                // localStorage.setItem("hasReducedReturnRates", "true");
-                let urlTemplate = "{{ route('commodities.reduceReturnRates', ['phase' => ':phase']) }}";
-                let url = urlTemplate.replace(':phase', localStorage.getItem('currentPhaseId'));
+            // if (timeLeft <= 60 * 60 * 1000 && hasReduced == 0) {
+            //     // localStorage.setItem("hasReducedReturnRates", "true");
+            //     let urlTemplate = "{{ route('commodities.reduceReturnRates', ['phase' => ':phase']) }}";
+            //     let url = urlTemplate.replace(':phase', localStorage.getItem('currentPhaseId'));
 
-                fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                        },
-                        body: JSON.stringify({})
-                    })
-                    .then(res => res.json())
-                    .then(json => {
-                        if (!json.success) {
-                            console.error("Failed to reduce rates:", json.message);
-                        } else {
-                            Swal.fire({
-                                title: 'Success',
-                                text: json.message,
-                                icon: 'info',
-                                confirmButtonText: 'OK'
-                            }).then(() => {
-                                window.location.reload();
-                            });
-                        }
-                    })
-                    .catch(err => console.error("AJAX error:", err));
-            }
+            //     fetch(url, {
+            //             method: 'POST',
+            //             headers: {
+            //                 'Accept': 'application/json',
+            //                 'Content-Type': 'application/json',
+            //                 'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            //             },
+            //             body: JSON.stringify({})
+            //         })
+            //         .then(res => res.json())
+            //         .then(json => {
+            //             if (!json.success) {
+            //                 console.error("Failed to reduce rates:", json.message);
+            //             } else {
+            //                 // Swal.fire({
+            //                 //     title: 'Success',
+            //                 //     text: json.message,
+            //                 //     icon: 'info',
+            //                 //     confirmButtonText: 'OK'
+            //                 // }).then(() => {
+            //                 //     // window.location.reload();
+            //                 // });
+            //             }
+            //         })
+            //         .catch(err => console.error("AJAX error:", err));
+            // }
 
             let hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
             let minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
