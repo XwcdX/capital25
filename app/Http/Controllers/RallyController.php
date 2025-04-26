@@ -118,8 +118,8 @@ class RallyController extends BaseController
         }
         $rewardMapping = [
             1 => [
-                'teams_range' => '4-5',
-                'reward' => [60, 50, 45, 40, 35]
+                'teams_range' => '4-6',
+                'reward' => [60, 50, 45, 40, 35, 30]
             ],
             2 => [
                 'teams_range' => '5',
@@ -226,7 +226,7 @@ class RallyController extends BaseController
             }
 
             $allowedRanges = [
-                1 => [4, 5],
+                1 => [4, 6],
                 2 => [5, 5],
                 3 => [4, 7],
                 4 => [4, 7],
