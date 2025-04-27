@@ -72,6 +72,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('export-teams', [TeamController::class, 'exportValidatedTeam'])->name('export.validated.team');
         Route::get('export-leaderboard', [TeamController::class, 'exportLeaderboard'])->name('export.leaderboard.team');
         Route::get('export-post', [TeamController::class, 'exportPost'])->name('export.post.detail');
+        Route::get('export-coin', [TeamController::class, 'exportCoin'])->name('export.coin.detail');
 
         //Rally
         Route::get('/adminCommodities', [AdminController::class, 'viewCountdown'])->name('AdminCommodity.adminCommodityView');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CoinPhase3Export;
 use App\Exports\LeaderboardExport;
 use App\Exports\PostDetailExport;
 use App\Exports\TeamsWithUsersExport;
@@ -382,9 +383,12 @@ class TeamController extends BaseController
     public function exportLeaderboard(){
         return Excel::download(new LeaderboardExport, 'team_leaderboard.xlsx');
     }
-    
+
     public function exportPost(){
         return Excel::download(new PostDetailExport, 'post_detail.xlsx');
+    }
+    public function exportCoin(){
+        return Excel::download(new CoinPhase3Export, 'coin_in_phase_3.xlsx');
     }
 
     public function updateBalance(Request $request)
