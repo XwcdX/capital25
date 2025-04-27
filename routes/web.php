@@ -59,6 +59,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/import-data-panitia', [AdminController::class, 'importDataPanitia'])->name('import-data-panitia');
         Route::post('/import/excel-progress', [AdminController::class, 'storeImportExcel'])->name('import.excel');
         Route::get('/view-registered-team', [AdminController::class, 'viewRegisteredTeam'])->name('viewRegisteredTeam');
+        Route::get('/view-team-leaderboard', [AdminController::class, 'viewTeamLeaderboard'])->name('viewTeamLeaderboard');
         Route::get('/view-validate-team', [AdminController::class, 'viewValidateTeam'])->name('viewValidateTeam');
         Route::get('/view-validated-team', [AdminController::class, 'viewValidatedTeam'])->name('viewValidatedTeam');
         Route::post('/send-reminder-not-completed', [AdminController::class, 'sendEmailToNotCompletedTeam'])->name('sendReminderNotCompleted');
@@ -69,6 +70,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/get-completed-team', [TeamController::class, 'getCompletedTeam'])->name('team.getCompletedTeam');
 
         Route::get('export-teams', [TeamController::class, 'exportValidatedTeam'])->name('export.validated.team');
+        Route::get('export-leaderboard', [TeamController::class, 'exportLeaderboard'])->name('export.leaderboard.team');
 
         //Rally
         Route::get('/adminCommodities', [AdminController::class, 'viewCountdown'])->name('AdminCommodity.adminCommodityView');

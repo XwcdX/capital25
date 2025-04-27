@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\LeaderboardExport;
 use App\Exports\TeamsWithUsersExport;
 use App\Mail\ConfirmationEmail;
 use App\Mail\TeamValidationEmail;
@@ -375,6 +376,10 @@ class TeamController extends BaseController
     public function exportValidatedTeam()
     {
         return Excel::download(new TeamsWithUsersExport, 'validated_team.xlsx');
+    }
+
+    public function exportLeaderboard(){
+        return Excel::download(new LeaderboardExport, 'validated_team.xlsx');
     }
 
     public function updateBalance(Request $request)

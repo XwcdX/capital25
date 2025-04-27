@@ -228,6 +228,15 @@ class AdminController extends BaseController
             'data' => json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT),
         ]);
     }
+    public function viewTeamLeaderboard()
+    {
+        $teams = $this->teamController->getValidatedTeam();
+        $data = $teams->sortByDesc('green_points')->values();
+        return view('admin.TeamRecap.leaderboard', [
+            'title' => 'Team Leaderboard',
+            'data' => json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT),
+        ]);
+    }
     public function viewValidateTeam()
     {
         $data = $this->teamController->getCompletedTeam();
