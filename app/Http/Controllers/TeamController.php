@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\LeaderboardExport;
+use App\Exports\PostDetailExport;
 use App\Exports\TeamsWithUsersExport;
 use App\Mail\ConfirmationEmail;
 use App\Mail\TeamValidationEmail;
@@ -379,7 +380,11 @@ class TeamController extends BaseController
     }
 
     public function exportLeaderboard(){
-        return Excel::download(new LeaderboardExport, 'validated_team.xlsx');
+        return Excel::download(new LeaderboardExport, 'team_leaderboard.xlsx');
+    }
+    
+    public function exportPost(){
+        return Excel::download(new PostDetailExport, 'post_detail.xlsx');
     }
 
     public function updateBalance(Request $request)
