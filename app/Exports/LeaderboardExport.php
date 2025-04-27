@@ -17,6 +17,7 @@ class LeaderboardExport implements FromCollection, WithHeadings
     {
         return Team::query()
             ->where('valid', 1)
+            ->orderBy('green_points', 'desc')
             ->get(['name', 'email', 'school', 'domicile', 'green_points', 'coin'])
             ->map(function ($team) {
                 return [
