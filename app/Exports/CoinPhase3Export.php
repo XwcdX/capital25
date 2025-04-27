@@ -67,8 +67,8 @@ class CoinPhase3Export implements FromCollection, WithHeadings
 
             return [
                 'Team Name' => $team->name,
-                // 'Team Final Green Point' => $team->green_points,
-                // 'Total Quiz' => $totalQna,
+                'Team Final Green Point' => $team->green_points,
+                'Total Quiz' => $totalQna,
                 'Coin (Phase 3)' => $coinPhase3,
                 'Green Point (Final Invest)' => $finalInvest,
             ];
@@ -79,8 +79,8 @@ class CoinPhase3Export implements FromCollection, WithHeadings
     {
         return [
             'Team Name',
-            // 'Team Final Green Point',
-            // 'Total Quiz',
+            'Team Final Green Point',
+            'Total Quiz',
             'Coin (Phase 3)',
             'Green Point (Final Invest)',
         ];
