@@ -25,7 +25,7 @@ class CoinPhase3Export implements FromCollection, WithHeadings
                 ->where('is_correct', 1)
                 ->sum('question.points');
 
-            $reducedGreen = $team->green_point - $totalQna;
+            $reducedGreen = $team->green_points - $totalQna;
 
             $greenTx = $team->transactions
                 ->where('transaction_type', 'green_point');
@@ -67,6 +67,8 @@ class CoinPhase3Export implements FromCollection, WithHeadings
 
             return [
                 'Team Name' => $team->name,
+                // 'Team Final Green Point' => $team->green_points,
+                // 'Total Quiz' => $totalQna,
                 'Coin (Phase 3)' => $coinPhase3,
                 'Green Point (Final Invest)' => $finalInvest,
             ];
@@ -77,6 +79,8 @@ class CoinPhase3Export implements FromCollection, WithHeadings
     {
         return [
             'Team Name',
+            // 'Team Final Green Point',
+            // 'Total Quiz',
             'Coin (Phase 3)',
             'Green Point (Final Invest)',
         ];
