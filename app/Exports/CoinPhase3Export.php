@@ -23,7 +23,7 @@ class CoinPhase3Export implements FromCollection, WithHeadings
         return $teams->map(function ($team) use ($phase1End, $phase2End, $phase3End) {
             $totalQna = $team->answers
                 ->where('is_correct', 1)
-                ->sum(fn($a) => $a->question->points);
+                ->sum('question.points');
 
             $reducedGreen = $team->green_point - $totalQna;
 
@@ -32,22 +32,26 @@ class CoinPhase3Export implements FromCollection, WithHeadings
 
             $sumBetween = function ($start, $end) use ($greenTx) {
                 return $greenTx
-                    ->filter(fn($tx) => 
+                    ->filter(
+                        fn($tx) =>
                         $tx->created_at->format('H:i:s') > $start
                         && $tx->created_at->format('H:i:s') <= $end
                     )
-                    ->sum(fn($tx) =>
+                    ->sum(
+                        fn($tx) =>
                         $tx->action === 'credit'
-                            ? $tx->amount
-                            : -1 * $tx->amount
+                        ? $tx->amount
+                        : -1 * $tx->amount
                     );
             };
 
             $phase1Sum = $greenTx
-                ->filter(fn($tx) =>
+                ->filter(
+                    fn($tx) =>
                     $tx->created_at->format('H:i:s') <= Carbon::parse($phase1End)->format('H:i:s')
                 )
-                ->sum(fn($tx) =>
+                ->sum(
+                    fn($tx) =>
                     $tx->action === 'credit' ? $tx->amount : -1 * $tx->amount
                 );
             $res1 = $phase1Sum * 1.5;
@@ -59,11 +63,11 @@ class CoinPhase3Export implements FromCollection, WithHeadings
             $res3 = ($res2 + $phase3Sum) * 1.5;
 
             $finalInvest = $res3;
-            $coinPhase3  = $reducedGreen - $finalInvest;
+            $coinPhase3 = $reducedGreen - $finalInvest;
 
             return [
-                'Team Name'                  => $team->name,
-                'Coin (Phase 3)'             => $coinPhase3,
+                'Team Name' => $team->name,
+                'Coin (Phase 3)' => $coinPhase3,
                 'Green Point (Final Invest)' => $finalInvest,
             ];
         });
